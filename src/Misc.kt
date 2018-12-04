@@ -19,3 +19,9 @@ fun String.readFileMutable(): MutableList<String> {
 fun String.readFile(): List<String> {
     return File(this).readLines().toMutableList()
 }
+
+fun debug(str: String){
+    if (false){
+        println(str)
+    }
+}

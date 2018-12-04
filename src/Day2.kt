@@ -18,14 +18,14 @@ fun main(args: Array<String>) {
 
 val list = "/Users/frerodla/projects/advent/src/input_2.txt".readFile()
 
-fun partTwo() {
+private fun partTwo() {
     val hei = list.mapIndexed { i, s ->
         list.subList(i, list.size).map { getCommonChars(it, s) }.filter { it.length == s.length - 1 }
     }.flatten()
     println("part2 = ${hei}")
 }
 
-fun partTwo_take2() {
+private fun partTwo_take2() {
 
     val hei = list.mapIndexedNotNull() { i, s ->
         list.subList(i, list.size).map { getCommonChars(it, s) }.firstOrNull() { it.length == s.length - 1 }
