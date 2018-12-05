@@ -16,6 +16,7 @@ fun String.readFile(): List<String> {
     return File(this).readLines().toMutableList()
 }
 
+@Suppress("ConstantConditionIf")
 fun debug(str: String){
     if (false){
         println(str)

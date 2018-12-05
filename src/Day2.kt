@@ -17,13 +17,13 @@ class Day2 {
         }
     }
 
-    val list = "src/input_2.txt".readFile()
+    private val list = "src/input_2.txt".readFile()
 
     private fun partTwo() {
         val hei = list.mapIndexed { i, s ->
             list.subList(i, list.size).map { getCommonChars(it, s) }.filter { it.length == s.length - 1 }
         }.flatten()
-        println("part2 = ${hei}")
+        println("part2 = $hei")
     }
 
     private fun partTwo_take2() {
@@ -35,7 +35,7 @@ class Day2 {
     }
 
 
-    fun getCommonChars(str1: String, str2: String): String {
+    private fun getCommonChars(str1: String, str2: String): String {
         return str1.filterIndexed { i, c -> c == str2[i] }
     }
 
@@ -45,8 +45,8 @@ class Day2 {
             val mapValues = s.groupBy { it }.mapValues { it.value.size }.filter { it.value == 2 || it.value == 3 }.values.toSet()
             Pair(twos + mapValues.count { it == 2 }, threes + mapValues.count { it == 3 })
         }
-        println("${twos}")
-        println("${threes}")
+        println("$twos")
+        println("$threes")
         println("${twos * threes}")
     }
 
@@ -56,8 +56,8 @@ class Day2 {
             val mapValues = ('a'..'z').map { countChars(s, it) }.filter { it == 2 || it == 3 }.toSet()
             Pair(twos + mapValues.count { it == 2 }, threes + mapValues.count { it == 3 })
         }
-        println("${twos}")
-        println("${threes}")
+        println("$twos")
+        println("$threes")
         println("${twos * threes}")
     }
 

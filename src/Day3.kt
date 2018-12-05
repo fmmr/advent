@@ -18,7 +18,6 @@ class Day3 {
     }
 
     private fun part_two_take_one() {
-        var i = 0
         // asSequence shaves of approx 20 sec.
         val noOverlap = list3.asSequence().mapIndexed { index, claim ->
             val overLapsForClaim = list3
@@ -29,7 +28,7 @@ class Day3 {
                     .size
             Pair(claim, overLapsForClaim)
         }.first { it.second == 0 }.first
-        println("noOverlap = ${noOverlap}")
+        println("noOverlap = $noOverlap")
     }
 
     private fun part_one_take_two() {
@@ -43,29 +42,28 @@ class Day3 {
                 .filter { it.value > 1 }
                 .count()
 
-        println("list.size = ${list}")
+        println("list.size = $list")
     }
 
     private fun part_one_take_one() {
-        var i = 0
         val list = "src/input_3.txt".readFile().map { Claim(it) }
         val overlaps = list.mapIndexed { index, claim ->
             list.subList(index + 1, list.size).map { claim.overlap(it) }.flatten()
         }.flatten().toSet()
 
-        debug("overlaps = ${overlaps}")
+        debug("overlaps = $overlaps")
         println("overlaps.size = ${overlaps.size}")
         println("list.size = ${list.size}")
 
     }
 
     data class Claim(val str: String) {
-        val id: Int
-        val x: Int
-        val y: Int
-        val w: Int
-        val h: Int
-        val RE = """#(\d+) @ (\d+),(\d+): (\d+)x(\d+)""".toRegex()
+        private val id: Int
+        private val x: Int
+        private val y: Int
+        private val w: Int
+        private val h: Int
+        private val RE = """#(\d+) @ (\d+),(\d+): (\d+)x(\d+)""".toRegex()
 
         init {
             val find = RE.find(str)

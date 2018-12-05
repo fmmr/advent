@@ -20,7 +20,7 @@ class Day4 {
 
     private fun find_best_guard_to_trick() {
         val guard = readGuards(list4).maxBy { it.value.sleepPrOnCall() }?.value
-        println("guard = ${guard}")
+        println("guard = $guard")
     }
 
     private fun partTwo() {
@@ -37,7 +37,7 @@ class Day4 {
             debug("min: ${it.first}, guard: ${it.second}, num: ${it.second.numTimesSleptOnMinute(it.first)}")
         }
         val (min, guard) = hei.maxBy { it.second.numTimesSleptOnMinute(it.first) }!!
-        println("min = ${min}, guard: $guard")
+        println("min = $min, guard: $guard")
         println("mult min * guard.id = ${min * guard.id}")
     }
 
@@ -45,12 +45,12 @@ class Day4 {
     private fun partOne() {
         val guards = readGuards(list4)
         val id = guards.mapValues { it.value.sumMinutes() }.maxBy { it.value }!!.key
-        val guardWithMostSleep = guards.get(id)!!
+        val guardWithMostSleep = guards[id]!!
         val maxSleepMinute = guardWithMostSleep.maxSleepMinute()
         val maxMinute = guardWithMostSleep.maxMinute()
         val sumMinutes = guardWithMostSleep.sumMinutes()
 
-        debug("guardWithMostSleep = ${guardWithMostSleep}")
+        debug("guardWithMostSleep = $guardWithMostSleep")
         debug("guard slept = $sumMinutes")
         debug("maxsleepinaminute = $maxSleepMinute")
         println("slept guard $id slept $maxSleepMinute in minute $maxMinute")
@@ -83,15 +83,13 @@ class Day4 {
         return guards
     }
 
-    fun getMsg(str: String): Msg {
-        if (BEGIN.matches(str)) {
-            return Msg.Begin(str)
-        } else if (str.contains("asleep")) {
-            return Msg.Sleep(str)
-        } else if (str.contains("wakes")) {
-            return Msg.Wake(str)
+    private fun getMsg(str: String): Msg {
+        return when {
+            BEGIN.matches(str) -> Msg.Begin(str)
+            str.contains("asleep") -> Msg.Sleep(str)
+            str.contains("wakes") -> Msg.Wake(str)
+            else -> error("$str not valid - not able to continue")
         }
-        error("$str not valid - not able to continue")
     }
 
     sealed class Msg {
@@ -101,9 +99,9 @@ class Day4 {
     }
 
     data class Guard(val id: Int) {
-        val arr = IntArray(60)
-        var start = -1
-        var onCall = 0
+        private val arr = IntArray(60)
+        private var start = -1
+        private var onCall = 0
 
         fun newOnCall() {
             onCall++
@@ -142,7 +140,7 @@ class Day4 {
         }
 
         override fun toString(): String {
-            return "Guard(id=$id, oncall: ${onCall}, slept=${sumMinutes()}, sleptPrOnCall=${sleepPrOnCall()})"
+            return "Guard(id=$id, oncall: $onCall, slept=${sumMinutes()}, sleptPrOnCall=${sleepPrOnCall()})"
         }
     }
 }

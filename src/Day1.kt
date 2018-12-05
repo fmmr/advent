@@ -1,13 +1,13 @@
 import java.io.File
 
 class Day1 {
-    fun readFileLineByLineUsingForEachLine(fileName: String): List<Int> {
+    private fun readFileLineByLineUsingForEachLine(fileName: String): List<Int> {
         val intList = mutableListOf<Int>()
         File(fileName).forEachLine { intList.add(it.toInt()) }
         return intList
     }
 
-    fun sequence(): Sequence<Int> {
+    private fun sequence(): Sequence<Int> {
         val input = readFileLineByLineUsingForEachLine("src/input_1.txt")
         var index = 0
         return generateSequence {
