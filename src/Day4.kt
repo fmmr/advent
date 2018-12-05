@@ -93,9 +93,9 @@ class Day4 {
     }
 
     sealed class Msg {
-        data class Begin(val str: String, val guard: Int = BEGIN.first(str)) : Msg()
-        data class Sleep(val str: String, val min: Int = SLEEP.first(str)) : Msg()
-        data class Wake(val str: String, val min: Int = SLEEP.first(str)) : Msg()
+        data class Begin(val str: String, val guard: Int = BEGIN.get(str)) : Msg()
+        data class Sleep(val str: String, val min: Int = SLEEP.get(str)) : Msg()
+        data class Wake(val str: String, val min: Int = SLEEP.get(str)) : Msg()
     }
 
     data class Guard(val id: Int) {

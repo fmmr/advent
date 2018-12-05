@@ -31,4 +31,4 @@ fun debug(str: String){
     }
 }
 
-fun Regex.first(str: String): Int = find(str)!!.groupValues[1].toInt()
+fun Regex.get(str: String, i: Int = 1): Int = find(str)!!.groupValues[i].toInt()
