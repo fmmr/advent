@@ -4,26 +4,48 @@ class Day3 {
     private val list3 = "src/input_3.txt".readFile().map { Claim(it) }
 
     fun main(args: Array<String>) {
-        (3 to 1).report {
-            //        part_one_take_one()
-            println("commented out - time consuming")
+        (3 to 1).drop {
+            part_one_take_one()
         }
         (3 to 1).report(2) {
             part_one_take_two()
         }
-        (3 to 2).report {
-//            part_two_take_one()  //noOverlap = #806 @ 736,434: 22x21
-            println("commented out - time consuming")
+        (3 to 2).drop {
+            part_two_take_one()  //took: 32116ms noOverlap = #806 @ 736,434: 22x21
+        }
+        (3 to 2).report(2) {
+            part_two_take_two()  // took: 160ms
         }
     }
+
+    // had a look @ https://github.com/tginsberg/advent-2018-kotlin/
+    // who solved part1 similar to my take 2.
+    private fun part_two_take_two() {
+        val map: MutableMap<Pair<Int, Int>, Claim> = mutableMapOf()
+        val candidates = list3.toMutableSet()
+        list3.forEach { claim ->
+            claim.toPos().forEach { p ->
+                val previous = map.getOrPut(p) { claim }
+                if (previous != claim) {
+                    // if there was another claim at this spot, both the previous and current claim
+                    // is not a candidate anymore
+                    candidates.remove(claim)
+                    candidates.remove(previous)
+                }
+            }
+        }
+        println("list3.size = ${list3.size}")
+        println("candidates.size = ${candidates.size}")
+        println("candidates = ${candidates}")
+    }
+
 
     private fun part_two_take_one() {
         // asSequence shaves of approx 20 sec.
         val noOverlap = list3.asSequence().mapIndexed { index, claim ->
             val overLapsForClaim = list3
                     .filter { it != claim }
-                    .map { claim.overlap(it) }
-                    .flatten()
+                    .flatMap { claim.overlap(it) }
                     .toList()
                     .size
             Pair(claim, overLapsForClaim)
@@ -32,17 +54,13 @@ class Day3 {
     }
 
     private fun part_one_take_two() {
-        val list = "src/input_3.txt".readFile()
-                .asSequence()
-                .map { Claim(it) }
-                .map { it.toPos() }
-                .flatten()
+        val list = list3
+                .flatMap { it.toPos() }
                 .groupingBy { it }
                 .eachCount()
-                .filter { it.value > 1 }
-                .count()
+                .count { it.value > 1 }
 
-        println("list.size = $list")
+        println("list = $list")
     }
 
     private fun part_one_take_one() {
@@ -58,7 +76,7 @@ class Day3 {
     }
 
     data class Claim(val str: String) {
-        private val id: Int
+        val id: Int
         private val x: Int
         private val y: Int
         private val w: Int

@@ -12,6 +12,14 @@ fun <A, B> Pair<A, B>.report(take: Int = 1, function: () -> Unit) {
     println()
 }
 
+fun <A, B> Pair<A, B>.drop(take: Int = 1, function: () -> Unit) {
+    val header = "DAY: ${this.first}, PART: ${this.second}, TAKE: $take"
+    println(header)
+    println("=".repeat(header.length))
+    println("Not run function: ${function.javaClass} - this function is very timeconuming")
+    println()
+}
+
 fun String.readFile(): List<String> {
     return File(this).readLines().toMutableList()
 }
