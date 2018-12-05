@@ -12,10 +12,6 @@ fun <A, B> Pair<A, B>.report(take: Int = 1, function: () -> Unit) {
     println()
 }
 
-fun String.readFileMutable(): MutableList<String> {
-    return File(this).readLines().toMutableList()
-}
-
 fun String.readFile(): List<String> {
     return File(this).readLines().toMutableList()
 }
@@ -25,3 +21,5 @@ fun debug(str: String){
         println(str)
     }
 }
+
+fun Regex.first(str: String): Int = find(str)!!.groupValues[1].toInt()
