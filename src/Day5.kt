@@ -1,32 +1,15 @@
-class Day5 {
-    companion object {
+object Day5 {
+
+    fun partTwo(str: String): Int {
+        val newStr = reducePolymer(str)
+        return ('a'..'z').map { c ->
+            val testString = newStr.replace("""[$c${c.toUpperCase()}]""".toRegex(), "")
+            reducePolymer(testString).length
+        }.min() ?: throw IllegalStateException("Could not find a solution")
     }
 
-    fun main(args: Array<String>) {
-        val list5 = "src/input_5.txt".readFile()[0]
-        val test = "dabAcCaCBAcCcaDA"
-        (5 to 1).report {
-            Day5().partOne(list5)
-        }
-        (5 to 2).report {
-            Day5().partTwo(list5)
-        }
-    }
-
-    fun partTwo(str: String) {
-        val lengths = ('a'..'z').map { c ->
-            val testString = str.replace("""[$c${c.toUpperCase()}]""".toRegex(), "")
-            c to reducePolymer(testString).length
-        }.minBy { it.second }
-        println("input.length: ${str.length}")
-        println("lengths: ${lengths}")
-    }
-
-    fun partOne(str: String) {
-        println("input.length: ${str.length}")
-        val output = reducePolymer(str)
-        println("output.length: ${output.length}")
-        println("output: ${output}")
+    fun partOne(str: String): Int {
+        return reducePolymer(str).length
     }
 
     private fun reducePolymer(str: String): StringBuffer {
@@ -40,26 +23,14 @@ class Day5 {
                     debug("appending $c")
                     append(c)
                 }
-
             }
         }
         return output
     }
 
-
     private fun Char.rCap() = if (isUpperCase()) {
         toLowerCase()
     } else {
         toUpperCase()
-    }
-
-    private fun String.rCap() {
-        require(this.length == 1)
-        val c = this.elementAt(0)
-        if (c.isUpperCase()) {
-            c.toLowerCase()
-        } else {
-            c.toUpperCase()
-        }
     }
 }

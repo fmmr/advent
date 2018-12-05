@@ -1,31 +1,25 @@
-class Day4 {
-    companion object {
-        private val BEGIN = """.*Guard #(\d+) begins.*""".toRegex()
-        private val list4 = "src/input_4.txt".readFile().sorted()
-        private val testList = listOf("[1518-11-01 00:00] Guard #10 begins shift", "[1518-11-01 00:05] falls asleep", "[1518-11-01 00:25] wakes up", "[1518-11-01 00:30] falls asleep", "[1518-11-01 00:55] wakes up", "[1518-11-01 23:58] Guard #99 begins shift", "[1518-11-02 00:40] falls asleep", "[1518-11-02 00:50] wakes up", "[1518-11-03 00:05] Guard #10 begins shift", "[1518-11-03 00:24] falls asleep", "[1518-11-03 00:29] wakes up", "[1518-11-04 00:02] Guard #99 begins shift", "[1518-11-04 00:36] falls asleep", "[1518-11-04 00:46] wakes up", "[1518-11-05 00:03] Guard #99 begins shift", "[1518-11-05 00:45] falls asleep", "[1518-11-05 00:55] wakes up")
-        private val SLEEP = """.* 00:(\d\d).*""".toRegex()
+object Day4 {
+    private val BEGIN = """.*Guard #(\d+) begins.*""".toRegex()
+    private val SLEEP = """.* 00:(\d\d).*""".toRegex()
+
+    fun partOne(data: List<String>): Int {
+        val guards = readGuards(data)
+        val id = guards.mapValues { it.value.sumMinutes() }.maxBy { it.value }!!.key
+        val guardWithMostSleep = guards[id]!!
+        val maxSleepMinute = guardWithMostSleep.maxSleepMinute()
+        val maxMinute = guardWithMostSleep.maxMinute()
+        val sumMinutes = guardWithMostSleep.sumMinutes()
+
+        debug("guardWithMostSleep = $guardWithMostSleep")
+        debug("guard slept = $sumMinutes")
+        debug("maxsleepinaminute = $maxSleepMinute")
+        println("slept guard $id slept $maxSleepMinute in minute $maxMinute")
+        println("multiply: $id * $maxMinute = ${maxMinute * id}")
+        return id * maxMinute
     }
 
-    fun main(args: Array<String>) {
-        (4 to 1).report {
-            partOne()
-        }
-        (4 to 2).report {
-            partTwo()
-        }
-        (4 to "NA").report {
-            find_best_guard_to_trick()
-        }
-    }
-
-
-    private fun find_best_guard_to_trick() {
-        val guard = readGuards(list4).maxBy { it.value.sleepPrOnCall() }?.value
-        println("guard = $guard")
-    }
-
-    private fun partTwo() {
-        val guards = readGuards(list4)
+    fun partTwo(data: List<String>): Int {
+        val guards = readGuards(data)
 
         val hei = (0..59).map { min ->
             val maxGuard = guards.maxBy { e ->
@@ -40,22 +34,14 @@ class Day4 {
         val (min, guard) = hei.maxBy { it.second.numTimesSleptOnMinute(it.first) }!!
         println("min = $min, guard: $guard")
         println("mult min * guard.id = ${min * guard.id}")
+        return min * guard.id
     }
 
 
-    private fun partOne() {
-        val guards = readGuards(list4)
-        val id = guards.mapValues { it.value.sumMinutes() }.maxBy { it.value }!!.key
-        val guardWithMostSleep = guards[id]!!
-        val maxSleepMinute = guardWithMostSleep.maxSleepMinute()
-        val maxMinute = guardWithMostSleep.maxMinute()
-        val sumMinutes = guardWithMostSleep.sumMinutes()
-
-        debug("guardWithMostSleep = $guardWithMostSleep")
-        debug("guard slept = $sumMinutes")
-        debug("maxsleepinaminute = $maxSleepMinute")
-        println("slept guard $id slept $maxSleepMinute in minute $maxMinute")
-        println("multiply: $id * $maxMinute = ${maxMinute * id}")
+    fun find_best_guard_to_trick(data: List<String>): Guard? {
+        val guard = readGuards(data).maxBy { it.value.sleepPrOnCall() }?.value
+        println("guard = $guard")
+        return guard
     }
 
     private fun readGuards(list: List<String>): MutableMap<Int, Guard> {
@@ -112,7 +98,11 @@ class Day4 {
             start = min
         }
 
-        fun sleepPrOnCall() = sumMinutes() / onCall
+        fun sleepPrOnCall() = if (onCall != 0) {
+            sumMinutes() / onCall
+        } else {
+            -1
+        }
 
         fun wake(min: Int) {
             if (start == -1) {
