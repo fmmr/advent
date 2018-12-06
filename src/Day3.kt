@@ -55,7 +55,7 @@ object Day3 {
         return claim
     }
     data class Claim(val str: String) {
-        val id: Int
+        private val id: Int
         private val x: Int
         private val y: Int
         private val w: Int

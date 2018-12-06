@@ -1,4 +1,11 @@
 object Day1 {
+    fun day1_1_remake(ints: List<Int>): Int {
+        return ints.fold(0) { acc, i ->
+            acc + i
+        }
+    }
+
+
     fun day1_2_take3(ints: List<Int>): Int {
         val seenAcc = mutableSetOf<Int>()
         var acc = 0

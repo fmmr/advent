@@ -35,7 +35,7 @@ class DisableSlowCond : ExecutionCondition {
     override fun evaluateExecutionCondition(context: ExtensionContext): ConditionEvaluationResult {
         val isSlow = context.element.get().getAnnotation(Slow::class.java)
         return if (isSlow != null && isSlow.approximateRunTimeInMillis > OK_TO_WAIT_PR_TEST) {
-            ConditionEvaluationResult.disabled("Disabled ${context.displayName} because it's marked as slow (${isSlow.approximateRunTimeInMillis} ms > $OK_TO_WAIT_PR_TEST ms)")
+            ConditionEvaluationResult.disabled("Disabled ${context.displayName}. Marked as slow: ${isSlow.approximateRunTimeInMillis} ms > $OK_TO_WAIT_PR_TEST ms")
         } else {
             ConditionEvaluationResult.enabled("Enabled")
         }

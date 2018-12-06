@@ -13,7 +13,7 @@ internal class Day3Test {
     }
 
     @Test
-    @Slow(26000)
+    @Slow(48000)
     fun `3,1,live`() {
         report {
             Day3.part_one_take_one(data3) to 104241
