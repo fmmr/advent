@@ -1,3 +1,5 @@
+package no.rodland.advent.`2018`
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.extension.ConditionEvaluationResult
 import org.junit.jupiter.api.extension.ExecutionCondition

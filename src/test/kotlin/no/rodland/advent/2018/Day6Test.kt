@@ -1,10 +1,14 @@
+package no.rodland.advent.`2018`
+
+import Day6
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import readFile
 
 @DisableSlow
 internal class Day6Test {
 
-    val data6 = "input/input_6.txt".readFile().map { it.split(", ")[0].toInt() to it.split(", ")[1].toInt() }
+    val data6 = "input_6.txt".readFile().map { it.split(", ")[0].toInt() to it.split(", ")[1].toInt() }
     val test6 = listOf("1, 1", "1, 6", "8, 3", "3, 4", "5, 5", "8, 9").map { it.split(", ")[0].toInt() to it.split(", ")[1].toInt() }
 
     @Nested

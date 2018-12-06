@@ -1,7 +1,11 @@
+package no.rodland.advent.`2018`
+
+import Day2
 import org.junit.jupiter.api.Test
+import readFile
 
 internal class Day2Test {
-    private val data2 = "input/input_2.txt".readFile()
+    private val data2 = "input_2.txt".readFile()
     private val test2 = listOf("abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab")
     private val test22 = listOf("abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz")
     @Test

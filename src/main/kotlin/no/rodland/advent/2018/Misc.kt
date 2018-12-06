@@ -1,11 +1,10 @@
-import java.io.File
-
 fun String.readFile(): List<String> {
-    return File(this).readLines()
+    val resource = Any::class.java.getResource("/$this")
+    return resource.readText().split("\n")
 }
 
 fun String.readFileAsInt(): List<Int> {
-    return File(this).readLines().map { it.toInt() }
+    return this.readFile().map { it.toInt() }
 }
 
 @Suppress("ConstantConditionIf")

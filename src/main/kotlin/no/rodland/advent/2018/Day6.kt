@@ -78,8 +78,6 @@ object Day6 {
     }
 
     fun getDistance(coord: Pair<Int, Int>, x: Int, y: Int): Int {
-        return Math.abs(coord.first - x) + Math.abs(coord.second - y);
+        return Math.abs(coord.first - x) + Math.abs(coord.second - y)
     }
-
-
 }
