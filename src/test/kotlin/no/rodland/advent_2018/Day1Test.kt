@@ -1,11 +1,12 @@
-package no.rodland.advent.`2018`
+package no.rodland.advent_2018
 
 import Day1
+import no.rodland.advent.report
 import org.junit.jupiter.api.Test
 import readFileAsInt
 
 internal class Day1Test {
-    private val data1 = "input_1.txt".readFileAsInt()
+    private val data1 = "2018/input_1.txt".readFileAsInt()
     private val test1 = listOf(+1, -2, +3, +1)
     private val test2 = listOf(+1, +1, +1)
     private val test3 = listOf(+1, +1, -2)

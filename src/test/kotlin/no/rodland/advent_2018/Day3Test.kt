@@ -1,13 +1,16 @@
-package no.rodland.advent.`2018`
+package no.rodland.advent_2018
 
 import Day3
+import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
+import no.rodland.advent.report
 import org.junit.jupiter.api.Test
 import readFile
 
 @DisableSlow
 internal class Day3Test {
     private val test3 = listOf("#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2", "#1 @ 1,3: 4x4").map { Day3.Claim(it) }
-    private val data3 = "input_3.txt".readFile().map { Day3.Claim(it) }
+    private val data3 = "2018/input_3.txt".readFile().map { Day3.Claim(it) }
 
     @Test
     fun `3,1,test`() {

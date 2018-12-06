@@ -1,6 +1,9 @@
-package no.rodland.advent.`2018`
+package no.rodland.advent_2018
 
 import Day5
+import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
+import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -8,7 +11,7 @@ import readFile
 @DisableSlow
 internal class Day5Test {
 
-    val data5 = "input_5.txt".readFile()[0]
+    val data5 = "2018/input_5.txt".readFile()[0]
     val test5 = "dabAcCaCBAcCcaDA"
 
     @Nested

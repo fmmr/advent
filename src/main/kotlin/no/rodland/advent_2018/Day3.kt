@@ -21,7 +21,7 @@ object Day3 {
 
     fun part_two_take_one(list: List<Claim>): Claim {
         // asSequence shaves of approx 20 sec.
-        val noOverlap = list.asSequence().mapIndexed { index, claim ->
+        val noOverlap = list.asSequence().map { claim ->
             val overLapsForClaim = list
                     .filter { it != claim }
                     .flatMap { claim.overlap(it) }
@@ -54,6 +54,7 @@ object Day3 {
         println("claim = ${claim}")
         return claim
     }
+
     data class Claim(val str: String) {
         private val id: Int
         private val x: Int
