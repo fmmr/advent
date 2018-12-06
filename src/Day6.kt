@@ -51,8 +51,8 @@ object Day6 {
         return closestPos
                 .filter { isEdge(it.first, minX, maxX, minY, maxY) }
                 .map { it.second }
+                .distinct()
                 .filterNotNull()
-
     }
 
     private fun isEdge(pos: Pair<Int, Int>, minX: Int, maxX: Int, minY: Int, maxY: Int): Boolean {
