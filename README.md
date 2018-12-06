@@ -11,3 +11,7 @@ fmmr solutions for Advent of code: https://adventofcode.com/2018
 [2017](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2017)
 
 [2018](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2018)
+
+
+
+Fredrik Rødland 2018
