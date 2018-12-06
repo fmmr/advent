@@ -1,3 +1,3 @@
-# advent_2018
+# advent og code
 
-fmmr solutions for 2018 Advent of code: https://adventofcode.com/2018
+fmmr solutions for Advent of code: https://adventofcode.com/2018
