@@ -49,6 +49,19 @@ internal class Day6Test {
 
     @Nested
     inner class `Part 2` {
+        @Test
+        fun `6,2,test`() {
+            report {
+                Day6.partTwo(test6, 32) to 16
+            }
+        }
+
+        @Test
+        fun `6,2,live`() {
+            report {
+                Day6.partTwo(data6, 10000) to 46554
+            }
+        }
 
     }
 }
