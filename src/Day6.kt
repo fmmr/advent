@@ -21,7 +21,6 @@ object Day6 {
                 .groupingBy { it?.first }
                 .eachCount()
                 .maxBy { it.value }?.value
-        println("tmp = $coordinates")
         println("MIN: x: $minX, y: $minY, MAX: x: $maxX, y: $maxY")
 
         return result!!
