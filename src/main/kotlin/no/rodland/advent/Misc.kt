@@ -15,3 +15,4 @@ fun debug(str: String) {
 }
 
 fun Regex.get(str: String, i: Int = 1): Int = find(str)!!.groupValues[i].toInt()
+fun Int.isEven() = this % 2 == 0
