@@ -1,13 +1,13 @@
 object Day8 {
     fun partOne(coordinates: List<Int>): Int {
-        return createSubTreeTwo(coordinates.toMutableList()) { _, i -> i }
+        return createSubTree(coordinates.toMutableList()) { _, i -> i }
                 .flatten()
                 .map { it.metaSum }
                 .sum()
     }
 
     fun partTwo(coordinates: List<Int>): Int {
-        return createSubTreeTwo(coordinates.toMutableList()) { s, i ->
+        return createSubTree(coordinates.toMutableList()) { s, i ->
             when {
                 s.isEmpty() -> i
                 (i - 1) < s.size -> s[i - 1].metaSum
@@ -16,10 +16,10 @@ object Day8 {
         }.metaSum
     }
 
-    private fun createSubTreeTwo(list: MutableList<Int>, metaDataMapper: (List<Node>, Int) -> Int): Node {
+    private fun createSubTree(list: MutableList<Int>, metaDataMapper: (List<Node>, Int) -> Int): Node {
         val numNodes = list.removeAt(0)
         val numMeta = list.removeAt(0)
-        val subNodes = (1..numNodes).map { createSubTreeTwo(list, metaDataMapper) }
+        val subNodes = (1..numNodes).map { createSubTree(list, metaDataMapper) }
         val meta = (1..numMeta)
                 .map { list.removeAt(0) }
                 .map { metaDataMapper(subNodes, it) }
