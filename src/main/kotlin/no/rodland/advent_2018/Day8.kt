@@ -20,6 +20,6 @@ object Day8 {
                 } else {
                     meta.sumBy { subNodes.getOrNull(it - 1)?.partTwo ?: 0 }
                 }
-        val partOne: Int = meta.sum() + subNodes.map { it.partOne }.sum()
+        val partOne: Int = meta.sum() + subNodes.sumBy { it.partOne }
     }
 }
