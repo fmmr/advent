@@ -1,4 +1,4 @@
-# advent of code
+# advent of code      [![Build Status](https://travis-ci.com/fmmr/advent.svg?branch=master)](https://travis-ci.com/fmmr/advent)
 
 fmmr solutions for Advent of code: https://adventofcode.com/2018
 
