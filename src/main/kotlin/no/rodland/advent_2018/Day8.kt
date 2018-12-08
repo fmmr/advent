@@ -1,39 +1,35 @@
 object Day8 {
     fun partOne(coordinates: List<Int>): Int {
-        return createSubTree(coordinates.toMutableList()) { _, i -> i }
+        return createSubTree(coordinates.toMutableList())
                 .flatten()
-                .map { it.metaSum }
-                .sum()
+                .sumBy { it.metaSum }
     }
 
     fun partTwo(coordinates: List<Int>): Int {
-        return createSubTree(coordinates.toMutableList()) { s, i ->
-            when {
-                s.isEmpty() -> i
-                (i - 1) < s.size -> s[i - 1].metaSum
-                else -> 0
-            }
-        }.metaSum
+        return createSubTree(coordinates.toMutableList()).sumFromChildrenMeta
     }
 
-    private fun createSubTree(list: MutableList<Int>, metaDataMapper: (List<Node>, Int) -> Int): Node {
+    private fun createSubTree(list: MutableList<Int>): Node {
         val numNodes = list.removeAt(0)
         val numMeta = list.removeAt(0)
-        val subNodes = (1..numNodes).map { createSubTree(list, metaDataMapper) }
-        val meta = (1..numMeta)
-                .map { list.removeAt(0) }
-                .map { metaDataMapper(subNodes, it) }
-                .sum()
-        return Node(meta, subNodes)
+        return Node((1..numNodes).map { createSubTree(list) }, (1..numMeta).map { list.removeAt(0) })
     }
 
     private fun flatMapNodes(nodes: List<Node>): List<Node> {
         return listOf(nodes, nodes.flatMap { flatMapNodes(it.subNodes) }).flatten()
     }
 
-    data class Node(val metaSum: Int, val subNodes: List<Node>) {
+    data class Node(val subNodes: List<Node>, val meta: List<Int>) {
         fun flatten(): List<Node> {
             return flatMapNodes(listOf(this))
         }
+
+        val metaSum = meta.sum()
+        val sumFromChildrenMeta: Int =
+                if (subNodes.isEmpty()) {
+                    metaSum
+                } else {
+                    meta.sumBy { subNodes.getOrNull(it - 1)?.sumFromChildrenMeta ?: 0 }
+                }
     }
 }
