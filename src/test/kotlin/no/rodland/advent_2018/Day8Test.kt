@@ -13,7 +13,6 @@ internal class Day8Test {
     val data8 = "2018/input_8.txt".readFile()[0].split(" ").toList().map { it.toInt() }
     val test8 = listOf(2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2)
 
-
     @Nested
     inner class `Part 1` {
         @Test
@@ -24,7 +23,7 @@ internal class Day8Test {
         }
 
         @Test
-        fun `7,1,live`() {
+        fun `8,1,live`() {
             report {
                 Day8.partOne(data8) to 45618
             }
@@ -33,6 +32,19 @@ internal class Day8Test {
 
     @Nested
     inner class `Part 2` {
+        @Test
+        fun `8,2,test`() {
+            report {
+                Day8.partTwo(test8) to 66
+            }
+        }
+
+        @Test
+        fun `8,2,live`() {
+            report {
+                Day8.partTwo(data8) to 22306
+            }
+        }
     }
 }
 
