@@ -37,12 +37,9 @@ object Day7 {
 
 
     class WorkPlace(val secPrTask: Int, val numWorkers: Int) {
-
         var secondsTicking = 0
         var inProgress: MutableList<Pair<String, Int>> = mutableListOf()
-        var started = false
         fun addWork(w: String): Boolean {
-            started = true
             return if (okToAddWork()) {
                 val secondsForWork = getSeconds(w)
                 inProgress.add(Pair(w, secondsForWork))
