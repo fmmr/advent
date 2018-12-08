@@ -15,6 +15,20 @@ fun debug(str: String) {
 }
 
 fun Regex.get(str: String, i: Int = 1): Int = find(str)!!.groupValues[i].toInt()
+
 fun Int.isEven() = this % 2 == 0
+
 fun Any.println() = println(this)
 
+fun String.pad(i: Int): String {
+    return this + (" ".repeat(i - this.length))
+}
+
+fun Int.pad(): String {
+    return when {
+        this < 10 -> "   $this"
+        this < 100 -> "  $this"
+        this < 1000 -> " $this"
+        else -> this.toString()
+    }
+}

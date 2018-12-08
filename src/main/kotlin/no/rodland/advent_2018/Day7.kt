@@ -105,16 +105,3 @@ object Day7 {
         println("${wp.secondsTicking.pad()}  $werb  $w      workers: ${wp.inProgress.size}  todo: ${todo.joinToString("").pad(25)}  done: ${done.joinToString("")}")
     }
 }
-
-private fun String.pad(i: Int): String {
-    return this + (" ".repeat(i - this.length))
-}
-
-private fun Int.pad(): String {
-    return when {
-        this < 10 -> "   $this"
-        this < 100 -> "  $this"
-        this < 1000 -> " $this"
-        else -> this.toString()
-    }
-}
