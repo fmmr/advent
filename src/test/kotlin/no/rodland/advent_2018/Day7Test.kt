@@ -33,6 +33,40 @@ internal class Day7Test {
 
     @Nested
     inner class `Part 2` {
+        @Test
+        fun `7,2,test`() {
+            report {
+                Day7.partTwo(test7, 0, 2) to 15
+            }
+        }
+
+        @Test
+        fun `7,2,live_0_2`() {
+            report {
+                Day7.partTwo(data7, 0, 2) to 210
+            }
+        }
+
+        @Test
+        fun `7,2,live_60_5`() {
+            report {
+                Day7.partTwo(data7, 60, 5) to 828
+            }
+        }
+
+        @Test
+        fun `7,2,workplacea`() {
+            report {
+                Day7.WorkPlace(60, 1).getSeconds("A") to 61
+            }
+        }
+
+        @Test
+        fun `7,2,workplacez`() {
+            report {
+                Day7.WorkPlace(0, 1).getSeconds("Z") to 26
+            }
+        }
     }
 }
 
