@@ -1,10 +1,10 @@
 object Day8 {
     fun partOne(coordinates: List<Int>): Int {
-        return createSubTree(coordinates.toMutableList()).metaSumWithChildren
+        return createSubTree(coordinates.toMutableList()).partOne
     }
 
     fun partTwo(coordinates: List<Int>): Int {
-        return createSubTree(coordinates.toMutableList()).sumFromChildrenMeta
+        return createSubTree(coordinates.toMutableList()).partTwo
     }
 
     private fun createSubTree(list: MutableList<Int>): Node {
@@ -14,12 +14,12 @@ object Day8 {
     }
 
     data class Node(val subNodes: List<Node>, val meta: List<Int>) {
-        val sumFromChildrenMeta: Int =
+        val partTwo: Int =
                 if (subNodes.isEmpty()) {
                     meta.sum()
                 } else {
-                    meta.sumBy { subNodes.getOrNull(it - 1)?.sumFromChildrenMeta ?: 0 }
+                    meta.sumBy { subNodes.getOrNull(it - 1)?.partTwo ?: 0 }
                 }
-        val metaSumWithChildren: Int = meta.sum() + subNodes.map { it.metaSumWithChildren }.sum()
+        val partOne: Int = meta.sum() + subNodes.map { it.partOne }.sum()
     }
 }
