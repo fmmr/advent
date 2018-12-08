@@ -1,8 +1,6 @@
 object Day8 {
     fun partOne(coordinates: List<Int>): Int {
-        return createSubTree(coordinates.toMutableList())
-                .flatten()
-                .sumBy { it.metaSum }
+        return createSubTree(coordinates.toMutableList()).metaSumWithChildren
     }
 
     fun partTwo(coordinates: List<Int>): Int {
@@ -15,21 +13,13 @@ object Day8 {
         return Node((1..numNodes).map { createSubTree(list) }, (1..numMeta).map { list.removeAt(0) })
     }
 
-    private fun flatMapNodes(nodes: List<Node>): List<Node> {
-        return listOf(nodes, nodes.flatMap { flatMapNodes(it.subNodes) }).flatten()
-    }
-
     data class Node(val subNodes: List<Node>, val meta: List<Int>) {
-        fun flatten(): List<Node> {
-            return flatMapNodes(listOf(this))
-        }
-
-        val metaSum = meta.sum()
         val sumFromChildrenMeta: Int =
                 if (subNodes.isEmpty()) {
-                    metaSum
+                    meta.sum()
                 } else {
                     meta.sumBy { subNodes.getOrNull(it - 1)?.sumFromChildrenMeta ?: 0 }
                 }
+        val metaSumWithChildren: Int = meta.sum() + subNodes.map { it.metaSumWithChildren }.sum()
     }
 }
