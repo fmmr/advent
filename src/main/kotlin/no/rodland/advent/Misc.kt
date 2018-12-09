@@ -15,6 +15,7 @@ fun debug(str: String) {
 }
 
 fun Regex.get(str: String, i: Int = 1): Int = find(str)!!.groupValues[i].toInt()
+fun Regex.getLong(str: String, i: Int = 1): Long = find(str)!!.groupValues[i].toLong()
 
 fun Int.isEven() = this % 2 == 0
 
