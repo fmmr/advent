@@ -48,7 +48,14 @@ internal class Day10Test {
         @Test
         fun `8,1,test`() {
             report {
-                Day10.partOne(test10) to 2
+                Day10.partOne(test10, 7) to 3
+            }
+        }
+
+        @Test
+        fun `8,1,live`() {
+            report {
+                Day10.partOne(data10, 9) to 10476
             }
         }
 
@@ -57,9 +64,9 @@ internal class Day10Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `8,2,test`() {
+        fun `8,2,live`() {
             report {
-                Day10.partTwo(test10) to 2
+                Day10.partOne(data10, 9) to 10476
             }
         }
     }
