@@ -4,7 +4,6 @@ import Day9
 import get
 import getLong
 import no.rodland.advent.DisableSlow
-import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
@@ -30,31 +29,29 @@ internal class Day9Test {
             val worth = re.get(candidate, 2)
             val answer = re.getLong(candidate, 3)
             report {
-                Day9.partOne(players, worth) to answer
+                Day9.partTwo(players, worth) to answer
             }
         }
 
         @ParameterizedTest(name = "run #{index} with [{arguments}]")
         @ValueSource(strings = ["405 players; last marble is worth 717000 points: high score is 36911578"])
-        @Slow(12200)
         fun `8,2,paramterized_10`(candidate: String) {
             val players = re.get(candidate, 1)
             val worth = re.get(candidate, 2)
             val answer = re.getLong(candidate, 3)
             report {
-                Day9.partOne(players, worth) to answer
+                Day9.partTwo(players, worth) to answer
             }
         }
 
         @ParameterizedTest(name = "run #{index} with [{arguments}]")
         @ValueSource(strings = ["405 players; last marble is worth 7170000 points: high score is 3628143500"])
-        @Slow(99999999)
         fun `8,2,paramterized_100`(candidate: String) {
             val players = re.get(candidate, 1)
             val worth = re.get(candidate, 2)
             val answer = re.getLong(candidate, 3)
             report {
-                Day9.partOne(players, worth) to answer
+                Day9.partTwo(players, worth) to answer
             }
         }
     }
