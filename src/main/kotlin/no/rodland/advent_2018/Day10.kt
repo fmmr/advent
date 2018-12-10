@@ -2,6 +2,7 @@ object Day10 {
     val re = """position=<([\d- ]+),([\d- ]+)> velocity=<([\d- ]+),([\d- ]+)>""".toRegex()
     const val NOT_SET = ".."
     const val SET = "[]"
+    const val BORDER = 2
 
     fun partOne(p: List<String>, height: Int): Int {
         val points = p.map { Point(it.trim()) }
@@ -22,14 +23,14 @@ object Day10 {
         val xs = points.map { it.x }
         val ys = points.map { it.y }
 
-        val minX = (xs.min() ?: 0) - 3
-        val maxX = ((ys.max() ?: 0)) + 3
-        val minY = (ys.min() ?: 0) - 3
-        val maxY = ((xs.max() ?: 0)) + 3
+        val minY = (ys.min() ?: 0) - BORDER
+        val maxY = ((ys.max() ?: 0)) + BORDER
+        val minX = (xs.min() ?: 0) - BORDER
+        val maxX = ((xs.max() ?: 0)) + BORDER
 
-        (minX..maxX).forEach { y ->
-            (minY..maxY).forEach { x ->
-                print(pairs.get(x to y) ?: NOT_SET)
+        (minY..maxY).forEach { y ->
+            (minX..maxX).forEach { x ->
+                print(pairs[x to y] ?: NOT_SET)
             }
             println("")
         }
