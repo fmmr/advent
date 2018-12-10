@@ -6,6 +6,7 @@ import getLong
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
 import no.rodland.advent.report
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -94,6 +95,11 @@ internal class Day9Test {
         @Nested
         inner class `get index add` {
             val game = Day9.Game(3, 4)
+            @BeforeAll
+            fun playSomeRounds() {
+                (1..9).forEach { game.placeMarble(it.toLong()) }
+            }
+
             @Test
             fun `8,1,getindexforadd,1`() {
                 report {
@@ -119,6 +125,11 @@ internal class Day9Test {
         @Nested
         inner class `get index` {
             val game = Day9.Game(3, 4)
+
+            @BeforeAll
+            fun playSomeRounds() {
+                (1..9).forEach { game.placeMarble(it.toLong()) }
+            }
 
             @Test
             fun `8,1,getindex,1`() {

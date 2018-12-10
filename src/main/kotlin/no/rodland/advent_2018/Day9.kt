@@ -11,14 +11,13 @@ object Day9 {
     }
 
     class Game(val numPlayers: Int, val lastMarble: Int) {
-        val game = mutableListOf<Long>(0, 8, 4, 9, 2, 5, 1, 6, 3, 7)
+        val game = mutableListOf<Long>(0)
         var currentPlayer = -1
-        var currentMarblePos = 3
+        var currentMarblePos = 0
         val scores = LongArray(numPlayers) { 0 }
 
-
         fun playGame() {
-            (10..lastMarble).map { placeMarble(it.toLong()) }.toList()
+            (1..lastMarble).map { placeMarble(it.toLong()) }
         }
 
         fun placeMarble(marble: Long) {
@@ -34,7 +33,6 @@ object Day9 {
                 currentMarblePos = newMarblePos
             }
         }
-
 
         fun getIndex(current: Int, relative: Int): Int {
             val next = current + relative
