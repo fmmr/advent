@@ -1,4 +1,5 @@
-# advent of code      [![Build Status](https://travis-ci.com/fmmr/advent.svg?branch=master)](https://travis-ci.com/fmmr/advent)   [![codecov](https://codecov.io/gh/fmmr/advent/branch/master/graph/badge.svg)](https://codecov.io/gh/fmmr/advent)
+# advent of code      [![Build Status](https://travis-ci.com/fmmr/advent.svg?branch=master)](https://travis-ci.com/fmmr/advent)   [![codecov](https://codecov.io/gh/fmmr/advent/branch/master/graph/badge.svg)](https://codecov.io/gh/fmmr/advent)  [![last commit](https://img.shields.io/github/last-commit/fmmr/advent.svg)](https://github.com/fmmr/advent)
+
 
 fmmr solutions for Advent of code: https://adventofcode.com/2018
 
