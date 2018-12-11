@@ -122,7 +122,7 @@ internal class Day11Test {
         @Slow(2400)
         fun `11,2,live`() {
             report {
-                Day11.partTwo(9798, 12, 14) to ((235 to 87) to 13)
+                Day11.partTwo(9798, 1, 300) to ((235 to 87) to 13)
             }
         }
 

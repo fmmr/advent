@@ -1,3 +1,5 @@
+import kotlin.math.max
+
 object Day11 {
     fun partOne(serial: Int): Pair<Int, Int> {
         val grid = 3
@@ -10,16 +12,29 @@ object Day11 {
         return max!!.first
     }
 
-    fun partTwo(serial: Int, minRange: Int, maxRange: Int): Pair<Pair<Int, Int>, Int>? {
-        var lastVal = 0
+    fun partTwo(
+            serial: Int,
+            minRange: Int,
+            maxRange: Int,
+            stopPredicate: (current: Int, maxReached: Int) -> Boolean = { i1, i2 -> i1 < (i2 - (20 * i2 / 100)) }): Pair<Pair<Int, Int>, Int>? {
+        var maxReachedValue = 1
+        var stop = false
         val max = (minRange..maxRange).map { grid ->
-            val maxBy = (1..(300 - grid)).flatMap { x ->
-                (1..(300 - grid)).map { y ->
-                    getAggregatedValues(x, y, serial, grid) to grid
+            val max2 = (1..(301 - grid)).flatMap { x ->
+                (1..(301 - grid)).map { y ->
+                    if (!stop) {
+                        getAggregatedValues(x, y, serial, grid) to grid
+                    } else {
+                        ((x to y) to -1) to grid
+                    }
                 }
             }.maxBy { it.first.second }
-            println("grid: $grid: $maxBy")
-            maxBy
+            println("grid: $grid:   $max2   maxReached: $maxReachedValue")
+            if (stopPredicate(max2!!.first.second, maxReachedValue)) {
+                stop = true
+            }
+            maxReachedValue = max((max2.first.second ?: 0), maxReachedValue)
+            max2
         }.maxBy { it!!.first.second }
         println("max $max")
         return (max!!.first.first.first to max.first.first.second) to (max.second)
@@ -46,10 +61,6 @@ object Day11 {
     }
 
     fun getHundred(i: Int): Int {
-        if (i < 100) {
-            return 0
-        }
-        val toString = (i / 100).toString()
-        return toString.get(toString.length - 1).toString().toInt()
+        return (i % 1000) / 100  // thanks chriswk
     }
 }
