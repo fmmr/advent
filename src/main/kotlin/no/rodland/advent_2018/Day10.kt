@@ -39,7 +39,7 @@ object Day10 {
     }
 
     private data class Point(var x: Int, var y: Int, val dx: Int, val dy: Int) {
-        constructor(str: String) : this(re.getString(str).trim().toInt(), re.getString(str, 2).trim().toInt(), re.getString(str, 3).trim().toInt(), re.getString(str, 4).trim().toInt())
+        constructor(str: String) : this(re.getString(str)!!.trim().toInt(), re.getString(str, 2)!!.trim().toInt(), re.getString(str, 3)!!.trim().toInt(), re.getString(str, 4)!!.trim().toInt())
 
         fun move(): Point {
             x += dx

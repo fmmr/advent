@@ -14,7 +14,7 @@ fun debug(str: String) {
     }
 }
 
-fun Regex.getString(str: String, i: Int = 1): String = find(str)!!.groupValues[i]
+fun Regex.getString(str: String, i: Int = 1): String? = find(str)?.groupValues?.get(i)
 fun Regex.get(str: String, i: Int = 1): Int = find(str)!!.groupValues[i].toInt()
 fun Regex.getLong(str: String, i: Int = 1): Long = find(str)!!.groupValues[i].toLong()
 
