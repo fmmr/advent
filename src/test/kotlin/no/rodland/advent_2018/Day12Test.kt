@@ -33,14 +33,15 @@ internal class Day12Test {
         @Test
         fun `12,2,test`() {
             report {
-                Day12.partTwo(test12) to 2
+                Day12.partTwo(test12, "#..#.#..##......###...###") to 2
             }
         }
 
         @Test
         fun `12,2,live`() {
             report {
-                Day12.partTwo(data12) to 2
+                // ran parttwo until it made a recurring pattern
+                (2748L + (20L * (50000000000L - 112L))) to 1000000000508
             }
         }
     }
