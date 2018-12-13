@@ -19,13 +19,13 @@ object Day13 {
         val (trains, track: List<MutableList<Char>>) = init(list)
 
         while (trains.size > 1) {
-            trains.sorted().forEach {
+            trains.sorted().forEach { train ->
                 if (trains.crashed()) {
                     val crash = trains.getCrash()
                     trains.removeIf { crash.first == it.x && crash.second == it.y }
-                    println("CRASHED!!! ${crash}  ${trains.size}")
+                    println("CRASHED!!! $crash  ${trains.size}")
                 }
-                it.move(track)
+                train.move(track)
             }
         }
         val train = trains.first()
@@ -48,8 +48,8 @@ object Day13 {
 
     private fun plainTrack(it: Char): Char {
         return when (it) {
-            '<', '>' -> '-'
-            'v', '^' -> '|'
+            in "<>" -> '-'
+            in "v^" -> '|'
             else -> it
         }
     }
@@ -57,9 +57,9 @@ object Day13 {
     data class Train(val name: String = "tmp", var x: Int, var y: Int, var direction: Direction, var turn: Turn = Turn.LEFT) : Comparable<Train> {
         override fun compareTo(other: Train): Int {
             val yComp = y.compareTo(other.y)
-            if (yComp == 0) {
-                return x.compareTo(other.x)
-            } else return yComp
+            return if (yComp == 0) {
+                x.compareTo(other.x)
+            } else yComp
         }
 
         fun move(track: List<MutableList<Char>>): Train {
@@ -167,12 +167,12 @@ object Day13 {
         }
     }
 
-    enum class Direction() {
+    enum class Direction {
         UP, DOWN, LEFT, RIGHT
     }
 
 
-    fun direction(c: Char): Direction {
+    private fun direction(c: Char): Direction {
         return when (c) {
             '^' -> Direction.UP
             'v' -> Direction.DOWN
