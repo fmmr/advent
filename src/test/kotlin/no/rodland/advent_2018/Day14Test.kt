@@ -1,9 +1,14 @@
 package no.rodland.advent_2018
 
+import get
+import getString
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import readFile
 
 @DisableSlow
@@ -116,17 +121,28 @@ internal class Day14Test {
 
     @Nested
     inner class `Part 2` {
-        @Test
-        fun `14,2,test`() {
+
+        val re = """(\d+) first appears after (\d+) recipes\.""".toRegex()
+        @ParameterizedTest(name = "run #{index} with [{arguments}]")
+        @ValueSource(strings = ["51589 first appears after 9 recipes.",
+            "01245 first appears after 5 recipes.",
+            "92510 first appears after 18 recipes.",
+            "59414 first appears after 2018 recipes."]
+        )
+        @Slow(300)
+        fun `9,2,paramterizedtest`(candidate: String) {
+            val num = re.getString(candidate, 1)!!
+            val answer = re.get(candidate, 2)
             report {
-                Day14.partTwo(test14) to 2
+                Day14.partTwo(num) to answer
             }
         }
 
         @Test
-        fun `14,2,live`() {
+        @Slow(36000)
+        fun `9,2,live`() {
             report {
-                Day14.partTwo(data14) to 2
+                Day14.partTwo("320851") to -1
             }
         }
     }

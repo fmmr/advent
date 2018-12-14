@@ -34,3 +34,5 @@ fun Int.pad(): String {
         else -> this.toString()
     }
 }
+
+fun Char.asInt(): Int = toString().toInt()
