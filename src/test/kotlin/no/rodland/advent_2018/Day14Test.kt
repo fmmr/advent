@@ -8,81 +8,39 @@ import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import readFile
 
+@Suppress("ClassName")
 @DisableSlow
 internal class Day14Test {
     val data14 = "2018/input_14.txt".readFile()
     val test14 = listOf("1", "2")
 
-    @Nested
-    inner class newpos {
-        @Test
-        fun `14,1,newPos`() {
-            report {
-                Day14.newPos(3, 0, 4) to 0
-            }
+
+    @ParameterizedTest(name = "(value:{0},currentPos:{1},size:{2}) => {3}")
+    @CsvSource("3, 0, 4, 0",
+            "3, 0, 6, 4",
+            "7, 1, 6, 3",
+            "7, 1, 13, 9",
+            "1, 5, 20, 7")
+    fun `14,1,get next index`(value: Int, currentPos: Int, listSize: Int, expected: Int) {
+        report {
+            Day14.newPos(value, currentPos, listSize) to expected
         }
-
-        @Test
-        fun `14,1,newPos,2`() {
-            report {
-                Day14.newPos(1, 5, 20) to 7
-            }
-        }
-
-
-        @Test
-        fun `14,1,newPos,3`() {
-            report {
-                Day14.newPos(3, 0, 6) to 4
-            }
-        }
-
-        @Test
-        fun `14,1,newPos,4`() {
-            report {
-                Day14.newPos(7, 1, 6) to 3
-            }
-        }
-
-        @Test
-        fun `14,1,newPos,5`() {
-            report {
-                Day14.newPos(7, 1, 13) to 9
-            }
-        }
-
     }
 
-    @Nested
-    inner class listDigits {
-        @Test
-        fun `14,1,listdigits`() {
-            report {
-                Day14.toListOfDigits(8) to listOf(8)
-            }
-        }
-
-        @Test
-        fun `14,1,listdigits,2`() {
-            report {
-                Day14.toListOfDigits(18) to listOf(1, 8)
-            }
-        }
-
-        @Test
-        fun `14,1,listdigits,3`() {
-            report {
-                Day14.toListOfDigits(0) to listOf(0)
-            }
+    @ParameterizedTest(name = "(value:{0},currentPos:{1},size:{2}) => {3}")
+    @CsvSource("8, 8", "18, 18", "0,0")
+    fun `14,1,list digits`(value: Int, expected: String) {
+        report {
+            Day14.toListOfDigits(value).joinToString("") to expected
         }
     }
 
     @Nested
     inner class `Part 1` {
-
         @Test
         fun `14,1,test`() {
             report {
