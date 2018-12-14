@@ -139,10 +139,10 @@ internal class Day14Test {
         }
 
         @Test
-        @Slow(36000)
+        @Slow(5000)
         fun `9,2,live`() {
             report {
-                Day14.partTwo("320851") to -1
+                Day14.partTwo("320851") to 20316365
             }
         }
     }
