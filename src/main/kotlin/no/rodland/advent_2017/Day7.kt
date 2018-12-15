@@ -2,58 +2,87 @@ package no.rodland.advent_2017
 
 import get
 import getString
+import kotlin.math.absoluteValue
 
 object Day7 {
 
     val re = """(.*) \((\d+)\)[ ->]*(.*)""".toRegex()
     fun partOne(list: List<String>): String {
-        val (nodes, noParent) = init(list)
-        println("root node: $noParent")
+        val (nodes, rootNode) = init(list)
+
+        println("root node: $rootNode")
         println("nodes: ${nodes.size}")
-        return noParent.name
+        return rootNode.name
     }
 
     fun partTwo(list: List<String>): Int {
-        val (nodes, noParent) = init(list)
-        return 2
+        val (_, rootNode) = init(list)
 
+        return rootNode.findImbalance()
     }
-
 
     private fun init(list: List<String>): Pair<Map<String, Node>, Node> {
-        val nodes = list
-                .map { Node(it) }
-                .map { it.name to it }
-                .toMap()
-        nodes.values.forEach { node ->
-            node.subnodesStr?.forEach { subnode ->
-                nodes[subnode]?.parent = node
-//                node.subnodes.add(nodes[subnode]!!)
-            }
+        val nodes = list.map { str ->
+            val name = re.getString(str)!!
+            val weight = re.get(str, 2)
+            val subnodesStr = re.getString(str, 3)
+            name to Node(name, weight, subnodesStr)
+        }.toMap()
 
+        nodes.values.forEach { node ->
+            val subNodes = node.subnodesStr
+                    ?.split(" ", ", ", ",")
+                    ?.toList()
+                    ?.map { nodes[it] }
+                    ?.filterNotNull() ?: emptyList()
+
+            node.subnodes.addAll(subNodes)
+            subNodes.forEach {
+                it.parent = node
+            }
         }
-        val noParent = nodes.values.filter { it.parent == null }.first()
-        return Pair(nodes, noParent)
+        val rootNode = nodes.values.filter { it.parent == null }.first()
+        return Pair(nodes, rootNode)
     }
 
 
-    private class Node(str: String) {
-        val name: String
-        val weight: Int
-        val subnodesStr: List<String>?
-        val subnodes: MutableList<Node> = mutableListOf()
-        var parent: Node? = null
-        var childrenWeight = 0
-        var totalWeight = 0
+    private data class Node(
+            val name: String,
+            val weight: Int,
+            val subnodesStr: String?,
+            val subnodes: MutableList<Node> = mutableListOf(),
+            var parent: Node? = null) {
 
-        init {
-            name = re.getString(str)!!
-            weight = re.get(str, 2)
-            subnodesStr = re.getString(str, 3)?.split(" ", ", ", ",")?.toList()
+        val totalWeight: Int by lazy {
+            weight + subnodes.sumBy { it.totalWeight }
+        }
+
+        val haveBalancedChildTotal: Boolean by lazy {
+            subnodes.map { it.totalWeight }.distinct().count() == 1
         }
 
         override fun toString(): String {
-            return "Node(name='$name', weight=$weight, subnodes=$subnodesStr)"
+            return "Node(name='$name', weight=$weight, subnodesStr=$subnodesStr, parent=$parent)"
         }
+
+        // I ended up just finding (a few) candidates and detucted the result from having a look at the 11 ndoes 
+        // I got.
+        // copied this from: from https://todd.ginsberg.com/post/advent-of-code/2017/day7/
+        fun findImbalance(imbalance: Int? = null): Int =
+                if (imbalance != null && haveBalancedChildTotal) {
+                    // We end when I have a positive imbalance and my children are balanced.
+                    weight - imbalance
+                } else {
+                    // Find the child tree that is off.
+                    val subtreesByWeight = subnodes.groupBy { it.totalWeight }
+
+                    // Find the imbalanced child tree (they will be the lone node in the list, when grouped by weight)
+                    val badTree = subtreesByWeight.minBy { it.value.size }?.value?.first()
+                            ?: throw IllegalStateException("Should not be balanced here.")
+
+                    // Recurse, passing down our imbalance. If we don't know the imbalance, calculate it.
+                    // Calculate the imbalance as the absolute value of the difference of all distinct weights
+                    badTree.findImbalance(imbalance ?: subtreesByWeight.keys.reduce { a, b -> a - b }.absoluteValue)
+                }
     }
 }

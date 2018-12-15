@@ -33,14 +33,14 @@ internal class Day7Test {
         @Test
         fun `7,2,test`() {
             report {
-                Day7.partTwo(test7) to 2
+                Day7.partTwo(test7) to 60
             }
         }
 
         @Test
         fun `7,2,live`() {
             report {
-                Day7.partTwo(data7) to 2
+                Day7.partTwo(data7) to 1072
             }
         }
     }
