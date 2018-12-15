@@ -33,22 +33,27 @@ object Day15 {
 
     fun stats(creatures: List<Creature>, rounds: Int): Int = creatures.sumBy { it.hitPoints } * rounds
 
-    fun init(list: List<String>): Pair<TreeSet<Creature>, List<MutableList<Char>>> {
-        val creatures = sortedSetOf<Creature>()
-        val map: List<MutableList<Char>> = list.mapIndexed { y, line ->
-            creatures.addAll(line
-                    .mapIndexed { x, c -> c to (x to y) }
-                    .filter { it.first.isCreature() }
-                    .map {
-                        Creature(
-                                it.first.toType(),
-                                "${it.first}_${it.second.first}X${it.second.second}",
-                                Pos(it.second.first, it.second.second)
-                        )
-                    })
-            line.map { if (it.isCreature()) '.' else it }.toMutableList()
+    fun init(list: List<String>): Pair<SortedSet<Creature>, List<MutableList<Point>>> {
+        val map = list.mapIndexed { y, line ->
+            line.mapIndexed { x: Int, c: Char ->
+                if (c.isCreature()) {
+                    Point(creature = Creature(c.toType(), "${c}_${x}X$y", Pos(x, y)))
+                } else {
+                    Point(char = c)
+                }
+            }.toMutableList()
         }
+
+        val creatures = map.flatMap { line ->
+            line.mapNotNull { it.creature }
+        }.toSortedSet()
         return Pair(creatures, map)
+    }
+
+    data class Point(val char: Char? = null, val creature: Creature? = null) {
+        fun isWall() = char == WALL
+        fun isOpen() = char == OPEN
+        fun isCreature(): Boolean = creature != null
     }
 
     data class Creature(val type: Type, val name: String, var pos: Pos, val power: Int = 3, var hitPoints: Int = 200) : Comparable<Creature> {
@@ -60,7 +65,7 @@ object Day15 {
             other.hitPoints -= power
         }
 
-        fun move(enemies: List<Creature>, map: List<MutableList<Char>>) {
+        fun move(enemies: List<Creature>, map: List<MutableList<Point>>) {
 //            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
     }

@@ -124,8 +124,6 @@ internal class Day15Test {
         fun `15,1,init,small`() {
             report {
                 val (creatures, map) = Day15.init(test15_small)
-                (2..7).forEach { assertEquals(map[1], map[it]) }
-                assertEquals(map[0], map[8]) // left and right walls
                 assertEquals(map[0].size, 9) // left and right walls
                 assertEquals(creatures.count { it.type == GOBLIN }, 8)
                 assertEquals(creatures.count { it.type == ELF }, 1)
@@ -138,10 +136,6 @@ internal class Day15Test {
         fun `15,1,init,mini`() {
             report {
                 val (creatures, map) = Day15.init(test15_mini)
-                assertEquals(map[1].size, 7)
-                assertEquals(map[1], map[2])
-                assertEquals(map[1], map[3])
-                assertEquals(map[0], map[4]) // left and right walls
                 creatures.size to 2
             }
         }
