@@ -10,14 +10,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
-import readFile
 
 @Suppress("ClassName")
 @DisableSlow
 internal class Day14Test {
-    val data14 = "2018/input_14.txt".readFile()
-    val test14 = listOf("1", "2")
-
 
     @ParameterizedTest(name = "(value:{0},currentPos:{1},size:{2}) => {3}")
     @CsvSource("3, 0, 4, 0",

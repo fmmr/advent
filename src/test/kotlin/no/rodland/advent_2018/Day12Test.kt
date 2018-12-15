@@ -31,13 +31,6 @@ internal class Day12Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `12,2,test`() {
-            report {
-                Day12.partTwo(test12, "#..#.#..##......###...###") to 2
-            }
-        }
-
-        @Test
         fun `12,2,live`() {
             report {
                 // ran parttwo until it made a recurring pattern
