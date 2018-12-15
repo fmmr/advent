@@ -36,6 +36,24 @@ internal class Day15Test {
     @Nested
     inner class Creatures {
         @Test
+        fun `15,1,creatures,sort`() {
+            report {
+                val creatures = mutableListOf<Creature>()
+                creatures.add(Creature(ELF, "5", 5, 2))
+                creatures.add(Creature(ELF, "3", 1, 2))
+                creatures.add(Creature(ELF, "2", 4, 1))
+                creatures.add(Creature(ELF, "1", 2, 1))
+                creatures.add(Creature(ELF, "6", 2, 3))
+                creatures.add(Creature(ELF, "7", 4, 3))
+                creatures.add(Creature(ELF, "4", 3, 2))
+
+                val sorted = creatures.sorted()
+                val names = sorted.map { it.name }
+                names to listOf("1", "2", "3", "4", "5", "6", "7")
+            }
+        }
+
+        @Test
         fun `15,1,creatures,hit`() {
             report {
                 val elf = Creature(ELF, "test", 0, 0)
