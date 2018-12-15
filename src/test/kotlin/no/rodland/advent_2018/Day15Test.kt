@@ -35,6 +35,32 @@ internal class Day15Test {
     )
 
     @Nested
+    inner class Enemies {
+        @Test
+        fun `15,1,enemie,goblin`() {
+            report {
+                val (creatures, map) = Day15.init(test15_small)
+                val aGoblin = map[Pos(4, 1)].creature!!
+                val elves = aGoblin.enemies(map)
+                elves[0] to Creature(type = ELF, name = "E_4X4", pos = Pos(x = 4, y = 4))
+            }
+        }
+
+        @Test
+        fun `15,1,enemie,elves`() {
+            report {
+                val (creatures, map) = Day15.init(test15_small)
+                val elf = map.flatMap { hei ->
+                    hei.mapNotNull { it.creature }.filter { it.type == ELF }
+                }[0]
+                val goblins = elf.enemies(map)
+                assertEquals(goblins.size, 8)
+                goblins[0] to Creature(type = GOBLIN, name = "G_1X1", pos = Pos(x = 1, y = 1))
+            }
+        }
+    }
+
+    @Nested
     inner class Creatures {
         @Test
         fun `15,1,creatures,sort`() {

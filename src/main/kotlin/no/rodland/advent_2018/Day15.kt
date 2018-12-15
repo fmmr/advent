@@ -14,7 +14,7 @@ object Day15 {
         repeat(10) { round ->
             creatures.sorted().filter { !it.dead() }.forEach { creature ->
                 if (!creature.dead()) {
-                    creature.move(creatures.filter { !it.dead() }.filter { other -> creature.type != other.type }, map)
+                    creature.round(map)
                     // end state - only one type is alive
                     val alive = creatures.partition { it.dead() }.second.groupBy { it.type }
                     if (alive[GOBLIN].isNullOrEmpty()) {
@@ -65,8 +65,25 @@ object Day15 {
             other.hitPoints -= power
         }
 
-        fun move(enemies: List<Creature>, map: List<MutableList<Point>>) {
+        fun round(map: List<MutableList<Point>>) {
+            val enemies = enemies(map)
+            
 //            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        fun enemies(map: List<MutableList<Point>>): List<Creature> {
+            return map
+                    .flatMap { line ->
+                        line.mapNotNull { it.creature }
+                    }
+                    .filter { !it.dead() }
+                    .filter { it.type == type.other() }
+        }
+
+        fun move(newPos: Pos, map: List<MutableList<Point>>) {
+            map[pos] = Point(char = OPEN)
+            map[newPos] = Point(creature = this)
+            pos = newPos
         }
     }
 
@@ -93,6 +110,14 @@ object Day15 {
     fun partTwo(list: List<String>): Int {
         return 2
     }
+}
+
+operator fun List<MutableList<Day15.Point>>.set(pos: Day15.Pos, value: Day15.Point) {
+    this[pos.x][pos.y] = value
+}
+
+operator fun List<MutableList<Day15.Point>>.get(pos: Day15.Pos): Day15.Point {
+    return this[pos.x][pos.y]
 }
 
 fun Char.isCreature(): Boolean = this in "GE"
