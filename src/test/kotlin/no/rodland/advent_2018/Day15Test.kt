@@ -5,11 +5,11 @@ import no.rodland.advent.report
 import no.rodland.advent_2018.Day15.Creature
 import no.rodland.advent_2018.Day15.Type.ELF
 import no.rodland.advent_2018.Day15.Type.GOBLIN
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import readFile
-import kotlin.test.assertEquals
 
 @DisableSlow
 internal class Day15Test {
@@ -92,7 +92,7 @@ internal class Day15Test {
         @Test
         fun `15,1,creatures,1`() {
             report {
-                assertThrows<IllegalStateException> { '.'.toType() }
+                assertThrows(IllegalStateException::class.java) { '.'.toType() }
                 "exeption ok" to "exeption ok"
             }
         }
