@@ -1,5 +1,7 @@
 package no.rodland.advent_2018
 
+import no.rodland.advent_2018.Day15.Type.ELF
+import no.rodland.advent_2018.Day15.Type.GOBLIN
 import java.util.*
 
 object Day15 {
@@ -9,8 +11,30 @@ object Day15 {
 
     fun partOne(list: List<String>): Int {
         val (creatures, map) = init(list)
+        var count = 0
+        repeat(10) {
+            creatures.sorted().filter { !it.dead() }.forEach {
+                if (!it.dead()) {
+//                    it.move(map)
+                    // end state - only one type is alive
+                    val alive = creatures.partition { it.dead() }.second.groupBy { it.type }
+                    if (alive[GOBLIN].isNullOrEmpty()) {
+                        return stats(alive[ELF]!!, count)
+                    }
+                    if (alive[ELF].isNullOrEmpty()) {
+                        return stats(alive[GOBLIN]!!, count)
+                    }
+                } else {
+                    println("DEAD (cannot move): $it")
+                }
+            }
+            count++
+        }
+
         return 2
     }
+
+    fun stats(creatures: List<Creature>, rounds: Int): Int = creatures.sumBy { it.hitPoints } * rounds
 
     fun init(list: List<String>): Pair<TreeSet<Creature>, List<MutableList<Char>>> {
         val creatures = sortedSetOf<Creature>()
@@ -66,8 +90,8 @@ fun Char.isCreature(): Boolean = this in "GE"
 
 fun Char.toType(): Day15.Type {
     return when (this) {
-        'G' -> Day15.Type.GOBLIN
-        'E' -> Day15.Type.ELF
+        'G' -> GOBLIN
+        'E' -> ELF
         else -> error("not a vald creature type $this")
     }
 }

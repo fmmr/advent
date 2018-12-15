@@ -173,6 +173,21 @@ internal class Day15Test {
             }
         }
     }
+
+    @Nested
+    inner class Stats {
+        @Test
+        fun `15,1,stats`() {
+            report {
+                val creatures = mutableListOf<Creature>()
+                creatures.add(Creature(ELF, "5", 5, 2, hitPoints = 200))
+                creatures.add(Creature(ELF, "3", 1, 2, hitPoints = 131))
+                creatures.add(Creature(ELF, "2", 4, 1, hitPoints = 59))
+                creatures.add(Creature(ELF, "1", 2, 1, hitPoints = 200))
+                Day15.stats(creatures, 47) to 27730
+            }
+        }
+    }
 }
 
 
