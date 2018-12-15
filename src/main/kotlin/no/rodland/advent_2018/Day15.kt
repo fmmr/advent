@@ -11,26 +11,23 @@ object Day15 {
 
     fun partOne(list: List<String>): Int {
         val (creatures, map) = init(list)
-        var count = 0
-        repeat(10) {
-            creatures.sorted().filter { !it.dead() }.forEach {
-                if (!it.dead()) {
-//                    it.move(map)
+        repeat(10) { round ->
+            creatures.sorted().filter { !it.dead() }.forEach { creature ->
+                if (!creature.dead()) {
+                    creature.move(creatures.filter { !it.dead() }.filter { other -> creature.type != other.type }, map)
                     // end state - only one type is alive
                     val alive = creatures.partition { it.dead() }.second.groupBy { it.type }
                     if (alive[GOBLIN].isNullOrEmpty()) {
-                        return stats(alive[ELF]!!, count)
+                        return stats(alive[ELF]!!, round)
                     }
                     if (alive[ELF].isNullOrEmpty()) {
-                        return stats(alive[GOBLIN]!!, count)
+                        return stats(alive[GOBLIN]!!, round)
                     }
                 } else {
-                    println("DEAD (cannot move): $it")
+                    println("DEAD (cannot move), round $round: $creature")
                 }
             }
-            count++
         }
-
         return 2
     }
 
@@ -46,8 +43,7 @@ object Day15 {
                         Creature(
                                 it.first.toType(),
                                 "${it.first}_${it.second.first}X${it.second.second}",
-                                it.second.first,
-                                it.second.second
+                                Pos(it.second.first, it.second.second)
                         )
                     })
             line.map { if (it.isCreature()) '.' else it }.toMutableList()
@@ -55,18 +51,26 @@ object Day15 {
         return Pair(creatures, map)
     }
 
-    data class Creature(val type: Type, val name: String, var x: Int, var y: Int, val power: Int = 3, var hitPoints: Int = 200) : Comparable<Creature> {
-        override fun compareTo(other: Creature): Int {
-            val yComp = y.compareTo(other.y)
-            return if (yComp == 0) {
-                x.compareTo(other.x)
-            } else yComp
-        }
+    data class Creature(val type: Type, val name: String, var pos: Pos, val power: Int = 3, var hitPoints: Int = 200) : Comparable<Creature> {
+        override fun compareTo(other: Creature): Int = pos.compareTo(other.pos)
 
         fun dead() = hitPoints <= 0
 
         fun hit(other: Creature) {
             other.hitPoints -= power
+        }
+
+        fun move(enemies: List<Creature>, map: List<MutableList<Char>>) {
+//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+    }
+
+    data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
+        override fun compareTo(other: Pos): Int {
+            val yComp = y.compareTo(other.y)
+            return if (yComp == 0) {
+                x.compareTo(other.x)
+            } else yComp
         }
     }
 

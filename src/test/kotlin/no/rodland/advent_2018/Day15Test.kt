@@ -3,6 +3,7 @@ package no.rodland.advent_2018
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day15.Creature
+import no.rodland.advent_2018.Day15.Pos
 import no.rodland.advent_2018.Day15.Type.ELF
 import no.rodland.advent_2018.Day15.Type.GOBLIN
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,13 +40,13 @@ internal class Day15Test {
         fun `15,1,creatures,sort`() {
             report {
                 val creatures = mutableListOf<Creature>()
-                creatures.add(Creature(ELF, "5", 5, 2))
-                creatures.add(Creature(ELF, "3", 1, 2))
-                creatures.add(Creature(ELF, "2", 4, 1))
-                creatures.add(Creature(ELF, "1", 2, 1))
-                creatures.add(Creature(ELF, "6", 2, 3))
-                creatures.add(Creature(ELF, "7", 4, 3))
-                creatures.add(Creature(ELF, "4", 3, 2))
+                creatures.add(Creature(ELF, "5", Pos(5, 2)))
+                creatures.add(Creature(ELF, "3", Pos(1, 2)))
+                creatures.add(Creature(ELF, "2", Pos(4, 1)))
+                creatures.add(Creature(ELF, "1", Pos(2, 1)))
+                creatures.add(Creature(ELF, "6", Pos(2, 3)))
+                creatures.add(Creature(ELF, "7", Pos(4, 3)))
+                creatures.add(Creature(ELF, "4", Pos(3, 2)))
 
                 val sorted = creatures.sorted()
                 val names = sorted.map { it.name }
@@ -56,8 +57,8 @@ internal class Day15Test {
         @Test
         fun `15,1,creatures,hit`() {
             report {
-                val elf = Creature(ELF, "test", 0, 0)
-                val goblin = Creature(ELF, "test", 0, 0)
+                val elf = Creature(ELF, "test", Pos(0, 0))
+                val goblin = Creature(ELF, "test", Pos(0, 0))
                 goblin.hit(elf)
                 repeat(10) { elf.hit(goblin) }
                 assertEquals(goblin.dead(), false)
@@ -68,8 +69,8 @@ internal class Day15Test {
         @Test
         fun `15,1,creatures,hit_until_dead`() {
             report {
-                val elf = Creature(ELF, "test", 0, 0)
-                val goblin = Creature(ELF, "test", 0, 0)
+                val elf = Creature(ELF, "test", Pos(0, 0))
+                val goblin = Creature(ELF, "test", Pos(0, 0))
                 goblin.hit(elf)
                 repeat(200 / 3) { elf.hit(goblin) }
                 assertEquals(goblin.dead(), false)
@@ -180,10 +181,10 @@ internal class Day15Test {
         fun `15,1,stats`() {
             report {
                 val creatures = mutableListOf<Creature>()
-                creatures.add(Creature(ELF, "5", 5, 2, hitPoints = 200))
-                creatures.add(Creature(ELF, "3", 1, 2, hitPoints = 131))
-                creatures.add(Creature(ELF, "2", 4, 1, hitPoints = 59))
-                creatures.add(Creature(ELF, "1", 2, 1, hitPoints = 200))
+                creatures.add(Creature(ELF, "5", Pos(5, 2), hitPoints = 200))
+                creatures.add(Creature(ELF, "3", Pos(1, 2), hitPoints = 131))
+                creatures.add(Creature(ELF, "2", Pos(4, 1), hitPoints = 59))
+                creatures.add(Creature(ELF, "1", Pos(2, 1), hitPoints = 200))
                 Day15.stats(creatures, 47) to 27730
             }
         }
