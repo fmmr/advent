@@ -3,7 +3,7 @@ package no.rodland.advent_2018
 import get
 
 object Day16 {
-    val re = """.*?(\d+),? (\d+),? (\d+),? (\d+).*""".toRegex()
+    private val re = """.*?(\d+),? (\d+),? (\d+),? (\d+).*""".toRegex()
 
     fun partOne(list: List<List<String>>, num: Int): Int {
         return list.map { sample ->
@@ -21,13 +21,14 @@ object Day16 {
 
     fun partTwo(list: List<String>): Register {
         val result = list.fold(Register(0, 0, 0, 0)) { input, instruction ->
-            val i = Instruction(re.get(instruction), re.get(instruction, 2), re.get(instruction, 3), re.get(instruction, 4))
-            opcode(i.i).run(i, input)
+            val i = Instruction(instruction)
+            OpCode[i.i].run(i, input)
         }
         return result
     }
 
-    // could probably be automatized but looping through 15 times wasn't all that time-consuming either.
+    // could probably be automatized but looping through 15 times (and manually changing the IDs from -1 to their actual value) 
+    // wasn't all that time-consuming either.
     // to avoid false positives - IDs already seen should be filtered out as well
     fun findOpCodes(list: List<List<String>>): Int {
         val count = list.map { sample ->
@@ -53,13 +54,12 @@ object Day16 {
     }
 
     fun parse(sample: List<String>): Pair<Instruction, Pair<Register, Register>> {
-        return Instruction(re.get(sample[1]), re.get(sample[1], 2), re.get(sample[1], 3), re.get(sample[1], 4)) to
-                (Register(re.get(sample[0]), re.get(sample[0], 2), re.get(sample[0], 3), re.get(sample[0], 4)) to
-                        Register(re.get(sample[2]), re.get(sample[2], 2), re.get(sample[2], 3), re.get(sample[2], 4)))
+        return Instruction(sample[1]) to (Register(sample[0]) to Register(sample[2]))
     }
 
-
     data class Register(var r0: Int, var r1: Int, var r2: Int, var r3: Int) {
+        constructor(str: String) : this(re.get(str), re.get(str, 2), re.get(str, 3), re.get(str, 4))
+
         operator fun get(idx: Int): Int {
             return when (idx) {
                 0 -> r0
@@ -88,11 +88,10 @@ object Day16 {
         }
     }
 
-    data class Instruction(val i: Int, val a: Int, val b: Int, val c: Int)
-
-    fun opcode(id: Int): OpCode {
-        return OpCode.values().first { it.id == id }
+    data class Instruction(val i: Int, val a: Int, val b: Int, val c: Int) {
+        constructor(str: String) : this(re.get(str), re.get(str, 2), re.get(str, 3), re.get(str, 4))
     }
+
 
     @Suppress("EnumEntryName", "SpellCheckingInspection")
     enum class OpCode(val id: Int) {
@@ -187,6 +186,13 @@ object Day16 {
                     register.copyWithValue(instruction.c, value)
                 }
             }
+        }
+
+        companion object {
+            operator fun get(i: Int): OpCode {
+                return OpCode.values().first { it.id == i }
+            }
+
         }
     }
 }
