@@ -65,10 +65,35 @@ object Day15 {
             other.hitPoints -= power
         }
 
+        fun neighboorCells(): List<Pos> {
+            return listOf(Pos(pos.x + 1, pos.y), Pos(pos.x - 1, pos.y), Pos(pos.x, pos.y + 1), Pos(pos.x, pos.y - 1))
+        }
+
         fun round(map: List<MutableList<Point>>) {
             val enemies = enemies(map)
-            
-//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            val enemyCells = enemies.flatMap { it.neighboorCells() }.distinct()
+
+            val openEnemyCells = enemyCells.map { it to map[Pos(it.x, it.y)] }.filter { it.second.isOpen() }.map { it.first }
+            val nearestPoint = openEnemyCells.minBy { pos.distanceTo(it) }!!
+            val nextPos = getNextPointToward(nearestPoint)
+            println("$this moving to $nextPos")
+            move(nextPos, map)
+        }
+
+        private fun getNextPointToward(goal: Pos): Pos {
+
+            // TODO nope!  - reading order!
+
+
+            return if (goal.x > pos.x) {
+                Pos(pos.x + 1, pos.y)
+            } else if (goal.x < pos.x) {
+                Pos(pos.x - 1, pos.y)
+            } else if (goal.y > pos.y) {
+                Pos(pos.x, pos.y + 1)
+            } else if (goal.y < pos.y) {
+                Pos(pos.x, pos.y - 1)
+            } else error("already at point: $goal  (pos: $pos)")
         }
 
         fun enemies(map: List<MutableList<Point>>): List<Creature> {
@@ -94,6 +119,12 @@ object Day15 {
                 x.compareTo(other.x)
             } else yComp
         }
+
+        fun distanceTo(other: Pos): Int {
+            // TODO does not account for walls
+            return Math.abs(other.x - x) + Math.abs(other.y - y)
+        }
+
     }
 
     enum class Type {
