@@ -30,27 +30,40 @@ object Day16 {
     // could probably be automatized but looping through 15 times (and manually changing the IDs from -1 to their actual value) 
     // wasn't all that time-consuming either.
     // to avoid false positives - IDs already seen should be filtered out as well
-    fun findOpCodes(list: List<List<String>>): Int {
-        val count = list.map { sample ->
-            val (instructions, registers) = parse(sample)
-            val opCodesWithMatch = OpCode.values()
-                    .filter { it.id == -1 }
-                    .map { opCode ->
-                        val result = opCode.run(instructions, registers.first)
-                        if (result == registers.second) {
-                            opCode
+    fun findOpCodes(input: List<List<String>>): List<Pair<OpCode, Int>> {
+        val list = input.toMutableList()
+        val opcodesWithId: MutableList<Pair<OpCode, Int>> = mutableListOf()
+
+        val count = list
+                .map { sample ->
+                    val (instructions, registers) = parse(sample)
+                    if (opcodesWithId.none { it.second == instructions.i }) {
+                        val opCodesWithMatch = OpCode.values()
+                                .filter { opCode -> opcodesWithId.none { it.first == opCode } }
+                                .map { opCode ->
+                                    val result = opCode.run(instructions, registers.first)
+                                    if (result == registers.second) {
+                                        opCode
+                                    } else {
+                                        null
+                                    }
+                                }.filterNotNull()
+                        if (opCodesWithMatch.size == 1) {
+                            val hei = opCodesWithMatch[0] to instructions.i
+                            opcodesWithId.add(hei)
+                            hei
                         } else {
                             null
                         }
-                    }.filterNotNull()
-            if (opCodesWithMatch.size == 1) {
-                opCodesWithMatch[0] to instructions.i
-            } else {
-                null
-            }
-        }.filterNotNull().distinct()
-        println("opcodes: $count")
-        return 2
+                    } else {
+                        null
+                    }
+                }
+                .filterNotNull()
+                .distinct()
+        println("opcodes: $count ${opcodesWithId.size} ${OpCode.values().size}")
+
+        return count
     }
 
     fun parse(sample: List<String>): Pair<Instruction, Pair<Register, Register>> {

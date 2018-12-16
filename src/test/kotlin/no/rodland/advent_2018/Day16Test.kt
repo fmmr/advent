@@ -80,7 +80,24 @@ internal class Day16Test {
         @Test
         fun `16,2,find_opcodes`() {
             report {
-                Day16.findOpCodes(samples16.windowed(4, 4)) to 2
+                Day16.findOpCodes(samples16.windowed(4, 4)) to
+                        listOf((mulr to 0),
+                                (borr to 6),
+                                (bori to 15),
+                                (muli to 5),
+                                (addi to 12),
+                                (addr to 8),
+                                (seti to 14),
+                                (eqir to 10),
+                                (eqrr to 3),
+                                (gtri to 13),
+                                (gtrr to 4),
+                                (eqri to 1),
+                                (gtir to 11),
+                                (setr to 2),
+                                (bani to 7),
+                                (banr to 9)
+                        )
             }
         }
 
