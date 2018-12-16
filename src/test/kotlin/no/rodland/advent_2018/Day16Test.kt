@@ -63,7 +63,7 @@ internal class Day16Test {
         @Test
         fun `16,1,test`() {
             report {
-                Day16.partOne(Instruction(9, 2, 1, 2), Register(3, 2, 1, 1), Register(3, 2, 2, 1)) to 3
+                Day16.numberOfMatchingOpcodes(Instruction(9, 2, 1, 2), Register(3, 2, 1, 1), Register(3, 2, 2, 1)) to 3
             }
         }
 
@@ -87,7 +87,7 @@ internal class Day16Test {
         @Test
         fun `16,2,live`() {
             report {
-                Day16.findOpCodes(samples16.windowed(4, 4)) to 2
+                Day16.partTwo(program16) to Register(r0 = 557, r1 = 6, r2 = 0, r3 = 557)
             }
         }
     }

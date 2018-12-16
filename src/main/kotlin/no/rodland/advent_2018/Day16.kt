@@ -8,24 +8,27 @@ object Day16 {
     fun partOne(list: List<List<String>>, num: Int): Int {
         return list.map { sample ->
             val (instructions, registers) = parse(sample)
-            partOne(instructions, registers.first, registers.second)
+            numberOfMatchingOpcodes(instructions, registers.first, registers.second)
         }.count { it >= num }
     }
 
-
-    fun parse(sample: List<String>): Pair<Instruction, Pair<Register, Register>> {
-        return Instruction(re.get(sample[1]), re.get(sample[1], 2), re.get(sample[1], 3), re.get(sample[1], 4)) to
-                (Register(re.get(sample[0]), re.get(sample[0], 2), re.get(sample[0], 3), re.get(sample[0], 4)) to
-                        Register(re.get(sample[2]), re.get(sample[2], 2), re.get(sample[2], 3), re.get(sample[2], 4)))
-    }
-
-    fun partOne(command: Instruction, before: Register, after: Register): Int {
+    fun numberOfMatchingOpcodes(command: Instruction, before: Register, after: Register): Int {
         return OpCode.values().map {
             val result = it.run(command, before)
             result == after
         }.count { it }
     }
 
+    fun partTwo(list: List<String>): Register {
+        val result = list.fold(Register(0, 0, 0, 0)) { input, instruction ->
+            val i = Instruction(re.get(instruction), re.get(instruction, 2), re.get(instruction, 3), re.get(instruction, 4))
+            opcode(i.i).run(i, input)
+        }
+        return result
+    }
+
+    // could probably be automatized but looping through 15 times wasn't all that time-consuming either.
+    // to avoid false positives - IDs already seen should be filtered out as well
     fun findOpCodes(list: List<List<String>>): Int {
         val count = list.map { sample ->
             val (instructions, registers) = parse(sample)
@@ -45,11 +48,16 @@ object Day16 {
                 null
             }
         }.filterNotNull().distinct()
-
         println("opcodes: $count")
         return 2
-
     }
+
+    fun parse(sample: List<String>): Pair<Instruction, Pair<Register, Register>> {
+        return Instruction(re.get(sample[1]), re.get(sample[1], 2), re.get(sample[1], 3), re.get(sample[1], 4)) to
+                (Register(re.get(sample[0]), re.get(sample[0], 2), re.get(sample[0], 3), re.get(sample[0], 4)) to
+                        Register(re.get(sample[2]), re.get(sample[2], 2), re.get(sample[2], 3), re.get(sample[2], 4)))
+    }
+
 
     data class Register(var r0: Int, var r1: Int, var r2: Int, var r3: Int) {
         operator fun get(idx: Int): Int {
@@ -78,13 +86,12 @@ object Day16 {
             copy[idx] = value
             return copy
         }
-
     }
 
     data class Instruction(val i: Int, val a: Int, val b: Int, val c: Int)
 
-    fun idsFound(): List<Int> {
-        return OpCode.values().map { it.id }.filter { it != 0 }
+    fun opcode(id: Int): OpCode {
+        return OpCode.values().first { it.id == id }
     }
 
     @Suppress("EnumEntryName", "SpellCheckingInspection")
@@ -92,7 +99,6 @@ object Day16 {
         addr(8), addi(12), mulr(0), muli(5), banr(9), bani(7), borr(6), bori(15), setr(2), seti(14), gtir(11), gtri(13), gtrr(4), eqir(10), eqri(1), eqrr(3);
 
         fun run(instruction: Instruction, register: Register): Register {
-//            println("Running $this on $instruction")
             return when (this) {
                 addr -> {
                     // (add register) stores into register C the result of adding register A and register B.
@@ -183,6 +189,4 @@ object Day16 {
             }
         }
     }
-
-
 }
