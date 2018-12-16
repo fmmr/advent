@@ -17,14 +17,14 @@ internal class Day16Test {
         @Test
         fun `16,1,test`() {
             report {
-                Day16.partOne(samples16) to 2
+                Day16.partOne(intArrayOf(), intArrayOf(), intArrayOf()) to 2
             }
         }
 
         @Test
         fun `16,1,live`() {
             report {
-                Day16.partOne(samples16) to 2
+                Day16.partOne(intArrayOf(), intArrayOf(), intArrayOf()) to 2
             }
         }
     }
