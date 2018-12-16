@@ -27,9 +27,7 @@ object Day16 {
         return result
     }
 
-    // could probably be automatized but looping through 15 times (and manually changing the IDs from -1 to their actual value) 
-    // wasn't all that time-consuming either.
-    // to avoid false positives - IDs already seen should be filtered out as well
+    // boo _ ugly code but kinda works. 
     fun findOpCodes(input: List<List<String>>): List<Pair<OpCode, Int>> {
         val list = input.toMutableList()
         val opcodesWithId: MutableList<Pair<OpCode, Int>> = mutableListOf()
