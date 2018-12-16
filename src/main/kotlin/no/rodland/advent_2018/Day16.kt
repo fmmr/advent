@@ -1,79 +1,186 @@
 package no.rodland.advent_2018
 
+import get
+
 object Day16 {
-    fun partOne(command: IntArray, before: IntArray, after: IntArray): Int {
-//        val matches = Register.values().map {
-//            val result = it.run(command, before)
-//            matches(result.first, after, result.second)
-//        }.count { it }
+    val re = """.*?(\d+),? (\d+),? (\d+),? (\d+).*""".toRegex()
+
+    fun partOne(list: List<List<String>>, num: Int): Int {
+        return list.map { sample ->
+            val (instructions, registers) = parse(sample)
+            partOne(instructions, registers.first, registers.second)
+        }.count { it >= num }
+    }
+
+
+    fun parse(sample: List<String>): Pair<Instruction, Pair<Register, Register>> {
+        return Instruction(re.get(sample[1]), re.get(sample[1], 2), re.get(sample[1], 3), re.get(sample[1], 4)) to
+                (Register(re.get(sample[0]), re.get(sample[0], 2), re.get(sample[0], 3), re.get(sample[0], 4)) to
+                        Register(re.get(sample[2]), re.get(sample[2], 2), re.get(sample[2], 3), re.get(sample[2], 4)))
+    }
+
+    fun partOne(command: Instruction, before: Register, after: Register): Int {
+        return OpCode.values().map {
+            val result = it.run(command, before)
+            result == after
+        }.count { it }
+    }
+
+    fun findOpCodes(list: List<List<String>>): Int {
+        val count = list.map { sample ->
+            val (instructions, registers) = parse(sample)
+            val opCodesWithMatch = OpCode.values()
+                    .filter { it.id == -1 }
+                    .map { opCode ->
+                        val result = opCode.run(instructions, registers.first)
+                        if (result == registers.second) {
+                            opCode
+                        } else {
+                            null
+                        }
+                    }.filterNotNull()
+            if (opCodesWithMatch.size == 1) {
+                opCodesWithMatch[0] to instructions.i
+            } else {
+                null
+            }
+        }.filterNotNull().distinct()
+
+        println("opcodes: $count")
         return 2
+
     }
 
-    private fun matches(result: IntArray, after: IntArray, ignoreB: Boolean): Boolean {
-        return result[0] == after[0] && result[1] == after[1] && result[3] == after[3] && (ignoreB || result[2] == after[2])
+    data class Register(var r0: Int, var r1: Int, var r2: Int, var r3: Int) {
+        operator fun get(idx: Int): Int {
+            return when (idx) {
+                0 -> r0
+                1 -> r1
+                2 -> r2
+                3 -> r3
+                else -> error("register $idx does not exist only 0-3 is allowed")
+            }
+        }
+
+        operator fun set(idx: Int, value: Int): Register {
+            when (idx) {
+                0 -> r0 = value
+                1 -> r1 = value
+                2 -> r2 = value
+                3 -> r3 = value
+                else -> error("register $idx does not exist only 0-3 is allowed")
+            }
+            return this
+        }
+
+        fun copyWithValue(idx: Int, value: Int): Register {
+            val copy = this.copy()
+            copy[idx] = value
+            return copy
+        }
+
     }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
+    data class Instruction(val i: Int, val a: Int, val b: Int, val c: Int)
 
+    fun idsFound(): List<Int> {
+        return OpCode.values().map { it.id }.filter { it != 0 }
+    }
 
     @Suppress("EnumEntryName", "SpellCheckingInspection")
-    enum class Register(private val ignoreB: Boolean = false) {
-        addr, addi, mulr, muli, banr, bani, borr, bori, setr(true), seti(true), gtir, gtri, gtrr, eqir, eqri, eqrr;
+    enum class OpCode(val id: Int) {
+        addr(8), addi(12), mulr(0), muli(5), banr(9), bani(7), borr(6), bori(15), setr(2), seti(14), gtir(11), gtri(13), gtrr(4), eqir(10), eqri(1), eqrr(3);
 
-        fun run(instruction: IntArray, register: IntArray): Pair<IntArray, Boolean> {
-            println("Running $this on $instruction")
-            return (when (this) {
+        fun run(instruction: Instruction, register: Register): Register {
+//            println("Running $this on $instruction")
+            return when (this) {
                 addr -> {
-                    register
+                    // (add register) stores into register C the result of adding register A and register B.
+                    val value = register[instruction.a] + register[instruction.b]
+                    register.copyWithValue(instruction.c, value)
                 }
                 addi -> {
-                    register
+                    // (add immediate) stores into register C the result of adding register A and value B.
+                    val value = register[instruction.a] + instruction.b
+                    register.copyWithValue(instruction.c, value)
                 }
                 mulr -> {
-                    register
+                    // (multiply register) stores into register C the result of multiplying register A and register B.
+                    val value = register[instruction.a] * register[instruction.b]
+                    register.copyWithValue(instruction.c, value)
                 }
                 muli -> {
-                    register
+                    // (multiply immediate) stores into register C the result of multiplying register A and value B.
+                    val value = register[instruction.a] * instruction.b
+                    register.copyWithValue(instruction.c, value)
                 }
                 banr -> {
-                    register
+                    // (bitwise AND register) stores into register C the result of the bitwise AND of register A and register B.
+                    val value = register[instruction.a] and register[instruction.b]
+                    register.copyWithValue(instruction.c, value)
                 }
                 bani -> {
-                    register
+                    // (bitwise AND immediate) stores into register C the result of the bitwise AND of register A and value B.
+                    val value = register[instruction.a] and instruction.b
+                    register.copyWithValue(instruction.c, value)
                 }
                 borr -> {
-                    register
+                    // (bitwise OR register) stores into register C the result of the bitwise OR of register A and register B.
+                    val value = register[instruction.a] or register[instruction.b]
+                    register.copyWithValue(instruction.c, value)
                 }
                 bori -> {
-                    register
+                    // (bitwise OR immediate) stores into register C the result of the bitwise OR of register A and value B.
+                    val value = register[instruction.a] or instruction.b
+                    register.copyWithValue(instruction.c, value)
                 }
                 setr -> {
-                    register
+                    // (set register) copies the contents of register A into register C. (Input B is ignored.)
+                    val value = register[instruction.a]
+                    register.copyWithValue(instruction.c, value)
                 }
                 seti -> {
-                    register
+                    // (set immediate) stores value A into register C. (Input B is ignored.)
+                    val value = instruction.a
+                    register.copyWithValue(instruction.c, value)
                 }
                 gtir -> {
-                    register
+                    // (greater-than immediate/register) sets register C to 1 if value A is greater than register B. Otherwise, register C is set to 0.
+                    val tmpValue = instruction.a > register[instruction.b]
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
                 gtri -> {
-                    register
+                    // (greater-than register/immediate) sets register C to 1 if register A is greater than value B. Otherwise, register C is set to 0.
+                    val tmpValue = register[instruction.a] > instruction.b
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
                 gtrr -> {
-                    register
+                    // (greater-than register/register) sets register C to 1 if register A is greater than register B. Otherwise, register C is set to 0.
+                    val tmpValue = register[instruction.a] > register[instruction.b]
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
                 eqir -> {
-                    register
+                    // (equal immediate/register) sets register C to 1 if value A is equal to register B. Otherwise, register C is set to 0.
+                    val tmpValue = instruction.a == register[instruction.b]
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
                 eqri -> {
-                    register
+                    // (equal register/immediate) sets register C to 1 if register A is equal to value B. Otherwise, register C is set to 0.
+                    val tmpValue = register[instruction.a] == instruction.b
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
                 eqrr -> {
-                    register
+                    // (equal register/register) sets register C to 1 if register A is equal to register B. Otherwise, register C is set to 0.
+                    val tmpValue = register[instruction.a] == register[instruction.b]
+                    val value = if (tmpValue) 1 else 0
+                    register.copyWithValue(instruction.c, value)
                 }
-            } to ignoreB)
+            }
         }
     }
 
