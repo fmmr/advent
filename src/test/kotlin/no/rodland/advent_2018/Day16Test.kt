@@ -80,14 +80,14 @@ internal class Day16Test {
         @Test
         fun `16,2,find_opcodes`() {
             report {
-                Day16.findOpCodes(samples16.windowed(4, 4)) to 592
+                Day16.findOpCodes(samples16.windowed(4, 4)) to 2
             }
         }
 
         @Test
         fun `16,2,live`() {
             report {
-                Day16.findOpCodes(samples16.windowed(4, 4)) to 592
+                Day16.findOpCodes(samples16.windowed(4, 4)) to 2
             }
         }
     }
