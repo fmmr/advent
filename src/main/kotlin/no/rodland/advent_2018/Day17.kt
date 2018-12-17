@@ -3,7 +3,7 @@ package no.rodland.advent_2018
 object Day17 {
     fun partOne(list: List<String>): Int {
         val coordinates: List<Pair<IntRange, IntRange>> = parse(list)
-        getYMinMax(coordinates)
+        val (ymin, ymax) = getYMinMax(coordinates)
         return 2
     }
 
