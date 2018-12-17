@@ -4,10 +4,9 @@ import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day15.Creature
 import no.rodland.advent_2018.Day15.Pos
-import no.rodland.advent_2018.Day15.Type.ELF
-import no.rodland.advent_2018.Day15.Type.GOBLIN
+import no.rodland.advent_2018.Day15.Team.ELF
+import no.rodland.advent_2018.Day15.Team.GOBLIN
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -35,37 +34,11 @@ internal class Day15Test {
     )
 
     @Nested
-    inner class Enemies {
-        @Test
-        fun `15,1,enemie,goblin`() {
-            report {
-                val (creatures, map) = Day15.init(test15_small)
-                val aGoblin = map[Pos(4, 1)].creature!!
-                val elves = aGoblin.enemies(map)
-                elves[0] to Creature(type = ELF, name = "E_4X4", pos = Pos(x = 4, y = 4))
-            }
-        }
-
-        @Test
-        fun `15,1,enemie,elves`() {
-            report {
-                val (creatures, map) = Day15.init(test15_small)
-                val elf = map.flatMap { hei ->
-                    hei.mapNotNull { it.creature }.filter { it.type == ELF }
-                }[0]
-                val goblins = elf.enemies(map)
-                assertEquals(goblins.size, 8)
-                goblins[0] to Creature(type = GOBLIN, name = "G_1X1", pos = Pos(x = 1, y = 1))
-            }
-        }
-    }
-
-    @Nested
     inner class Neighbours {
         @Test
         fun `15,1,neighbours`() {
             report {
-                Creature(ELF, "6", Pos(2, 3)).neighboorCells() to listOf(Pos(x = 3, y = 3), Pos(x = 1, y = 3), Pos(x = 2, y = 4), Pos(x = 2, y = 2))
+                Pos(2, 3).neighboorCells() to listOf(Pos(x = 2, y = 2), Pos(x = 1, y = 3), Pos(x = 3, y = 3), Pos(x = 2, y = 4))
             }
         }
     }
@@ -117,38 +90,23 @@ internal class Day15Test {
         }
 
         @Test
-        fun `15,1,creatures,elf_other`() {
-            report {
-                ELF.other() to GOBLIN
-            }
-        }
-
-        @Test
-        fun `15,1,creatures,goblin_other`() {
-            report {
-                GOBLIN.other() to ELF
-            }
-        }
-
-        @Test
         fun `15,1,creatures,g`() {
             report {
-                'G'.toType() to GOBLIN
+                'G'.toTeam() to GOBLIN
             }
         }
 
         @Test
         fun `15,1,creatures,e`() {
             report {
-                'E'.toType() to ELF
+                'E'.toTeam() to ELF
             }
         }
 
         @Test
         fun `15,1,creatures,1`() {
             report {
-                assertThrows(IllegalStateException::class.java) { '.'.toType() }
-                "exeption ok" to "exeption ok"
+                '.'.toTeam() to null
             }
         }
     }
@@ -159,11 +117,12 @@ internal class Day15Test {
         @Test
         fun `15,1,init,small`() {
             report {
-                val (creatures, map) = Day15.init(test15_small)
-                assertEquals(map[0].size, 9) // left and right walls
-                assertEquals(creatures.count { it.type == GOBLIN }, 8)
-                assertEquals(creatures.count { it.type == ELF }, 1)
-                assertEquals(creatures.map { it.type.other() }.count { it == ELF }, 8)
+                val caves = Day15.init(test15_small)
+                val creatures: List<Creature> = Creature.findCreatures(caves)
+
+                assertEquals(caves[0].size, 9) // left and right walls
+                assertEquals(creatures.count { it.team == GOBLIN }, 8)
+                assertEquals(creatures.count { it.team == ELF }, 1)
                 creatures.size to 9
             }
         }
@@ -171,8 +130,9 @@ internal class Day15Test {
         @Test
         fun `15,1,init,mini`() {
             report {
-                val (creatures, map) = Day15.init(test15_mini)
-                creatures.size to 2
+                val caves = Day15.init(test15_small)
+                val creatures: List<Creature> = Creature.findCreatures(caves)
+                creatures.size to 9
             }
         }
     }
@@ -181,10 +141,39 @@ internal class Day15Test {
     inner class `Part 1` {
 
         @Test
-        fun `15,1,test,small`() {
+        fun `15,1,test,ex1`() {
             report {
-                //                Day15.partOne(test15_mini) to 2
-                2 to 2
+                Day15.partOne(listOf(
+                        "#######",
+                        "#.G...#",
+                        "#...EG#",
+                        "#.#.#G#",
+                        "#..G#E#",
+                        "#.....#",
+                        "#######")) to 27730
+
+            }
+        }
+
+        @Test
+        fun `15,1,test,ex2`() {
+            report {
+                Day15.partOne(listOf(
+                        "#######",
+                        "#G..#E#",
+                        "#E#E.E#",
+                        "#G.##.#",
+                        "#...#E#",
+                        "#...E.#",
+                        "#######")) to 36334
+            }
+        }
+
+        @Test
+        fun `15,1,live`() {
+            report {
+                Day15.partOne(data15) to 245280
+
             }
         }
     }
@@ -192,16 +181,23 @@ internal class Day15Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `15,2,test`() {
+        fun `15,1,test,ex2`() {
             report {
-                Day15.partTwo(test15_mini) to 2
+                Day15.partTwo(listOf(
+                        "#######",
+                        "#G..#E#",
+                        "#E#E.E#",
+                        "#G.##.#",
+                        "#...#E#",
+                        "#...E.#",
+                        "#######")) to 9240
             }
         }
 
         @Test
         fun `15,2,live`() {
             report {
-                Day15.partTwo(data15) to 2
+                Day15.partTwo(data15) to 74984
             }
         }
     }
@@ -216,7 +212,7 @@ internal class Day15Test {
                 creatures.add(Creature(ELF, "3", Pos(1, 2), hitPoints = 131))
                 creatures.add(Creature(ELF, "2", Pos(4, 1), hitPoints = 59))
                 creatures.add(Creature(ELF, "1", Pos(2, 1), hitPoints = 200))
-                Day15.stats(creatures, 47) to 27730
+                creatures.filterNot { it.dead() }.sumBy { it.hitPoints } * 47 to 27730
             }
         }
     }
