@@ -2,38 +2,28 @@ package no.rodland.advent_2017
 
 import get
 import getString
-import no.rodland.advent_2017.Day8.Condition.*
 import kotlin.math.max
 
 object Day8 {
     fun run(list: List<String>): Pair<Int, Int> {
-        val input: List<Input> = list.map { input(it) }
-        var max = 0
-        val final = input.fold(mutableMapOf<String, Int>()) { reg, i ->
-            if (i.condition.test(reg, i.conditionRegister, i.conditionValue)) {
-                if (i.inc) {
-                    reg[i.reg] = (reg[i.reg] ?: 0) + i.value
-                } else {
-                    reg[i.reg] = (reg[i.reg] ?: 0) - i.value
+        var allTimeMax = 0
+        val final = list
+                .map { Input(it) }
+                .fold(mutableMapOf<String, Int>()) { reg, i ->
+                    if (i.condition.test(reg, i.conditionRegister, i.conditionValue)) {
+                        if (i.inc) {
+                            reg[i.reg] = (reg[i.reg] ?: 0) + i.value
+                        } else {
+                            reg[i.reg] = (reg[i.reg] ?: 0) - i.value
+                        }
+                    }
+                    allTimeMax = max(reg.maxBy { it.value }?.value ?: 0, allTimeMax)
+                    reg
                 }
-            }
-            max = max(reg.maxBy { it.value }?.value ?: 0, max)
-            reg
-        }
-        return final.maxBy { it.value }!!.value to max
+        return final.maxBy { it.value }!!.value to allTimeMax
     }
 
-    val re = """(.*) (inc|dec) ([\d-]+) if (.+) (.*) ([\d-]+)""".toRegex()
-
-    private fun input(str: String): Input {
-        val d1 = re.getString(str)!!
-        val d2 = re.getString(str, 2)!!
-        val d3 = re.get(str, 3)
-        val d4 = re.getString(str, 4)!!
-        val d5 = re.getString(str, 5)!!
-        val d6 = re.get(str, 6)
-        return Input(d1, d2, d3, d4, condition(d5), d6)
-    }
+    private val re = """(.*) (inc|dec) ([\d-]+) if (.+) (.*) ([\d-]+)""".toRegex()
 
     data class Input(
             val reg: String,
@@ -43,6 +33,13 @@ object Day8 {
             val condition: Condition,
             val conditionValue: Int
     ) {
+        constructor(str: String) : this(re.getString(str)!!,
+                re.getString(str, 2)!!,
+                re.get(str, 3),
+                re.getString(str, 4)!!,
+                condition(re.getString(str, 5)!!),
+                re.get(str, 6))
+
         val inc = incStr == "inc"
     }
 
@@ -62,15 +59,5 @@ object Day8 {
         }
     }
 
-    private fun condition(str: String): Condition {
-        return when (str) {
-            "<" -> lt
-            "<=" -> lte
-            ">" -> gt
-            ">=" -> gte
-            "==" -> eq
-            "!=" -> ne
-            else -> error("not a valid str for cond: $str")
-        }
-    }
+    private fun condition(str: String): Condition = Condition.values().first { it.symbol == str }
 }
