@@ -23,6 +23,41 @@ object Day18 {
         return num[TREE]!! * num[LUMBERYARD]!!
     }
 
+    fun partTwo(list: List<String>): Int {
+        var cave: Caves = init(list)
+        // 508 - 536
+        val recurringList = (1..536).map {
+            cave = iteration(cave)
+            val num = cave.flatMap { row ->
+                row.map {
+                    it
+                }
+            }.groupingBy { it }.eachCount()
+            (num[TREE] ?: -1) * (num[LUMBERYARD] ?: -1)
+        }.takeLast(28)
+
+        val seq = sequence {
+            var i = 0
+            var started = false
+            while (true) {
+                if (started || i >= 536) {
+                    if (i >= recurringList.size) {
+                        i = 0
+                    }
+                    yield(recurringList[i])
+                    started = true
+                } else {
+                    yield(0)
+                }
+                i++
+            }
+        }
+        val message = seq.drop(1000000000 - 1).take(1).first()
+
+        return message
+    }
+
+
     private fun iteration(cave: Caves): Caves {
         return cave.mapIndexed { y, row ->
             row.mapIndexed { x, c -> getNewValue(c, Pos(x, y), cave) }.toCharArray()
@@ -42,12 +77,8 @@ object Day18 {
         } else {
             if (lumberyard >= 1 && trees >= 1) LUMBERYARD else OPEN
         }
-
     }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
 
     fun init(list: List<String>): Caves = list.map { it.toCharArray() }.toTypedArray()
 
