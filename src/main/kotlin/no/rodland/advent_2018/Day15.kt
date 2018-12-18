@@ -198,6 +198,18 @@ operator fun Array<CharArray>.get(pos: Pos): Char {
     return this[pos.y][pos.x]
 }
 
+
+fun Array<CharArray>.printme() {
+    this.forEach { row ->
+        row.forEach { c ->
+            print(c)
+        }
+        println()
+    }
+    println()
+}
+
+
 fun Char.toTeam(): Day15.Team? {
     return when (this) {
         'G' -> GOBLIN

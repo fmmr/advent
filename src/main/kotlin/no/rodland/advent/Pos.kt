@@ -21,6 +21,19 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
         )
     }
 
+    fun neighboorCellsAllEight(): List<Pos> {
+        return listOf(
+                Pos(x, y - 1),
+                Pos(x - 1, y),
+                Pos(x + 1, y),
+                Pos(x, y + 1),
+                Pos(x - 1, y - 1),
+                Pos(x + 1, y - 1),
+                Pos(x - 1, y + 1),
+                Pos(x + 1, y + 1)
+        )
+    }
+
     fun getDownNeighbors(): List<Pos> {
         return listOf(
                 Pos(x - 1, y),
