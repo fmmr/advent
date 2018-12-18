@@ -1,3 +1,7 @@
+import no.rodland.advent.Pos
+
+typealias Caves = Array<CharArray>
+
 fun String.readFile(): List<String> {
     val resource = Any::class.java.getResource("/$this")
     return resource.readText().split("\n")
@@ -36,3 +40,14 @@ fun Int.pad(): String {
 }
 
 fun Char.asInt(): Int = toString().toInt()
+
+operator fun Caves.set(pos: Pos, value: Char) {
+    this[pos.y][pos.x] = value
+}
+
+operator fun Caves.contains(pos: Pos): Boolean =
+        pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
+
+operator fun Caves.get(pos: Pos): Char {
+    return this[pos.y][pos.x]
+}

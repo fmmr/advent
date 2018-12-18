@@ -1,6 +1,7 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,7 +32,7 @@ internal class Day17Test {
         fun `17,1,minmax`() {
             report {
                 val parse = Day17.parse(test17)
-                Day17.getYMinMax(parse) to (1 to 13)
+                Day17.getMinMax(parse) to ((495 to 506) to (1 to 13))
             }
         }
     }
@@ -41,14 +42,15 @@ internal class Day17Test {
         @Test
         fun `17,1,test`() {
             report {
-                Day17.partOne(test17) to 2
+                Day17.partOne(test17, true) to 57
             }
         }
 
         @Test
+        @Slow(7500)
         fun `17,1,live`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17) to 30384
             }
         }
     }
@@ -58,17 +60,16 @@ internal class Day17Test {
         @Test
         fun `17,2,test`() {
             report {
-                Day17.partTwo(test17) to 2
+                Day17.partTwo(test17) to 29
             }
         }
 
         @Test
+        @Slow(7000)
         fun `17,2,live`() {
             report {
-                Day17.partTwo(data17) to 2
+                Day17.partTwo(data17) to 24479
             }
         }
     }
 }
-
-

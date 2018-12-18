@@ -1,6 +1,6 @@
 package no.rodland.advent_2018
 
-import no.rodland.advent_2018.Day15.Pos
+import no.rodland.advent.Pos
 import no.rodland.advent_2018.Day15.Team.ELF
 import no.rodland.advent_2018.Day15.Team.GOBLIN
 import java.util.*
@@ -112,7 +112,7 @@ object Day15 {
             val paths: Deque<Path> = ArrayDeque()
 
             // Seed the queue with each of our neighbors, in reading order (that's important)
-            pos.neighboorCells()
+            pos.neighboorCellsReadingOrder()
                     .filter { caves[it] == '.' }
                     .forEach { paths.add(listOf(it)) }
 
@@ -131,7 +131,7 @@ object Day15 {
                 // to the queue.
                 if (pathEnd !in seen) {
                     seen.add(pathEnd)
-                    pathEnd.neighboorCells()
+                    pathEnd.neighboorCellsReadingOrder()
                             .filter { caves[it] == '.' }
                             .filterNot { it in seen }
                             .forEach { paths.add(path + it) }
@@ -145,7 +145,7 @@ object Day15 {
                 creatures
                         .filterNot { it.dead() }
                         .filterNot { it.team == team }
-                        .flatMap { it.pos.neighboorCells().filter { neighbor -> caves[neighbor.y][neighbor.x] == '.' } }
+                        .flatMap { it.pos.neighboorCellsReadingOrder().filter { neighbor -> caves[neighbor.y][neighbor.x] == '.' } }
                         .toSet()
 
         fun attack(target: Creature, caves: Caves) {
@@ -180,28 +180,6 @@ object Day15 {
         }
     }
 
-    data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
-        override fun compareTo(other: Pos): Int {
-            val yComp = y.compareTo(other.y)
-            return if (yComp == 0) {
-                x.compareTo(other.x)
-            } else yComp
-        }
-
-        fun distanceTo(other: Pos): Int {
-            // TODO does not account for walls
-            return Math.abs(other.x - x) + Math.abs(other.y - y)
-        }
-
-        fun neighboorCells(): List<Pos> {
-            return listOf(
-                    Pos(x, y - 1),
-                    Pos(x - 1, y),
-                    Pos(x + 1, y),
-                    Pos(x, y + 1)
-            )
-        }
-    }
 
     enum class Team(val char: Char) {
         ELF('E'), GOBLIN('G');
@@ -213,7 +191,10 @@ operator fun Array<CharArray>.set(pos: Pos, value: Char) {
     this[pos.y][pos.x] = value
 }
 
-operator fun Caves.get(pos: Pos): Char {
+operator fun Array<CharArray>.contains(pos: Pos): Boolean =
+        pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
+
+operator fun Array<CharArray>.get(pos: Pos): Char {
     return this[pos.y][pos.x]
 }
 

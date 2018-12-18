@@ -1,9 +1,9 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Pos
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day15.Creature
-import no.rodland.advent_2018.Day15.Pos
 import no.rodland.advent_2018.Day15.Team.ELF
 import no.rodland.advent_2018.Day15.Team.GOBLIN
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -14,13 +14,7 @@ import readFile
 @DisableSlow
 internal class Day15Test {
     val data15 = "2018/input_15.txt".readFile()
-    val test15_mini = listOf(
-            "#######",
-            "#.E...#",
-            "#.....#",
-            "#...G.#",
-            "#######"
-    )
+
     val test15_small = listOf(
             "#########",
             "#G..G..G#",
@@ -38,7 +32,7 @@ internal class Day15Test {
         @Test
         fun `15,1,neighbours`() {
             report {
-                Pos(2, 3).neighboorCells() to listOf(Pos(x = 2, y = 2), Pos(x = 1, y = 3), Pos(x = 3, y = 3), Pos(x = 2, y = 4))
+                Pos(2, 3).neighboorCellsReadingOrder() to listOf(Pos(x = 2, y = 2), Pos(x = 1, y = 3), Pos(x = 3, y = 3), Pos(x = 2, y = 4))
             }
         }
     }
