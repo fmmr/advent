@@ -90,13 +90,8 @@ object Day18 {
         }.takeLast(28)
 
         val seq = sequence {
-            var i = 0
             while (true) {
-                if (i >= recurringList.size) {
-                    i = 0
-                }
-                yield(recurringList[i])
-                i++
+                yieldAll(recurringList)
             }
         }
 

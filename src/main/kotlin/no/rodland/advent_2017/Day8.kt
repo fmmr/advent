@@ -16,11 +16,11 @@ object Day8 {
                         } else {
                             reg[i.reg] = (reg[i.reg] ?: 0) - i.value
                         }
+                        allTimeMax = max(reg[i.reg]!!, allTimeMax)
                     }
-                    allTimeMax = max(reg.maxBy { it.value }?.value ?: 0, allTimeMax)
                     reg
                 }
-        return final.maxBy { it.value }!!.value to allTimeMax
+        return final.values.max()!! to allTimeMax
     }
 
     private val re = """(.*) (inc|dec) ([\d-]+) if (.+) (.*) ([\d-]+)""".toRegex()
