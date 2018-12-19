@@ -4,7 +4,7 @@ package no.rodland.advent_2018
 enum class OpCode(val id: Int) {
     addr(8), addi(12), mulr(0), muli(5), banr(9), bani(7), borr(6), bori(15), setr(2), seti(14), gtir(11), gtri(13), gtrr(4), eqir(10), eqri(1), eqrr(3);
 
-    fun run(instruction: Day16.Instruction, register: Day16.Register): Day16.Register {
+    fun run(instruction: Instruction, register: Register): Register {
         return when (this) {
             addr -> {
                 // (add register) stores into register C the result of adding register A and register B.
