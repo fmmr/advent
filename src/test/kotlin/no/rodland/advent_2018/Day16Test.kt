@@ -3,8 +3,8 @@ package no.rodland.advent_2018
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day16.Instruction
-import no.rodland.advent_2018.Day16.OpCode.*
 import no.rodland.advent_2018.Day16.Register
+import no.rodland.advent_2018.OpCode.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
