@@ -7,6 +7,7 @@ private val re = """.*?(\d+),? (\d+),? (\d+),? (\d+).*""".toRegex()
 data class Register(val ar: IntArray = intArrayOf(0, 0, 0, 0)) {
     constructor(str: String) : this(intArrayOf(re.get(str), re.get(str, 2), re.get(str, 3), re.get(str, 4)))
     constructor(r0: Int, r1: Int, r2: Int, r3: Int) : this(intArrayOf(r0, r1, r2, r3))
+    constructor(r0: Int, r1: Int, r2: Int, r3: Int, r4: Int, r5: Int) : this(intArrayOf(r0, r1, r2, r3, r4, r5))
 
     operator fun get(idx: Int): Int {
         return ar[idx]
