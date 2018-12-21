@@ -7,7 +7,7 @@ object Day9 {
         val onlyGroups = cleanGroups(input)
         var value = 0
         var sum = 0
-        onlyGroups.forEach {
+        onlyGroups.first.forEach {
             if (it == '{') {
                 value += 1
                 sum += value
@@ -19,12 +19,17 @@ object Day9 {
         return sum
     }
 
-    private fun cleanGroups(input: String): String {
+    fun partTwo(input: String): Int {
+        val onlyGroups = cleanGroups(input)
+        return onlyGroups.second
+    }
+
+    private fun cleanGroups(input: String): Pair<String, Int> {
         println(input)
         var isGarbage = false
         var cancelNext = false
         val stack: ArrayDeque<Int> = ArrayDeque()
-        var count = 0
+        var countGarbage = 0
         val onlyGroups = input.mapNotNull {
             if (cancelNext) {
                 cancelNext = false
@@ -35,6 +40,8 @@ object Day9 {
             } else if (isGarbage) {
                 if (it == '>') {
                     isGarbage = false
+                } else {
+                    countGarbage++
                 }
                 null
             } else if (it == '<') {
@@ -48,10 +55,7 @@ object Day9 {
             }
         }.joinToString("")
         println(onlyGroups)
-        return onlyGroups
+        return onlyGroups to countGarbage
     }
 
-    fun partTwo(input: String): Int {
-        return 2
-    }
 }

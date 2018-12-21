@@ -82,14 +82,14 @@ internal class Day9Test {
         @Test
         fun `9,2,test`() {
             report {
-                Day9.partTwo("<>") to 2
+                Day9.partTwo("<>") to 0
             }
         }
 
         @Test
         fun `9,2,live`() {
             report {
-                Day9.partTwo(data9) to 2
+                Day9.partTwo(data9) to 6425
             }
         }
     }
