@@ -42,9 +42,37 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
         )
     }
 
+    fun getNext(c: Char): Pos {
+        return when (c) {
+            'N' -> above()
+            'S' -> below()
+            'W' -> left()
+            'E' -> right()
+            else -> error("Unable to get pos from direction: $c")
+        }
+    }
+
+    fun getSidesAfterMoving(c: Char): List<Pos> {
+        return when (c) {
+            'N', 'S' -> listOf(left(), right())
+            'E', 'W' -> listOf(below(), above())
+            else -> error("Unable to get pos from direction: $c")
+        }
+    }
+
     fun isPositive(): Boolean = x >= 0 && y >= 0
     fun above(): Pos = Pos(x, y - 1)
     fun below(): Pos = Pos(x, y + 1)
     fun left(): Pos = Pos(x - 1, y)
     fun right(): Pos = Pos(x + 1, y)
+
+    companion object {
+        fun getMinMax(coordinates: Collection<Pos>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
+            val xmin = coordinates.map { it.x }.min()!!
+            val xmax = coordinates.map { it.x }.max()!!
+            val ymin = coordinates.map { it.y }.min()!!
+            val ymax = coordinates.map { it.y }.max()!!
+            return (xmin to xmax) to (ymin to ymax)
+        }
+    }
 }
