@@ -51,12 +51,13 @@ internal class Day20Test {
             report {
                 val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
                 val partOne = Day20.traverse("^WN$", map, Pos(0, 0))
-                isMap(map, listOf(
+                map.toMap().map { it.joinToString("") }.forEach { println(it) }
+                assertEquals(listOf(
                         "?.??",
                         "#-#?",
                         "?.|X",
                         "??#?"
-                ))
+                ), map.toMap().map { it.joinToString("") })
                 assertThat(map).hasSize(8)
                 partOne to Pos(x = -2, y = -2)
             }
@@ -67,64 +68,141 @@ internal class Day20Test {
             report {
                 val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
                 val partOne = Day20.traverse("^WNE$", map, Pos(0, 0))
-                isMap(map, listOf(
+                map.toMap().map { it.joinToString("") }.forEach { println(it) }
+                assertEquals(listOf(
                         "??#?",
                         "?.|.",
                         "#-#?",
                         "?.|X",
                         "??#?"
-                ))
+                ), map.toMap().map { it.joinToString("") })
                 assertThat(map).hasSize(11)
                 partOne to Pos(x = 0, y = -2)
             }
         }
-    }
 
+        @Test
+        fun `20,1,test,fmr_simplest_wne|ne`() {
+            report {
+                val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
+                val partOne = Day20.traverse("^WNE|NE$", map, Pos(0, 0))
+                map.toMap().map { it.joinToString("") }.forEach { println(it) }
+                assertEquals(listOf(
+                        "??#?#?",
+                        "?.|.|.",
+                        "#-#-#?",
+                        "?.|X??",
+                        "??#???"
+                ), map.toMap().map { it.joinToString("") })
+                assertThat(map).hasSize(16)
+                partOne to Pos(x = 0, y = 0)
+            }
+        }
+
+        @Test
+        fun `20,1,test,fmr_simplest_(wne|ne)`() {
+            report {
+                val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
+                val partOne = Day20.traverse("^(WNE|NE)$", map, Pos(0, 0))
+                map.toMap().map { it.joinToString("") }.forEach { println(it) }
+                assertEquals(listOf(
+                        "??#?#?",
+                        "?.|.|.",
+                        "#-#-#?",
+                        "?.|X??",
+                        "??#???"
+                ), map.toMap().map { it.joinToString("") })
+                assertThat(map).hasSize(16)
+                partOne to Pos(x = 0, y = 0)
+            }
+        }
+
+        @Test
+        fun `20,1,test,fmr_simplest_(wne|)`() {
+            report {
+                val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
+                val partOne = Day20.traverse("^(WNE|)$", map, Pos(0, 0))
+                map.toMap().map { it.joinToString("") }.forEach { println(it) }
+                assertEquals(listOf(
+                        "??#?",
+                        "?.|.",
+                        "#-#?",
+                        "?.|X",
+                        "??#?"
+                ), map.toMap().map { it.joinToString("") })
+                assertThat(map).hasSize(11)
+                partOne to Pos(x = 0, y = 0)
+            }
+        }
+    }
 
     @Nested
     inner class `Part 1` {
         @Test
-        fun `20,1,test`() {
+        fun `20,1,test,WNE`() {
             report {
-                Day20.partOne("^WNE$") to 3
+                val map = Day20.parse("^WNE$")
+                assertThat(map).hasSize(4)
+                map to mapOf(Pos(x = -1, y = -1) to 2, Pos(x = 0, y = -1) to 3, Pos(x = -1, y = 0) to 1, Pos(x = 0, y = 0) to 0)
             }
         }
 
 
-//        @Test
-//        fun `20,1,test,fmr_1`() {
-//            report {
-//                Day20.partOne("^(WNE)$") to 3
-//            }
-//        }
-//
-//        @Test
-//        fun `20,1,test,fmr_2`() {
-//            report {
-//                Day20.partOne("^(WNE|NE)$") to 5
-//            }
-//        }
-//
-//        @Test
-//        fun `20,1,test,2`() {
-//            report {
-//                Day20.partOne("^ENWWW(NEEE|SSE(EE|N))$") to 10
-//            }
-//        }
-//
-//        @Test
-//        fun `20,1,test,3`() {
-//            report {
-//                Day20.partOne("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$") to 18
-//            }
-//        }
-//
-//        @Test
-//        fun `20,1,live`() {
-//            report {
-//                Day20.partOne(data20) to 2
-//            }
-//        }
+        @Test
+        fun `20,1,test,fmr_^(WNE|NE)$`() {
+            report {
+                Day20.parse("^(WNE|NE)$").size to 5
+            }
+        }
+
+        @Test
+        fun `20,1,part1,fmr_^(WNE|NE)$`() {
+            report {
+                Day20.partOne("^(WNE|NE)$") to 2
+            }
+        }
+
+        @Test
+        fun `20,1,test,^ENWWW(NEEE|SSE(EE|N))$`() {
+            report {
+                Day20.parse("^ENWWW(NEEE|SSE(EE|N))$").size to 16
+            }
+        }
+
+        @Test
+        fun `20,1,part1,^ENWWW(NEEE|SSE(EE|N))$`() {
+            report {
+                Day20.partOne("^ENWWW(NEEE|SSE(EE|N))$") to 10
+            }
+        }
+
+        @Test
+        fun `20,1,test,^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$`() {
+            report {
+                Day20.parse("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$").size to 25
+            }
+        }
+
+        @Test
+        fun `20,1,part1,^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$`() {
+            report {
+                Day20.partOne("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$") to 18
+            }
+        }
+
+        @Test
+        fun `20,1,test,live`() {
+            report {
+                Day20.parse(data20).size to 10000
+            }
+        }
+
+        @Test
+        fun `20,1,live`() {
+            report {
+                Day20.partOne(data20) to 3046
+            }
+        }
     }
 
     @Nested
@@ -132,21 +210,21 @@ internal class Day20Test {
         @Test
         fun `20,2,test`() {
             report {
-                Day20.partTwo("^WNE$") to 2
+                Day20.partTwo("^WNE$") to 0
             }
         }
 
         @Test
         fun `20,2,live`() {
             report {
-                Day20.partTwo(data20) to 2
+                Day20.partTwo(data20) to 8545
             }
         }
     }
 
-    private fun isMap(map: MutableMap<Pos, Char>, actual: List<String>) {
-//        map.toMap().map { it.joinToString("") }.forEach { println(it) }
-        assertEquals(map.toMap().map { it.joinToString("") }, actual)
+    private fun isMap(map: MutableMap<Pos, Char>, expected: List<String>) {
+        map.toMap().map { it.joinToString("") }.forEach { println(it) }
+        assertEquals(expected, map.toMap().map { it.joinToString("") })
     }
 }
 
