@@ -13,16 +13,66 @@ internal class Day9Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `9,1,test`() {
+        fun `9,1,test,1`() {
             report {
-                Day9.partOne("<>") to 2
+                Day9.partOne("{{<ab>},{<ab>},{<ab>},{<ab>}}") to 9
+            }
+        }
+
+        @Test
+        fun `9,1,test,2`() {
+            report {
+                Day9.partOne("{<a>,<a>,<a>,<a>}") to 1
+            }
+        }
+
+        @Test
+        fun `9,1,test,3`() {
+            report {
+                Day9.partOne("{{{},{},{{}}}}") to 16
+            }
+        }
+
+        @Test
+        fun `9,1,test,4`() {
+            report {
+                Day9.partOne("{{},{}}") to 5
+            }
+        }
+
+        @Test
+        fun `9,1,test,5`() {
+            report {
+                Day9.partOne("{{{}}}") to 6
+            }
+        }
+
+
+        @Test
+        fun `9,1,test,6`() {
+            report {
+                Day9.partOne("{}") to 1
+            }
+        }
+
+        @Test
+        fun `9,1,test,7`() {
+            report {
+                Day9.partOne("{{<!!>},{<!!>},{<!!>},{<!!>}}") to 9
+            }
+        }
+
+        @Test
+        fun `9,1,test,8`() {
+            report {
+                Day9.partOne("{{<a!>},{<a!>},{<a!>},{<ab>}}") to 3
             }
         }
 
         @Test
         fun `9,1,live`() {
             report {
-                Day9.partOne(data9) to 2
+                Day9.partOne(data9) to 12803
             }
         }
     }
