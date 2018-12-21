@@ -24,7 +24,7 @@ internal class Day21Test {
     inner class `Part 2` {
         @Test
         @Slow(70000)
-        fun `21,1,live`() {
+        fun `21,2,live`() {
             report {
                 Day21.partTwo(data21) to 14626276
             }
