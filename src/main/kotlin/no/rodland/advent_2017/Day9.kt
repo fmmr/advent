@@ -1,7 +1,5 @@
 package no.rodland.advent_2017
 
-import java.util.*
-
 object Day9 {
     fun partOne(input: String): Int {
         val onlyGroups = cleanGroups(input)
@@ -15,20 +13,22 @@ object Day9 {
                 value -= 1
             }
         }
+
+        println("input:         $input")
+        println("only groups:   ${onlyGroups.first}")
         println("current value: $value, sum: $sum")
         return sum
     }
 
     fun partTwo(input: String): Int {
         val onlyGroups = cleanGroups(input)
+        println("removed ${onlyGroups.second} garbage")
         return onlyGroups.second
     }
 
     private fun cleanGroups(input: String): Pair<String, Int> {
-        println(input)
         var isGarbage = false
         var cancelNext = false
-        val stack: ArrayDeque<Int> = ArrayDeque()
         var countGarbage = 0
         val onlyGroups = input.mapNotNull {
             if (cancelNext) {
@@ -54,7 +54,6 @@ object Day9 {
                 it
             }
         }.joinToString("")
-        println(onlyGroups)
         return onlyGroups to countGarbage
     }
 
