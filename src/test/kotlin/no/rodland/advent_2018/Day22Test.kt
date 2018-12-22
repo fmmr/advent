@@ -32,7 +32,7 @@ internal class Day22Test {
         @Test
         fun `22,2,test`() {
             report {
-                Day22.partTwo(test22) to 2
+                Day22.partTwo(510, Pos(10, 10)) to 2
             }
         }
 

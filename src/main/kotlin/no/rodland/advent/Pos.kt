@@ -21,6 +21,10 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
         )
     }
 
+    fun positiveNeighboor(): List<Pos> {
+        return neighboorCellsReadingOrder().filter { it.x >= 0 && it.y >= 0 }
+    }
+
     fun neighboorCellsAllEight(): List<Pos> {
         return listOf(
                 Pos(x, y - 1),
