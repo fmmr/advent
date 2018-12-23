@@ -2,6 +2,7 @@ package no.rodland.advent_2018
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Pos
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -32,10 +33,24 @@ internal class Day22Test {
         @Test
         fun `22,2,test`() {
             report {
-                Day22.partTwo(510, Pos(10, 10)) to 2
+                Day22.partTwo(510, Pos(10, 10)) to 45
             }
         }
 
+        //        depth: 8112
+//        target: 13,743
+        @Test
+        @Slow(9000)
+        fun `22,1,live`() {
+            report {
+                // ca 750 => ca 2000
+                // 900 => 1082
+                // 1000 => 1027
+                // 1300 => 1027
+                // 2500 => 1027
+                Day22.partTwo(8112, Pos(13, 743)) to 1004
+            }
+        }
     }
 }
 
