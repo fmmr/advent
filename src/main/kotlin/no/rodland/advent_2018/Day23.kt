@@ -11,7 +11,13 @@ object Day23 {
 
     fun partTwo(list: List<String>): Int {
         val bots = list.map { NanoBot(it) }
-        return 2
+        val neighbors: Map<NanoBot, Set<NanoBot>> = bots.map { bot ->
+            Pair(bot, bots.filterNot { it == bot }.filter { bot.withinRangeOfSharedPoint(it) }.toSet())
+        }.toMap()
+
+        val clique: Set<NanoBot> = BronKerbosch(neighbors).largestClique()
+
+        return clique.map { it.distanceTo(NanoBot(0, 0, 0, 0)) - it.sigalRadius }.max()!!
     }
 
 
@@ -47,5 +53,42 @@ object Day23 {
         fun distanceTo(other: NanoBot): Int {
             return Math.abs(other.x - x) + Math.abs(other.y - y) + Math.abs(other.z - z)
         }
+
+        fun withinRangeOfSharedPoint(other: NanoBot): Boolean =
+                distanceTo(other) <= (sigalRadius + other.sigalRadius)
     }
+
+    // https://todd.ginsberg.com/post/advent-of-code/2018/day23/
+    class BronKerbosch<T>(private val neighbors: Map<T, Set<T>>) {
+
+        private var bestR: Set<T> = emptySet()
+
+        fun largestClique(): Set<T> {
+            execute(neighbors.keys)
+            return bestR
+        }
+
+        private fun execute(
+                p: Set<T>,
+                r: Set<T> = emptySet(),
+                x: Set<T> = emptySet()
+        ) {
+            if (p.isEmpty() && x.isEmpty()) {
+                // We have found a potential best R value, compare it to the best so far.
+                if (r.size > bestR.size) bestR = r
+            } else {
+                val mostNeighborsOfPandX: T = (p + x).maxBy { neighbors.getValue(it).size }!!
+                val pWithoutNeighbors = p.minus(neighbors[mostNeighborsOfPandX]!!)
+                pWithoutNeighbors.forEach { v ->
+                    val neighborsOfV = neighbors[v]!!
+                    execute(
+                            p.intersect(neighborsOfV),
+                            r + v,
+                            x.intersect(neighborsOfV)
+                    )
+                }
+            }
+        }
+    }
+
 }
