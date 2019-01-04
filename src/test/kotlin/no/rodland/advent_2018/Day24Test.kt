@@ -3,29 +3,15 @@ package no.rodland.advent_2018
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day24.Group
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
-import kotlin.test.assertEquals
 
 @DisableSlow
 internal class Day24Test {
     val data24 = "2018/input_24.txt".readFile()
     val test24 = listOf("1", "2")
-
-    @Nested
-    inner class Hit {
-        @Test
-        fun `24,1,test`() {
-            report {
-                val immune = Group.of(Day24.Team.IMMUNE, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2")
-                val infection = Group.of(Day24.Team.INFECTION, "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1")
-                infection.hit(immune)
-
-                immune.num to 0
-            }
-        }
-    }
 
     @Nested
     inner class `Part 1` {
@@ -101,6 +87,19 @@ internal class Day24Test {
                 assertEquals(4, group.num)
                 assertEquals(120, group.effective())
                 2 to 2
+            }
+        }
+    }
+
+    @Nested
+    inner class Hit {
+        @Test
+        fun `24,1,test`() {
+            report {
+                val immune = Group.of(Day24.Team.IMMUNE, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2")
+                val infection = Group.of(Day24.Team.INFECTION, "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1")
+                infection.hit(immune)
+                immune.num to 0
             }
         }
     }
