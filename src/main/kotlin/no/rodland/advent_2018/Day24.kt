@@ -13,10 +13,10 @@ object Day24 {
         val infections = infectionList.map { Group.of(Team.INFECTION, it) }
 
 
-        val all = (immunes + infections).sorted()
+        val all = (immunes + infections)
 
         while (all.filter { it.alive() }.map { it.team }.distinct().count() > 1) {
-            val fighters = all.filter { it.alive() }
+            val fighters = all.filter { it.alive() }.sorted()
             val selected: MutableSet<Group> = mutableSetOf()
             // targetSelection
             val targetSelection = fighters.map { selector ->

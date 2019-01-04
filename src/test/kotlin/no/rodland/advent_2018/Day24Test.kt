@@ -67,7 +67,7 @@ internal class Day24Test {
                         "2729 units each with 33834 hit points (immune to slashing, cold) with an attack that does 23 fire damage at initiative 7",
                         "344 units each with 20830 hit points (immune to fire) with an attack that does 116 bludgeoning damage at initiative 12",
                         "6848 units each with 50757 hit points with an attack that does 12 slashing damage at initiative 11"
-                )) to 26231
+                )) to 26343
             }
         }
     }
