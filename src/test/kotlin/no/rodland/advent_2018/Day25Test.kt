@@ -1,7 +1,6 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.DisableSlow
-import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Test
 import readFile
@@ -81,7 +80,6 @@ internal class Day25Test {
     }
 
     @Test
-    @Slow(800)
     fun `25,1,live`() {
         report {
             Day25.partOne(data25) to 394

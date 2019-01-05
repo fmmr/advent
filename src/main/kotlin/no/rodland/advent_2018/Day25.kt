@@ -2,27 +2,19 @@ package no.rodland.advent_2018
 
 object Day25 {
     fun partOne(list: List<String>): Int {
-        val points = list.map { Point4D(it) }
-        val neighbors = points.map { point -> point to points.filterNot { point == it }.filter { point.isCloseTo(it) } }
-        val constellations: MutableMap<Int, Set<Point4D>> = mutableMapOf()
         var id = 0
-
-        neighbors.forEach { (k, v) ->
-            if (constellations.doesNotContainPoint(k)) {
-                constellations[id++] = setOf(k) + v
-            } else {
-                val currentId = constellations.getConstelltion(k)!!
-                constellations[currentId] = constellations[currentId]!! + setOf(k) + v
-            }
-        }
+        val points = list.map { Point4D(it) }
+        var constellations: MutableMap<Int, Set<Point4D>> = points.map { point -> id++ to points.filter { point.isCloseTo(it) }.toSet() }.toMap().toMutableMap()
 
         var numberOfConstellationEntries = constellations.map { (_, v) -> v.size }.sum()
+        println("INIT: number points: ${list.size}, number of constellation entries: $numberOfConstellationEntries, number of constellations: ${constellations.size}")
         while (numberOfConstellationEntries > points.size) {
             merge(points, constellations)
+            constellations = constellations.filterValues { it.size > 0 }.toMutableMap()
             numberOfConstellationEntries = constellations.map { (_, v) -> v.size }.sum()
+            println("LOOP: number points: ${list.size}, number of constellation entries: $numberOfConstellationEntries, number of constellations: ${constellations.size}")
         }
-        println("number points: ${list.size}, number of constellations: ${constellations.size}, number of points $numberOfConstellationEntries")
-        return constellations.filterValues { it.size > 0 }.size
+        return constellations.size
     }
 
     private fun merge(points: List<Point4D>, constellations: MutableMap<Int, Set<Point4D>>) {
@@ -31,7 +23,7 @@ object Day25 {
                 .forEach { (_, ints) ->
                     val mergedConstellation = ints.flatMap { constellations[it]?.toList() ?: emptyList() }
                     ints.forEach { constellations.remove(it) }
-                    constellations[constellations.maxId() + 1] = mergedConstellation.toSet()
+                    constellations[ints.first()] = mergedConstellation.toSet()
                 }
     }
 
