@@ -1,9 +1,11 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import no.rodland.advent_2018.Day24.Group
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -61,16 +63,124 @@ internal class Day24Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `24,2,test`() {
+        fun `24,2,test,game`() {
             report {
-                Day24.partTwo(test24) to 2
+                Day24.partOne(listOf(
+                        "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2",
+                        "989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3"
+                ), listOf(
+                        "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1",
+                        "4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4"
+                ), 1570) to 51
             }
         }
 
         @Test
+        @Slow(700)
+        fun `24,2,test,boost`() {
+            report {
+                Day24.partTwo(listOf(
+                        "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2",
+                        "989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3"
+                ), listOf(
+                        "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1",
+                        "4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4"
+                )) to 1570
+            }
+        }
+
+        @Test
+        @Disabled
+        fun `24,2,live,boost_38_endlesss_loop`() {
+            // 38 - 56 ends in deadlock:
+            // example from 38
+            // Group(team= Day24.Team.IMMUNE, N=2, num=1210, hitPoints=10339, damage=60, attack=cold, initiative=4, weaks=[], immunities=[fire, radiation, slashing])"
+            // Group(team= Day24.Team.INFECTION, N=8, num=2636, hitPoints=33834, damage=23, attack=fire, initiative=7, weaks=[], immunities=[slashing, cold])"
+            // Group(team=INFECTION, N=5, num=888, hitPoints=30594, damage=20, attack=fire, initiative=1, weaks=[radiation], immunities=[cold])"
+
+            report {
+                Day24.partOne(listOf(
+                        "7056 units each with 8028 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 13",
+                        "4459 units each with 10339 hit points (immune to fire, radiation, slashing) with an attack that does 22 cold damage at initiative 4",
+                        "724 units each with 10689 hit points (immune to bludgeoning, cold, fire) with an attack that does 124 radiation damage at initiative 17",
+                        "1889 units each with 3361 hit points (weak to cold) with an attack that does 17 fire damage at initiative 2",
+                        "4655 units each with 1499 hit points (weak to fire) with an attack that does 2 fire damage at initiative 5",
+                        "6799 units each with 3314 hit points with an attack that does 4 radiation damage at initiative 16",
+                        "2407 units each with 4016 hit points (weak to slashing; immune to bludgeoning) with an attack that does 13 fire damage at initiative 20",
+                        "5372 units each with 5729 hit points with an attack that does 9 fire damage at initiative 14",
+                        "432 units each with 11056 hit points with an attack that does 220 cold damage at initiative 10",
+                        "3192 units each with 8960 hit points (weak to slashing, radiation) with an attack that does 24 cold damage at initiative 15"
+                ), listOf(
+                        "4052 units each with 25687 hit points (weak to fire, radiation) with an attack that does 11 slashing damage at initiative 18",
+                        "1038 units each with 13648 hit points (weak to slashing) with an attack that does 24 bludgeoning damage at initiative 9",
+                        "6627 units each with 34156 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 6",
+                        "2299 units each with 45224 hit points (weak to fire) with an attack that does 38 cold damage at initiative 19",
+                        "2913 units each with 30594 hit points (weak to radiation; immune to cold) with an attack that does 20 fire damage at initiative 1",
+                        "2153 units each with 14838 hit points (immune to fire, bludgeoning, radiation; weak to slashing) with an attack that does 11 radiation damage at initiative 3",
+                        "2381 units each with 61130 hit points (weak to cold) with an attack that does 39 slashing damage at initiative 8",
+                        "2729 units each with 33834 hit points (immune to slashing, cold) with an attack that does 23 fire damage at initiative 7",
+                        "344 units each with 20830 hit points (immune to fire) with an attack that does 116 bludgeoning damage at initiative 12",
+                        "6848 units each with 50757 hit points with an attack that does 12 slashing damage at initiative 11"
+                ), 38) to 51
+            }
+        }
+
+        @Test
+        @Disabled
         fun `24,2,live`() {
             report {
-                Day24.partTwo(data24) to 2
+                Day24.partTwo(listOf(
+                        "7056 units each with 8028 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 13",
+                        "4459 units each with 10339 hit points (immune to fire, radiation, slashing) with an attack that does 22 cold damage at initiative 4",
+                        "724 units each with 10689 hit points (immune to bludgeoning, cold, fire) with an attack that does 124 radiation damage at initiative 17",
+                        "1889 units each with 3361 hit points (weak to cold) with an attack that does 17 fire damage at initiative 2",
+                        "4655 units each with 1499 hit points (weak to fire) with an attack that does 2 fire damage at initiative 5",
+                        "6799 units each with 3314 hit points with an attack that does 4 radiation damage at initiative 16",
+                        "2407 units each with 4016 hit points (weak to slashing; immune to bludgeoning) with an attack that does 13 fire damage at initiative 20",
+                        "5372 units each with 5729 hit points with an attack that does 9 fire damage at initiative 14",
+                        "432 units each with 11056 hit points with an attack that does 220 cold damage at initiative 10",
+                        "3192 units each with 8960 hit points (weak to slashing, radiation) with an attack that does 24 cold damage at initiative 15"
+                ), listOf(
+                        "4052 units each with 25687 hit points (weak to fire, radiation) with an attack that does 11 slashing damage at initiative 18",
+                        "1038 units each with 13648 hit points (weak to slashing) with an attack that does 24 bludgeoning damage at initiative 9",
+                        "6627 units each with 34156 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 6",
+                        "2299 units each with 45224 hit points (weak to fire) with an attack that does 38 cold damage at initiative 19",
+                        "2913 units each with 30594 hit points (weak to radiation; immune to cold) with an attack that does 20 fire damage at initiative 1",
+                        "2153 units each with 14838 hit points (immune to fire, bludgeoning, radiation; weak to slashing) with an attack that does 11 radiation damage at initiative 3",
+                        "2381 units each with 61130 hit points (weak to cold) with an attack that does 39 slashing damage at initiative 8",
+                        "2729 units each with 33834 hit points (immune to slashing, cold) with an attack that does 23 fire damage at initiative 7",
+                        "344 units each with 20830 hit points (immune to fire) with an attack that does 116 bludgeoning damage at initiative 12",
+                        "6848 units each with 50757 hit points with an attack that does 12 slashing damage at initiative 11"
+                ), 57) to 26343
+            }
+        }
+
+        @Test
+        fun `24,2,game`() {
+            report {
+                Day24.partOne(listOf(
+                        "7056 units each with 8028 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 13",
+                        "4459 units each with 10339 hit points (immune to fire, radiation, slashing) with an attack that does 22 cold damage at initiative 4",
+                        "724 units each with 10689 hit points (immune to bludgeoning, cold, fire) with an attack that does 124 radiation damage at initiative 17",
+                        "1889 units each with 3361 hit points (weak to cold) with an attack that does 17 fire damage at initiative 2",
+                        "4655 units each with 1499 hit points (weak to fire) with an attack that does 2 fire damage at initiative 5",
+                        "6799 units each with 3314 hit points with an attack that does 4 radiation damage at initiative 16",
+                        "2407 units each with 4016 hit points (weak to slashing; immune to bludgeoning) with an attack that does 13 fire damage at initiative 20",
+                        "5372 units each with 5729 hit points with an attack that does 9 fire damage at initiative 14",
+                        "432 units each with 11056 hit points with an attack that does 220 cold damage at initiative 10",
+                        "3192 units each with 8960 hit points (weak to slashing, radiation) with an attack that does 24 cold damage at initiative 15"
+                ), listOf(
+                        "4052 units each with 25687 hit points (weak to fire, radiation) with an attack that does 11 slashing damage at initiative 18",
+                        "1038 units each with 13648 hit points (weak to slashing) with an attack that does 24 bludgeoning damage at initiative 9",
+                        "6627 units each with 34156 hit points (weak to radiation) with an attack that does 10 slashing damage at initiative 6",
+                        "2299 units each with 45224 hit points (weak to fire) with an attack that does 38 cold damage at initiative 19",
+                        "2913 units each with 30594 hit points (weak to radiation; immune to cold) with an attack that does 20 fire damage at initiative 1",
+                        "2153 units each with 14838 hit points (immune to fire, bludgeoning, radiation; weak to slashing) with an attack that does 11 radiation damage at initiative 3",
+                        "2381 units each with 61130 hit points (weak to cold) with an attack that does 39 slashing damage at initiative 8",
+                        "2729 units each with 33834 hit points (immune to slashing, cold) with an attack that does 23 fire damage at initiative 7",
+                        "344 units each with 20830 hit points (immune to fire) with an attack that does 116 bludgeoning damage at initiative 12",
+                        "6848 units each with 50757 hit points with an attack that does 12 slashing damage at initiative 11"
+                ), 57) to 5549
             }
         }
     }
@@ -80,7 +190,7 @@ internal class Day24Test {
         @Test
         fun `24,1,parse,1`() {
             report {
-                val group = Day24.Group.of(Day24.Team.IMMUNE, "5 units each with 20 hit points (weak to radiation, bludgeoning) with an attack that does 30 fire damage at initiative 2")
+                val group = Day24.Group.of(Day24.Team.IMMUNE, 1, "5 units each with 20 hit points (weak to radiation, bludgeoning) with an attack that does 30 fire damage at initiative 2", 0)
                 assertEquals(5, group.num)
                 assertEquals(150, group.effective())
                 group.num -= 1
@@ -96,8 +206,8 @@ internal class Day24Test {
         @Test
         fun `24,1,test`() {
             report {
-                val immune = Group.of(Day24.Team.IMMUNE, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2")
-                val infection = Group.of(Day24.Team.INFECTION, "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1")
+                val immune = Group.of(Day24.Team.IMMUNE, 1, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2", 0)
+                val infection = Group.of(Day24.Team.INFECTION, 1, "801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1", 0)
                 infection.hit(immune)
                 immune.num to 0
             }
@@ -109,40 +219,40 @@ internal class Day24Test {
         @Test
         fun `24,1,parse,1`() {
             report {
-                Day24.Group.of(Day24.Team.IMMUNE, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2") to
-                        Day24.Group(Day24.Team.IMMUNE, 17, 5390, 4507, "fire", 2, listOf("radiation", "bludgeoning"), emptyList())
+                Day24.Group.of(Day24.Team.IMMUNE, 1, "17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2", 0) to
+                        Day24.Group(Day24.Team.IMMUNE, 1, 17, 5390, 4507, "fire", 2, listOf("radiation", "bludgeoning"), emptyList())
             }
         }
 
         @Test
         fun `24,1,parse,2`() {
             report {
-                Day24.Group.of(Day24.Team.INFECTION, "17 units each with 5390 hit points with an attack that does 4507 fire damage at initiative 2") to
-                        Day24.Group(Day24.Team.INFECTION, 17, 5390, 4507, "fire", 2, emptyList(), emptyList())
+                Day24.Group.of(Day24.Team.INFECTION, 1, "17 units each with 5390 hit points with an attack that does 4507 fire damage at initiative 2", 0) to
+                        Day24.Group(Day24.Team.INFECTION, 1, 17, 5390, 4507, "fire", 2, emptyList(), emptyList())
             }
         }
 
         @Test
         fun `24,1,parse,3`() {
             report {
-                Day24.Group.of(Day24.Team.INFECTION, "989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3") to
-                        Day24.Group(Day24.Team.INFECTION, 989, 1274, 25, "slashing", 3, listOf("bludgeoning", "slashing"), listOf("fire"))
+                Day24.Group.of(Day24.Team.INFECTION, 1, "989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3", 0) to
+                        Day24.Group(Day24.Team.INFECTION, 1, 989, 1274, 25, "slashing", 3, listOf("bludgeoning", "slashing"), listOf("fire"))
             }
         }
 
         @Test
         fun `24,1,parse,4`() {
             report {
-                Day24.Group.of(Day24.Team.INFECTION, "989 units each with 1274 hit points (weak to bludgeoning, slashing; immune to fire) with an attack that does 25 slashing damage at initiative 3") to
-                        Day24.Group(Day24.Team.INFECTION, 989, 1274, 25, "slashing", 3, listOf("bludgeoning", "slashing"), listOf("fire"))
+                Day24.Group.of(Day24.Team.INFECTION, 1, "989 units each with 1274 hit points (weak to bludgeoning, slashing; immune to fire) with an attack that does 25 slashing damage at initiative 3", 0) to
+                        Day24.Group(Day24.Team.INFECTION, 1, 989, 1274, 25, "slashing", 3, listOf("bludgeoning", "slashing"), listOf("fire"))
             }
         }
 
         @Test
         fun `24,1,parse,5`() {
             report {
-                Day24.Group.of(Day24.Team.INFECTION, "989 units each with 1274 hit points (immune to fire, slashing) with an attack that does 25 slashing damage at initiative 3") to
-                        Day24.Group(Day24.Team.INFECTION, 989, 1274, 25, "slashing", 3, emptyList(), listOf("fire", "slashing"))
+                Day24.Group.of(Day24.Team.INFECTION, 1, "989 units each with 1274 hit points (immune to fire, slashing) with an attack that does 25 slashing damage at initiative 3", 0) to
+                        Day24.Group(Day24.Team.INFECTION, 1, 989, 1274, 25, "slashing", 3, emptyList(), listOf("fire", "slashing"))
             }
         }
     }

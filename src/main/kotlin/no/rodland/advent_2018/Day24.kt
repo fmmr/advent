@@ -8,16 +8,34 @@ object Day24 {
     val reWeak = """.*weak to ([^;]*).*""".toRegex()
     val reImmune = """.*immune to ([^;]*).*""".toRegex()
 
-    fun partOne(imuneList: List<String>, infectionList: List<String>): Int {
-        val immunes = imuneList.map { Group.of(Team.IMMUNE, it) }
-        val infections = infectionList.map { Group.of(Team.INFECTION, it) }
+    fun partOne(imuneList: List<String>, infectionList: List<String>, boost: Int = 0): Int {
+        val endGame = play(imuneList, infectionList, boost)
+        return endGame.first.sumBy { it.num }
+    }
 
+    fun partTwo(imuneList: List<String>, infectionList: List<String>, initialBoost: Int = 0): Int {
+        return generateSequence(initialBoost) { it + 1 }.takeWhile { boost ->
+            val end = play(imuneList, infectionList, boost)
+            val teamWon = end.first.first().team
+            val fighters = end.first.sumBy { it.num }
+            println("team $teamWon won with a remaining army of $fighters for boost $boost")
+            end.first.first().team != Team.IMMUNE
+        }.last() + 1
+    }
 
+    private fun play(imuneList: List<String>, infectionList: List<String>, boost: Int): Pair<List<Group>, List<Group>> {
+        var count = 1
+        val immunes = imuneList.map { Group.of(Team.IMMUNE, count++, it, boost) }
+        count = 1
+        val infections = infectionList.map { Group.of(Team.INFECTION, count++, it, boost) }
         val all = (immunes + infections)
-
+        count = 0
         while (all.filter { it.alive() }.map { it.team }.distinct().count() > 1) {
-            val fighters = all.filter { it.alive() }.sorted()
+            count++
+            val fighters = all.filter { it.alive() }.sortedWith(compareByDescending<Group> { it.effective() }.thenByDescending { it.initiative })
             val selected: MutableSet<Group> = mutableSetOf()
+
+
             // targetSelection
             val targetSelection = fighters.map { selector ->
                 val available = fighters.filter { !it.isA(selector.team) }.filter { !selected.contains(it) }
@@ -26,16 +44,12 @@ object Day24 {
                     selected.add(opponent)
                 }
                 selector to opponent
-            }.sortedBy { it.first.initiative * -1 }
+            }.sortedByDescending { it.first.initiative }
 
             // attack
             targetSelection.forEach { it.first.hit(it.second) }
-//            val debug = fighters.map { it.team to it.alive() }.partition { it.second }
-//            println("debug = ${debug}")
         }
-
-        val endGame = all.partition { it.alive() }
-        return endGame.first.sumBy { it.num }
+        return all.partition { it.alive() }
     }
 
     fun partTwo(list: List<String>): Int {
@@ -44,23 +58,14 @@ object Day24 {
 
     data class Group(
             val team: Team,
+            var N: Int,
             var num: Int,
             val hitPoints: Int,
             val damage: Int,
             val attack: String,
             val initiative: Int,
             val weaks: List<String>,
-            val immunities: List<String>,
-            val initEffect: Int = num * damage  // todo for debugging
-    ) : Comparable<Group> {
-        override fun compareTo(other: Group): Int {
-            val powerComp = other.effective().compareTo(effective())
-            if (powerComp == 0) {
-                return other.initiative.compareTo(initiative)
-            }
-            return powerComp;
-        }
-
+            val immunities: List<String>) {
         fun effective() = num * damage
         fun alive() = num > 0
 
@@ -79,11 +84,19 @@ object Day24 {
         }
 
         fun chooseOpponent(opponents: List<Group>): Group? {
-            val potential = opponents.map { it to willDamage(it) }.maxBy { it.second }
-            if ((potential?.second ?: 0) > 0) {
-                return potential!!.first
-            }
-            return null
+            return opponents
+                    .sortedWith(compareByDescending<Group> { willDamage(it) }.thenByDescending { it.effective() }.thenByDescending { it.initiative })
+                    .filterNot { willDamage(it) == 0 }
+//                    .filter { willKillAtLeastOneUnit(it) }
+                    .firstOrNull()
+        }
+
+        // filtering for these will fail test: part1, live
+        private fun willKillAtLeastOneUnit(other: Group): Boolean {
+            val hit = this.willDamage(other)
+            val numToDie = hit / other.hitPoints
+            val newOtherNum = other.num - Math.min(numToDie, other.num)
+            return newOtherNum < other.num
         }
 
         fun willDamage(other: Group): Int {
@@ -97,11 +110,16 @@ object Day24 {
         }
 
         companion object {
-            fun of(team: Team, str: String): Group {
+            fun of(team: Team, count: Int, str: String, boost: Int = 0): Group {
                 val info = re.getString(str, 3) ?: ""
                 val weakList = reWeak.getString(info)?.split(",")?.map { it.trim() } ?: emptyList()
                 val immuneList = reImmune.getString(info)?.split(", ")?.map { it.trim() } ?: emptyList()
-                return Group(team, re.get(str), re.get(str, 2), re.get(str, 4), re.getString(str, 5)!!, re.get(str, 6), weakList, immuneList)
+                val damage = if (team == Team.IMMUNE) {
+                    boost + re.get(str, 4)
+                } else {
+                    re.get(str, 4)
+                }
+                return Group(team, count, re.get(str), re.get(str, 2), damage, re.getString(str, 5)!!, re.get(str, 6), weakList, immuneList)
             }
         }
     }
