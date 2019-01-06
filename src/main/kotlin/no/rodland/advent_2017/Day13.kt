@@ -7,6 +7,9 @@ object Day13 {
         return catches.map { it.first * it.second }.sum()
     }
 
+    // coulød bne solved MUCH more effective by having a sequence and abort
+    // once we're ciught once instead ofg calculating the severity for all
+    // offsets.
     fun partTwo(list: List<String>): Int {
         var offset = 1
         var catches = getCatches(list, offset)
