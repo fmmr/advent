@@ -14,16 +14,37 @@ internal class Day01Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `01,1,test`() {
+        fun `01,1,test,1`() {
             report {
-                Day01.partOne(test01) to 2
+                Day01.partOne(12) to 2
+            }
+        }
+
+        @Test
+        fun `01,1,test,2`() {
+            report {
+                Day01.partOne(14) to 2
+            }
+        }
+
+        @Test
+        fun `01,1,test,3`() {
+            report {
+                Day01.partOne(1969) to 654
+            }
+        }
+
+        @Test
+        fun `01,1,test,4`() {
+            report {
+                Day01.partOne(100756) to 33583
             }
         }
 
         @Test
         fun `01,1,live`() {
             report {
-                Day01.partOne(data01) to 2
+                data01.map { Day01.partOne(it.toInt()) }.sum() to 3398090
             }
         }
     }
@@ -31,16 +52,30 @@ internal class Day01Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `01,2,test`() {
+        fun `01,2,test,1`() {
             report {
-                Day01.partTwo(test01) to 2
+                Day01.partTwo(14) to 2
+            }
+        }
+
+        @Test
+        fun `01,2,test,2`() {
+            report {
+                Day01.partTwo(1969) to 966
+            }
+        }
+
+        @Test
+        fun `01,2,test,3`() {
+            report {
+                Day01.partTwo(100756) to 50346
             }
         }
 
         @Test
         fun `01,2,live`() {
             report {
-                Day01.partTwo(data01) to 2
+                data01.map { Day01.partTwo(it.toInt()) }.sum() to 5094261
             }
         }
     }

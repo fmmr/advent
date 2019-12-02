@@ -4,7 +4,7 @@ typealias Caves = Array<CharArray>
 
 fun String.readFile(): List<String> {
     val resource = Pos::class.java.getResource("/$this")
-    return resource.readText().split("\n")
+    return resource.readText().split("\n").filter { it.isNotEmpty() }
 }
 
 fun String.readFileAsInt(): List<Int> {
