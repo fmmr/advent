@@ -11,6 +11,10 @@ fun String.readFileAsInt(): List<Int> {
     return this.readFile().map { it.toInt() }
 }
 
+fun String.readFileAsIntOneLine(): List<Int> {
+    return this.readFile()[0].split(",").map { it.toInt() }
+}
+
 @Suppress("ConstantConditionIf")
 fun debug(str: String) {
     if (false) {
