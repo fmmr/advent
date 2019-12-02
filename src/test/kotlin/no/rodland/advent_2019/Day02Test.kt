@@ -4,11 +4,10 @@ import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import readFileAsIntOneLine
 
 @DisableSlow
 internal class Day02Test {
-    val data02 = "2019/input_02.txt".readFileAsIntOneLine()
+    val data02 = "2019/input_02.txt".readFirstLine()
     val test02 = listOf(1, 2)
 
     @Nested

@@ -4,15 +4,11 @@ typealias Caves = Array<CharArray>
 
 fun String.readFile(): List<String> {
     val resource = Pos::class.java.getResource("/$this")
-    return resource.readText().split("\n").filter { it.isNotEmpty() }
+    return resource.readText().split("\n")
 }
 
 fun String.readFileAsInt(): List<Int> {
     return this.readFile().map { it.toInt() }
-}
-
-fun String.readFileAsIntOneLine(): List<Int> {
-    return this.readFile()[0].split(",").map { it.toInt() }
 }
 
 @Suppress("ConstantConditionIf")
