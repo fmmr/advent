@@ -2,30 +2,25 @@ package no.rodland.advent_2019
 
 object Day02 {
 
-    fun partOne(list: MutableList<Int>): List<Int> {
+    fun partOne(input: MutableList<Int>): List<Int> {
+        val list = input.toMutableList()
         return runProgram(list, 0)
     }
 
-    fun partOneMod(list: MutableList<Int>, noun: Int = 12, verb: Int = 2): Int {
+    fun partOneMod(input: List<Int>, noun: Int = 12, verb: Int = 2): Int {
+        val list = input.toMutableList()
         list[1] = noun
         list[2] = verb
         return runProgram(list, 0)[0]
     }
 
-    fun runProgram(list: MutableList<Int>, pos: Int): MutableList<Int> {
-        val opcode = list[pos]
-        if (opcode == 99) {
-            return list
-        }
-        val adr1 = list[pos + 1]
-        val adr2 = list[pos + 2]
-        val adr3 = list[pos + 3]
-        if (opcode == 1) {
-            list[adr3] = list[adr1] + list[adr2]
-        } else if (opcode == 2) {
-            list[adr3] = list[adr1] * list[adr2]
-        } else {
-            error("Unable to handle opcode $opcode")
+    private fun runProgram(input: List<Int>, pos: Int): MutableList<Int> {
+        val list = input.toMutableList()
+        when (list[pos]) {
+            99 -> return list
+            1 -> list[list[pos + 3]] = list[list[pos + 1]] + list[list[pos + 2]]
+            2 -> list[list[pos + 3]] = list[list[pos + 1]] * list[list[pos + 2]]
+            else -> error("Unable to handle opcode ${list[pos]}")
         }
         return runProgram(list, pos + 4)
     }
