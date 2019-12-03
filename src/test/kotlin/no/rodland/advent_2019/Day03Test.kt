@@ -40,7 +40,7 @@ internal class Day03Test {
         @Test
         fun `03,2,live`() {
             report {
-                Day03.partTwo(wire1, wire2) to 2
+                Day03.partTwo(wire1, wire2) to 19242
             }
         }
     }

@@ -28,7 +28,7 @@ object Day02 {
     fun partTwo(list: List<Int>): Int {
         (0..100).forEach { noun ->
             (0..100).forEach { verb ->
-                val result = partOneMod(list.toMutableList(), noun, verb)
+                val result = partOneMod(list, noun, verb)
                 if (result == 19690720) {
                     return 100 * noun + verb
                 }
