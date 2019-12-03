@@ -7,6 +7,6 @@ fun String.readFile(): List<String> {
     return resource.readText().split("\n").filter { it.isNotEmpty() }
 }
 
-fun String.readFirstLine(): List<Int> {
+fun String.readFirstLineInts(): List<Int> {
     return this.readFile()[0].split(",").map { it.toInt() }
 }

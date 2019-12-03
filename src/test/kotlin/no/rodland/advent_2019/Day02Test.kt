@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 @DisableSlow
 internal class Day02Test {
-    val data02 = "2019/input_02.txt".readFirstLine()
+    val data02 = "2019/input_02.txt".readFirstLineInts()
     val test02 = listOf(1, 2)
 
     @Nested

@@ -26,15 +26,14 @@ object Day02 {
     }
 
     fun partTwo(list: List<Int>): Int {
-        for (i in 0..50) {
-            for (j in 0..50) {
-                val result = partOneMod(list.toMutableList(), i, j)
+        (0..100).forEach { noun ->
+            (0..100).forEach { verb ->
+                val result = partOneMod(list.toMutableList(), noun, verb)
                 if (result == 19690720) {
-                    println(100 * i + j)
-                    return 100 * i + j
+                    return 100 * noun + verb
                 }
             }
         }
-        return -1
+        error("noun and verb not found")
     }
 }
