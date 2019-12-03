@@ -1,6 +1,7 @@
 package no.rodland.advent_2019
 
 import no.rodland.advent.report
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 internal class Day03PosTest {
@@ -92,6 +93,13 @@ internal class Day03PosTest {
     fun `03,pos,range,4`() {
         report {
             Pos(1, 5)..Pos(1, 2) to listOf(Pos(1, 5), Pos(1, 4), Pos(1, 3), Pos(1, 2))
+        }
+    }
+
+    @Test
+    fun `03,pos,range,5`() {
+        Assertions.assertThrows(NotImplementedError::class.java) {
+            Pos(1, 5)..Pos(3, 4)
         }
     }
 }

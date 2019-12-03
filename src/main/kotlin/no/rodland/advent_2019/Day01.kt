@@ -11,4 +11,8 @@ object Day01 {
             partOne + partTwo(partOne)
         }
     }
+
+    fun findFuel2FromChriswk(weight: Int): Int {
+        return generateSequence(partOne(weight)) { w -> partOne(w) }.takeWhile { it > 0 }.sum()
+    }
 }

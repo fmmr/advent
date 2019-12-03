@@ -39,7 +39,9 @@ data class Pos(val x: Int, val y: Int) {
     }
 
     operator fun rangeTo(pos: Pos): List<Pos> {
-        return if (x != pos.x) {
+        return if (x != pos.x && y != pos.y) {
+            TODO("rangeTo Not implemented for bi-directional movement")
+        } else if (x != pos.x) {
             if (x < pos.x) {
                 (x..pos.x).map { Pos(it, y) }
             } else {
