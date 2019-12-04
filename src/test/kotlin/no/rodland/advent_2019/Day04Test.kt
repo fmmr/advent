@@ -22,7 +22,7 @@ internal class Day04Test {
         @Test
         fun `04,1,adjacent,1`() {
             report {
-                1234454.twoAdjacentEqual() to true
+                1234454.hasTwoAdjacent() to true
             }
         }
 
@@ -50,7 +50,7 @@ internal class Day04Test {
         @Test
         fun `04,1,adjacent,2`() {
             report {
-                1234254.twoAdjacentEqual() to false
+                1234254.hasTwoAdjacent() to false
             }
         }
     }
@@ -58,16 +58,37 @@ internal class Day04Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `04,2,test`() {
+        fun `04,2,hasTwoAdjecentNotPartOfLargerGroup,1`() {
             report {
-                Day04.partTwo(test04) to 2
+                112233.digits().groupBy { it }.entries.any { it.value.size == 2 } to true
+            }
+        }
+
+        @Test
+        fun `04,2,hasTwoAdjecentNotPartOfLargerGroup,2`() {
+            report {
+                123444.digits().groupBy { it }.entries.any { it.value.size == 2 } to false
+            }
+        }
+
+        @Test
+        fun `04,2,hasTwoAdjecentNotPartOfLargerGroup,3`() {
+            report {
+                111122.digits().groupBy { it }.entries.any { it.value.size == 2 } to true
+            }
+        }
+
+        @Test
+        fun `04,2,hasTwoAdjecentNotPartOfLargerGroup,4`() {
+            report {
+                22124424.digits().groupBy { it }.entries.any { it.value.size == 2 } to false
             }
         }
 
         @Test
         fun `04,2,live`() {
             report {
-                Day04.partTwo(test04) to 2
+                Day04.partTwo(input) to 1180
             }
         }
     }

@@ -2,22 +2,28 @@ package no.rodland.advent_2019
 
 object Day04 {
     fun partOne(input: Pair<Int, Int>): Int {
-        return (input.first..input.second).partition { it.valid() }.first.size
+        return (input.first..input.second).partition { it.validPart1() }.first.size
     }
 
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    fun partTwo(input: Pair<Int, Int>): Int {
+        return (input.first..input.second).partition { it.validPart2() }.first.size
     }
 }
 
-private fun Int.valid(): Boolean {
-    return isSixDigit() && twoAdjacentEqual() && neverDecrease()
+private fun Int.validPart1(): Boolean {
+    return isSixDigit() && hasTwoAdjacent() && neverDecrease()
 }
 
-fun Int.twoAdjacentEqual(): Boolean {
-    var previous = ' '
-    toString().forEach {
+private fun Int.validPart2(): Boolean {
+    return isSixDigit() &&
+            digits().groupBy { it }.entries.any { it.value.size == 2 } &&
+            neverDecrease()
+}
+
+fun Int.hasTwoAdjacent(): Boolean {
+    var previous = -1
+    digits().forEach {
         if (it == previous) return true
         previous = it
     }
@@ -36,5 +42,10 @@ fun Int.neverDecrease(): Boolean {
 fun Int.isSixDigit(): Boolean {
     return this in 100000..999999
 }
+
+fun Int.digits(): List<Int> {
+    return toString().map { it.toString().toInt() }
+}
+
 
 
