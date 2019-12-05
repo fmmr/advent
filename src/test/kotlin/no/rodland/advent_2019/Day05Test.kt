@@ -14,21 +14,143 @@ internal class Day05Test {
         @Test
         fun `05,1,test,1`() {
             report {
-                Day05.partOne(listOf(1002, 4, 3, 4, 33)) to listOf(1002, 4, 3, 4, 99)
+                Day05.partOne(listOf(1002, 4, 3, 4, 33)) to 7157989
             }
         }
 
         @Test
         fun `05,1,test,2`() {
             report {
-                Day05.partOne(listOf(1101, 100, -1, 4, 0)) to listOf(1101, 100, -1, 4, 99)
+                Day05.partOne(listOf(1101, 100, -1, 4, 0)) to 7157989
             }
         }
 
         @Test
         fun `05,1,live`() {
             report {
-                Day05.partOne(data05) to 2
+                Day05.partOne(data05) to 7157989
+            }
+        }
+    }
+
+    @Nested
+    inner class `Part 2` {
+        @Test
+        fun `05,2,test,1`() {
+            report {
+                Day05.partOne(listOf(3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8), 8) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,2`() {
+            report {
+                Day05.partOne(listOf(3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8), 7) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,3`() {
+            report {
+                Day05.partOne(listOf(3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8), 9) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,4`() {
+            report {
+                Day05.partOne(listOf(3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8), 7) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,5`() {
+            report {
+                Day05.partOne(listOf(3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8), 8) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,6`() {
+            report {
+                Day05.partOne(listOf(3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8), 9) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,7`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1108, -1, 8, 3, 4, 3, 99), 7) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,8`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1108, -1, 8, 3, 4, 3, 99), 8) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,9`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1108, -1, 8, 3, 4, 3, 99), 9) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,10`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1107, -1, 8, 3, 4, 3, 99), 7) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,11`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1107, -1, 8, 3, 4, 3, 99), 8) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,12`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1107, -1, 8, 3, 4, 3, 99), 9) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,20`() {
+            report {
+                Day05.partOne(listOf(3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9), 9) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,21`() {
+            report {
+                Day05.partOne(listOf(3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9), 0) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,test,22`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1), 9) to 1
+            }
+        }
+
+        @Test
+        fun `05,2,test,23`() {
+            report {
+                Day05.partOne(listOf(3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1), 0) to 0
+            }
+        }
+
+        @Test
+        fun `05,2,live`() {
+            report {
+                Day05.partOne(data05, start = 5) to 7873292
             }
         }
     }
@@ -115,22 +237,7 @@ internal class Day05Test {
 
     }
 
-//    @Nested
-//    inner class `Part 2` {
-//        @Test
-//        fun `05,2,test`() {
-//            report {
-//                Day05.partTwo(test05) to 2
-//            }
-//        }
-//
-//        @Test
-//        fun `05,2,live`() {
-//            report {
-//                Day05.partTwo(data05) to 2
-//            }
-//        }
-//    }
+
 }
 
 
