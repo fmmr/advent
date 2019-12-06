@@ -18,12 +18,6 @@ object Day06 {
         return ((sanToCom + youToCom) - intersect).size
     }
 
-    fun pathToCom(node: Node, acc: List<Node> = emptyList()): List<Node> {
-        if (node == com) {
-            return acc
-        }
-        return pathToCom(node.parent!!, acc) + node.parent!!
-    }
 
     private fun buildTree(list: List<String>): MutableMap<String, Node> {
         val tree = mutableMapOf<String, Node>()
@@ -56,6 +50,12 @@ object Day06 {
         return tree
     }
 
+    fun pathToCom(node: Node): List<Node> {
+        if (node == com) {
+            return emptyList()
+        }
+        return pathToCom(node.parent!!) + node.parent!!
+    }
 
     fun stepsToCom(node: Node): Int {
         return stepsToDestination(node, com)
