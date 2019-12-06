@@ -22,9 +22,13 @@ object Day05 {
                 list[list[pos + 3]] = getValue(operator.mode(1), list[pos + 1], list) * getValue(operator.mode(2), list[pos + 2], list)
                 pos + operator.steps
             }
-            6 -> if (getValue(operator.mode(1), list[pos + 1], list) == 0) {
-                getValue(operator.mode(2), list[pos + 2], list)
-            } else {
+            3 -> {
+                list[list[pos + 1]] = start
+                pos + operator.steps
+            }
+            4 -> {
+                lastValuePrinted = list[list[pos + 1]]
+                println(lastValuePrinted)
                 pos + operator.steps
             }
             5 -> if (getValue(operator.mode(1), list[pos + 1], list) != 0) {
@@ -32,12 +36,9 @@ object Day05 {
             } else {
                 pos + operator.steps
             }
-            8 -> {
-                list[list[pos + 3]] = if (getValue(operator.mode(1), list[pos + 1], list) == getValue(operator.mode(2), list[pos + 2], list)) {
-                    1
-                } else {
-                    0
-                }
+            6 -> if (getValue(operator.mode(1), list[pos + 1], list) == 0) {
+                getValue(operator.mode(2), list[pos + 2], list)
+            } else {
                 pos + operator.steps
             }
             7 -> {
@@ -48,13 +49,12 @@ object Day05 {
                 }
                 pos + operator.steps
             }
-            3 -> {
-                list[list[pos + 1]] = start
-                pos + operator.steps
-            }
-            4 -> {
-                lastValuePrinted = list[list[pos + 1]]
-                println(lastValuePrinted)
+            8 -> {
+                list[list[pos + 3]] = if (getValue(operator.mode(1), list[pos + 1], list) == getValue(operator.mode(2), list[pos + 2], list)) {
+                    1
+                } else {
+                    0
+                }
                 pos + operator.steps
             }
             else -> error("Unable to handle opcode $operator")
@@ -93,13 +93,11 @@ class Operation(val code: Int) {
             1 -> (code % 1000) / 100
             2 -> (code % 10000) / 1000
             3 -> (code % 100000) / 10000
-            else -> error("Unable to find mode@ for operation $operation")
+            else -> error("Unable to find mode for operation $operation")
         }
     }
 
     override fun toString(): String {
         return "Operation(code=$code, operation=$operation, steps=$steps)"
     }
-
-
 }
