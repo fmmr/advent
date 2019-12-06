@@ -9,21 +9,33 @@ import readFile
 @DisableSlow
 internal class Day06Test {
     val data06 = "2019/input_06.txt".readFile()
-    val test06 = listOf("1", "2")
+    val test06 = listOf(
+            "COM)B",
+            "B)C",
+            "C)D",
+            "D)E",
+            "E)F",
+            "B)G",
+            "G)H",
+            "D)I",
+            "E)J",
+            "J)K",
+            "K)L"
+    )
 
     @Nested
     inner class `Part 1` {
         @Test
         fun `06,1,test`() {
             report {
-                Day06.partOne(test06) to 2
+                Day06.partOne(test06) to 42
             }
         }
 
         @Test
         fun `06,1,live`() {
             report {
-                Day06.partOne(data06) to 2
+                Day06.partOne(data06) to 261306
             }
         }
     }
