@@ -23,6 +23,22 @@ internal class Day06Test {
             "K)L"
     )
 
+    val test0602 = listOf(
+            "COM)B",
+            "B)C",
+            "C)D",
+            "D)E",
+            "E)F",
+            "B)G",
+            "G)H",
+            "D)I",
+            "E)J",
+            "J)K",
+            "K)L",
+            "K)YOU",
+            "I)SAN"
+    )
+
     @Nested
     inner class `Part 1` {
         @Test
@@ -45,14 +61,14 @@ internal class Day06Test {
         @Test
         fun `06,2,test`() {
             report {
-                Day06.partTwo(test06) to 2
+                Day06.partTwo(test0602) to 4
             }
         }
 
         @Test
         fun `06,2,live`() {
             report {
-                Day06.partTwo(data06) to 2
+                Day06.partTwo(data06) to 382
             }
         }
     }

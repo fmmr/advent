@@ -9,7 +9,20 @@ object Day06 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return 2
+        val tree = buildTree(list)
+        val san = tree["SAN"]!!
+        val you = tree["YOU"]!!
+        val sanToCom = pathToCom(san)
+        val youToCom = pathToCom(you)
+        val intersect = sanToCom.intersect(youToCom)
+        return ((sanToCom + youToCom) - intersect).size
+    }
+
+    fun pathToCom(node: Node, acc: List<Node> = emptyList()): List<Node> {
+        if (node == com) {
+            return acc
+        }
+        return pathToCom(node.parent!!, acc) + node.parent!!
     }
 
     private fun buildTree(list: List<String>): MutableMap<String, Node> {
@@ -52,8 +65,7 @@ object Day06 {
         if (node == destination) {
             return 0
         }
-        val parent = node.parent
-        return 1 + stepsToDestination(parent!!, destination)
+        return 1 + stepsToDestination(node.parent!!, destination)
     }
 
     data class Node(val name: String, var parent: Node?) {
