@@ -3,7 +3,6 @@ package no.rodland.advent_2019
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 object Day07 {
@@ -25,14 +24,14 @@ object Day07 {
         val de = Channel<Int>(20)
 
         // set ut channels initially
-        coroutineScope {
-            ea.send(phases[0])
-            ab.send(phases[1])
-            bc.send(phases[2])
-            cd.send(phases[3])
-            de.send(phases[4])
-            ea.send(0)
-        }
+        ea.send(phases[0])
+        ab.send(phases[1])
+        bc.send(phases[2])
+        cd.send(phases[3])
+        de.send(phases[4])
+
+        // send initial value
+        ea.send(0)
 
         // start each amplifier (justDoIt will do a launch)
         IntCodeComputerCR(program, ea, ab).justDoIt()
