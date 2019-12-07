@@ -12,11 +12,11 @@ object Day07 {
 
     @ExperimentalCoroutinesApi
     fun partTwo(program: List<Int>): Int {
-        return permute(5..9).map { runBlocking { partTwo(program, it) } }.max()!!
+        return permute(5..9).map { runBlocking { runAmplifiersPart2(program, it) } }.max()!!
     }
 
     @Suppress("DeferredResultUnused")
-    private suspend fun partTwo(program: List<Int>, phases: List<Int>): Int {
+    private suspend fun runAmplifiersPart2(program: List<Int>, phases: List<Int>): Int {
         val ea = Channel<Int>(20)
         val ab = Channel<Int>(20)
         val bc = Channel<Int>(20)
@@ -38,32 +38,21 @@ object Day07 {
         IntCodeComputerCR(program, ab, bc).justDoIt()
         IntCodeComputerCR(program, bc, cd).justDoIt()
         IntCodeComputerCR(program, cd, de).justDoIt()
+
+        // the value could also be fetched by:
+        // 1. adding an extra channel to the last computer and receive until channel is closed and emitt last value
+        // 2. Using the experimental BroadcastChannel which allows multiple subscriptions and do the same as 1.
         val deferred = IntCodeComputerCR(program, de, ea).justDoIt()
         return getValue(deferred)
     }
 
-    private fun getValue(heisan: Deferred<Int>): Int {
+    // hacky - i guess
+    private fun getValue(deferred: Deferred<Int>): Int {
         var value: Int = NO_OUTPUT_VALUE
-        runBlocking { value = heisan.await() }
+        runBlocking { value = deferred.await() }
         return value
     }
 
-
-    private fun permute(range: IntRange): List<List<Int>> {
-        return range.flatMap { p0 ->
-            range.flatMap { p1 ->
-                range.flatMap { p2 ->
-                    range.flatMap { p3 ->
-                        range.map { p4 ->
-                            listOf(p0, p1, p2, p3, p4)
-                        }
-                    }
-                }
-            }
-        }
-                .distinct()
-                .filterNot { it.toSet().size != it.size }
-    }
 
     fun runAmplifiersPart1(program: List<Int>, phases: List<Int>): Int {
         val resA = IntCodeComputer(program, mutableListOf(phases[0], 0)).runProgram()
