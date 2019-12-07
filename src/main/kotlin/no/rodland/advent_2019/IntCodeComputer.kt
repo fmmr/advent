@@ -1,5 +1,7 @@
 package no.rodland.advent_2019
 
+const val NO_OUTPUT_VALUE = -999
+
 class IntCodeComputer(program: List<Int>, inputs: List<Int>) {
     val inputMut = inputs.toMutableList()
     val programList = program.toMutableList()
@@ -11,7 +13,7 @@ class IntCodeComputer(program: List<Int>, inputs: List<Int>) {
     private fun runProgram(pos: Int = 0): Int {
         val operator = Operation(programList[pos])
         val newPos = when (operator.operation) {
-            99 -> return outputs.lastOrNull() ?: -999
+            99 -> return outputs.lastOrNull() ?: NO_OUTPUT_VALUE
             1 -> {
                 programList[programList[pos + 3]] = getValue(operator.mode(1), programList[pos + 1], programList) + getValue(operator.mode(2), programList[pos + 2], programList)
                 pos + operator.steps
