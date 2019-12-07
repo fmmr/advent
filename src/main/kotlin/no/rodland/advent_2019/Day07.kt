@@ -1,7 +1,6 @@
 package no.rodland.advent_2019
 
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
@@ -10,7 +9,6 @@ object Day07 {
         return permute(0..4).map { runAmplifiersPart1(program, it) }.max()!!
     }
 
-    @ExperimentalCoroutinesApi
     fun partTwo(program: List<Int>): Int {
         return permute(5..9).map { runBlocking { runAmplifiersPart2(program, it) } }.max()!!
     }
