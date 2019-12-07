@@ -14,14 +14,14 @@ internal class Day05Test {
         @Test
         fun `05,1,test,1`() {
             report {
-                Day05.partOne(listOf(1002, 4, 3, 4, 33)) to 7157989
+                Day05.partOne(listOf(1002, 4, 3, 4, 33)) to -999
             }
         }
 
         @Test
         fun `05,1,test,2`() {
             report {
-                Day05.partOne(listOf(1101, 100, -1, 4, 0)) to 7157989
+                Day05.partOne(listOf(1101, 100, -1, 4, 0)) to -999
             }
         }
 
@@ -156,7 +156,7 @@ internal class Day05Test {
     }
 
     @Nested
-    inner class `Op` {
+    inner class OpTest {
         @Test
         fun `05,op,steps,1`() {
             report {
