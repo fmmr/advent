@@ -11,6 +11,10 @@ fun String.readFirstLineInts(): List<Int> {
     return this.readFile()[0].split(",").map { it.toInt() }
 }
 
+fun String.readFirstLineConvertToInts(): List<Int> {
+    return this.readFile()[0].map { it.toString().toInt() }
+}
+
 fun permute(range: IntRange): List<List<Int>> {
     return range.flatMap { p0 ->
         range.flatMap { p1 ->
