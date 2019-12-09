@@ -1,11 +1,9 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.channels.toList
 
 object Day09 {
 
@@ -25,29 +23,10 @@ object Day09 {
         input.send(0)
         input.send(0)
 
-        // start each amplifier (justDoIt will do a launch)
+        // start each computer (justDoIt will do a launch)
         IntCodeComputerCR(program, input, output).justDoIt()
-        val outputList = mutableListOf<Int>()
-        while (true) {
-            try {
-                val value = output.receive()
-                outputList.add(value)
-                println("GOT OUT: $value")
-            } catch (e: ClosedReceiveChannelException) {
-                break
-            }
-        }
-
-        return outputList
+        return output.toList()
     }
-
-    // hacky - i guess
-    private fun getValue(deferred: Deferred<Int>): Int {
-        var value: Int = NO_OUTPUT_VALUE
-        runBlocking { value = deferred.await() }
-        return value
-    }
-
 
     @Suppress("UNUSED_PARAMETER")
     fun partTwo(list: List<Int>): Int {

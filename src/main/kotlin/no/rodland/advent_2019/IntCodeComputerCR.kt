@@ -8,7 +8,7 @@ import kotlinx.coroutines.channels.SendChannel
 
 
 class IntCodeComputerCR(program: List<Int>, val input: ReceiveChannel<Int>, val output: SendChannel<Int>) {
-    val programList = program.toMutableList().also { list -> (1..10000).forEach { list.add(0) } }
+    val prog = program.toMutableList().also { list -> (1..1000).forEach { list.add(0) } }
 
     var lastOut = NO_OUTPUT_VALUE
 
@@ -24,67 +24,64 @@ class IntCodeComputerCR(program: List<Int>, val input: ReceiveChannel<Int>, val 
     }
 
     suspend fun runProgram(pos: Int = 0, relBase: Int = 0): Int {
-        val operator = Operation(programList[pos])
+        val operator = Operation(prog[pos])
 
         var newRelBase = relBase
+        val val2 = getValue(operator.mode(2), prog.getOrZero(pos + 2), prog, relBase)
+        val val1 = getValue(operator.mode(1), prog.getOrZero(pos + 1), prog, relBase)
+        val setVal1 = prog.getOrZero(pos + 1)
+        val setVal3 = prog.getOrZero(pos + 3)
+
         val newPos = when (operator.operation) {
             99 -> {
                 output.close()
                 return lastOut
             }
             1 -> {
-                programList.safeSet(programList.getOrZero(pos + 3), getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) + getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase))
+                prog.safeSet(setVal3, val1 + val2)
                 pos + operator.steps
             }
             9 -> {
-                newRelBase += getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase)
+                newRelBase += val1
                 pos + operator.steps
             }
             2 -> {
-                programList.safeSet(programList.getOrZero(pos + 3), getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) * getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase))
+                prog.safeSet(setVal3, val1 * val2)
                 pos + operator.steps
             }
             3 -> {
-                val v = input.receive()
-//                println("${Thread.currentThread().name} GOT: $v")
-
-                programList.safeSet(programList.getOrZero(pos + 1), v)
+                prog.safeSet(setVal1, input.receive())
                 pos + operator.steps
             }
             4 -> {
-                lastOut = getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase)
-//                println("${Thread.currentThread().name} SEND: $lastOut")
+                lastOut = val1
                 output.send(lastOut)
                 pos + operator.steps
             }
-            5 -> if (getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) != 0) {
-                getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase)
+            5 -> if (val1 != 0) {
+                val2
             } else {
                 pos + operator.steps
             }
-            6 -> if (getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) == 0) {
-                getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase)
+            6 -> if (val1 == 0) {
+                val2
             } else {
                 pos + operator.steps
             }
             7 -> {
-
-
-                programList.safeSet(programList.getOrZero(pos + 3),
-                        if (getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) < getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase)) {
-                            1
-                        } else {
-                            0
-                        })
+                prog.safeSet(setVal3, if (val1 < val2) {
+                    1
+                } else {
+                    0
+                })
                 pos + operator.steps
             }
             8 -> {
-                programList.safeSet(programList.getOrZero(pos + 3),
-                        if (getValue(operator.mode(1), programList.getOrZero(pos + 1), programList, relBase) == getValue(operator.mode(2), programList.getOrZero(pos + 2), programList, relBase)) {
-                            1
-                        } else {
-                            0
-                        })
+                prog.safeSet(setVal3, if (val1 == val2) {
+                    1
+                } else {
+                    0
+                })
                 pos + operator.steps
             }
             else -> error("Unable to handle opcode $operator")
@@ -92,16 +89,16 @@ class IntCodeComputerCR(program: List<Int>, val input: ReceiveChannel<Int>, val 
         return runProgram(pos = newPos, relBase = newRelBase)
     }
 
-    fun getValue(mode: Int, value: Int, list: List<Int>, relBase: Int): Int {
+    fun getValue(mode: Int, value: Int, prog: List<Int>, relBase: Int): Int {
         return when (mode) {
             1 -> {
                 value
             }
             2 -> {
-                list.getOrZero(value + relBase)
+                prog.getOrZero(value + relBase)
             }
             else -> {
-                list.getOrZero(value)
+                prog.getOrZero(value)
             }
         }
     }
