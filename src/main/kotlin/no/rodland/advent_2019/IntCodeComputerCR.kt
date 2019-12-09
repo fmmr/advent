@@ -5,17 +5,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import java.math.BigInteger
-import java.math.BigInteger.ONE
-import java.math.BigInteger.ZERO
 
 
-class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<BigInteger>, val output: SendChannel<BigInteger>) {
-    val prog = program.mapIndexed { idx, str -> idx to BigInteger(str) }.toMap().toMutableMap()
+class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
+    private val prog = program.map { it.toLong() }.toMutableList().also { it.addAll(Array(100) { 0L }) }
 
-    var lastOut = BigInteger("-999")
+    private var lastOut = -999L
 
-    fun justDoIt(): Deferred<BigInteger> {
+    fun justDoIt(): Deferred<Long> {
         return GlobalScope.async {
             try {
                 runProgram()
@@ -26,7 +23,7 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<BigInte
         }
     }
 
-    suspend fun runProgram(pos: Int = 0, relBase: Int = 0): BigInteger {
+    private suspend fun runProgram(pos: Int = 0, relBase: Int = 0): Long {
         val operator = Operation(prog[pos].toString().toInt())
         if (operator.operation == 99) {
             output.close()
@@ -34,26 +31,26 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<BigInte
         }
 
         var newRelBase = relBase
-        val val2 = getValue(operator.mode(2), prog.getOrDefault(pos + 2, ZERO), prog, relBase)
-        val val1 = getValue(operator.mode(1), prog.getOrDefault(pos + 1, ZERO), prog, relBase)
-        val setVal1 = prog.getOrDefault(pos + 1, ZERO)
-        val setVal3 = prog.getOrDefault(pos + 3, ZERO)
+        val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0L }, prog, relBase)
+        val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0L }, prog, relBase)
+        val setVal1 = prog.getOrElse(pos + 1) { 0L }
+        val setVal3 = prog.getOrElse(pos + 3) { 0L }
 
         val newPos = when (operator.operation) {
             1 -> {
-                prog.safeSet(setVal3.intValueExact(), val1 + val2, operator.mode(3), relBase)
+                prog.set(setVal3.toIntExact(), val1 + val2, operator.mode(3), relBase)
                 pos + operator.steps
             }
             9 -> {
-                newRelBase += val1.intValueExact()
+                newRelBase += val1.toIntExact()
                 pos + operator.steps
             }
             2 -> {
-                prog.safeSet(setVal3.intValueExact(), val1 * val2, operator.mode(3), relBase)
+                prog.set(setVal3.toIntExact(), val1 * val2, operator.mode(3), relBase)
                 pos + operator.steps
             }
             3 -> {
-                prog.safeSet(setVal1.intValueExact(), input.receive(), operator.mode(1), relBase)
+                prog.set(setVal1.toIntExact(), input.receive(), operator.mode(1), relBase)
                 pos + operator.steps
             }
             4 -> {
@@ -61,29 +58,29 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<BigInte
                 output.send(lastOut)
                 pos + operator.steps
             }
-            5 -> if (val1 != ZERO) {
-                val2.intValueExact()
+            5 -> if (val1 != 0L) {
+                val2.toIntExact()
             } else {
                 pos + operator.steps
             }
-            6 -> if (val1 == ZERO) {
-                val2.intValueExact()
+            6 -> if (val1 == 0L) {
+                val2.toIntExact()
             } else {
                 pos + operator.steps
             }
             7 -> {
-                prog.safeSet(setVal3.intValueExact(), if (val1 < val2) {
-                    ONE
+                prog.set(setVal3.toIntExact(), if (val1 < val2) {
+                    1L
                 } else {
-                    ZERO
+                    0L
                 }, operator.mode(3), relBase)
                 pos + operator.steps
             }
             8 -> {
-                prog.safeSet(setVal3.intValueExact(), if (val1 == val2) {
-                    ONE
+                prog.set(setVal3.toIntExact(), if (val1 == val2) {
+                    1L
                 } else {
-                    ZERO
+                    0L
                 }, operator.mode(3), relBase)
                 pos + operator.steps
             }
@@ -92,25 +89,28 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<BigInte
         return runProgram(pos = newPos, relBase = newRelBase)
     }
 
-    fun getValue(mode: Int, value: BigInteger, prog: Map<Int, BigInteger>, relBase: Int): BigInteger {
+    fun get(mode: Int, value: Long, prog: List<Long>, relBase: Int): Long {
         return when (mode) {
-            1 -> {
-                value
-            }
-            2 -> {
-                prog.getOrDefault((value.intValueExact() + relBase).toString().toInt(), ZERO)
-            }
-            else -> {
-                prog.getOrDefault(value.toString().toInt(), ZERO)
-            }
+            1 -> value
+            2 -> prog.getOrElse((value + relBase).toIntExact()) { 0L }
+            else -> prog.getOrElse(value.toIntExact()) { 0L }
         }
     }
 
-    private fun MutableMap<Int, BigInteger>.safeSet(idx: Int, value: BigInteger, mode: Int, relBase: Int) {
-        when (mode) {
-            2 -> this[(idx + relBase).toString().toInt()] = value
-            0 -> this[idx] = value
+    private fun MutableList<Long>.set(idx: Int, value: Long, mode: Int, relBase: Int) {
+        val index = when (mode) {
+            2 -> idx + relBase
+            0 -> idx
             else -> error("unsupported mode $mode for set-operations")
+        }
+        if (index < size) {
+            set(index, value)
+        } else {
+            if (index > size) addAll(Array(index - size) { 0L })
+            add(value)
         }
     }
 }
+
+private fun Long.toIntExact(): Int = Math.toIntExact(this)
+

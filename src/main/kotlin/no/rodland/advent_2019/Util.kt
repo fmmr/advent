@@ -2,7 +2,6 @@ package no.rodland.advent_2019
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
-import java.math.BigInteger
 
 class Util
 
@@ -46,8 +45,8 @@ fun getValueFromDeferred(deferred: Deferred<Int>): Int {
     return value
 }
 
-fun getValueFromDeferredList(deferred: Deferred<List<BigInteger>>): List<BigInteger> {
-    var value: List<BigInteger> = emptyList()
+fun getValueFromDeferredList(deferred: Deferred<List<Long>>): List<Long> {
+    var value: List<Long> = emptyList()
     runBlocking { value = deferred.await() }
     return value
 }
