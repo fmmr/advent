@@ -1,19 +1,16 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.launch
 
 
 class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
     private val prog = program.map { it.toLong() }.toMutableList().also { it.addAll(Array(100) { 0L }) }
 
-    private var lastOut = -999L
-
-    fun justDoIt(): Deferred<Long> {
-        return GlobalScope.async {
+    fun justDoIt() {
+        GlobalScope.launch {
             try {
                 runProgram()
             } catch (e: Exception) {
@@ -23,77 +20,82 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, 
         }
     }
 
-    private suspend fun runProgram(pos: Int = 0, relBase: Int = 0): Long {
-        val operator = Operation(prog[pos].toString().toInt())
-        if (operator.operation == 99) {
-            output.close()
-            return lastOut
-        }
+    private suspend fun runProgram(initialPos: Int = 0, initialRelBase: Int = 0) {
+        var pos = initialPos
+        var relBase = initialRelBase
 
-        var newRelBase = relBase
-        val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0L }, prog, relBase)
-        val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0L }, prog, relBase)
-        val setVal1 = prog.getOrElse(pos + 1) { 0L }
-        val setVal3 = prog.getOrElse(pos + 3) { 0L }
+        while (true) {
+            val operator = Operation(prog[pos].toString().toInt())
+            if (operator.operation == 99) {
+                output.close()
+                break
+            }
 
-        val newPos = when (operator.operation) {
-            1 -> {
-                prog.set(setVal3.toIntExact(), val1 + val2, operator.mode(3), relBase)
-                pos + operator.steps
-            }
-            9 -> {
-                newRelBase += val1.toIntExact()
-                pos + operator.steps
-            }
-            2 -> {
-                prog.set(setVal3.toIntExact(), val1 * val2, operator.mode(3), relBase)
-                pos + operator.steps
-            }
-            3 -> {
-                prog.set(setVal1.toIntExact(), input.receive(), operator.mode(1), relBase)
-                pos + operator.steps
-            }
-            4 -> {
-                lastOut = val1
-                output.send(lastOut)
-                pos + operator.steps
-            }
-            5 -> if (val1 != 0L) {
-                val2.toIntExact()
-            } else {
-                pos + operator.steps
-            }
-            6 -> if (val1 == 0L) {
-                val2.toIntExact()
-            } else {
-                pos + operator.steps
-            }
-            7 -> {
-                prog.set(setVal3.toIntExact(), if (val1 < val2) {
-                    1L
+            var newRelBase = relBase
+            val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0L }, prog, relBase)
+            val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0L }, prog, relBase)
+            val setVal1 = prog.getOrElse(pos + 1) { 0L }
+            val setVal3 = prog.getOrElse(pos + 3) { 0L }
+
+            val newPos = when (operator.operation) {
+                1 -> {
+                    prog.set(setVal3.toInt(), val1 + val2, operator.mode(3), relBase)
+                    pos + operator.steps
+                }
+                9 -> {
+                    newRelBase += val1.toInt()
+                    pos + operator.steps
+                }
+                2 -> {
+                    prog.set(setVal3.toInt(), val1 * val2, operator.mode(3), relBase)
+                    pos + operator.steps
+                }
+                3 -> {
+                    prog.set(setVal1.toInt(), input.receive(), operator.mode(1), relBase)
+                    pos + operator.steps
+                }
+                4 -> {
+                    output.send(val1)
+                    pos + operator.steps
+                }
+                5 -> if (val1 != 0L) {
+                    val2.toInt()
                 } else {
-                    0L
-                }, operator.mode(3), relBase)
-                pos + operator.steps
-            }
-            8 -> {
-                prog.set(setVal3.toIntExact(), if (val1 == val2) {
-                    1L
+                    pos + operator.steps
+                }
+                6 -> if (val1 == 0L) {
+                    val2.toInt()
                 } else {
-                    0L
-                }, operator.mode(3), relBase)
-                pos + operator.steps
+                    pos + operator.steps
+                }
+                7 -> {
+                    prog.set(setVal3.toInt(), if (val1 < val2) {
+                        1L
+                    } else {
+                        0L
+                    }, operator.mode(3), relBase)
+                    pos + operator.steps
+                }
+                8 -> {
+                    prog.set(setVal3.toInt(), if (val1 == val2) {
+                        1L
+                    } else {
+                        0L
+                    }, operator.mode(3), relBase)
+                    pos + operator.steps
+                }
+                else -> error("Unable to handle opcode $operator")
             }
-            else -> error("Unable to handle opcode $operator")
+            pos = newPos
+            relBase = newRelBase
         }
-        return runProgram(pos = newPos, relBase = newRelBase)
     }
 
     fun get(mode: Int, value: Long, prog: List<Long>, relBase: Int): Long {
         return when (mode) {
             1 -> value
-            2 -> prog.getOrElse((value + relBase).toIntExact()) { 0L }
-            else -> prog.getOrElse(value.toIntExact()) { 0L }
+            2 -> prog.getOrElse((value + relBase).toInt()) { 0L }
+            else -> prog.getOrElse(value.toInt()) { 0L }
         }
     }
 
@@ -111,6 +113,3 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, 
         }
     }
 }
-
-private fun Long.toIntExact(): Int = Math.toIntExact(this)
-

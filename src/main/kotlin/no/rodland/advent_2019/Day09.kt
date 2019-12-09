@@ -21,7 +21,7 @@ object Day09 {
         val output = Channel<Long>(2000)
         // set ut channels initially
         input.send(seed)
-//        input.send(ZERO)
+        input.send(0L)  // only to support test with old program from day 7
 
         // start each computer (justDoIt will do a launch)
         IntCodeComputerCR(program, input, output).justDoIt()
