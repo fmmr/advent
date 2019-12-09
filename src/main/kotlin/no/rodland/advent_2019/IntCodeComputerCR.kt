@@ -14,7 +14,12 @@ class IntCodeComputerCR(program: List<Int>, val input: ReceiveChannel<Int>, val 
 
     fun justDoIt(): Deferred<Int> {
         return GlobalScope.async {
-            runProgram()
+            try {
+                runProgram()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw e
+            }
         }
     }
 
