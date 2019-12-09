@@ -22,7 +22,7 @@ internal class Day08Test {
         @Test
         fun `08,1,live`() {
             report {
-                Day08.partOne(data08, 25, 6) to 2
+                Day08.partOne(data08, 25, 6) to 1584
             }
         }
     }

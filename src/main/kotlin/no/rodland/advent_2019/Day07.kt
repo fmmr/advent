@@ -1,6 +1,5 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
@@ -41,15 +40,9 @@ object Day07 {
         // 1. adding an extra channel to the last computer and receive until channel is closed and emitt last value
         // 2. Using the experimental BroadcastChannel which allows multiple subscriptions and do the same as 1.
         val deferred = IntCodeComputerCR(program, de, ea).justDoIt()
-        return getValue(deferred)
+        return getValueFromDeferred(deferred)
     }
 
-    // hacky - i guess
-    private fun getValue(deferred: Deferred<Int>): Int {
-        var value: Int = NO_OUTPUT_VALUE
-        runBlocking { value = deferred.await() }
-        return value
-    }
 
 
     fun runAmplifiersPart1(program: List<Int>, phases: List<Int>): Int {
