@@ -3,6 +3,7 @@ package no.rodland.advent_2019
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -43,6 +44,7 @@ internal class Day07Test {
 
     @ExperimentalCoroutinesApi
     @Nested
+    @Disabled
     inner class `Part 2` {
         @Test
         fun `07,2,test,1`() {

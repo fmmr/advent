@@ -2,6 +2,7 @@ package no.rodland.advent_2019
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
+import java.math.BigInteger
 
 class Util
 
@@ -12,6 +13,10 @@ fun String.readFile(): List<String> {
 
 fun String.readFirstLineInts(): List<Int> {
     return this.readFile()[0].split(",").map { it.toInt() }
+}
+
+fun String.readFirstLineStrings(): List<String> {
+    return this.readFile()[0].split(",")
 }
 
 fun String.readFirstLineConvertToInts(): List<Int> {
@@ -41,8 +46,8 @@ fun getValueFromDeferred(deferred: Deferred<Int>): Int {
     return value
 }
 
-fun getValueFromDeferredList(deferred: Deferred<List<Int>>): List<Int> {
-    var value: List<Int> = emptyList()
+fun getValueFromDeferredList(deferred: Deferred<List<BigInteger>>): List<BigInteger> {
+    var value: List<BigInteger> = emptyList()
     runBlocking { value = deferred.await() }
     return value
 }

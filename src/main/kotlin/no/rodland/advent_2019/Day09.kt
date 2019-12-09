@@ -4,10 +4,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.toList
+import java.math.BigInteger
+import java.math.BigInteger.ONE
 
 object Day09 {
 
-    fun partOne(program: List<Int>): List<Int> {
+    fun partOne(program: List<String>): List<BigInteger> {
         val def = GlobalScope.async {
             runProgram(program)
         }
@@ -16,12 +18,12 @@ object Day09 {
 
 
     @Suppress("DeferredResultUnused")
-    private suspend fun runProgram(program: List<Int>): List<Int> {
-        val input = Channel<Int>(20)
-        val output = Channel<Int>(20)
+    private suspend fun runProgram(program: List<String>): List<BigInteger> {
+        val input = Channel<BigInteger>(20)
+        val output = Channel<BigInteger>(20)
         // set ut channels initially
-        input.send(0)
-        input.send(0)
+        input.send(ONE)
+//        input.send(ZERO)
 
         // start each computer (justDoIt will do a launch)
         IntCodeComputerCR(program, input, output).justDoIt()
@@ -29,7 +31,7 @@ object Day09 {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun partTwo(list: List<Int>): Int {
+    fun partTwo(list: List<String>): Int {
         return 2
     }
 
