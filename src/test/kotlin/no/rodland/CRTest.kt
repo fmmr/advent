@@ -4,11 +4,11 @@ import kotlinx.coroutines.*
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.system.measureTimeMillis
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 // https://www.baeldung.com/kotlin-coroutines
 @DisableSlow
