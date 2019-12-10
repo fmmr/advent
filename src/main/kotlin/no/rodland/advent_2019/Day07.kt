@@ -49,11 +49,11 @@ object Day07 {
 
 
     fun runAmplifiersPart1(program: List<Int>, phases: List<Int>): Int {
-        val resA = IntCodeComputer(program, mutableListOf(phases[0], 0)).runProgram()
-        val resB = IntCodeComputer(program, mutableListOf(phases[1], resA)).runProgram()
-        val resC = IntCodeComputer(program, mutableListOf(phases[2], resB)).runProgram()
-        val resD = IntCodeComputer(program, mutableListOf(phases[3], resC)).runProgram()
-        val resE = IntCodeComputer(program, mutableListOf(phases[4], resD)).runProgram()
+        val resA = IntCodeComputerFirstTry(program, mutableListOf(phases[0], 0)).runProgram()
+        val resB = IntCodeComputerFirstTry(program, mutableListOf(phases[1], resA)).runProgram()
+        val resC = IntCodeComputerFirstTry(program, mutableListOf(phases[2], resB)).runProgram()
+        val resD = IntCodeComputerFirstTry(program, mutableListOf(phases[3], resC)).runProgram()
+        val resE = IntCodeComputerFirstTry(program, mutableListOf(phases[4], resD)).runProgram()
         return resE
     }
 }
