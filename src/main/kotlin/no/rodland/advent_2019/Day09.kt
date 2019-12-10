@@ -1,17 +1,15 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.toList
+import kotlinx.coroutines.runBlocking
 
 object Day09 {
 
     fun partOne(program: List<String>, seed: Long): List<Long> {
-        val def = GlobalScope.async {
+        return runBlocking {
             runProgram(program, seed)
         }
-        return getValueFromDeferredList(def)
     }
 
 

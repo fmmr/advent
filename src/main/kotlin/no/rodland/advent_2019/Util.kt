@@ -1,8 +1,5 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.runBlocking
-
 class Util
 
 fun String.readFile(): List<String> {
@@ -38,15 +35,3 @@ fun permute(range: IntRange): List<List<Long>> {
             .filterNot { it.toSet().size != it.size }
 }
 
-// hacky - i guess
-fun getValueFromDeferred(deferred: Deferred<Int>): Int {
-    var value: Int = NO_OUTPUT_VALUE
-    runBlocking { value = deferred.await() }
-    return value
-}
-
-fun getValueFromDeferredList(deferred: Deferred<List<Long>>): List<Long> {
-    var value: List<Long> = emptyList()
-    runBlocking { value = deferred.await() }
-    return value
-}
