@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 
 class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
-    private val prog = program.map { it.toLong() }.toMutableList().also { it.addAll(Array(100) { 0L }) }
+    private val prog = program.map { it.toLong() }.toMutableList()
 
     fun run() {
         GlobalScope.launch {
@@ -24,80 +24,73 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, 
         var pos = 0
         var relBase = 0
         while (true) {
-            val operator = Operation(prog[pos].toString().toInt())
+            val operator = Operation(prog[pos].toInt())
             if (operator.operation == 99) {
-                output.close()
                 break
             }
-            val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0L }, prog, relBase)
-            val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0L }, prog, relBase)
-            val setVal1 = prog.getOrElse(pos + 1) { 0L }
-            val setVal3 = prog.getOrElse(pos + 3) { 0L }
-
-            pos = when (operator.operation) {
-                1 -> {
-                    prog.set(setVal3.toInt(), val1 + val2, operator.mode(3), relBase)
-                    pos + operator.steps
-                }
-                9 -> {
-                    relBase += val1.toInt()
-                    pos + operator.steps
-                }
-                2 -> {
-                    prog.set(setVal3.toInt(), val1 * val2, operator.mode(3), relBase)
-                    pos + operator.steps
-                }
-                3 -> {
-                    prog.set(setVal1.toInt(), input.receive(), operator.mode(1), relBase)
-                    pos + operator.steps
-                }
-                4 -> {
-                    output.send(val1)
-                    pos + operator.steps
-                }
-                5 -> if (val1 != 0L) {
-                    val2.toInt()
-                } else {
-                    pos + operator.steps
-                }
-                6 -> if (val1 == 0L) {
-                    val2.toInt()
-                } else {
-                    pos + operator.steps
-                }
-                7 -> {
-                    prog.set(setVal3.toInt(), if (val1 < val2) {
-                        1L
-                    } else {
-                        0L
-                    }, operator.mode(3), relBase)
-                    pos + operator.steps
-                }
-                8 -> {
-                    prog.set(setVal3.toInt(), if (val1 == val2) {
-                        1L
-                    } else {
-                        0L
-                    }, operator.mode(3), relBase)
-                    pos + operator.steps
-                }
-                else -> error("Unable to handle opcode $operator")
-            }
+            val ret = next(operator, pos, relBase)
+            pos = ret.first
+            relBase = ret.second
         }
+        output.close()
+    }
+
+    private suspend fun next(operator: Operation, pos: Int, relBase: Int): Pair<Int, Int> {
+        var relBase1 = relBase
+        val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0 }, prog, relBase1)
+        val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0 }, prog, relBase1)
+        val idx1 = prog.getOrElse(pos + 1) { 0 }.toInt()
+        val idx3 = (prog.getOrElse(pos + 3) { 0 }).toInt()
+
+        val newPos = when (operator.operation) {
+            1 -> {
+                prog.set(idx3, val1 + val2, operator.mode(3), relBase1)
+                pos + operator.steps
+            }
+            2 -> {
+                prog.set(idx3, val1 * val2, operator.mode(3), relBase1)
+                pos + operator.steps
+            }
+            3 -> {
+                prog.set(idx1, input.receive(), operator.mode(1), relBase1)
+                pos + operator.steps
+            }
+            4 -> {
+                output.send(val1)
+                pos + operator.steps
+            }
+            5 -> if (val1 != 0L) val2.toInt() else pos + operator.steps
+            6 -> if (val1 == 0L) val2.toInt() else pos + operator.steps
+            7 -> {
+                prog.set(idx3, if (val1 < val2) 1L else 0L, operator.mode(3), relBase1)
+                pos + operator.steps
+            }
+            8 -> {
+                prog.set(idx3, if (val1 == val2) 1L else 0L, operator.mode(3), relBase1)
+                pos + operator.steps
+            }
+            9 -> {
+                relBase1 += val1.toInt()
+                pos + operator.steps
+            }
+            else -> error("Unable to handle opcode $operator")
+        }
+        return newPos to relBase1
     }
 
     fun get(mode: Int, value: Long, prog: List<Long>, relBase: Int): Long {
         return when (mode) {
             1 -> value
             2 -> prog.getOrElse((value + relBase).toInt()) { 0L }
-            else -> prog.getOrElse(value.toInt()) { 0L }
+            0 -> prog.getOrElse(value.toInt()) { 0L }
+            else -> error("unsupported mode $mode for get-operations")
         }
     }
 
     private fun MutableList<Long>.set(idx: Int, value: Long, mode: Int, relBase: Int) {
         val index = when (mode) {
-            2 -> idx + relBase
             0 -> idx
+            2 -> idx + relBase
             else -> error("unsupported mode $mode for set-operations")
         }
         if (index < size) {
