@@ -9,10 +9,10 @@ import kotlinx.coroutines.launch
 class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
     private val prog = program.map { it.toLong() }.toMutableList().also { it.addAll(Array(100) { 0L }) }
 
-    fun justDoIt() {
+    fun run() {
         GlobalScope.launch {
             try {
-                runProgram()
+                runSuspend()
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw e
@@ -20,30 +20,27 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, 
         }
     }
 
-    private suspend fun runProgram(initialPos: Int = 0, initialRelBase: Int = 0) {
-        var pos = initialPos
-        var relBase = initialRelBase
-
+    private suspend fun runSuspend() {
+        var pos = 0
+        var relBase = 0
         while (true) {
             val operator = Operation(prog[pos].toString().toInt())
             if (operator.operation == 99) {
                 output.close()
                 break
             }
-
-            var newRelBase = relBase
             val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0L }, prog, relBase)
             val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0L }, prog, relBase)
             val setVal1 = prog.getOrElse(pos + 1) { 0L }
             val setVal3 = prog.getOrElse(pos + 3) { 0L }
 
-            val newPos = when (operator.operation) {
+            pos = when (operator.operation) {
                 1 -> {
                     prog.set(setVal3.toInt(), val1 + val2, operator.mode(3), relBase)
                     pos + operator.steps
                 }
                 9 -> {
-                    newRelBase += val1.toInt()
+                    relBase += val1.toInt()
                     pos + operator.steps
                 }
                 2 -> {
@@ -86,8 +83,6 @@ class IntCodeComputerCR(program: List<String>, val input: ReceiveChannel<Long>, 
                 }
                 else -> error("Unable to handle opcode $operator")
             }
-            pos = newPos
-            relBase = newRelBase
         }
     }
 

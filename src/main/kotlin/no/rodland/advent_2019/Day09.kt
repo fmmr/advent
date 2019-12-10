@@ -24,7 +24,7 @@ object Day09 {
         input.send(0L)  // only to support test with old program from day 7
 
         // start each computer (justDoIt will do a launch)
-        IntCodeComputerCR(program, input, output).justDoIt()
+        IntCodeComputerCR(program, input, output).run()
         return output.toList()
     }
 }
