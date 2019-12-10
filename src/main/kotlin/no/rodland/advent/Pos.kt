@@ -1,5 +1,8 @@
 package no.rodland.advent
 
+import kotlin.math.atan2
+import kotlin.math.pow
+
 data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
     override fun compareTo(other: Pos): Int {
         val yComp = y.compareTo(other.y)
@@ -10,6 +13,10 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun distanceTo(other: Pos): Int {
         return Math.abs(other.x - x) + Math.abs(other.y - y)
+    }
+
+    fun directDistance(other: Pos): Double {
+        return Math.sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2))
     }
 
     fun neighboorCellsReadingOrder(): List<Pos> {
@@ -41,6 +48,8 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
                 Pos(x + 1, y + 1)
         )
     }
+
+    fun angle(another: Pos) = atan2((another.x - x).toDouble(), (another.y - y).toDouble())
 
     fun getDownNeighbors(): List<Pos> {
         return listOf(
