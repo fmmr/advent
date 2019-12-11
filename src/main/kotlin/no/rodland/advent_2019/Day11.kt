@@ -10,9 +10,30 @@ import no.rodland.advent.Pos
 @ExperimentalCoroutinesApi
 object Day11 {
     const val BLACK = 0L
+    const val WHITE = 1L
     const val TURN_LEFT = 0L
 
-    fun partOne(program: List<String>): Int {
+    fun part1(program: List<String>): Int {
+        return paint(program, BLACK).size
+    }
+
+    fun partTwo(program: List<String>): Int {
+        val paint = paint(program, WHITE).filter { it.value == BLACK }
+        val minX = paint.map { it.key.x }.min()!!
+        val minY = paint.map { it.key.y }.min()!!
+        val maxX = paint.map { it.key.x }.max()!!
+        val maxY = paint.map { it.key.y }.max()!!
+
+        (minY..maxY).forEach { y ->
+            (0..(maxX - minX)).forEach { x -> print(printable(paint.getOrDefault(Pos(x, y), WHITE))) }
+            println()
+        }
+        return 2
+    }
+
+    private fun printable(it: Long): Char = if (it == BLACK) ' ' else '\u2588'
+
+    private fun paint(program: List<String>, background: Long): MutableMap<Pos, Long> {
         val map = mutableMapOf<Pos, Long>()
         // start each amplifier (justDoIt will do a launch)
         var currentPos = RobDir(Pos(0, 0), Dir.UP)
@@ -23,14 +44,14 @@ object Day11 {
         val job = IntCodeComputer(program, input, output).run()
 
         GlobalScope.launch {
-            input.send(BLACK)
+            input.send(background)
             while (job.isActive) {
                 try {
                     val newColour = output.receive()
                     val newDir = output.receive()
                     map[currentPos.pos] = newColour
                     currentPos = currentPos.next(newDir)
-                    input.send(map.getOrDefault(currentPos.pos, BLACK))
+                    input.send(map.getOrDefault(currentPos.pos, background))
                 } catch (e: Exception) {
                     println("Channel closed - computer stopped")
                 }
@@ -39,7 +60,7 @@ object Day11 {
         runBlocking {
             job.join()
         }
-        return map.size
+        return map
     }
 
     data class RobDir(val pos: Pos, val dir: Dir) {
@@ -71,9 +92,5 @@ object Day11 {
                 RIGHT -> if (turn == TURN_LEFT) UP else DOWN
             }
         }
-    }
-
-    fun partTwo(list: List<String>): Int {
-        return 2
     }
 }
