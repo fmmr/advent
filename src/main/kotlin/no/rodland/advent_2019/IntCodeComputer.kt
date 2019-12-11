@@ -1,6 +1,7 @@
 package no.rodland.advent_2019
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
@@ -9,8 +10,8 @@ import kotlinx.coroutines.launch
 class IntCodeComputer(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
     private val prog = program.map { it.toLong() }.toMutableList()
 
-    fun run() {
-        GlobalScope.launch {
+    fun run(): Job {
+        return GlobalScope.launch {
             try {
                 runSuspend()
             } catch (e: Exception) {

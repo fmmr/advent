@@ -1,11 +1,13 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @DisableSlow
+@ExperimentalCoroutinesApi
 internal class Day11Test {
     val data11 = "2019/input_11.txt".readFirstLineStrings()
     val test11 = listOf("1", "2")
@@ -13,16 +15,9 @@ internal class Day11Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `11,1,test`() {
-            report {
-                Day11.partOne(test11) to 2
-            }
-        }
-
-        @Test
         fun `11,1,live`() {
             report {
-                Day11.partOne(data11) to 2
+                Day11.partOne(data11) to 2172
             }
         }
     }
