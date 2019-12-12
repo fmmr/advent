@@ -17,14 +17,32 @@ object Day12 {
         return listOf(io, europa, ganymede, callisto).map { it.energy() }.sum()
     }
 
+
+    fun partTwo(list: List<List<Int>>): Int {
+        var io = Moon(list[0])
+        var europa = Moon(list[1])
+        var ganymede = Moon(list[2])
+        var callisto = Moon(list[3])
+        val previousSeen = mutableSetOf(listOf(io, europa, ganymede, callisto))
+        var i = 0
+        var found = false
+
+        while (!found) {
+            val newVelocities: List<Pos3D> = applyGravity(listOf(io, europa, ganymede, callisto))
+            io = io.applyVelocity(newVelocities[0])
+            europa = europa.applyVelocity(newVelocities[1])
+            ganymede = ganymede.applyVelocity(newVelocities[2])
+            callisto = callisto.applyVelocity(newVelocities[3])
+            found = !previousSeen.add(listOf(io, europa, ganymede, callisto))
+            i += 1
+        }
+        return i
+    }
+
     private fun applyGravity(moons: List<Moon>): List<Pos3D> {
         return moons.map { moon -> moon.applyGravity(moons.filterNot { it == moon }) }
     }
 
-
-    fun partTwo(list: List<List<Int>>): Int {
-        return 2
-    }
 
     data class Moon(val pos: Pos3D, val velocity: Pos3D) {
         constructor(list: List<Int>) : this(Pos3D(list[0], list[1], list[2]), Pos3D(0, 0, 0))
