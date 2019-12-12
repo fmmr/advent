@@ -8,7 +8,7 @@ object Day12 {
         return moons.take(steps).last().map { it.energy() }.sum()
     }
 
-    fun partTwoSimple(list: List<List<Int>>): Int {
+    fun partTwoTrivial(list: List<List<Int>>): Int {
         val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
         val seen: MutableSet<List<Moon>> = mutableSetOf()
         for (state in moons) {
@@ -19,7 +19,8 @@ object Day12 {
         return seen.size
     }
 
-    fun partTwo(list: List<List<Int>>): Long {
+    fun partTwoOptimized(list: List<List<Int>>): BigInteger {
+        // velocity x only changes x, so we can find periods for each direction individually and then find lcm of them.
         val states = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
         val seenX: MutableSet<List<Pair<Int, Int>>> = mutableSetOf()
         val seenY: MutableSet<List<Pair<Int, Int>>> = mutableSetOf()
@@ -43,19 +44,19 @@ object Day12 {
                 }
             }
             if (foundX && foundY && foundZ) {
-                break;
+                val lcm = lcm(BigInteger(seenX.size.toString()), lcm(BigInteger(seenY.size.toString()), BigInteger(seenZ.size.toString())))
+                println("Found periods: x: ${seenX.size}, y: ${seenY.size}, z: ${seenZ.size}, lcm: $lcm")
+                return lcm
             }
         }
-        return lcm(seenX.size.toLong(), lcm(seenY.size.toLong(), seenZ.size.toLong()))
+        error("no period found")
     }
 
-    private fun lcm(n1: Long, n2: Long): Long {
+    private fun lcm(n1: BigInteger, n2: BigInteger): BigInteger {
         // https://no.wikipedia.org/wiki/Minste_felles_multiplum
         // lcm = (n1 * n2) / gcd
-        val bi1: BigInteger = BigInteger(n1.toString())
-        val bi2: BigInteger = BigInteger(n2.toString())
-        val gcd = bi1.gcd(bi2)
-        return ((bi1 * bi2) / gcd).toLong()
+        val gcd = n1.gcd(n2)
+        return ((n1 * n2) / gcd)
     }
 
 
@@ -110,8 +111,6 @@ object Day12 {
             }
             return Pos3D(x, y, z)
         }
-
-
     }
 
     data class Pos3D(val x: Int, val y: Int, val z: Int) {
