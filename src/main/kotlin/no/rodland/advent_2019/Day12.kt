@@ -1,5 +1,7 @@
 package no.rodland.advent_2019
 
+import java.math.BigInteger
+
 object Day12 {
     fun partOne(list: List<List<Int>>, steps: Int): Int {
         val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
@@ -17,16 +19,45 @@ object Day12 {
         return seen.size
     }
 
-    fun partTwo(list: List<List<Int>>): Int {
-        val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
-        val seen: MutableSet<List<Moon>> = mutableSetOf()
-        for (state in moons) {
-            if (!seen.add(state)) {
-                break
+    fun partTwo(list: List<List<Int>>): Long {
+        val states = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
+        val seenX: MutableSet<List<Pair<Int, Int>>> = mutableSetOf()
+        val seenY: MutableSet<List<Pair<Int, Int>>> = mutableSetOf()
+        val seenZ: MutableSet<List<Pair<Int, Int>>> = mutableSetOf()
+
+        var (foundX, foundY, foundZ) = listOf(false, false, false)
+        for (state in states) {
+            if (!foundX) {
+                if (!seenX.add(state.map { moon -> moon.pos.x to moon.velocity.x })) {
+                    foundX = true
+                }
+            }
+            if (!foundY) {
+                if (!seenY.add(state.map { moon -> moon.pos.y to moon.velocity.y })) {
+                    foundY = true
+                }
+            }
+            if (!foundZ) {
+                if (!seenZ.add(state.map { moon -> moon.pos.z to moon.velocity.z })) {
+                    foundZ = true
+                }
+            }
+            if (foundX && foundY && foundZ) {
+                break;
             }
         }
-        return seen.size
+        return lcm(seenX.size.toLong(), lcm(seenY.size.toLong(), seenZ.size.toLong()))
     }
+
+    private fun lcm(n1: Long, n2: Long): Long {
+        // https://no.wikipedia.org/wiki/Minste_felles_multiplum
+        // lcm = (n1 * n2) / gcd
+        val bi1: BigInteger = BigInteger(n1.toString())
+        val bi2: BigInteger = BigInteger(n2.toString())
+        val gcd = bi1.gcd(bi2)
+        return ((bi1 * bi2) / gcd).toLong()
+    }
+
 
     private fun runSim(moons: List<Moon>): Sequence<List<Moon>> {
         var moonsTmp = moons

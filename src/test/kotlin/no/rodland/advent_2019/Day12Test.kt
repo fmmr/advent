@@ -5,6 +5,7 @@ import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 @DisableSlow
 internal class Day12Test {
@@ -50,15 +51,18 @@ internal class Day12Test {
         @Test
         fun `12,2,test,real`() {
             report {
-                Day12.partTwo(test12) to 2772
+                val bi = BigInteger("44").gcd(BigInteger("28"))
+                val result = BigInteger("18").gcd(bi)
+                println("dsjdksdjs $result")
+                Day12.partTwo(test12) to 2772L
             }
         }
 
         @Test
-        @Slow(232323232)
+        @Slow(1100)
         fun `12,2,live`() {
             report {
-                Day12.partTwo(data12) to 2
+                Day12.partTwo(data12) to 469671086427712L
             }
         }
     }
