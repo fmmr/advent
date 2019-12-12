@@ -1,6 +1,7 @@
 package no.rodland.advent_2019
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -75,7 +76,7 @@ internal class Day12Test {
         }
 
         @Test
-//        @Slow(1100)
+        @Slow(1100)
         fun `12,2,live`() {
             report {
                 Day12.partTwoOptimized(data12) to BigInteger("469671086427712")
