@@ -41,7 +41,14 @@ internal class Day12Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `12,2,test`() {
+        fun `12,2,test,simple`() {
+            report {
+                Day12.partTwoSimple(test12) to 2772
+            }
+        }
+
+        @Test
+        fun `12,2,test,real`() {
             report {
                 Day12.partTwo(test12) to 2772
             }

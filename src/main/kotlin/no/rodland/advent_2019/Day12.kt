@@ -6,6 +6,17 @@ object Day12 {
         return moons.take(steps).last().map { it.energy() }.sum()
     }
 
+    fun partTwoSimple(list: List<List<Int>>): Int {
+        val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
+        val seen: MutableSet<List<Moon>> = mutableSetOf()
+        for (state in moons) {
+            if (!seen.add(state)) {
+                break
+            }
+        }
+        return seen.size
+    }
+
     fun partTwo(list: List<List<Int>>): Int {
         val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
         val seen: MutableSet<List<Moon>> = mutableSetOf()
@@ -18,22 +29,18 @@ object Day12 {
     }
 
     private fun runSim(moons: List<Moon>): Sequence<List<Moon>> {
-        var io = moons[0]
-        var europa = moons[1]
-        var ganymede = moons[2]
-        var callisto = moons[3]
-
+        var moonsTmp = moons
         return sequence {
             while (true) {
-                val newVelocities: List<Pos3D> = applyGravity(listOf(io, europa, ganymede, callisto))
-                io = io.applyVelocity(newVelocities[0])
-                europa = europa.applyVelocity(newVelocities[1])
-                ganymede = ganymede.applyVelocity(newVelocities[2])
-                callisto = callisto.applyVelocity(newVelocities[3])
-                val l = listOf(io, europa, ganymede, callisto)
-                yield(l)
+                moonsTmp = applygravityAndVelocity(moonsTmp)
+                yield(moonsTmp)
             }
         }
+    }
+
+    private fun applygravityAndVelocity(moons: List<Moon>): List<Moon> {
+        val newVelocities: List<Pos3D> = applyGravity(moons)
+        return moons.zip(newVelocities) { moon, velocity -> moon.applyVelocity(velocity) }
     }
 
 
@@ -51,7 +58,7 @@ object Day12 {
         fun applyGravity(moons: List<Moon>): Pos3D {
             return moons
                     .map { this.applyGravity(it) }
-                    .fold(velocity) { acc, it -> Pos3D(acc.x + it.x, acc.y + it.y, acc.z + it.z) }
+                    .fold(velocity) { vel, moon -> Pos3D(vel.x + moon.x, vel.y + moon.y, vel.z + moon.z) }
         }
 
         fun applyGravity(other: Moon): Pos3D {
@@ -79,5 +86,4 @@ object Day12 {
     data class Pos3D(val x: Int, val y: Int, val z: Int) {
         fun energy(): Int = Math.abs(x) + Math.abs(y) + Math.abs(z)
     }
-
 }
