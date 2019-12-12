@@ -2,42 +2,40 @@ package no.rodland.advent_2019
 
 object Day12 {
     fun partOne(list: List<List<Int>>, steps: Int): Int {
-        var io = Moon(list[0])
-        var europa = Moon(list[1])
-        var ganymede = Moon(list[2])
-        var callisto = Moon(list[3])
-
-        (1..steps).map {
-            val newVelocities: List<Pos3D> = applyGravity(listOf(io, europa, ganymede, callisto))
-            io = io.applyVelocity(newVelocities[0])
-            europa = europa.applyVelocity(newVelocities[1])
-            ganymede = ganymede.applyVelocity(newVelocities[2])
-            callisto = callisto.applyVelocity(newVelocities[3])
-        }
-        return listOf(io, europa, ganymede, callisto).map { it.energy() }.sum()
+        val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
+        return moons.take(steps).last().map { it.energy() }.sum()
     }
-
 
     fun partTwo(list: List<List<Int>>): Int {
-        var io = Moon(list[0])
-        var europa = Moon(list[1])
-        var ganymede = Moon(list[2])
-        var callisto = Moon(list[3])
-        val previousSeen = mutableSetOf(listOf(io, europa, ganymede, callisto))
-        var i = 0
-        var found = false
-
-        while (!found) {
-            val newVelocities: List<Pos3D> = applyGravity(listOf(io, europa, ganymede, callisto))
-            io = io.applyVelocity(newVelocities[0])
-            europa = europa.applyVelocity(newVelocities[1])
-            ganymede = ganymede.applyVelocity(newVelocities[2])
-            callisto = callisto.applyVelocity(newVelocities[3])
-            found = !previousSeen.add(listOf(io, europa, ganymede, callisto))
-            i += 1
+        val moons = runSim(listOf(Moon(list[0]), Moon(list[1]), Moon(list[2]), Moon(list[3])))
+        val seen: MutableSet<List<Moon>> = mutableSetOf()
+        for (state in moons) {
+            if (!seen.add(state)) {
+                break
+            }
         }
-        return i
+        return seen.size
     }
+
+    private fun runSim(moons: List<Moon>): Sequence<List<Moon>> {
+        var io = moons[0]
+        var europa = moons[1]
+        var ganymede = moons[2]
+        var callisto = moons[3]
+
+        return sequence {
+            while (true) {
+                val newVelocities: List<Pos3D> = applyGravity(listOf(io, europa, ganymede, callisto))
+                io = io.applyVelocity(newVelocities[0])
+                europa = europa.applyVelocity(newVelocities[1])
+                ganymede = ganymede.applyVelocity(newVelocities[2])
+                callisto = callisto.applyVelocity(newVelocities[3])
+                val l = listOf(io, europa, ganymede, callisto)
+                yield(l)
+            }
+        }
+    }
+
 
     private fun applyGravity(moons: List<Moon>): List<Pos3D> {
         return moons.map { moon -> moon.applyGravity(moons.filterNot { it == moon }) }
