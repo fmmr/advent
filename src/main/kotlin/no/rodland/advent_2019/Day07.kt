@@ -41,9 +41,9 @@ object Day07 {
 
 
         // start each amplifier (justDoIt will do a launch)
+        IntCodeComputer(program, bc, cd).run()
         IntCodeComputer(program, ea, ab).run()
         IntCodeComputer(program, ab, bc).run()
-        IntCodeComputer(program, bc, cd).run()
         IntCodeComputer(program, cd, de).run()
         IntCodeComputer(program, de, broadcast).run()
 

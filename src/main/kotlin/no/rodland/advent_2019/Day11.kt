@@ -43,7 +43,7 @@ object Day11 {
         val output = Channel<Long>(20)
         val job = IntCodeComputer(program, input, output).run()
 
-        GlobalScope.launch {
+        val receiver = GlobalScope.launch {
             input.send(background)
             while (job.isActive) {
                 try {
@@ -59,6 +59,7 @@ object Day11 {
         }
         runBlocking {
             job.join()
+            receiver.join()
         }
         return map
     }
