@@ -5,44 +5,63 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Pos
+import kotlin.math.sign
 
 object Day13 {
-    var score = 0L
     fun partOne(list: List<String>): Int {
-        return runProgram(list).filter { it.tile == Tile.BLOCK }.size
+        return runProgram(list).first.filter { it.value == Tile.BLOCK }.size
     }
 
     fun partTwo(list: List<String>, numQuarters: String): Int {
         val program = list.toMutableList()
         program[0] = numQuarters
-        return runProgram(list).filter { it.tile == Tile.BLOCK }.size
+        return runProgram(program).second.toInt()
     }
 
-    private fun runProgram(program: List<String>): MutableList<Event> {
+    private fun runProgram(program: List<String>): Pair<MutableMap<Pos, Tile>, Long> {
         val input = Channel<Long>(20)
         val output = Channel<Long>(20)
         val job = IntCodeComputer(program, input, output).run()
-        val tiles: MutableList<Event> = mutableListOf()
-        GlobalScope.launch {
-            while (job.isActive) {
+        val tiles: MutableMap<Pos, Tile> = mutableMapOf()
+
+        var score = 0L
+        var xCoordBall: Long
+        var xCoordPaddle = 0L
+
+        val game = GlobalScope.launch {
+            //            repeat(8) { input.send(0L) }
+            while (true) {
                 try {
                     val x = output.receive()
                     val y = output.receive()
                     val thirdValue = output.receive()
                     if (x == -1L && y == 0L) {
                         score = thirdValue
+                        println("new score: $score")
                     } else {
-                        tiles.add(Event(x, y, tile(thirdValue)))
+                        val tile = tile(thirdValue)
+                        tiles[Pos(x.toInt(), y.toInt())] = tile
+                        if (tile == Tile.BALL) {
+                            xCoordBall = x
+                            val joy = (xCoordBall - xCoordPaddle).sign.toLong()
+                            input.send(joy)
+                            // println("sent joy: $joy - xball: $xCoordBall, xpaddle: $xCoordPaddle")
+                        }
+                        if (tile == Tile.PADDLE) {
+                            xCoordPaddle = x
+                        }
                     }
                 } catch (e: Exception) {
                     println("Channel closed - computer stopped")
+                    break
                 }
             }
         }
         runBlocking {
             job.join()
+            game.join()
         }
-        return tiles
+        return tiles to score
     }
 
     fun tile(value: Long): Tile = when (value) {
@@ -54,15 +73,7 @@ object Day13 {
         else -> error("unable to draw tile: $value")
     }
 
-    data class Event(val pos: Pos, val tile: Tile) {
-        constructor(x: Long, y: Long, tile: Tile) : this(Pos(x.toInt(), y.toInt()), tile)
-    }
-
     enum class Tile(val id: Int) {
         EMPTY(0), WALL(1), BLOCK(2), PADDLE(3), BALL(4);
-    }
-
-    enum class Joystick(val id: Int) {
-        NEUTRAL(0), LEFT(-1), RIGHT(1)
     }
 }

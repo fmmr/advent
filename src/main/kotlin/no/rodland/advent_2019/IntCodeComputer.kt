@@ -35,6 +35,7 @@ class IntCodeComputer(program: List<String>, val input: ReceiveChannel<Long>, pr
         }
         output.close()
     }
+//     I want something  like: suspend fun next(input: suspend () -> Long, output: suspend (Long) -> Unit): Long? {
 
     private suspend fun next(operator: Operation, pos: Int, relBase: Int): Pair<Int, Int> {
         var relBase1 = relBase
