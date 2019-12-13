@@ -21,7 +21,8 @@ object Day13 {
     private fun runProgram(program: List<String>): Pair<MutableMap<Pos, Tile>, Long> {
         val input = Channel<Long>(20)
         val output = Channel<Long>(20)
-        val job = IntCodeComputer(program, input, output).run()
+        val intCodeComputer = IntCodeComputer()
+        val job = intCodeComputer.launch(program, input, output)
         val tiles: MutableMap<Pos, Tile> = mutableMapOf()
 
         var score = 0L
@@ -29,17 +30,16 @@ object Day13 {
         var xCoordPaddle = 0L
 
         val game = GlobalScope.launch {
-            //            repeat(8) { input.send(0L) }
             while (true) {
                 try {
                     val x = output.receive()
                     val y = output.receive()
-                    val thirdValue = output.receive()
+                    val scoreOrTile = output.receive()
                     if (x == -1L && y == 0L) {
-                        score = thirdValue
+                        score = scoreOrTile
                         println("new score: $score")
                     } else {
-                        val tile = tile(thirdValue)
+                        val tile = tile(scoreOrTile)
                         tiles[Pos(x.toInt(), y.toInt())] = tile
                         if (tile == Tile.BALL) {
                             xCoordBall = x

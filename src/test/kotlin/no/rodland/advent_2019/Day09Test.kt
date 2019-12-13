@@ -12,14 +12,6 @@ internal class Day09Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `09,1,test,program_from_day7`() {
-            report {
-                val program = listOf("3", "15", "3", "16", "1002", "16", "10", "16", "1", "16", "15", "15", "4", "15", "99", "0", "0")
-                Day09.partOne(program, 1L) to listOf(1L)
-            }
-        }
-
-        @Test
         fun `09,1,test,1`() {
             report {
                 val program = listOf("109", "1", "204", "-1", "1001", "100", "1", "100", "1008", "100", "16", "101", "1006", "101", "0", "99")

@@ -41,11 +41,16 @@ object Day07 {
 
 
         // start each amplifier (justDoIt will do a launch)
-        IntCodeComputer(program, bc, cd).run()
-        IntCodeComputer(program, ea, ab).run()
-        IntCodeComputer(program, ab, bc).run()
-        IntCodeComputer(program, cd, de).run()
-        IntCodeComputer(program, de, broadcast).run()
+        val intCodeComputer4 = IntCodeComputer()
+        intCodeComputer4.launch(program, bc, cd)
+        val intCodeComputer3 = IntCodeComputer()
+        intCodeComputer3.launch(program, ea, ab)
+        val intCodeComputer2 = IntCodeComputer()
+        intCodeComputer2.launch(program, ab, bc)
+        val intCodeComputer1 = IntCodeComputer()
+        intCodeComputer1.launch(program, cd, de)
+        val intCodeComputer = IntCodeComputer()
+        intCodeComputer.launch(program, de, broadcast)
 
         return sniffer.toList().last()
     }
@@ -63,11 +68,11 @@ object Day07 {
 
     suspend fun runAmp(program: List<String>, first: Long, second: Long): Long {
         val inCh = Channel<Long>(20)
-        val outCh = Channel<Long>(20)
         inCh.send(first)
         inCh.send(second)
-        IntCodeComputer(program, inCh, outCh).run()
-        return outCh.toList().last()
+        val list = mutableListOf<Long>()
+        IntCodeComputer().runSuspend(program, { inCh.receive() }, { list.add(it) })
+        return list.last()
     }
 }
 

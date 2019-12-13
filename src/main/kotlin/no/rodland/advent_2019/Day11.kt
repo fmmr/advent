@@ -41,7 +41,8 @@ object Day11 {
 
         val input = Channel<Long>(20)
         val output = Channel<Long>(20)
-        val job = IntCodeComputer(program, input, output).run()
+        val intCodeComputer = IntCodeComputer()
+        val job = intCodeComputer.launch(program, input, output)
 
         val receiver = GlobalScope.launch {
             input.send(background)

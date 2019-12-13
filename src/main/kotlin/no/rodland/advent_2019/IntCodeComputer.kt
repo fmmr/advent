@@ -7,13 +7,12 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
 
 
-class IntCodeComputer(program: List<String>, val input: ReceiveChannel<Long>, private val output: SendChannel<Long>) {
-    private val prog = program.map { it.toLong() }.toMutableList()
+class IntCodeComputer {
 
-    fun run(): Job {
+    fun launch(program: List<String>, receiveChannel: ReceiveChannel<Long>, sendChannel: SendChannel<Long>): Job {
         return GlobalScope.launch {
             try {
-                runSuspend()
+                runSuspend(program, receiveChannel, sendChannel)
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw e
@@ -21,63 +20,62 @@ class IntCodeComputer(program: List<String>, val input: ReceiveChannel<Long>, pr
         }
     }
 
-    private suspend fun runSuspend() {
-        var pos = 0
-        var relBase = 0
+    suspend fun runSuspend(program: List<String>, input: ReceiveChannel<Long>, output: SendChannel<Long>) {
+        runSuspend(program, { input.receive() }, { output.send(it) })
+        output.close()
+    }
+
+    suspend fun runSuspend(programInput: List<String>, input: suspend () -> Long, output: suspend (Long) -> Unit) {
+        val program = programInput.map { it.toLong() }.toMutableList()
+        var instructionPointer = 0
+        var relativePointer = 0
         while (true) {
-            val operator = Operation(prog[pos].toInt())
+            val operator = Operation(program[instructionPointer].toInt())
             if (operator.operation == 99) {
                 break
             }
-            val ret = next(operator, pos, relBase)
-            pos = ret.first
-            relBase = ret.second
+            var relBase1 = relativePointer
+            val val1 = get(operator.mode(1), program.getOrElse(instructionPointer + 1) { 0 }, program, relBase1)
+            val val2 = get(operator.mode(2), program.getOrElse(instructionPointer + 2) { 0 }, program, relBase1)
+            val idx1 = program.getOrElse(instructionPointer + 1) { 0 }.toInt()
+            val idx3 = (program.getOrElse(instructionPointer + 3) { 0 }).toInt()
+            val newPos = when (operator.operation) {
+                1 -> {
+                    program.set(idx3, val1 + val2, operator.mode(3), relBase1)
+                    instructionPointer + operator.steps
+                }
+                2 -> {
+                    program.set(idx3, val1 * val2, operator.mode(3), relBase1)
+                    instructionPointer + operator.steps
+                }
+                3 -> {
+                    program.set(idx1, input(), operator.mode(1), relBase1)
+                    instructionPointer + operator.steps
+                }
+                4 -> {
+                    output(val1)
+                    instructionPointer + operator.steps
+                }
+                5 -> if (val1 != 0L) val2.toInt() else instructionPointer + operator.steps
+                6 -> if (val1 == 0L) val2.toInt() else instructionPointer + operator.steps
+                7 -> {
+                    program.set(idx3, if (val1 < val2) 1L else 0L, operator.mode(3), relBase1)
+                    instructionPointer + operator.steps
+                }
+                8 -> {
+                    program.set(idx3, if (val1 == val2) 1L else 0L, operator.mode(3), relBase1)
+                    instructionPointer + operator.steps
+                }
+                9 -> {
+                    relBase1 += val1.toInt()
+                    instructionPointer + operator.steps
+                }
+                else -> error("Unable to handle opcode $operator")
+            }
+            val ret = newPos to relBase1
+            instructionPointer = ret.first
+            relativePointer = ret.second
         }
-        output.close()
-    }
-//     I want something  like: suspend fun next(input: suspend () -> Long, output: suspend (Long) -> Unit): Long? {
-
-    private suspend fun next(operator: Operation, pos: Int, relBase: Int): Pair<Int, Int> {
-        var relBase1 = relBase
-        val val1 = get(operator.mode(1), prog.getOrElse(pos + 1) { 0 }, prog, relBase1)
-        val val2 = get(operator.mode(2), prog.getOrElse(pos + 2) { 0 }, prog, relBase1)
-        val idx1 = prog.getOrElse(pos + 1) { 0 }.toInt()
-        val idx3 = (prog.getOrElse(pos + 3) { 0 }).toInt()
-
-        val newPos = when (operator.operation) {
-            1 -> {
-                prog.set(idx3, val1 + val2, operator.mode(3), relBase1)
-                pos + operator.steps
-            }
-            2 -> {
-                prog.set(idx3, val1 * val2, operator.mode(3), relBase1)
-                pos + operator.steps
-            }
-            3 -> {
-                prog.set(idx1, input.receive(), operator.mode(1), relBase1)
-                pos + operator.steps
-            }
-            4 -> {
-                output.send(val1)
-                pos + operator.steps
-            }
-            5 -> if (val1 != 0L) val2.toInt() else pos + operator.steps
-            6 -> if (val1 == 0L) val2.toInt() else pos + operator.steps
-            7 -> {
-                prog.set(idx3, if (val1 < val2) 1L else 0L, operator.mode(3), relBase1)
-                pos + operator.steps
-            }
-            8 -> {
-                prog.set(idx3, if (val1 == val2) 1L else 0L, operator.mode(3), relBase1)
-                pos + operator.steps
-            }
-            9 -> {
-                relBase1 += val1.toInt()
-                pos + operator.steps
-            }
-            else -> error("Unable to handle opcode $operator")
-        }
-        return newPos to relBase1
     }
 
     fun get(mode: Int, value: Long, prog: List<Long>, relBase: Int): Long {
