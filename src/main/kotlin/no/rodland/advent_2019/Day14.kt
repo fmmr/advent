@@ -1,12 +1,38 @@
 package no.rodland.advent_2019
 
 object Day14 {
-    fun partOne(list: List<String>): Int {
+    fun partOne(list: List<String>): Long {
         val process = toProcess(list)
-        val alreadyMade = mutableMapOf<String, Int>()
+        val alreadyMade = mutableMapOf<String, Long>()
         val result = process(process, Step("FUEL", 1), alreadyMade)
-        return result.filter { it.name == "ORE" }.map { it.quantity }.sum()
+        return result.map { it.quantity }.sum()
     }
+
+    fun partTwo(list: List<String>, storage: Long, overProductionFactor: Int): Long {
+        val process = toProcess(list)
+
+        val orePrFuel = process(process, Step("FUEL", 1), mutableMapOf()).map { it.quantity }.sum()
+        var min = storage / orePrFuel
+        var max = min * overProductionFactor
+        var mid = min + (max - min) / 2
+        while (true) {
+            val test = process(process, Step("FUEL", mid), mutableMapOf()).map { it.quantity }.sum()
+            println("min: $min, max: $max, mid: $mid, test: $test")
+            if (test > storage) {
+                max = mid
+                mid = min + ((max - min) / 2)
+            }
+            if (test < storage) {
+                min = mid
+                mid = min + ((max - min) / 2)
+            }
+            if (max - min <= 1L) {
+                break
+            }
+        }
+        return min
+    }
+
 
     private fun toProcess(list: List<String>): Map<Step, List<Step>> {
         return list.map { it.split("=>") }
@@ -15,9 +41,9 @@ object Day14 {
                 .toMap()
     }
 
-    fun process(process: Map<Step, List<Step>>, step: Step, alreadyMade: MutableMap<String, Int>): List<Step> {
+    fun process(process: Map<Step, List<Step>>, step: Step, alreadyMade: MutableMap<String, Long>): List<Step> {
         val name = step.name
-        println("need: $step  - have $alreadyMade")
+//        println("need: $step  - have $alreadyMade")
 
         if (name == "ORE") {
             return listOf(step)  // always need ore...
@@ -36,7 +62,7 @@ object Day14 {
             val needed = process[def] ?: error("we just fetched key $def in previous statement")
             if (step.quantity > def.quantity) {
                 //  må ha 13 , def sier 3
-                val mustMake = Math.ceil(step.quantity.toDouble() / def.quantity).toInt()
+                val mustMake = Math.ceil(step.quantity.toDouble() / def.quantity).toLong()
                 // 5 - har da (5*3)-13 == 2 til overs
                 alreadyMade[name] = (mustMake * def.quantity) - step.quantity
                 needed.map { Step(it.name, it.quantity * mustMake) }.flatMap { process(process, it, alreadyMade) }
@@ -49,12 +75,8 @@ object Day14 {
     }
 
 
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
-
-    data class Step(val name: String, val quantity: Int) {
-        constructor(str1: String, str2: String) : this(str2.trim(), str1.trim().toInt())
+    data class Step(val name: String, val quantity: Long) {
+        constructor(str1: String, str2: String) : this(str2.trim(), str1.trim().toLong())
         constructor(str: String) : this(str.split(" ")[0], str.split(" ")[1])
     }
 }
