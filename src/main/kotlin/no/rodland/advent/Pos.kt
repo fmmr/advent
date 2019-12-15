@@ -36,6 +36,10 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     }
 
+    fun getNeighboorsNotInMap(map: Map<Pos, *>): List<Pos> {
+        return neighboorCellsReadingOrder().filter { !map.containsKey(it) }
+    }
+
     fun neighboorCellsAllEight(): List<Pos> {
         return listOf(
                 Pos(x, y - 1),
