@@ -16,7 +16,6 @@ object Day15 {
         val start = Pos(0, 0)
         val map = mutableMapOf(start to 1L)
         val distances = mutableMapOf<Pos, Int>()
-        var distanceToOx = -1
 
         val game = runBlocking {
             go(start, map, input, output)
@@ -51,8 +50,6 @@ object Day15 {
                 buildDistance(current.getNext(dir.c), map, distances, distance + 1)
             }
         }
-
-
     }
 
     suspend fun go(current: Pos, map: MutableMap<Pos, Long>, input: Channel<Long>, output: Channel<Long>) {
@@ -63,17 +60,15 @@ object Day15 {
                 map[next] = block
                 if (block != 0L) {
                     go(next, map, input, output)
-                    move(input, dir.goBack(), output, " BACK")
+                    move(input, dir.goBack(), output)
                 }
             }
         }
     }
 
-    private suspend fun move(input: Channel<Long>, dir: Direction, output: Channel<Long>, kind: String = " FORW"): Long {
+    private suspend fun move(input: Channel<Long>, dir: Direction, output: Channel<Long>): Long {
         input.send(dir.num)
-        val value = output.receive()
-//        println("dir: $dir, val: $value  $kind")
-        return value
+        return output.receive()
     }
 
 
@@ -89,7 +84,34 @@ object Day15 {
     }
 
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    fun partTwo(program: List<String>): Int {
+        val input = Channel<Long>(20)
+        val output = Channel<Long>(20)
+        val intCodeComputer = IntCodeComputer()
+        intCodeComputer.launch(program, input, output)
+
+
+        val start = Pos(0, 0)
+        val map = mutableMapOf(start to 1L)
+        val distances = mutableMapOf<Pos, Int>()
+
+        return runBlocking {
+            go(start, map, input, output)
+            val minMax = getMinMax(map.keys)
+            val array = (minMax.second.first..minMax.second.second).map { y ->
+                (minMax.first.first..minMax.first.second).map { x ->
+                    map.getOrDefault(Pos(x, y), 0L)
+                }
+            }
+
+            val oxMap = map.filter { it.value == 2L }.keys.first()
+            val offsetX = -minMax.first.first
+            val offsetY = -minMax.second.first
+            val oxygen = Pos(oxMap.x + offsetX, oxMap.y + offsetY)
+//            val startP = Pos(start.x + offsetX, start.y + offsetY)
+
+            buildDistance(oxygen, array, distances)
+            distances.values.max()!!
+        }
     }
 }
