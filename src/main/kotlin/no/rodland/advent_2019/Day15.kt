@@ -1,8 +1,6 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Pos
 import no.rodland.advent.Pos.Companion.getMinMax
@@ -12,31 +10,49 @@ object Day15 {
         val input = Channel<Long>(20)
         val output = Channel<Long>(20)
         val intCodeComputer = IntCodeComputer()
-        val job = intCodeComputer.launch(program, input, output)
+        intCodeComputer.launch(program, input, output)
 
 
         val start = Pos(0, 0)
         val map = mutableMapOf(start to 1L)
+        val distances = mutableMapOf<Pos, Int>()
+        var distanceToOx = -1
 
-
-        val game = GlobalScope.launch {
+        val game = runBlocking {
             go(start, map, input, output)
             val minMax = getMinMax(map.keys)
-            println("min max: $minMax")
+            val array = (minMax.second.first..minMax.second.second).map { y ->
+                (minMax.first.first..minMax.first.second).map { x ->
+                    map.getOrDefault(Pos(x, y), 0L)
+                }
+            }
 
+            val oxMap = map.filter { it.value == 2L }.keys.first()
+            val offsetX = -minMax.first.first
+            val offsetY = -minMax.second.first
+            val oxygen = Pos(oxMap.x + offsetX, oxMap.y + offsetY)
+            val startP = Pos(start.x + offsetX, start.y + offsetY)
+
+            buildDistance(startP, array, distances)
+            distances[oxygen]!!
         }
-        println("1")
 
-        runBlocking {
-            println("2")
-            job.join()
-            println("3")
-            game.join()
-            println("4")
+        return game
+    }
+
+    fun buildDistance(current: Pos, map: List<List<Long>>, distances: MutableMap<Pos, Int>, distance: Int = 0) {
+        if (map[current.y][current.x] == 0L) {
+            return
+        }
+        val last = distances[current] ?: 10000000
+        if (distance < last) {
+            distances[current] = distance
+            Direction.values().forEach { dir ->
+                buildDistance(current.getNext(dir.c), map, distances, distance + 1)
+            }
         }
 
-        println("5")
-        return map.filter { it.value == 2L }.map { it.key }.first().distanceTo(start)
+
     }
 
     suspend fun go(current: Pos, map: MutableMap<Pos, Long>, input: Channel<Long>, output: Channel<Long>) {
