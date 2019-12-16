@@ -5,21 +5,19 @@ object Day16 {
         val result = getPhase(list, numPhases)
         return result.subList(0, 8).joinToString("") { it.toString() }
     }
-//    fun partOneAlt(list: List<Int>, numPhases: Int = 100): String {
-//        val longList = list.toMutableList()
-//        val offset = 1
-//        for (phase in 1..numPhases) {
-//            for (i in (longList.size - 1) downTo offset) {
-//                longList[i-1] = (longList[i-1] + longList[i]) % 10
-//            }
-//        }
-//        return longList.subList(offset, 8+offset).joinToString("") { it.toString() }
-//    }
 
     fun partTwo(list: List<Int>, numPhases: Int = 100, repeat: Int): String {
         val offset = list.subList(0, 7).joinToString("") { it.toString() }.toInt()
         val longList = (1..repeat).flatMap { list }.toMutableList()
-        for (phase in 1..numPhases) {
+        // num digits in input: 650
+        // num digits * 10k= 6500000
+        // offset is 5978199
+
+        // println(longList.size / offset <= 2)
+        // offset is almost at the end => only 1s from offset to end
+        // we can calculate backwards and sum the next with the current (and % 10) for each element (phase times)
+
+        (1..numPhases).forEach {
             for (i in (longList.size - 1) downTo offset) {
                 longList[i - 1] = (longList[i - 1] + longList[i]) % 10
             }

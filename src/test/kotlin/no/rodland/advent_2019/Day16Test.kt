@@ -83,7 +83,6 @@ internal class Day16Test {
         }
 
         @Test
-        @Slow(2300)
         fun `16,1,test,4`() {
             report {
                 Day16.partOne("69317163492948606335995924319873".map { it.toString().toInt() }) to "52432133"
@@ -91,8 +90,8 @@ internal class Day16Test {
         }
 
         @Test
-        @Slow(2300)
-        fun `16,1,live`() {
+        @Slow(2100)
+        fun `16,1,live,1`() {
             report {
                 Day16.partOne(data16) to "23135243"
             }
