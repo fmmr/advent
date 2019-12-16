@@ -1,5 +1,7 @@
 package no.rodland.advent_2019
 
+import kotlin.math.abs
+
 object Day16 {
     fun partOne(list: List<Int>, numPhases: Int = 100): String {
         val result = getPhase(list, numPhases)
@@ -13,11 +15,11 @@ object Day16 {
         // num digits * 10k= 6500000
         // offset is 5978199
 
-        // println(longList.size / offset <= 2)
+        println(longList.size / offset.toDouble() <= 2.0)
         // offset is almost at the end => only 1s from offset to end
         // we can calculate backwards and sum the next with the current (and % 10) for each element (phase times)
 
-        (1..numPhases).forEach {
+        (1..numPhases).forEach { _ ->
             for (i in (longList.size - 1) downTo offset) {
                 longList[i - 1] = (longList[i - 1] + longList[i]) % 10
             }
@@ -27,16 +29,16 @@ object Day16 {
 
     private tailrec fun getPhase(list: List<Int>, phase: Int): List<Int> {
         return if (phase == 1) {
-            list.mapIndexed({ idx, el -> step(idx, list) })
+            list.mapIndexed { idx, _ -> step(idx, list) }
         } else {
-            getPhase(list.mapIndexed({ idx, el -> step(idx, list) }), phase - 1)
+            getPhase(list.mapIndexed { idx, _ -> step(idx, list) }, phase - 1)
         }
     }
 
     private fun step(idx: Int, list: List<Int>): Int {
         val pattern = getPattern(idx + 1).take(list.size).toList()
         val subList = list.subList(idx, list.size)
-        return Math.abs(subList.zip(pattern) { num, p -> num * p }.sum() % 10)
+        return abs(subList.zip(pattern) { num, p -> num * p }.sum() % 10)
     }
 
     fun getPattern(num: Int): Sequence<Int> {
