@@ -41,7 +41,7 @@ object Day15 {
         if (map[current.y][current.x] == 0L) {
             return
         }
-        val last = distances[current] ?: 10000000
+        val last = distances[current] ?: (distance + 1)
         if (distance < last) {
             distances[current] = distance
             Direction.values().forEach { dir ->
