@@ -7,7 +7,7 @@ object Day16 {
     }
 
     fun partTwo(list: List<Int>, numPhases: Int = 100, repeat: Int): String {
-        val offset = list.subList(0, 7).joinToString("") { it.toString() }.toInt()
+        val offset = list.subList(0, 7).joinToString("").toInt()
         val longList = (1..repeat).flatMap { list }.toMutableList()
         // num digits in input: 650
         // num digits * 10k= 6500000

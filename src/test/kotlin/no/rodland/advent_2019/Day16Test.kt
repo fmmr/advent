@@ -122,7 +122,7 @@ internal class Day16Test {
         }
 
         @Test
-        @Slow(1140)
+//        @Slow(1140)
         fun `16,2,live`() {
             report {
                 Day16.partTwo(data16, repeat = 10000) to "21130597"
