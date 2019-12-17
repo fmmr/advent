@@ -1,39 +1,25 @@
 package no.rodland.advent_2019
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import no.rodland.advent.Pos
 
 object Day17 {
     fun partOne(list: List<String>): Int {
-        getMap(list)
-        return 2
+        val map = runBlocking { runAmp(list) }
+        val calibration = map.filter { cell -> cell.value != '.' && cell.key.neighboorCellsReadingOrder().all { nei -> map[nei] != '.' } }
+                .map { it.key.x * it.key.y }
+                .sum()
+        return calibration
     }
 
-    private fun getMap(program: List<String>): Int {
-        val input = Channel<Long>(20)
-        val output = Channel<Long>(20)
-        val job = IntCodeComputer().launch(program, input, output)
-
-
-        val game = GlobalScope.launch {
-            while (true) {
-                try {
-                    val y = output.receive().toChar()
-                    println("got: $y")
-                } catch (e: Exception) {
-                    println("Channel closed - computer stopped")
-                    break
-                }
-            }
-        }
-
-        runBlocking {
-            job.join()
-            game.join()
-        }
-        return 2
+    suspend fun runAmp(program: List<String>): Map<Pos, Char> {
+        val list = mutableListOf<Long>()
+        IntCodeComputer().runSuspend(program, { 0 }, { list.add(it) })
+        return list.map { it.toChar() }
+                .joinToString("").split(10.toChar())
+                .mapIndexed { y, line -> line.mapIndexed { x, char -> Pos(x, y) to char } }
+                .flatten()
+                .toMap()
     }
 
     fun partTwo(list: List<String>): Int {
