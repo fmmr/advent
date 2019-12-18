@@ -36,7 +36,7 @@ object Day17 {
 
         val job = IntCodeComputer().launch(program, input, output)
         var sum = 0L
-        GlobalScope.launch {
+        val out = GlobalScope.launch {
             while (true) {
                 try {
                     sum = output.receive()
@@ -68,6 +68,7 @@ object Day17 {
 
         runBlocking {
             job.join()
+            out.join()
         }
 
         return sum
