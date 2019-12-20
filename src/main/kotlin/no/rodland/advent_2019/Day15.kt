@@ -2,6 +2,7 @@ package no.rodland.advent_2019
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
+import no.rodland.advent.Direction
 import no.rodland.advent.Pos
 import no.rodland.advent.Pos.Companion.getMinMax
 
@@ -86,14 +87,4 @@ object Day15 {
     }
 
 
-    enum class Direction(val c: Char, val num: Long) {
-        NORTH('N', 1L), SOUTH('S', 2), WEST('W', 3), EAST('E', 4);
-
-        fun goBack(): Direction = when (this) {
-            NORTH -> SOUTH
-            SOUTH -> NORTH
-            WEST -> EAST
-            EAST -> WEST
-        }
-    }
 }
