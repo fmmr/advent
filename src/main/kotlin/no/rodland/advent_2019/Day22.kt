@@ -2,11 +2,7 @@ package no.rodland.advent_2019
 
 object Day22 {
     fun partOne(list: List<String>, deck: List<Int>): List<Int> {
-        var tmpList = deck
-        list.map {
-            tmpList = doit(it, tmpList)
-        }
-        return tmpList
+        return list.fold(deck) { acc, cmd -> doit(cmd, acc) }
     }
 
     private fun doit(cmd: String, list: List<Int>): List<Int> {
@@ -28,11 +24,9 @@ object Day22 {
         error("unable to parse $cmd")
     }
 
-
     fun partTwo(list: List<String>): Int {
         return 2
     }
-
 }
 
 fun List<Int>.deal_new(): List<Int> = reversed()
