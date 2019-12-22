@@ -28,6 +28,7 @@ object Day21 {
 
         //   # # # #  false
 
+        // jump if there i s a hole in A, B, C but only if you can land on D
         // => (!A || !B || !C) && D
 
         val cmds = listOf(
