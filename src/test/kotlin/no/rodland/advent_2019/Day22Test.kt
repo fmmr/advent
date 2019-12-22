@@ -2,7 +2,6 @@ package no.rodland.advent_2019
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -96,17 +95,16 @@ internal class Day22Test {
     @Nested
     inner class `Part 1` {
         @Test
-        @Disabled
         fun `22,1,test`() {
             report {
-                Day22.partOne(testInput) to listOf(9, 2, 5, 8, 1, 4, 7, 0, 3, 6)
+                Day22.partOne(testInput, test22) to listOf(9, 2, 5, 8, 1, 4, 7, 0, 3, 6)
             }
         }
 
         @Test
         fun `22,1,live`() {
             report {
-                Day22.partOne(data22) to 2
+                Day22.partOne(data22, (0..10006).toList()).indexOf(2019) to 2514
             }
         }
     }
