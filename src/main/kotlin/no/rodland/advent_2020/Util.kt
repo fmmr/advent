@@ -7,6 +7,11 @@ fun String.readFile(): List<String> {
     return resource.readText().split("\n").filter { it.isNotEmpty() }
 }
 
+fun String.readFileInts(): List<Int> {
+    val resource = Util::class.java.getResource("/$this")
+    return resource.readText().split("\n").filter { it.isNotEmpty() }.map { it.toInt() }
+}
+
 fun String.readFirstLineInts(): List<Int> {
     return this.readFile()[0].split(",").map { it.toInt() }
 }

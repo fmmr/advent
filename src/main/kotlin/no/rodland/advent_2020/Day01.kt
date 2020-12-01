@@ -1,18 +1,21 @@
 package no.rodland.advent_2020
 
 object Day01 {
-    fun partOne(mass: Int) = (mass / 3) - 2
-
-    fun partTwo(mass: Int): Int {
-        return if (mass < 7) {
-            0
-        } else {
-            val partOne = partOne(mass)
-            partOne + partTwo(partOne)
+    fun partOne(expences: List<Int>): Int {
+        val number = expences.first { exp ->
+            expences.contains(2020 - exp)
         }
+        return (2020 - number) * number
     }
 
-    fun findFuel2FromChriswk(weight: Int): Int {
-        return generateSequence(partOne(weight)) { w -> partOne(w) }.takeWhile { it > 0 }.sum()
+    fun partTwo(expences: List<Int>): Int {
+        val number = expences.first { exp ->
+            expences.contains(2020 - exp)
+        }
+        return (2020 - number) * number
     }
+
+//    fun findFuel2FromChriswk(weight: Int): Int {
+//        return generateSequence(partOne(weight)) { w -> partOne(w) }.takeWhile { it > 0 }.sum()
+//    }
 }
