@@ -34,22 +34,20 @@ internal class Day01Test {
         }
     }
 
-//    @Nested
-//    inner class `Part 2` {
-//        @Test
-//        fun `01,2,test,1`() {
-//            report {
-//                Day01.partTwo(testData) to 241861950
-//            }
-//        }
-//
-//        @Test
-//        fun `01,2,live`() {
-//            report {
-//                Day01.partTwo(data01) to 241861950
-//            }
-//        }
-//    }
+    @Nested
+    inner class `Part 2` {
+        @Test
+        fun `01,2,test,1`() {
+            report {
+                Day01.partTwo(testData) to 241861950
+            }
+        }
+
+        @Test
+        fun `01,2,live`() {
+            report {
+                Day01.partTwo(data01) to 8446464
+            }
+        }
+    }
 }
-
-
