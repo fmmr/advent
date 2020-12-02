@@ -10,7 +10,7 @@ object Day01 {
     }
 
     fun partTwo(expences: List<Int>): Int {
-        return expences
+        return expences.asSequence()
             .map { it to findTarget(expences, 2020 - it) }
             .first { it.second != null }
             .let { it.first * it.second!! }
