@@ -2,9 +2,9 @@ package no.rodland.advent_2020
 
 
 object Day02 {
-    fun partOne(input: List<String>): Int = input.map { it.toPolicyAndPassword() }.count { it.first.validPart1(it.second) }
+    fun partOne(input: List<String>): Int = input.map { it.toPolicyAndPassword() }.count { (policy, password) -> policy.validPart1(password) }
 
-    fun partTwo(input: List<String>): Int = input.map { it.toPolicyAndPassword() }.count { it.first.validPart2(it.second) }
+    fun partTwo(input: List<String>): Int = input.map { it.toPolicyAndPassword() }.count { (policy, password) -> policy.validPart2(password) }
 }
 
 private fun String.toPolicyAndPassword(): Pair<PasswordPolicy, String> {
@@ -17,7 +17,7 @@ private fun String.toPolicyAndPassword(): Pair<PasswordPolicy, String> {
 
 }
 
-class PasswordPolicy(val from: Int, val to: Int, val char: Char) {
+data class PasswordPolicy(val from: Int, val to: Int, val char: Char) {
     fun validPart1(password: String): Boolean = password.count { it == char } in from..to
 
     fun validPart2(password: String): Boolean = (password[from - 1] == char) xor (password[to - 1] == char)
