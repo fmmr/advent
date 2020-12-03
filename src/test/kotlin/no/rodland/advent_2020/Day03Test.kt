@@ -45,14 +45,15 @@ internal class Day03Test {
         @Test
         fun `03,2,test`() {
             report {
-                Day03.partTwo(test03) to 2
+
+                Day03.partTwo(test03) to 336
             }
         }
 
         @Test
         fun `03,2,live`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 3064612320L
             }
         }
     }
