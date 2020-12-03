@@ -8,7 +8,7 @@ import readFile
 
 @DisableSlow
 internal class Day03Test {
-    val data03 = "2019/input_03.txt".readFile()
+    val data03 = "2020/input_03.txt".readFile()
     val test03 = listOf(
         "..##.......",
         "#...#...#..",
@@ -28,14 +28,14 @@ internal class Day03Test {
         @Test
         fun `03,1,test`() {
             report {
-                Day03.partOne(test03) to 2
+                Day03.partOne(test03) to 7
             }
         }
 
         @Test
         fun `03,1,live`() {
             report {
-                Day03.partOne(data03) to 2
+                Day03.partOne(data03) to 162
             }
         }
     }
