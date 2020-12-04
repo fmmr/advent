@@ -5,23 +5,23 @@ object Day04 {
         return list.split("\n\n").count { it.validPassportPart1() }
     }
 
+    fun partTwo(list: String): Int {
+        return list.split("\n\n").count { it.validPassportPart2() }
+    }
+
     private fun String.validPassportPart1(): Boolean {
-        val fields = this.split("[ \n]+".toRegex()).map { it.split(":")[0] }.map { it.toUpperCase() }
+        val fields = this.split("\n", " ").map { it.split(":")[0] }.map { it.toUpperCase() }
         return ValidationType.values().filterNot { it == ValidationType.CID }.map { it.toString() }.all { fields.contains(it) }
     }
 
     private fun String.validPassportPart2(): Boolean {
         val fields = this
-            .split("[ \n]+".toRegex())
-            .map { it.split(":")[0].toUpperCase() to it.split(":")[1] }
+            .split("\n", " ")
+            .map { it.split(":") }
+            .map { it[0].toUpperCase() to it[1] }
             .toMap()
         return ValidationType.values().all { it.isValid(fields[it.toString()]) }
     }
-
-    fun partTwo(list: String): Int {
-        return list.split("\n\n").count { it.validPassportPart2() }
-    }
-
 
     enum class ValidationType(val description: String, val isValid: (String?) -> Boolean) {
         BYR("Birth Year", String?::byr),
