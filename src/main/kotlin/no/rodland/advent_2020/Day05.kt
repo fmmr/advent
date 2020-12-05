@@ -6,20 +6,20 @@ object Day05 {
     }
 
     fun partTwo(list: List<String>): Int {
-        val ids = list.map { rowAndColum(it) }.map { seatId(it.first, it.second) }.sorted()
-        val allSeats = (ids.min()!!..ids.max()!!).toList().sorted()
+        val ids = list.map { rowAndColum(it) }.map { seatId(it.first, it.second) }
+        val allSeats = (ids.min()!!..ids.max()!!).toList()
         return (allSeats - ids).first()
     }
 
     private fun rowAndColum(boarding: String): Pair<Int, Int> {
         val rowCommands = boarding.substring(0..6)
         val colCommands = boarding.substring(7)
-        val row = findRow(0..127, rowCommands).first
-        val col = findRow(0..7, colCommands).first
+        val row = find(0..127, rowCommands).first
+        val col = find(0..7, colCommands).first
         return row to col
     }
 
-    private tailrec fun findRow(intRange: IntRange, rowCommands: String): IntRange {
+    private tailrec fun find(intRange: IntRange, rowCommands: String): IntRange {
         return if (rowCommands.isEmpty()) {
             intRange
         } else {
@@ -29,10 +29,9 @@ object Day05 {
                 'B', 'R' -> ((intRange.last + intRange.first) / 2 + 1)..intRange.last
                 else -> error("unknown command: $command")
             }
-            findRow(range, rowCommands.substring(1))
+            find(range, rowCommands.substring(1))
         }
     }
-
 
     fun seatId(row: Int, column: Int) = row * 8 + column
 }
