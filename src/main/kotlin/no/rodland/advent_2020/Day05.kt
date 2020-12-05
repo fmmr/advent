@@ -2,13 +2,12 @@ package no.rodland.advent_2020
 
 object Day05 {
     fun partOne(list: List<String>): Int {
-        return list.map { seatId(it) }.maxByOrNull { it }!!
+        return list.map { seatIdChriswk(it) }.maxByOrNull { it }!!
     }
 
     fun partTwo(list: List<String>): Int {
-        val ids = list.map { seatId(it) }
-        val allSeats = (ids.min()!!..ids.max()!!).toList()
-        return (allSeats - ids).first()
+        val ids = list.map { seatIdChriswk(it) }.toSet()
+        return ((ids.min()!!..ids.max()!!) - ids).first()
     }
 
     private fun seatId(boarding: String): Int {
@@ -29,6 +28,27 @@ object Day05 {
                 },
                 commands.substring(1)
             )
+        }
+    }
+
+
+    // from chriswk - with his elegant binaryParser
+    // https://github.com/chriswk/adventofcode/blob/main/src/main/kotlin/com/chriswk/aoc/advent2020/Day5.kt
+     fun seatIdChriswk(placement: String): Int {
+        return binaryParser(placement, setOf('F', 'L'), setOf('B', 'R'))
+    }
+
+    fun binaryParser(input: String, zero: Char, one: Char): Int {
+        return binaryParser(input, setOf(zero), setOf(one))
+    }
+
+    fun binaryParser(input: String, zeros: Set<Char>, ones: Set<Char>): Int {
+        return input.fold(0) { a, c ->
+            when(c) {
+                in ones -> 2 * a + 1
+                in zeros -> 2 * a
+                else -> throw IllegalArgumentException("Unexpected")
+            }
         }
     }
 }
