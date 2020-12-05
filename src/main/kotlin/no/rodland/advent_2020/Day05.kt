@@ -7,16 +7,19 @@ object Day05 {
 
     fun partTwo(list: List<String>): Int {
         val ids = list.map { seatIdChriswk(it) }.toSet()
-        return ((ids.min()!!..ids.max()!!) - ids).first()
+        val min = ids.minOrNull()!!
+        val max = ids.maxOrNull()!!
+        return ((min..max) - ids).first()
     }
 
+    @Suppress("unused")
     private fun seatId(boarding: String): Int {
         val row = find(0..127, boarding.substring(0..6)).first
         val col = find(0..7, boarding.substring(7)).first
         return row * 8 + col
     }
 
-    private tailrec fun find(intRange: IntRange, commands: String): IntRange {
+    private fun find(intRange: IntRange, commands: String): IntRange {
         return if (commands.isEmpty()) {
             intRange
         } else {
@@ -34,17 +37,13 @@ object Day05 {
 
     // from chriswk - with his elegant binaryParser
     // https://github.com/chriswk/adventofcode/blob/main/src/main/kotlin/com/chriswk/aoc/advent2020/Day5.kt
-     fun seatIdChriswk(placement: String): Int {
+    private fun seatIdChriswk(placement: String): Int {
         return binaryParser(placement, setOf('F', 'L'), setOf('B', 'R'))
     }
 
-    fun binaryParser(input: String, zero: Char, one: Char): Int {
-        return binaryParser(input, setOf(zero), setOf(one))
-    }
-
-    fun binaryParser(input: String, zeros: Set<Char>, ones: Set<Char>): Int {
+    private fun binaryParser(input: String, zeros: Set<Char>, ones: Set<Char>): Int {
         return input.fold(0) { a, c ->
-            when(c) {
+            when (c) {
                 in ones -> 2 * a + 1
                 in zeros -> 2 * a
                 else -> throw IllegalArgumentException("Unexpected")
