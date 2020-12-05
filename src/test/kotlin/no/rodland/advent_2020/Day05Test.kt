@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
 
+@Suppress("ClassName")
 @DisableSlow
 internal class Day05Test {
     val data05 = "2020/input_05.txt".readFile()
-    val test05 = listOf("1", "2")
 
     @Nested
     inner class `Part 1` {
