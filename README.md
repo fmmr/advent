@@ -4,6 +4,10 @@ fmmr solutions for Advent of code: https://adventofcode.com/2020
 
 ## implementationas
 
+[2015](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2015)
+
+2016
+
 [2017](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2017)
 
 [2018](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2018)
@@ -13,6 +17,10 @@ fmmr solutions for Advent of code: https://adventofcode.com/2020
 [2020](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2020)
 
 ## tests
+
+[2015](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2015)
+
+2016
 
 [2017](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2017)
 
