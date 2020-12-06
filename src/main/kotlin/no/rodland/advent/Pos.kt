@@ -65,10 +65,10 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun getNext(c: Char): Pos {
         return when (c) {
-            'N' -> above()
-            'S' -> below()
-            'W' -> left()
-            'E' -> right()
+            'N', '^' -> above()
+            'S', 'v' -> below()
+            'W', '<' -> left()
+            'E', '>' -> right()
             else -> error("Unable to get pos from direction: $c")
         }
     }
