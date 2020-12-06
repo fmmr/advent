@@ -21,6 +21,11 @@ object Day05 {
     }
 
     @Suppress("unused")
+    private fun seatIdSimpleMap(boarding: String): Int {
+        return boarding.map { if (it in 'F'..'L') "0" else "1" }.joinToString("").toInt(2)
+    }
+
+    @Suppress("unused")
     private fun seatId(boarding: String): Int {
         val row = find(0..127, boarding.substring(0..6)).first
         val col = find(0..7, boarding.substring(7)).first
