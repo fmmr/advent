@@ -16,8 +16,8 @@ object Day07 {
         return calc(node, curcuit)
     }
 
-    private fun calc(g: OpParam, curcuit: MutableMap<String, OpParam>): Int {
-        val intParams = g.params.map {
+    private fun calc(current: OpParam, curcuit: MutableMap<String, OpParam>): Int {
+        val intParams = current.params.map {
             if (it.toIntOrNull() != null) {
                 it.toIntOrNull()!!
             } else {
@@ -26,7 +26,7 @@ object Day07 {
                 value
             }
         }
-        val answer = g.operation.exec(intParams)
+        val answer = current.operation.exec(intParams)
         return if (answer < 0) answer.toUShort().toInt() else answer
     }
 
