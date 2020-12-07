@@ -44,6 +44,16 @@ object Day07 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return 2
+        val bags = list.map { fromTo(it) }.toMap()
+        val start = bags[Bag("shiny gold")]!!
+        return countBags(bags, start) - 1
+    }
+
+    private fun countBags(bags: Map<Bag, List<Bag>>, start: List<Bag>): Int {
+        return if (start.isEmpty()) {
+            1
+        } else {
+            1 + start.map { countBags(bags, bags[it]!!) }.sum()
+        }
     }
 }

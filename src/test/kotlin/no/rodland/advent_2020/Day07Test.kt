@@ -42,7 +42,7 @@ internal class Day07Test {
         @Test
         fun `07,2,live,init`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 10219
             }
         }
     }
@@ -76,21 +76,21 @@ internal class Day07Test {
         @Test
         fun `07,2,test`() {
             report {
-                Day07.partTwo(test07_2) to 2
+                Day07.partTwo(test07_2) to 126
             }
         }
 
         @Test
         fun `07,2,live,1`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 10219
             }
         }
 
         @Test
         fun `07,2,live,2`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 10219
             }
         }
     }
