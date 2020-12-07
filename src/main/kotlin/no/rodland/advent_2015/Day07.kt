@@ -9,8 +9,11 @@ object Day07 {
         return calc(node, curcuit)
     }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    fun partTwo(input: List<String>): Int {
+        val curcuit = input.map { it.split(" -> ") }.map { it[1] to OpParam.fromString(it[0]) }.toMap().toMutableMap()
+        curcuit["b"] = OpParam(Operation.NUM, listOf("16076"))
+        val node = curcuit["a"]!!
+        return calc(node, curcuit)
     }
 
     private fun calc(g: OpParam, curcuit: MutableMap<String, OpParam>): Int {
