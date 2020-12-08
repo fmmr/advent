@@ -33,7 +33,7 @@ internal class Day08Test {
         @Test
         fun `08,2,live,init`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 501
             }
         }
     }
@@ -67,21 +67,21 @@ internal class Day08Test {
         @Test
         fun `08,2,test`() {
             report {
-                Day08.partTwo(test08) to 2
+                Day08.partTwo(test08) to 8
             }
         }
 
         @Test
         fun `08,2,live,1`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 501
             }
         }
 
         @Test
         fun `08,2,live,2`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 501
             }
         }
     }
