@@ -36,7 +36,6 @@ object Day08 {
     // -2: finished
     private fun run(instructions: List<Instruction>): AccumulatorPointer {
         val visited = mutableSetOf<Int>()
-        // -3 is to ensure we get the correct exit code
         return generateSequence((0 to 0)) { (accum, pointer) ->
             if (pointer >= 0) {
                 val instruction = instructions[pointer]
@@ -49,9 +48,9 @@ object Day08 {
                     newacc to newPointer
                 }
             } else { // mark as finished - check this on the outside in takeWhile allow returnvalue to be returned as last element
-                accum to -3
+                null
             }
-        }.takeWhile { it.second > -3 }.last()
+        }.last()
     }
 
 
