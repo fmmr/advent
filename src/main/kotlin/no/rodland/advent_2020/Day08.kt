@@ -8,30 +8,28 @@ object Day08 {
         return run(instructions).first
     }
 
-    private fun run(instructions: List<Instruction>): AccumulatorPointer {
-        val visited = mutableSetOf<Int>()
-        // -3 is to ensure we get the correct exit code
-        return run(instructions, visited).takeWhile { it.second > -3 }.last()
-    }
-
     // will generate a sequence with the which should be stopped when pointer is == -3
     // the next to last element will contain an exit code:
     // -1: detected endless loop
     // -2: finished
-    private fun run(instructions: List<Instruction>, visited: MutableSet<Int>) = generateSequence((0 to 0)) { (accum, pointer) ->
-        if (pointer >= 0) {
-            val instruction = instructions[pointer]
-            val (newacc, newPointer) = instruction.op.exec(accum, pointer, instruction.arg)
-            if (newPointer == instructions.size) { // program finished
-                newacc to -2
-            } else if (!visited.add(newPointer)) { // program finished
-                accum to -1
-            } else {
-                newacc to newPointer
+    private fun run(instructions: List<Instruction>): AccumulatorPointer {
+        val visited = mutableSetOf<Int>()
+        // -3 is to ensure we get the correct exit code
+        return generateSequence((0 to 0)) { (accum, pointer) ->
+            if (pointer >= 0) {
+                val instruction = instructions[pointer]
+                val (newacc, newPointer) = instruction.op.exec(accum, pointer, instruction.arg)
+                if (newPointer == instructions.size) { // program finished ok
+                    newacc to -2
+                } else if (!visited.add(newPointer)) { // endless loop detected
+                    accum to -1
+                } else { // continue to next instruction
+                    newacc to newPointer
+                }
+            } else { // mark as finished - check this on the outside in takeWhile allow returnvalue to be returned as last element
+                accum to -3
             }
-        } else {
-            accum to -3
-        }
+        }.takeWhile { it.second > -3 }.last()
     }
 
     fun partTwo(list: List<String>): Int {
@@ -40,13 +38,15 @@ object Day08 {
         val flipIndices = instructions
             .mapIndexed { index: Int, instruction: Instruction -> index to instruction }
             .filter { it.second.op in flips }
-            .filterNot { it.second.op == Op.nop && it.second.arg == 0 }  // no need to have a jmp 0 (endless for sure)
+            .filterNot { it.second.op == Op.nop && it.second.arg == 0 }  // no need to have a jmp 0 (endless for sure if executed)
             .map { it.first }
-        println("num instructions: ${instructions.size} - have ${flipIndices.size} indices to switch")
+        // println("num instructions: ${instructions.size} - have ${flipIndices.size} indices to switch")
         flipIndices.forEach { indexToFlip ->
             instructions.flip(indexToFlip)
             val result = run(instructions)
-            if (result.second == -2) {
+            if (result.second == -1) {
+                // println("endless loop after switching index $indexToFlip")
+            } else if (result.second == -2) {
                 return result.first
             }
             instructions.flip(indexToFlip)
@@ -55,8 +55,7 @@ object Day08 {
     }
 
     private fun MutableList<Instruction>.flip(indexToFlip: Int) {
-        val newInstruction = Instruction(this[indexToFlip].op.flip(), this[indexToFlip].arg)
-        this[indexToFlip] = newInstruction
+        this[indexToFlip] = Instruction(this[indexToFlip].op.flip(), this[indexToFlip].arg)
     }
 
     data class Instruction(val op: Op, val arg: Int)
