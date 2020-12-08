@@ -8,6 +8,28 @@ object Day08 {
         return run(instructions).first
     }
 
+    fun partTwo(list: List<String>): Int {
+        val flips = setOf(Op.jmp, Op.nop)  // only need to switch these
+        val instructions = list.map { it.split(" ") }.map { Instruction(Op.valueOf(it[0]), it[1].toInt()) }.toMutableList()
+        val flipIndices = instructions
+            .mapIndexed { index: Int, instruction: Instruction -> index to instruction }
+            .filter { it.second.op in flips }
+            .filterNot { it.second.op == Op.nop && it.second.arg == 0 }  // no need to have a jmp 0 (endless for sure if executed)
+            .map { it.first }
+        // println("num instructions: ${instructions.size} - have ${flipIndices.size} indices to switch")
+        flipIndices.forEach { indexToFlip ->
+            instructions.flip(indexToFlip)
+            val result = run(instructions)
+            if (result.second == -1) {
+                // println("endless loop after switching index $indexToFlip")
+            } else if (result.second == -2) {
+                return result.first
+            }
+            instructions.flip(indexToFlip)
+        }
+        error("No result found")
+    }
+
     // will generate a sequence with the which should be stopped when pointer is == -3
     // the next to last element will contain an exit code:
     // -1: detected endless loop
@@ -32,36 +54,15 @@ object Day08 {
         }.takeWhile { it.second > -3 }.last()
     }
 
-    fun partTwo(list: List<String>): Int {
-        val flips = setOf(Op.jmp, Op.nop)  // only need to switch these
-        val instructions = list.map { it.split(" ") }.map { Instruction(Op.valueOf(it[0]), it[1].toInt()) }.toMutableList()
-        val flipIndices = instructions
-            .mapIndexed { index: Int, instruction: Instruction -> index to instruction }
-            .filter { it.second.op in flips }
-            .filterNot { it.second.op == Op.nop && it.second.arg == 0 }  // no need to have a jmp 0 (endless for sure if executed)
-            .map { it.first }
-        // println("num instructions: ${instructions.size} - have ${flipIndices.size} indices to switch")
-        flipIndices.forEach { indexToFlip ->
-            instructions.flip(indexToFlip)
-            val result = run(instructions)
-            if (result.second == -1) {
-                // println("endless loop after switching index $indexToFlip")
-            } else if (result.second == -2) {
-                return result.first
-            }
-            instructions.flip(indexToFlip)
-        }
-        error("No result found")
-    }
 
     private fun MutableList<Instruction>.flip(indexToFlip: Int) {
         this[indexToFlip] = Instruction(this[indexToFlip].op.flip(), this[indexToFlip].arg)
     }
 
-    data class Instruction(val op: Op, val arg: Int)
+    private data class Instruction(val op: Op, val arg: Int)
 
     @Suppress("EnumEntryName")
-    enum class Op {
+    private enum class Op {
         acc,
         jmp,
         nop;
