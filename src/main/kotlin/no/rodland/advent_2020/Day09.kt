@@ -12,9 +12,7 @@ object Day09 {
     fun partTwo(list: List<Long>, number: Long, idx: Int): Long {
         val range = (2 until idx)
             .asSequence()
-            .map {
-                list.windowed(it, 1).firstOrNull { list -> list.sum() == number }
-            }
+            .map { list.windowed(it, 1).firstOrNull { list -> list.sum() == number } }
             .first { it != null }
         return range!!.maxOrNull()!! + range.minOrNull()!!
     }
