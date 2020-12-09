@@ -9,9 +9,9 @@ object Day09 {
     fun partTwo(list: List<Long>, number: Long, idx: Int): Long {
         val range = (2 until idx)
             .asSequence()
-            .map { list.windowed(it, 1).firstOrNull { list -> list.sum() == number } }
-            .first { it != null }
-        return range!!.maxOrNull()!! + range.minOrNull()!!
+            .mapNotNull { list.windowed(it, 1).firstOrNull { list -> list.sum() == number } }
+            .first()
+        return range.maxOrNull()!! + range.minOrNull()!!
     }
 
     private fun List<Long>.isValid(idx: Int, preAmble: Int): Boolean = get(idx).isComposable(subList(idx - preAmble, idx))
