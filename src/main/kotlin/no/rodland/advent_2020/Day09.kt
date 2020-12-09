@@ -2,10 +2,7 @@ package no.rodland.advent_2020
 
 object Day09 {
     fun partOne(list: List<Long>, preAmble: Int): Long {
-        val idx = (preAmble until list.size)
-            .first { idx ->
-                !list.isValid(idx, preAmble)
-            }
+        val idx = (preAmble until list.size).first { idx -> !list.isValid(idx, preAmble) }
         return list[idx]
     }
 
