@@ -13,7 +13,7 @@ object Day09 {
         val range = (2 until idx)
             .asSequence()
             .map {
-                list.windowed(it, 1, true).firstOrNull { list -> list.sum() == number }
+                list.windowed(it, 1).firstOrNull { list -> list.sum() == number }
             }
             .first { it != null }
         return range!!.maxOrNull()!! + range.minOrNull()!!
