@@ -19,7 +19,7 @@
     </properties>
     <repositories>
         <repository>
-            <id>mvnrepository</id>
+            <id>central</id>
             <url>http://central.maven.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -29,7 +29,7 @@
             </releases>
         </repository>
         <repository>
-            <id>mvnrepository</id>
+            <id>repo1</id>
             <url>https://repo1.maven.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
