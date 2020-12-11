@@ -21,18 +21,18 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun neighboorCellsReadingOrder(): List<Pos> {
         return listOf(
-                Pos(x, y - 1),
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1)
+            Pos(x, y - 1),
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1)
         )
     }
 
     fun positiveNeighboor(limitX: Int = Int.MAX_VALUE, limitY: Int = Int.MAX_VALUE): List<Pos> {
         return neighboorCellsReadingOrder()
-                .filter { it.x >= 0 && it.y >= 0 }
-                .filter { it.x < limitX }
-                .filter { it.y < limitY }
+            .filter { it.x >= 0 && it.y >= 0 }
+            .filter { it.x < limitX }
+            .filter { it.y < limitY }
 
     }
 
@@ -42,14 +42,14 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun neighboorCellsAllEight(): List<Pos> {
         return listOf(
-                Pos(x, y - 1),
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1),
-                Pos(x - 1, y - 1),
-                Pos(x + 1, y - 1),
-                Pos(x - 1, y + 1),
-                Pos(x + 1, y + 1)
+            Pos(x, y - 1),
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1),
+            Pos(x - 1, y - 1),
+            Pos(x + 1, y - 1),
+            Pos(x - 1, y + 1),
+            Pos(x + 1, y + 1)
         )
     }
 
@@ -57,9 +57,9 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun getDownNeighbors(): List<Pos> {
         return listOf(
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1)
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1)
         )
     }
 
@@ -82,17 +82,24 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
     }
 
     fun isPositive(): Boolean = x >= 0 && y >= 0
+
+    fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
+
     fun above(): Pos = Pos(x, y - 1)
     fun below(): Pos = Pos(x, y + 1)
     fun left(): Pos = Pos(x - 1, y)
     fun right(): Pos = Pos(x + 1, y)
+    fun nw(): Pos = Pos(x - 1, y - 1)
+    fun ne(): Pos = Pos(x + 1, y - 1)
+    fun sw(): Pos = Pos(x - 1, y + 1)
+    fun se(): Pos = Pos(x + 1, y + 1)
 
     companion object {
         fun getMinMax(coordinates: Collection<Pos>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-            val xmin = coordinates.map { it.x }.min()!!
-            val xmax = coordinates.map { it.x }.max()!!
-            val ymin = coordinates.map { it.y }.min()!!
-            val ymax = coordinates.map { it.y }.max()!!
+            val xmin = coordinates.map { it.x }.minOrNull()!!
+            val xmax = coordinates.map { it.x }.maxOrNull()!!
+            val ymin = coordinates.map { it.y }.minOrNull()!!
+            val ymax = coordinates.map { it.y }.maxOrNull()!!
             return (xmin to xmax) to (ymin to ymax)
         }
     }
