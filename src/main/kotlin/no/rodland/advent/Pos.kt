@@ -74,10 +74,10 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
         }
     }
 
-    fun next(s: String, howMuch: Int = 1, northDown: Boolean = true): Pos {
+    fun next(s: String, howMuch: Int = 1): Pos {
         return when (s) {
-            "N", "^" -> above(howMuch, northDown)
-            "S", "v" -> below(howMuch, northDown)
+            "N", "^" -> above(howMuch)
+            "S", "v" -> below(howMuch)
             "W", "<" -> left(howMuch)
             "E", ">" -> right(howMuch)
             "NE" -> ne()
@@ -100,8 +100,8 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
 
-    fun above(howMuch: Int = 1, northDown: Boolean = true): Pos = Pos(x, if (northDown) y - howMuch else y + howMuch)
-    fun below(howMuch: Int = 1, northDown: Boolean = true): Pos = Pos(x, if (northDown) y + howMuch else y - howMuch)
+    fun above(howMuch: Int = 1): Pos = Pos(x, y - howMuch)
+    fun below(howMuch: Int = 1): Pos = Pos(x, y + howMuch)
     fun left(howMuch: Int = 1): Pos = Pos(x - howMuch, y)
     fun right(howMuch: Int = 1): Pos = Pos(x + howMuch, y)
     fun nw(): Pos = Pos(x - 1, y - 1)
@@ -118,9 +118,9 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
     fun rotateRight(times: Int): Pos {
         return when (times % 4) {
             0 -> this
-            1 -> Pos(y, -x)
+            1 -> Pos(-y, x)
             2 -> Pos(-x, -y)
-            3 -> Pos(-y, x)
+            3 -> Pos(y, -x)
             else -> error("unable to rotate $this $times times")
         }
     }
