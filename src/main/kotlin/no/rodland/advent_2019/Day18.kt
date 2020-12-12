@@ -40,7 +40,7 @@ object Day18 {
         if (distance < last) {
             distances[current] = distance
             Direction.values().forEach { dir ->
-                buildDistance(current.getNext(dir.c), map, distances, distance + 1, doorsPassed, keysPassed)
+                buildDistance(current.next(dir.c), map, distances, distance + 1, doorsPassed, keysPassed)
             }
         }
     }

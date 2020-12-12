@@ -14,6 +14,6 @@ object Day03 {
     }
 
     private fun houses(instructions: String): List<Pos> {
-        return instructions.runningFold(Pos(0, 0)) { acc, c -> acc.getNext(c) }
+        return instructions.runningFold(Pos(0, 0)) { acc, c -> acc.next(c) }
     }
 }

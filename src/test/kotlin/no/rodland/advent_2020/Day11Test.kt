@@ -1,6 +1,8 @@
 package no.rodland.advent_2020
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Pos
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -32,9 +34,10 @@ internal class Day11Test {
         }
 
         @Test
+        @Slow(700)
         fun `11,2,live,init`() {
             report {
-                Day11.partTwo(data11) to 2
+                Day11.partTwo(data11) to 2111
             }
         }
     }
@@ -68,21 +71,57 @@ internal class Day11Test {
         @Test
         fun `11,2,test`() {
             report {
-                Day11.partTwo(test11) to 2
+                Day11.partTwo(test11) to 26
             }
         }
 
         @Test
+        fun `11,2,test,neighbours_1`() {
+            report {
+                val test = listOf(
+                    ".......#.",
+                    "...#.....",
+                    ".#.......",
+                    ".........",
+                    "..#L....#",
+                    "....#....",
+                    ".........",
+                    "#........",
+                    "...#.....",
+                )
+                Day11.findNeighboursPart2(Pos(3, 4), test.map { it.toCharArray() }.toTypedArray()).count() to 8
+            }
+        }
+
+        @Test
+        fun `11,2,test,neighbours_2`() {
+            report {
+                val test = listOf(
+                    ".##.##.",
+                    "#.#.#.#",
+                    "##...##",
+                    "...L...",
+                    "##...##",
+                    "#.#.#.#",
+                    ".##.##.",
+                )
+                Day11.findNeighboursPart2(Pos(3, 3), test.map { it.toCharArray() }.toTypedArray()).count() to 0
+            }
+        }
+
+        @Test
+        @Slow(500)
         fun `11,2,live,1`() {
             report {
-                Day11.partTwo(data11) to 2
+                Day11.partTwo(data11) to 2111
             }
         }
 
         @Test
+        @Slow(500)
         fun `11,2,live,2`() {
             report {
-                Day11.partTwo(data11) to 2
+                Day11.partTwo(data11) to 2111
             }
         }
     }

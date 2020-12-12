@@ -22,7 +22,7 @@ object Day20 {
                 '$' -> println("end")// do nothing
                 else -> {
                     val nextDistance = grid.getValue(current) + 1
-                    current = current.getNext(it)
+                    current = current.next(it)
                     grid[current] = minOf(grid.getOrDefault(current, Int.MAX_VALUE), nextDistance)
                 }
             }
@@ -45,10 +45,10 @@ object Day20 {
         var taken = 0
         val oki = re.takeWhile { it.isDirection() }.fold(pos) { p, c ->
             taken++
-            val tmpP = p.getNext(c)
+            val tmpP = p.next(c)
             tmpP.getSidesAfterMoving(c).forEach { visited[it] = '#' }
             visited[tmpP] = c.getDoor()
-            val next = tmpP.getNext(c)
+            val next = tmpP.next(c)
             visited[next] = '.'
             next
         }

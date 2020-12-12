@@ -46,7 +46,7 @@ object Day15 {
         if (distance < last) {
             distances[current] = distance
             Direction.values().forEach { dir ->
-                buildDistance(current.getNext(dir.c), map, distances, distance + 1)
+                buildDistance(current.next(dir.c), map, distances, distance + 1)
             }
         }
     }
@@ -69,7 +69,7 @@ object Day15 {
 
     suspend fun go(current: Pos, map: MutableMap<Pos, Long>, input: Channel<Long>, output: Channel<Long>) {
         Direction.values().forEach { dir ->
-            val next = current.getNext(dir.c)
+            val next = current.next(dir.c)
             if (!map.containsKey(next)) {
                 val block = move(input, dir, output)
                 map[next] = block
