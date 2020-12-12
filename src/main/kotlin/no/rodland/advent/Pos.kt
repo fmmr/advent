@@ -1,5 +1,6 @@
 package no.rodland.advent
 
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.pow
 
@@ -73,12 +74,12 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
         }
     }
 
-    fun next(s: String): Pos {
+    fun next(s: String, howMuch: Int = 1, northDown: Boolean = true): Pos {
         return when (s) {
-            "N", "^" -> above()
-            "S", "v" -> below()
-            "W", "<" -> left()
-            "E", ">" -> right()
+            "N", "^" -> above(howMuch, northDown)
+            "S", "v" -> below(howMuch, northDown)
+            "W", "<" -> left(howMuch)
+            "E", ">" -> right(howMuch)
             "NE" -> ne()
             "SE" -> se()
             "NW" -> nw()
@@ -99,14 +100,30 @@ data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
 
     fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
 
-    fun above(): Pos = Pos(x, y - 1)
-    fun below(): Pos = Pos(x, y + 1)
-    fun left(): Pos = Pos(x - 1, y)
-    fun right(): Pos = Pos(x + 1, y)
+    fun above(howMuch: Int = 1, northDown: Boolean = true): Pos = Pos(x, if (northDown) y - howMuch else y + howMuch)
+    fun below(howMuch: Int = 1, northDown: Boolean = true): Pos = Pos(x, if (northDown) y + howMuch else y - howMuch)
+    fun left(howMuch: Int = 1): Pos = Pos(x - howMuch, y)
+    fun right(howMuch: Int = 1): Pos = Pos(x + howMuch, y)
     fun nw(): Pos = Pos(x - 1, y - 1)
     fun ne(): Pos = Pos(x + 1, y - 1)
     fun sw(): Pos = Pos(x - 1, y + 1)
     fun se(): Pos = Pos(x + 1, y + 1)
+
+    fun manhattan(): Int = abs(x) + abs(y)
+
+    operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
+    operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
+
+
+    fun rotateRight(times: Int): Pos {
+        return when (times % 4) {
+            0 -> this
+            1 -> Pos(y, -x)
+            2 -> Pos(-x, -y)
+            3 -> Pos(-y, x)
+            else -> error("unable to rotate $this $times times")
+        }
+    }
 
     companion object {
         fun getMinMax(coordinates: Collection<Pos>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
