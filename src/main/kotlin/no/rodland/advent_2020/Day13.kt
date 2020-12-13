@@ -26,14 +26,17 @@ object Day13 {
             .filterNot { it.second == "x" }
             .map { it.second.toInt() to it.first }
             .map { it.first.toLong() to it.second.toLong() }
-        var currentJump = bussDiffs[0].first
+        var currentJump = 1L
         var num = 0L
-        bussDiffs.drop(1).forEach { (bus, diff) ->
+        var iterations = 0
+        bussDiffs.forEach { (bus, diff) ->
             while ((num + diff) % bus != 0L) {
+                iterations++
                 num += currentJump
             }
-            currentJump *= bus // New Ratio!
+            currentJump *= bus
         }
+        println("Found it iterating $iterations times")
         return num
     }
 
