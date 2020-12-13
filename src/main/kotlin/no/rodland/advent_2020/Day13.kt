@@ -18,7 +18,7 @@ object Day13 {
         return (minuteBus.second!! * (minuteBus.first - earliestDeparture))
     }
 
-    // thanx to https://todd.ginsberg.com/post/advent-of-code/2020/day13/
+    // thanks to https://todd.ginsberg.com/post/advent-of-code/2020/day13/
     fun partTwo(list: List<String>): Long {
         val bussDiffs = list[1]
             .split(",")
@@ -26,7 +26,6 @@ object Day13 {
             .filterNot { it.second == "x" }
             .map { it.second.toInt() to it.first }
             .map { it.first.toLong() to it.second.toLong() }
-        println(bussDiffs)
         var currentJump = bussDiffs[0].first
         var num = 0L
         bussDiffs.drop(1).forEach { (bus, diff) ->
