@@ -19,6 +19,7 @@ object Day13 {
     }
 
     fun partTwo(list: List<String>): Int {
+        val busses = list[1].split(",").mapIndexed { index: Int, bus: String -> index to bus }.filterNot { it.second == "x" }.map { it.second.toInt() to it.first }
         return 2
     }
 
