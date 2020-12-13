@@ -23,7 +23,7 @@ internal class Day13Test {
         @Test
         fun `13,2,live,init`() {
             report {
-                Day13.partTwo(data13) to 2
+                Day13.partTwo(data13) to 526090562196173
             }
         }
     }
@@ -55,23 +55,58 @@ internal class Day13Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `13,2,test`() {
+        fun `13,2,test,1`() {
             report {
-                Day13.partTwo(test13) to 2
+                Day13.partTwo(test13) to 1068781
+            }
+        }
+
+        @Test
+        fun `13,2,test,2`() {
+            report {
+                Day13.partTwo(listOf("", "17,x,13,19")) to 3417
+            }
+        }
+
+        @Test
+        fun `13,2,test,3`() {
+            report {
+                Day13.partTwo(listOf("", "67,7,59,61")) to 754018
+            }
+        }
+
+        @Test
+        fun `13,2,test,4`() {
+            report {
+                Day13.partTwo(listOf("", "67,x,7,59,61")) to 779210
+            }
+        }
+
+        @Test
+        fun `13,2,test,5`() {
+            report {
+                Day13.partTwo(listOf("", "67,7,x,59,61")) to 1261476
+            }
+        }
+
+        @Test
+        fun `13,2,test,6`() {
+            report {
+                Day13.partTwo(listOf("", "1789,37,47,1889")) to 1202161486
             }
         }
 
         @Test
         fun `13,2,live,1`() {
             report {
-                Day13.partTwo(data13) to 2
+                Day13.partTwo(data13) to 526090562196173
             }
         }
 
         @Test
         fun `13,2,live,2`() {
             report {
-                Day13.partTwo(data13) to 2
+                Day13.partTwo(data13) to 526090562196173
             }
         }
     }

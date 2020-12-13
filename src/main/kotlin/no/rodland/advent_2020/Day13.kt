@@ -18,9 +18,26 @@ object Day13 {
         return (minuteBus.second!! * (minuteBus.first - earliestDeparture))
     }
 
-    fun partTwo(list: List<String>): Int {
-        val busses = list[1].split(",").mapIndexed { index: Int, bus: String -> index to bus }.filterNot { it.second == "x" }.map { it.second.toInt() to it.first }
-        return 2
+    // thanx to https://todd.ginsberg.com/post/advent-of-code/2020/day13/
+    fun partTwo(list: List<String>): Long {
+        val bussDiffs = list[1]
+            .split(",")
+            .mapIndexed { index: Int, bus: String -> index to bus }
+            .filterNot { it.second == "x" }
+            .map { it.second.toInt() to it.first }
+            .map { it.first.toLong() to it.second.toLong() }
+        println(bussDiffs)
+        var currentJump = bussDiffs[0].first
+        var num = 0L
+        bussDiffs.drop(1).forEach { (bus, diff) ->
+            while ((num + diff) % bus != 0L) {
+                num += currentJump
+            }
+            currentJump *= bus // New Ratio!
+        }
+        return num
     }
 
+
+    private fun isValid(num: Long, bus: Long, diff: Long) = num % bus == if (diff == 0L) 0 else (bus - diff)
 }

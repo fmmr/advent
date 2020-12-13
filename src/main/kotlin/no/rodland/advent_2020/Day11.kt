@@ -39,9 +39,9 @@ object Day11 {
     private fun findSeatsTaken(grid: Maze, iterationFunction: (Maze) -> Maze): Int {
         val lastMaze = generateSequence(grid, iterationFunction)
             .zipWithNext()
-            .takeWhile { p -> !p.first.contentDeepEquals(p.second) }
-            .last()
-        return lastMaze.second.flatMap { it.map { c -> c.isTaken() } }.count { it }
+            .first { p -> !p.first.contentDeepEquals(p.second) }
+            .second
+        return lastMaze.flatMap { it.map { c -> c.isTaken() } }.count { it }
     }
 
     private fun iteration(maze: Maze, width: Int, height: Int, tolerant: Int, findNeighbours: (Pos, Maze) -> List<Pos>): Maze {
