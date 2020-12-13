@@ -40,6 +40,5 @@ object Day13 {
         return num
     }
 
-
     private fun isValid(num: Long, bus: Long, diff: Long) = num % bus == if (diff == 0L) 0 else (bus - diff)
 }
