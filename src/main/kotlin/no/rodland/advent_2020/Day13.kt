@@ -1,5 +1,7 @@
 package no.rodland.advent_2020
 
+import takeWhileInclusive
+
 object Day13 {
     fun partOne(list: List<String>): Int {
         val earliestDeparture = list[0].toInt()
@@ -18,12 +20,4 @@ object Day13 {
         return 2
     }
 
-    fun <T> Sequence<T>.takeWhileInclusive(pred: (T) -> Boolean): Sequence<T> {
-        var shouldContinue = true
-        return takeWhile {
-            val result = shouldContinue
-            shouldContinue = pred(it)
-            result
-        }
-    }
 }
