@@ -3,29 +3,19 @@ package no.rodland.advent_2020
 import kotlin.math.pow
 
 object Day14 {
-    private const val noMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-
-//    mask = X01000100X10X101X110100011X100X11X01
-//    mem[39436] = 148937739
-
-
     fun partOne(list: List<String>): Long {
-        val commands = list.map { it.split(" = ") }.map { it.first() to it.last() }
-        val memory = LongArray(commands.getMaxMemory().toInt() + 1) { 0 }
-        commands.fold(noMask) { mask, command ->
-            if (command.first == "mask") {
-                command.second
-            } else {
-                val cmd = MemCommand(command)
-                memory[cmd.address.toInt()] = cmd.applyMask(mask)
-                mask
-            }
-        }
-
-        return memory.sum()
+        val adressesGetter = { cmd: MemCommand, _: String -> listOf(cmd.address) }
+        val valueGetter = { cmd: MemCommand, mask: String -> cmd.valueMask(mask) }
+        return runProgram(list, adressesGetter, valueGetter)
     }
 
     fun partTwo(list: List<String>): Long {
+        val adressesGetter = { cmd: MemCommand, mask: String -> cmd.getAdresses(mask) }
+        val valueGetter = { cmd: MemCommand, _: String -> cmd.value }
+        return runProgram(list, adressesGetter, valueGetter)
+    }
+
+    private fun runProgram(list: List<String>, adressesGetter: (MemCommand, String) -> List<Long>, valueGetter: (MemCommand, String) -> Long): Long {
         val commands = list.map { it.split(" = ") }.map { it.first() to it.last() }
         val memory = mutableMapOf<Long, Long>()
         commands.fold("") { mask, command ->
@@ -33,7 +23,8 @@ object Day14 {
                 command.second
             } else {
                 val cmd = MemCommand(command)
-                MemCommand(command).getAdresses(mask).forEach { memory[it] = cmd.value }
+                val addresses = adressesGetter(cmd, mask)
+                addresses.forEach { memory[it] = valueGetter(cmd, mask) }
                 mask
             }
         }
@@ -44,7 +35,7 @@ object Day14 {
     class MemCommand(val address: Long, val value: Long) {
 
         fun getAdresses(mask: String): List<Long> {
-            val maskWithX = maskWithX(mask)
+            val maskWithX = addressMask(mask)
             val countX = maskWithX.count { it == 'X' }  // we should have 2^countX addresses
             val numberAdresses = (2.0).pow(countX).toInt()
             return (0 until numberAdresses).map { permutation ->
@@ -60,21 +51,14 @@ object Day14 {
             }.map { it.toLong(2) }
         }
 
-        fun applyMask(mask: String): Long {
-            val valStr = value.asBits()
-            return valStr.zip(mask).map {
-                when (it.second) {
-                    'X' -> it.first
-                    else -> it.second
-                }
-            }.joinToString("").toLong(2)
-        }
+        fun valueMask(mask: String): Long = value.mask(mask, 'X').toLong(2)
+        private fun addressMask(mask: String): String = address.mask(mask, '0')
 
-        private fun maskWithX(mask: String): String {
-            val valStr = address.asBits()
+        private fun Long.mask(mask: String, valueChar: Char): String {
+            val valStr = asBits()
             return valStr.zip(mask) { zipValue, zipMask ->
                 when (zipMask) {
-                    '0' -> zipValue
+                    valueChar -> zipValue
                     else -> zipMask
                 }
             }.joinToString("")
