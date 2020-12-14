@@ -4,21 +4,17 @@ import kotlin.math.pow
 
 object Day14 {
     fun partOne(list: List<String>): Long {
-        val adressesGetter = { cmd: MemCommand, _: String -> listOf(cmd.address) }
-        val valueGetter = { cmd: MemCommand, mask: String -> cmd.valueMask(mask) }
-        return runProgram(list, adressesGetter, valueGetter)
+        return runProgram(list, { cmd: MemCommand, _: String -> listOf(cmd.address) }, { cmd: MemCommand, mask: String -> cmd.valueMask(mask) })
     }
 
     fun partTwo(list: List<String>): Long {
-        val adressesGetter = { cmd: MemCommand, mask: String -> cmd.getAdresses(mask) }
-        val valueGetter = { cmd: MemCommand, _: String -> cmd.value }
-        return runProgram(list, adressesGetter, valueGetter)
+        return runProgram(list, { cmd: MemCommand, mask: String -> cmd.getAdresses(mask) }, { cmd: MemCommand, _: String -> cmd.value })
     }
 
     private fun runProgram(list: List<String>, adressesGetter: (MemCommand, String) -> List<Long>, valueGetter: (MemCommand, String) -> Long): Long {
         val commands = list.map { it.split(" = ") }.map { it.first() to it.last() }
         val memory = mutableMapOf<Long, Long>()
-        commands.fold("") { mask, command ->
+        commands.fold("") { mask, command ->  // ONLY works if first instruction is a mask
             if (command.first == "mask") {
                 command.second
             } else {
