@@ -34,13 +34,13 @@ object Day14 {
             val maskWithX = addressMask(mask)
             val countX = maskWithX.count { it == 'X' }  // we should have 2^countX addresses
             val numberAdresses = (2.0).pow(countX).toInt()
-            return (0 until numberAdresses)
-                .map { it.toString(2).padStart(countX, '0') }
+            val permutations = (0 until numberAdresses).map { it.toString(2).padStart(countX, '0') }
+            val adresses = permutations
                 .map { permutation ->
                     var idx = 0
                     maskWithX.map { if (it == 'X') permutation[idx++] else it }  // replace nth x in mask with nth bit in permutation
                 }
-                .map { it.joinToString("").toLong(2) }
+            return adresses.map { it.joinToString("").toLong(2) }
         }
 
         fun valueMask(mask: String): Long = value.mask(mask, 'X').toLong(2)
