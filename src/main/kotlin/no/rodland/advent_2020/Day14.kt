@@ -31,42 +31,30 @@ object Day14 {
         return memory.values.sum()
     }
 
-
     class MemCommand(val address: Long, val value: Long) {
+        constructor(str: Pair<String, String>) : this(str.first.split("[").last().split("]").first().toLong(), str.second.toLong())
 
         fun getAdresses(mask: String): List<Long> {
             val maskWithX = addressMask(mask)
             val countX = maskWithX.count { it == 'X' }  // we should have 2^countX addresses
             val numberAdresses = (2.0).pow(countX).toInt()
-            return (0 until numberAdresses).map { permutation ->
-                permutation.toString(2).padStart(countX, '0')
-            }.map { permutation ->
-                var idx = 0
-                maskWithX.map { c ->
-                    when (c) {
-                        'X' -> permutation[idx++]  // replace nth x in mask with nth bit in permutation
-                        else -> c
-                    }
-                }.joinToString("")
-            }.map { it.toLong(2) }
+            return (0 until numberAdresses)
+                .map { it.toString(2).padStart(countX, '0') }
+                .map { permutation ->
+                    var idx = 0
+                    maskWithX.map { if (it == 'X') permutation[idx++] else it }  // replace nth x in mask with nth bit in permutation
+                }
+                .map { it.joinToString("").toLong(2) }
         }
 
         fun valueMask(mask: String): Long = value.mask(mask, 'X').toLong(2)
+
         private fun addressMask(mask: String): String = address.mask(mask, '0')
 
-        private fun Long.mask(mask: String, valueChar: Char): String {
-            val valStr = asBits()
-            return valStr.zip(mask) { zipValue, zipMask ->
-                when (zipMask) {
-                    valueChar -> zipValue
-                    else -> zipMask
-                }
-            }.joinToString("")
-        }
+        private fun Long.mask(mask: String, valueChar: Char): String = asBits().zip(mask) { zipValue, zipMask -> if (zipMask == valueChar) zipValue else zipMask }.joinToString("")
 
         private fun Long.asBits() = toString(2).padStart(36, '0')
 
-        constructor(str: Pair<String, String>) : this(str.first.split("[").last().split("]").first().toLong(), str.second.toLong())
     }
 
     private fun List<Pair<String, String>>.getMaxMemory(): Long {
