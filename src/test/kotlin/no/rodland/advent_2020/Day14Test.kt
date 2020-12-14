@@ -15,6 +15,12 @@ internal class Day14Test {
         "mem[7] = 101",
         "mem[8] = 0",
     )
+    val test14_2 = listOf(
+        "mask = 000000000000000000000000000000X1001X",
+        "mem[42] = 100",
+        "mask = 00000000000000000000000000000000X0XX",
+        "mem[26] = 1",
+    )
 
     @Nested
     inner class Init {
@@ -28,7 +34,7 @@ internal class Day14Test {
         @Test
         fun `14,2,live,init`() {
             report {
-                Day14.partTwo(data14) to 2
+                Day14.partTwo(data14) to 2173858456958
             }
         }
     }
@@ -62,21 +68,21 @@ internal class Day14Test {
         @Test
         fun `14,2,test`() {
             report {
-                Day14.partTwo(test14) to 2
+                Day14.partTwo(test14_2) to 208
             }
         }
 
         @Test
         fun `14,2,live,1`() {
             report {
-                Day14.partTwo(data14) to 2
+                Day14.partTwo(data14) to 2173858456958
             }
         }
 
         @Test
         fun `14,2,live,2`() {
             report {
-                Day14.partTwo(data14) to 2
+                Day14.partTwo(data14) to 2173858456958
             }
         }
     }
