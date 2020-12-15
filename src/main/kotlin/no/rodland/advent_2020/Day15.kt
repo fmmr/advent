@@ -20,6 +20,6 @@ object Day15 {
             gameMap[num] = turn
             turn + 1 to nextNum
         }
-        return (listSeq + gameSeq).take(position).last().second
+        return (listSeq + gameSeq).drop(position - 1).first().second
     }
 }
