@@ -15,7 +15,7 @@ internal class Day15Test {
         @Test
         fun `15,1,live,init`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 1696
             }
         }
 
@@ -81,14 +81,14 @@ internal class Day15Test {
         @Test
         fun `15,1,live,1`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 1696
             }
         }
 
         @Test
         fun `15,1,live,2`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 1696
             }
         }
     }
@@ -98,7 +98,7 @@ internal class Day15Test {
         @Test
         fun `15,2,test`() {
             report {
-                Day15.partTwo(listOf(0, 3, 6)) to 2
+                Day15.partTwo(listOf(0, 3, 6)) to 2// 175594
             }
         }
 
