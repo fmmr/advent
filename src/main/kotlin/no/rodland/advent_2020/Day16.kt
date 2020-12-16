@@ -9,23 +9,34 @@ object Day16 {
     fun partTwo(str: String): Long {
         val (rules, ticket, nearbyTickets) = parseInput(str)
         val okTickets = nearbyTickets.filterNot { it.invalid(rules) }
-        val allTickets = okTickets + listOf(ticket)
-        val indexRules = ticket.mapIndexed() { index, value ->
-            index to rules.findRule(index, allTickets)
-        }
-        val departuresIndices = indexRules.filter { it.second.name.startsWith("departure") }.map { it.first }
-        println("Found ${departuresIndices.size} departure related rules (should be 6)")
-        val product = departuresIndices.map { ticket[it] }.fold(0L) { acc, n -> acc * n.toLong() }
-        return 2
-    }
+        val allTickets = okTickets
 
-    // That's not the right answer; your answer is too low
+        val mutableRules = rules.toMutableSet()
+
+        val indexRules = ticket.mapIndexed() { index, value -> index to rules.findRules(index, allTickets) }
+            .sortedBy { it.second.size }
+            .map {
+                val ruleLeft = it.second.filter { it in mutableRules }.first()
+                mutableRules.remove(ruleLeft)
+                it.first to ruleLeft
+            }
+
+        val departureRules = indexRules.filter { it.second.name.startsWith("departure") }
+        val departureValues = departureRules.map { ticket[it.first] }
+        return departureValues.fold(1L) { acc, n -> acc * n.toLong() }
+    }
 
     private fun List<Rule>.findRule(index: Int, allTickets: List<Ticket>): Rule {
         val matcingRules = filter { rule ->
             rule.inRange(allTickets.map { it[index] })
         }
         return matcingRules.first()
+    }
+
+    private fun List<Rule>.findRules(index: Int, allTickets: List<Ticket>): List<Rule> {
+        return filter { rule ->
+            rule.inRange(allTickets.map { it[index] })
+        }
     }
 
 
@@ -43,9 +54,9 @@ object Day16 {
 
         override fun iterator(): Iterator<IntRange> = ranges.iterator()
 
-        fun inRange(ints: List<Int>): Boolean = ints.all { i ->
-            any { range -> i in range }
-        }
+        fun inRange(ints: List<Int>): Boolean = ints.all { i -> inRange(i) }
+
+        private fun inRange(int: Int): Boolean = any { range -> int in range }
     }
 
     // index 0 matchres bnoth train and wagon
