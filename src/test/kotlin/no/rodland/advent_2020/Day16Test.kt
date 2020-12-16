@@ -23,19 +23,6 @@ internal class Day16Test {
         "55,2,20",
         "38,6,12",
     ).joinToString("\n")
-    val test16_2 = listOf(
-        "class: 0-1 or 4-19",
-        "row: 0-5 or 8-19",
-        "seat: 0-13 or 16-19",
-        "",
-        "your ticket:",
-        "11,12,13",
-        "",
-        "nearby tickets:",
-        "3,9,18",
-        "15,1,5",
-        "5,14,9",
-    ).joinToString("\n")
 
     @Nested
     inner class Init {
@@ -49,7 +36,7 @@ internal class Day16Test {
         @Test
         fun `16,2,live,init`() {
             report {
-                Day16.partTwo(data16) to 2
+                Day16.partTwo(data16) to 426362917709
             }
         }
     }
@@ -81,23 +68,16 @@ internal class Day16Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `16,2,test`() {
-            report {
-                Day16.partTwo(test16_2) to 2
-            }
-        }
-
-        @Test
         fun `16,2,live,1`() {
             report {
-                Day16.partTwo(data16) to 2
+                Day16.partTwo(data16) to 426362917709
             }
         }
 
         @Test
         fun `16,2,live,2`() {
             report {
-                Day16.partTwo(data16) to 2
+                Day16.partTwo(data16) to 426362917709
             }
         }
     }

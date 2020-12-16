@@ -9,45 +9,22 @@ object Day16 {
     fun partTwo(str: String): Long {
         val (rules, ticket, nearbyTickets) = parseInput(str)
         val okTickets = nearbyTickets.filterNot { it.invalid(rules) }
-        val allTickets = okTickets
-
-        val mutableRules = rules.toMutableSet()
-
-        val indexRules = ticket.mapIndexed() { index, value -> index to rules.findRules(index, allTickets) }
+        val usedRules = mutableSetOf<Rule>()
+        val indexRules = ticket
+            .mapIndexed { index, value -> index to rules.findRules(index, okTickets) }
             .sortedBy { it.second.size }
-            .map {
-                val ruleLeft = it.second.filter { it in mutableRules }.first()
-                mutableRules.remove(ruleLeft)
-                it.first to ruleLeft
+            .map { (idx, rules) ->
+                val rule = rules.first { r -> r !in usedRules }
+                usedRules.add(rule)
+                idx to rule
             }
-
-        val departureRules = indexRules.filter { it.second.name.startsWith("departure") }
-        val departureValues = departureRules.map { ticket[it.first] }
-        return departureValues.fold(1L) { acc, n -> acc * n.toLong() }
+        return indexRules
+            .filter { it.second.name.startsWith("departure") }
+            .map { ticket[it.first] }
+            .product()
     }
 
-    private fun List<Rule>.findRule(index: Int, allTickets: List<Ticket>): Rule {
-        val matcingRules = filter { rule ->
-            rule.inRange(allTickets.map { it[index] })
-        }
-        return matcingRules.first()
-    }
-
-    private fun List<Rule>.findRules(index: Int, allTickets: List<Ticket>): List<Rule> {
-        return filter { rule ->
-            rule.inRange(allTickets.map { it[index] })
-        }
-    }
-
-
-    private fun parseInput(str: String): Triple<List<Rule>, Ticket, List<Ticket>> {
-        val splitted = str.split("\n\n")
-        val rules = splitted[0].split("\n").map { Rule(it) }
-        val ticket: Ticket = Ticket(splitted[1].split("\n")[1])
-        val nearbyTickets = splitted[2].split("\n").run { subList(1, size) }.map { Ticket(it) }
-        return Triple(rules, ticket, nearbyTickets)
-    }
-
+    private fun List<Rule>.findRules(index: Int, allTickets: List<Ticket>): List<Rule> = filter { rule -> rule.inRange(allTickets.map { it[index] }) }
 
     data class Rule(val name: String, val ranges: List<IntRange>) : Iterable<IntRange> {
         constructor(str: String) : this(str.split(": ")[0], str.split(": ")[1].run { split(" or ").map { it.split("-").run { get(0).toInt()..get(1).toInt() } } })
@@ -74,7 +51,14 @@ object Day16 {
             }
         }
     }
+
+    private fun List<Int>.product(): Long = fold(1L) { acc, n -> acc * n }
+
+    private fun parseInput(str: String): Triple<List<Rule>, Ticket, List<Ticket>> {
+        val splitted = str.split("\n\n")
+        val rules = splitted[0].split("\n").map { Rule(it) }
+        val ticket = Ticket(splitted[1].split("\n")[1])
+        val nearbyTickets = splitted[2].split("\n").run { subList(1, size) }.map { Ticket(it) }
+        return Triple(rules, ticket, nearbyTickets)
+    }
 }
-
-
-
