@@ -21,6 +21,6 @@ object Day10 {
         }
         yield(count to lastChar)
     }
-        .map { it.first.toString() + it.second }
+        .map { "${it.first}${it.second}" }
         .joinToString("")
 }
