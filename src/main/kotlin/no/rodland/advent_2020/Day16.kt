@@ -4,10 +4,18 @@ object Day16 {
     fun partOne(str: String): Int {
         val splitted = str.split("\n\n")
         val rules = splitted[0].split("\n").map { Rule(it) }
-        val ticket: Ticket = Ticket(splitted[1].split("\n")[1])
         val nearbyTickets = splitted[2].split("\n").run { subList(1, size) }.map { Ticket(it) }
-        val invalidValues = nearbyTickets.flatMap { it.getInvalid(rules) }
+        return nearbyTickets.flatMap { it.getInvalid(rules) }.sum()
+    }
 
+    private fun List<Rule>.findRule(index: Int, allTickets: List<Ticket>): Rule {
+        return find { rule ->
+            rule.all { range -> allTickets.map { it[index] }.all { i -> i in range } }
+        } ?: error("No rule found for idx: $index")
+    }
+
+    fun partTwo(str: String): Int {
+//        val ticket: Ticket = Ticket(splitted[1].split("\n")[1])
 //        val allTickets = (nearbyTickets)
 //        val validTickets = allTickets.filterNot { it.invalid(rules) }
 //        val invalidTickets = allTickets - validTickets
@@ -19,23 +27,6 @@ object Day16 {
 //            val rule: Rule = rules.findRule(index, checkTickets)
 //            println("idx: $index, value: $value rule: $rule")
 //        }
-
-        return invalidValues.sum()
-    }
-
-    private fun List<Rule>.findRule(index: Int, allTickets: List<Ticket>): Rule {
-
-
-        return find { rule ->
-            rule.all { range -> allTickets.map { it[index] }.all { i -> i in range } }
-        } ?: error("No rule found for idx: $index")
-    }
-
-    fun partTwo(str: String): Int {
-        val splitted = str.split("\n\n")
-        val rules = splitted[0].split("\n")
-        val ticket = splitted[1].split("\n")[1]
-        val nearbyTickets = splitted[2].split("\n").run { subList(1, size - 1) }
         return 2
     }
 
