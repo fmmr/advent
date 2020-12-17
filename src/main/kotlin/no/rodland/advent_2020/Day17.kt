@@ -1,14 +1,12 @@
 package no.rodland.advent_2020
 
 import no.rodland.advent.Pos3D
-import no.rodland.advent.Pos3D.Companion.getMinMax
 
 @Suppress("UNUSED_PARAMETER")
 object Day17 {
 
-    const val ACTIVE = '#'
-    const val INACTIVE = '.'
-    const val CYCLES = 6
+    private const val ACTIVE = '#'
+    private const val INACTIVE = '.'
 
     fun partOne(list: List<String>): Int {
         val initial = list
@@ -19,37 +17,31 @@ object Day17 {
             }
             .toMap()
 
-        val space = generateSequence(initial) { newSpace ->
-            newSpace
+        return generateSequence(initial) { space ->
+            space
                 .filter { it.value.active() }.keys
-                .flatMap {
-                    it.neighbors()
-                }
-                .toSet().map { pos ->
-                    val state = newSpace.getOrDefault(pos, INACTIVE)
-                    val activeNeighbors = pos.activeNeighbors(newSpace)
+                .flatMap { it.neighbors() }
+                .toSet()
+                .map { pos ->
+                    val state = space.getOrDefault(pos, INACTIVE)
+                    val activeNeighbors = pos.activeNeighbors(space)
                     pos to newState(state, activeNeighbors)
                 }
                 .toMap()
-        }.drop(6).first()
-        return space.values.count { it.active() }
+        }
+            .drop(6)
+            .first()
+            .values
+            .count { it.active() }
     }
 
     private fun Pos3D.activeNeighbors(space: Map<Pos3D, Char>) = neighbors().mapNotNull { space[it] }.count { it.active() }
 
-    private fun newState(state: Char, activeNeighbors: Int) = if (state.active()) {
-        if (activeNeighbors in 2..3) ACTIVE else INACTIVE
-    } else {
-        if (activeNeighbors == 3) ACTIVE else INACTIVE
-    }
+    private fun newState(state: Char, activeNeighbors: Int) = isNextActive(state, activeNeighbors).toChar()
 
-    private fun getMinMax(space: Map<Pos3D, Char>): Triple<Pair<Int, Int>, Pair<Int, Int>, Pair<Int, Int>> {
-        val mm = getMinMax(space.keys)
-        val mmx = mm.first.first - 1 to mm.first.second + 1
-        val mmy = mm.second.first - 1 to mm.second.second + 1
-        val mmz = mm.third.first - 1 to mm.third.second + 1
-        return Triple(mmx, mmy, mmz)
-    }
+    private fun isNextActive(state: Char, activeNeighbors: Int) = activeNeighbors == 3 || (activeNeighbors == 2 && state.active())
+
+    private fun Boolean.toChar(): Char = if (this) ACTIVE else INACTIVE
 
     fun partTwo(list: List<String>): Int {
         return 2
@@ -57,3 +49,4 @@ object Day17 {
 
     private fun Char.active() = this == ACTIVE
 }
+
