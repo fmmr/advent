@@ -1,5 +1,6 @@
 package no.rodland.advent_2020
 
+@Suppress("UNUSED_PARAMETER")
 object Day17 {
     fun partOne(list: List<String>): Int {
         return 2
