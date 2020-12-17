@@ -11,27 +11,27 @@ object Day17 {
     const val CYCLES = 6
 
     fun partOne(list: List<String>): Int {
-        var space = list.flatMapIndexed { x: Int, line: String ->
-            line.mapIndexed { y: Int, c: Char ->
-                Pos3D(x, y, 0).let {
-                    it to c
+        val initial = list
+            .flatMapIndexed { x: Int, line: String ->
+                line.mapIndexed { y: Int, c: Char ->
+                    Pos3D(x, y, 0) to c
                 }
             }
-        }.toMap()
+            .toMap()
 
-        (1..6).forEach {
-            val (mmX, mmY, mmZ) = getMinMax(space)
-            space = (mmZ.first..mmZ.second).flatMap { z ->
-                (mmY.first..mmY.second).flatMap { y ->
-                    (mmX.first..mmX.second).map { x ->
-                        val pos = Pos3D(x, y, z)
-                        val state = space.getOrDefault(pos, INACTIVE)
-                        val activeNeighbors = pos.activeNeighbors(space)
-                        pos to newState(state, activeNeighbors)
-                    }
+        val space = generateSequence(initial) { newSpace ->
+            newSpace
+                .filter { it.value.active() }.keys
+                .flatMap {
+                    it.neighbors()
                 }
-            }.toMap()
-        }
+                .toSet().map { pos ->
+                    val state = newSpace.getOrDefault(pos, INACTIVE)
+                    val activeNeighbors = pos.activeNeighbors(newSpace)
+                    pos to newState(state, activeNeighbors)
+                }
+                .toMap()
+        }.drop(6).first()
         return space.values.count { it.active() }
     }
 
