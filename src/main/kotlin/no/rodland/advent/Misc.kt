@@ -60,3 +60,5 @@ fun <T> Sequence<T>.takeWhileInclusive(pred: (T) -> Boolean): Sequence<T> {
         result
     }
 }
+
+fun List<Number>.product(): Long = fold(1L) { acc, n -> acc * n.toLong() }

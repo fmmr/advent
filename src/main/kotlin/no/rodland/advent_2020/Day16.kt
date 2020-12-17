@@ -1,5 +1,7 @@
 package no.rodland.advent_2020
 
+import product
+
 object Day16 {
     fun partOne(str: String): Int {
         val (rules, _, nearbyTickets) = parseInput(str)
@@ -26,10 +28,8 @@ object Day16 {
 
     private fun List<Rule>.findRules(index: Int, allTickets: List<Ticket>): List<Rule> = filter { rule -> rule.inRange(allTickets.map { it[index] }) }
 
-    data class Rule(val name: String, val ranges: List<IntRange>) : Iterable<IntRange> {
+    data class Rule(val name: String, val ranges: List<IntRange>) : Iterable<IntRange> by ranges {
         constructor(str: String) : this(str.split(": ")[0], str.split(": ")[1].run { split(" or ").map { it.split("-").run { get(0).toInt()..get(1).toInt() } } })
-
-        override fun iterator(): Iterator<IntRange> = ranges.iterator()
 
         fun inRange(ints: List<Int>): Boolean = ints.all { i -> inRange(i) }
 
@@ -37,11 +37,9 @@ object Day16 {
     }
 
     // index 0 matchres bnoth train and wagon
-    data class Ticket(val values: List<Int>) : Iterable<Int> {
+    data class Ticket(val values: List<Int>) : List<Int> by values {
         constructor(str: String) : this(str.split(",").map { it.toInt() })
 
-        override fun iterator(): Iterator<Int> = values.iterator()
-        operator fun get(index: Int) = values[index]
         fun invalid(rules: List<Rule>): Boolean = getInvalid(rules).isNotEmpty()
         fun getInvalid(rules: List<Rule>): List<Int> = filter { i ->
             rules.all { rule ->
@@ -52,8 +50,6 @@ object Day16 {
         }
     }
 
-    private fun List<Int>.product(): Long = fold(1L) { acc, n -> acc * n }
-
     private fun parseInput(str: String): Triple<List<Rule>, Ticket, List<Ticket>> {
         val splitted = str.split("\n\n")
         val rules = splitted[0].split("\n").map { Rule(it) }
@@ -62,3 +58,4 @@ object Day16 {
         return Triple(rules, ticket, nearbyTickets)
     }
 }
+
