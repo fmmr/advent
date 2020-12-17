@@ -11,34 +11,42 @@ object Day17 {
     private const val INACTIVE = '.'
 
     fun partOne(list: List<String>): Int {
-        val initial = list.flatMapIndexed { x: Int, line: String -> line.mapIndexed { y: Int, c: Char -> Pos3D(x, y, 0) to c } }.toMap()
-        return countActive(initial)
+        val initial = parseInput(list) { x: Int, y: Int -> Pos3D(x, y, 0) }
+        return simulate(initial, 6).size
+
     }
 
     fun partTwo(list: List<String>): Int {
-        val initial = list.flatMapIndexed { x: Int, line: String -> line.mapIndexed { y: Int, c: Char -> Pos4D(x, y, 0, 0) to c } }.toMap()
-        return countActive(initial)
+        val initial = parseInput(list) { x: Int, y: Int -> Pos4D(x, y, 0, 0) }
+        return simulate(initial, 6).size
     }
 
-    private fun countActive(initial: Map<out SpacePos, Char>): Int {
+    @Suppress("SameParameterValue")
+    private fun simulate(initial: Map<out SpacePos, Char>, times: Int): Map<out SpacePos, Char> {
         return generateSequence(initial) { space ->
             space
-                .filter { it.value.active() }.keys
+                .keys
                 .flatMap { it.neighbors() }
                 .toSet()
-                .map { pos ->
+                .mapNotNull { pos ->
                     val state = space[pos] ?: INACTIVE
                     val activeNeighbors = pos.activeNeighbors(space)
-                    pos to newState(state, activeNeighbors)
+                    newState(state, activeNeighbors).let { if (it.active()) pos to ACTIVE else null }
                 }
                 .toMap()
         }
-            .drop(6)
+            .drop(times)
             .first()
-            .values
-            .count { it.active() }
     }
 
+    private fun parseInput(list: List<String>, initialPoint: (x: Int, y: Int) -> SpacePos): Map<SpacePos, Char> {
+        return list
+            .flatMapIndexed { x: Int, line: String ->
+                line.mapIndexed { y: Int, c: Char -> initialPoint(x, y) to c }
+                    .filter { it.second.active() }
+            }
+            .toMap()
+    }
 
     private fun newState(state: Char, activeNeighbors: Int) = isNextActive(state, activeNeighbors).toChar()
 
