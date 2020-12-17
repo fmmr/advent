@@ -9,14 +9,18 @@ import org.junit.jupiter.api.Test
 @DisableSlow
 internal class Day17Test {
     val data17 = "2020/input_17.txt".readFile()
-    val test17 = listOf("1", "2")
+    val test17 = listOf(
+        ".#.",
+        "..#",
+        "###",
+    )
 
     @Nested
     inner class Init {
         @Test
         fun `17,1,live,init`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17) to 401
             }
         }
 
@@ -33,21 +37,21 @@ internal class Day17Test {
         @Test
         fun `17,1,test`() {
             report {
-                Day17.partOne(test17) to 2
+                Day17.partOne(test17) to 112
             }
         }
 
         @Test
         fun `17,1,live,1`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17) to 401
             }
         }
 
         @Test
         fun `17,1,live,2`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17) to 401
             }
         }
     }
