@@ -20,12 +20,7 @@ object Day18 {
         var i = 0
         while (i < rpn.length) {
             when (val next = rpn[i]) {
-                '*' -> {
-                    stack.push((stack.pop() * stack.pop()))
-                }
-                '+' -> {
-                    stack.push((stack.pop() + stack.pop()))
-                }
+                '+', '*' -> stack.push(next.calc(stack.pop(), stack.pop()))
                 else -> stack.push(next.getNum())
             }
             i++
@@ -72,3 +67,10 @@ object Day18 {
     private fun Char.getNum() = getNumericValue(this).toLong()
 
 }
+
+private fun Char.calc(pop: Long, pop1: Long): Long = when (this) {
+    '+' -> pop + pop1
+    '*' -> pop * pop1
+    else -> error("unable to calc $this with $pop and $pop1")
+}
+
