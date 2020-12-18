@@ -39,6 +39,4 @@ object Day13 {
         println("Found it iterating $iterations times")
         return num
     }
-
-    private fun isValid(num: Long, bus: Long, diff: Long) = num % bus == if (diff == 0L) 0 else (bus - diff)
 }
