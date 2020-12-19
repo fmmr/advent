@@ -32,9 +32,10 @@ object Day19 {
             return false
         }
         val nextRuleToMatch = rules.getValue(rulesToMatch[0])
-//        println("matching $nextRuleToMatch on $s (rulesToMatch: $rulesToMatch)")
-        if (nextRuleToMatch[0] in 'a'..'b') {
-            return if ((s[0] == nextRuleToMatch[0])) { // next char matches char in rule
+        val potentialChar = nextRuleToMatch[0]
+//        println("matching $nextRuleToMatch (char: $potentialChar) on $s (rulesToMatch: $rulesToMatch)")
+        if (potentialChar == 'a' || potentialChar == 'b') {
+            return if ((s[0] == potentialChar)) { // next char matches char in rule
                 validate(s.drop(1), rulesToMatch.drop(1), rules)  // match rest if string to rest of rules
             } else {
                 false  // nope - next char does not match
