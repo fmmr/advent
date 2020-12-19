@@ -21,7 +21,6 @@ object Day19 {
         return messages.count {
             validate(it, listOf(0), rules)
         }
-
     }
 
     private fun validate(s: String, rulesToMatch: List<Int>, rules: Map<Int, String>): Boolean {
