@@ -124,7 +124,7 @@ internal class Day20Test {
         @Test
         fun `20,1,live,init`() {
             report {
-                Day20.partOne(data20) to 2
+                Day20.partOne(data20) to 12519494280967
             }
         }
 
@@ -141,21 +141,21 @@ internal class Day20Test {
         @Test
         fun `20,1,test`() {
             report {
-                Day20.partOne(test20) to 2
+                Day20.partOne(test20) to 20899048083289
             }
         }
 
         @Test
         fun `20,1,live,1`() {
             report {
-                Day20.partOne(data20) to 2
+                Day20.partOne(data20) to 12519494280967
             }
         }
 
         @Test
         fun `20,1,live,2`() {
             report {
-                Day20.partOne(data20) to 2
+                Day20.partOne(data20) to 12519494280967
             }
         }
     }
