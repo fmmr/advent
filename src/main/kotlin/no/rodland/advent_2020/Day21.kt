@@ -1,12 +1,7 @@
 package no.rodland.advent_2020
 
+// --- Day 21: Allergen Assessment ---
 object Day21 {
-
-    // rblnlnk spmsczc tlrpk nxs ... (contains soy, eggs, nuts)
-    private fun split(list: List<String>) = list
-        .map { it.split(" (contains ") }
-        .map { it.first().split(" ") to it.last().replace(")", "").split(", ") }
-
     fun partOne(list: List<String>): Int {
         val allergens = split(list)
         val found = resolve(allergens)
@@ -19,6 +14,11 @@ object Day21 {
         val found = resolve(allergens)
         return found.toSortedMap().values.joinToString(",")
     }
+
+    // rblnlnk spmsczc tlrpk nxs ... (contains soy, eggs, nuts)
+    private fun split(list: List<String>) = list
+        .map { it.split(" (contains ") }
+        .map { it.first().split(" ") to it.last().replace(")", "").split(", ") }
 
     private fun resolve(splitted: List<Pair<List<String>, List<String>>>): Map<String, String> {
         val allergensToIngredients = splitted
