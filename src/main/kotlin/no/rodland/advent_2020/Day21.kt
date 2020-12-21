@@ -53,7 +53,20 @@ object Day21 {
     }
 
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    fun partTwo(list: List<String>): String {
+        val splitted = list
+            .map { it.split("(contains ") }
+            .map { it.first().split(" ").filterNot { it.isEmpty() } to it.last().replace(")", "").split(", ").filterNot { it.isEmpty() } }
+
+        val allIngredients = splitted.flatMap { it.first }
+        val alergens: Alergen = splitted.flatMap { (i, a) ->
+            a.map { it to i }
+        }.toMap()
+        val ingredients: Ingredient = splitted.flatMap { (i, a) ->
+            i.map { it to a }
+        }.toMap()
+
+
+        return findFromAlergens(splitted).toSortedMap().values.joinToString(",")
     }
 }
