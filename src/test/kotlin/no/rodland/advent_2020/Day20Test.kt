@@ -170,6 +170,26 @@ internal class Day20Test {
         }
 
         @Test
+        fun `20,2,test,forrest_rotate_2`() {
+            report {
+                val l = listOf(listOf('a', 'b'), listOf('c', 'd'))
+                val f = Day20.Forrest(l)
+                f.rotateR() to listOf(listOf('c', 'a'), listOf('d', 'b'))
+
+            }
+        }
+
+        @Test
+        fun `20,2,test,forrest_rotate_3`() {
+            report {
+                val l = listOf(listOf('a', 'b', 'c'), listOf('e', 'f', 'g'), listOf('i', 'j', 'k'))
+                val f = Day20.Forrest(l)
+                f.rotateR() to listOf(listOf('i', 'e', 'a'), listOf('j', 'f', 'b'), listOf('k', 'g', 'c'))
+
+            }
+        }
+
+        @Test
         fun `20,2,live,1`() {
             report {
                 Day20.partTwo(data20) to 2
