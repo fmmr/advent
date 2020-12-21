@@ -1,11 +1,9 @@
 package no.rodland.advent_2020
 
 import product
-import java.lang.Math.sqrt
 
 
 // --- Day 20: Jurassic Jigsaw ---
-@Suppress("UNUSED_PARAMETER")
 object Day20 {
     fun partOne(list: String): Long {
         val tiles = list.split("\n\n").map { Tile(it) }
@@ -18,7 +16,7 @@ object Day20 {
 //#    ##    ##    ###
 // #  #  #  #  #  #"""
 
-    val seaMonster = listOf(
+    private val seaMonster = listOf(
         listOf(18),
         listOf(0, 5, 6, 11, 12, 17, 18, 19),
         listOf(1, 4, 7, 10, 13, 16)
@@ -26,7 +24,7 @@ object Day20 {
 
     fun partTwo(list: String): Int {
         val tiles = list.split("\n\n").map { Tile(it) }.map { it.num to it }.toMap()
-        val size = sqrt(tiles.size.toDouble()).toInt()
+        val size = kotlin.math.sqrt(tiles.size.toDouble()).toInt()
         val common = tiles.map { it.key to it.value.commonBorders(tiles.values.toList()) }.toMap()
         val topLeftTile = orientTopLeft(common, common.filter { it.value.size == 2 }.map { tiles[it.key]!! }.first())
         val sea = getSea(topLeftTile, size, common)
@@ -35,7 +33,7 @@ object Day20 {
 
         // will not work if they overlap
         val numberSeaMonsters = entireSea.allVariations().map { it.countSeaMonsters(seaMonster) }.first { it > 0 }
-        val numHash = entireSea.map { it.count { it == '#' } }.sum()
+        val numHash = entireSea.map { line -> line.count { it == '#' } }.sum()
         val seaMonsterHashes = numberSeaMonsters * (seaMonster.map { it.size }.sum())
         return numHash - seaMonsterHashes
     }
@@ -81,8 +79,7 @@ object Day20 {
         val orientation = topLeft.allVariations().filter { f ->
             (n1.allVariations().any { it.left() == f.right() } && n2.allVariations().any { it.top() == f.bottom() }) || (n2.allVariations().any { it.left() == f.right() } && n1.allVariations().any { it.top() == f.bottom() })
         }
-        val topLeftTile = Tile(topLeft.num, orientation.first())
-        return topLeftTile
+        return Tile(topLeft.num, orientation.first())
     }
 
     val regex = "Tile (\\d+):".toRegex()
@@ -117,25 +114,25 @@ object Day20 {
         fun getOtherSide(dir: Dir): List<Char> = getSide(dir.other())
 
         fun rotateR() = Forest((0 until size).map { column(it).reversed() })
-        fun rotateL() = rotateR().rotateR().rotateR()
-        fun rotate2() = rotateR().rotateR()
-        fun flipH() = Forest(map { it.reversed() })
-        fun flipV() = Forest(reversed())
+        private fun rotateL() = rotateR().rotateR().rotateR()
+        private fun rotate2() = rotateR().rotateR()
+        private fun flipH() = Forest(map { it.reversed() })
+        private fun flipV() = Forest(reversed())
 
-        fun column(col: Int) = this.map { it[col] }
+        private fun column(col: Int) = this.map { it[col] }
         fun right() = column(size - 1)
         fun left() = column(0)
         fun top() = first()
         fun bottom() = last()
 
         fun commonBorders(forest: Forest): Set<List<Char>> = borders().intersect(forest.borders())
-        fun borders() = listOf(vBorders(), hBorders()).flatten()
-        fun vBorders() = listOf(topBorder(), bottomBorder()).flatten()
-        fun hBorders() = listOf(leftBorder(), rightBorder()).flatten()
-        fun leftBorder() = map { it.first() }.let { listOf(it, it.reversed()) }
-        fun rightBorder() = map { it.last() }.let { listOf(it, it.reversed()) }
-        fun topBorder() = first().toList().let { listOf(it, it.reversed()) }
-        fun bottomBorder() = last().toList().let { listOf(it, it.reversed()) }
+        private fun borders() = listOf(vBorders(), hBorders()).flatten()
+        private fun vBorders() = listOf(topBorder(), bottomBorder()).flatten()
+        private fun hBorders() = listOf(leftBorder(), rightBorder()).flatten()
+        private fun leftBorder() = map { it.first() }.let { listOf(it, it.reversed()) }
+        private fun rightBorder() = map { it.last() }.let { listOf(it, it.reversed()) }
+        private fun topBorder() = first().toList().let { listOf(it, it.reversed()) }
+        private fun bottomBorder() = last().toList().let { listOf(it, it.reversed()) }
 
         fun countSeaMonsters(seaMonster: List<List<Int>>): Int {
             val seaMonsters = (indices).flatMap { x ->
