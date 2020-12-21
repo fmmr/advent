@@ -13,9 +13,16 @@ object Day20 {
     }
 
 
-    val seaMonster = """                  #
-#    ##    ##    ###
- #  #  #  #  #  #"""
+//    val seaMonster = """
+//                  #
+//#    ##    ##    ###
+// #  #  #  #  #  #"""
+
+    val seaMonster = listOf(
+        listOf(18),
+        listOf(0, 5, 6, 11, 12, 17, 18, 19),
+        listOf(1, 4, 7, 10, 13, 16)
+    )
 
     fun partTwo(list: String): Int {
         val tiles = list.split("\n\n").map { Tile(it) }.map { it.num to it }.toMap()
@@ -24,20 +31,23 @@ object Day20 {
         val topLeftTile = orientTopLeft(common, common.filter { it.value.size == 2 }.map { tiles[it.key]!! }.first())
         val sea = getSea(topLeftTile, size, common)
 
-        val hugeTile = toTile(sea)
-        return 2
+        val entireSea = toTile(sea).forest
+
+        // will not work if they overlap
+        val numberSeaMonsters = entireSea.allVariations().map { it.countSeaMonsters(seaMonster) }.first { it > 0 }
+        val numHash = entireSea.map { it.count { it == '#' } }.sum()
+        val seaMonsterHashes = numberSeaMonsters * (seaMonster.map { it.size }.sum())
+        return numHash - seaMonsterHashes
     }
 
     private fun toTile(sea: List<List<Tile>>): Tile {
-        val largeForrest = sea.flatMap { tilesRow ->
+        return Tile(-1, Forest(sea.flatMap { tilesRow ->
             val inner = tilesRow.map { Tile(it.num, it.forest.inner()) }
             val rows = inner.first().size
-            val heisan = (0 until rows).map { row ->
+            (0 until rows).map { row ->
                 inner.map { it.forest[row] }.flatten()
             }
-            heisan
-        }
-        return Tile(-1, Forest(largeForrest))
+        }))
     }
 
     private fun getSea(topLeftTile: Tile, size: Int, common: Map<Int, List<Tile>>): List<List<Tile>> {
@@ -127,6 +137,23 @@ object Day20 {
         fun topBorder() = first().toList().let { listOf(it, it.reversed()) }
         fun bottomBorder() = last().toList().let { listOf(it, it.reversed()) }
 
+        fun countSeaMonsters(seaMonster: List<List<Int>>): Int {
+            val seaMonsters = (indices).flatMap { x ->
+                (get(0).indices).map { y ->
+                    val isSeamonster = seaMonster.flatMapIndexed { dx, yPos ->
+                        yPos.map { dy ->
+                            if ((x + dx) < size && ((y + dy) < get(0).size)) {
+                                get(x + dx)[y + dy]
+                            } else {
+                                'T'
+                            }
+                        }
+                    }.all { it == '#' }
+                    isSeamonster
+                }
+            }
+            return seaMonsters.count { it }
+        }
     }
 
     data class Tile(val num: Int, val forest: Forest) {
