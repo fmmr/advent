@@ -1,9 +1,5 @@
 package no.rodland.advent_2020
 
-typealias Ingredient = Map<String, List<String>>
-typealias Alergen = Map<String, List<String>>
-
-@Suppress("UNUSED_PARAMETER")
 object Day21 {
 
     // rblnlnk spmsczc tlrpk nxs ... (contains soy, eggs, nuts)
@@ -12,41 +8,36 @@ object Day21 {
         .map { it.first().split(" ") to it.last().replace(")", "").split(", ") }
 
     fun partOne(list: List<String>): Int {
-        val splitted = split(list)
-        val allIngredients = splitted.flatMap { it.first }
-        val found = findFromAlergens(splitted)
+        val allergens = split(list)
+        val found = resolve(allergens)
+        val allIngredients = allergens.flatMap { it.first }
         return (allIngredients - found.values).size
     }
 
     fun partTwo(list: List<String>): String {
-        val splitted = split(list)
-        val found = findFromAlergens(splitted)
+        val allergens = split(list)
+        val found = resolve(allergens)
         return found.toSortedMap().values.joinToString(",")
     }
 
-    private fun findFromAlergens(splitted: List<Pair<List<String>, List<String>>>): Map<String, String> {
-        val found = mutableMapOf<String, String>()
-
-        val alergensToIngredients = splitted
+    private fun resolve(splitted: List<Pair<List<String>, List<String>>>): Map<String, String> {
+        val allergensToIngredients = splitted
             .flatMap { (i, a) -> a.map { it to i } }
             .groupBy { it.first }
             .mapValues { (_, ingredientList) -> ingredientList.map { it.second } }
             .mapValues { (_, ingredientList) -> ingredientList.map { it.toSet() } }
             .mapValues { (_, ingredientList) -> ingredientList.reduce { acc, set -> acc.intersect(set) } }
 
-        return find(alergensToIngredients)
+        return find(allergensToIngredients)
     }
 
-    private fun find(alergensToIngredients: Map<String, Set<String>>): Map<String, String> {
-        if (alergensToIngredients.isEmpty()) {
+    private fun find(allergens: Map<String, Set<String>>): Map<String, String> {
+        if (allergens.isEmpty()) {
             return emptyMap()
         }
-        val identifyables = alergensToIngredients.filter { it.value.size == 1 }
-
-        val ret = identifyables.map { (k, ingredients) -> k to ingredients.first() }.toMap()
-
-        val heisan = alergensToIngredients.filterNot { it.key in ret.keys }.mapValues { (_, v) -> v.filterNot { it in ret.values }.toSet() }
-        return ret + find(heisan)
-
+        val identifyables = allergens.filter { it.value.size == 1 }
+        val found = identifyables.map { (k, ingredients) -> k to ingredients.first() }.toMap()
+        val rest = allergens.filterNot { it.key in found.keys }.mapValues { (_, v) -> v.filterNot { it in found.values }.toSet() }
+        return found + find(rest)
     }
 }
