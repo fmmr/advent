@@ -30,14 +30,14 @@ object Day20 {
 
     private fun toTile(sea: List<List<Tile>>): Tile {
         val largeForrest = sea.flatMap { tilesRow ->
-            val inner = tilesRow.map { Tile(it.num, it.forrest.inner()) }
+            val inner = tilesRow.map { Tile(it.num, it.forest.inner()) }
             val rows = inner.first().size
             val heisan = (0 until rows).map { row ->
-                inner.map { it.forrest[row] }.flatten()
+                inner.map { it.forest[row] }.flatten()
             }
             heisan
         }
-        return Tile(-1, Forrest(largeForrest))
+        return Tile(-1, Forest(largeForrest))
     }
 
     private fun getSea(topLeftTile: Tile, size: Int, common: Map<Int, List<Tile>>): List<List<Tile>> {
@@ -49,16 +49,16 @@ object Day20 {
                     topLeftTile
                 } else if (col == 0) {
                     // look at the one above
-                    val bottomRow = over.forrest.bottom()
+                    val bottomRow = over.forest.bottom()
                     val neighbours = common[over.num]!!
-                    val neighbour = neighbours.first { tile -> tile.forrest.allVariations().any { it.top() == bottomRow } }
+                    val neighbour = neighbours.first { tile -> tile.forest.allVariations().any { it.top() == bottomRow } }
                     over = over.orient(neighbour, Dir.DOWN)
                     left = over
                     over
                 } else {
-                    val rightRow = left.forrest.right()
+                    val rightRow = left.forest.right()
                     val neighbours = common[left.num]!!
-                    val neighbour = neighbours.first { tile -> tile.forrest.allVariations().any { it.left() == rightRow } }
+                    val neighbour = neighbours.first { tile -> tile.forest.allVariations().any { it.left() == rightRow } }
                     left = left.orient(neighbour, Dir.RIGHT)
                     left
                 }
@@ -78,14 +78,14 @@ object Day20 {
     val regex = "Tile (\\d+):".toRegex()
 
 
-    data class Forrest(val map: List<List<Char>>) : List<List<Char>> by map {
+    data class Forest(val map: List<List<Char>>) : List<List<Char>> by map {
 
 
-        fun inner() = Forrest(drop(1).dropLast(1).map { it.drop(1).dropLast(1) })
+        fun inner() = Forest(drop(1).dropLast(1).map { it.drop(1).dropLast(1) })
 
 
         fun allVariations() = sequence {
-            yield(this@Forrest)
+            yield(this@Forest)
             yield(flipV())
             yield(flipH())
             rotateR().let { rotated ->
@@ -106,11 +106,11 @@ object Day20 {
 
         fun getOtherSide(dir: Dir): List<Char> = getSide(dir.other())
 
-        fun rotateR() = Forrest((0 until size).map { column(it).reversed() })
+        fun rotateR() = Forest((0 until size).map { column(it).reversed() })
         fun rotateL() = rotateR().rotateR().rotateR()
         fun rotate2() = rotateR().rotateR()
-        fun flipH() = Forrest(map { it.reversed() })
-        fun flipV() = Forrest(reversed())
+        fun flipH() = Forest(map { it.reversed() })
+        fun flipV() = Forest(reversed())
 
         fun column(col: Int) = this.map { it[col] }
         fun right() = column(size - 1)
@@ -118,7 +118,7 @@ object Day20 {
         fun top() = first()
         fun bottom() = last()
 
-        fun commonBorders(forrest: Forrest): Set<List<Char>> = borders().intersect(forrest.borders())
+        fun commonBorders(forest: Forest): Set<List<Char>> = borders().intersect(forest.borders())
         fun borders() = listOf(vBorders(), hBorders()).flatten()
         fun vBorders() = listOf(topBorder(), bottomBorder()).flatten()
         fun hBorders() = listOf(leftBorder(), rightBorder()).flatten()
@@ -129,23 +129,23 @@ object Day20 {
 
     }
 
-    data class Tile(val num: Int, val forrest: Forrest) {
+    data class Tile(val num: Int, val forest: Forest) {
         constructor(str: String, split: List<String> = str.split("\n")) : this(
             regex.find(split[0])?.groups?.get(1)?.value?.toInt() ?: -1,
-            Forrest(split.subList(1, split.size).map { row -> row.map { it } })
+            Forest(split.subList(1, split.size).map { row -> row.map { it } })
         )
 
-        val size = forrest.size
+        val size = forest.size
 
-        fun commonBorders(tiles: List<Tile>): List<Tile> = tiles.filterNot { it == this }.filterNot { forrest.commonBorders(it.forrest).isEmpty() }
-        fun allVariations() = forrest.allVariations()
+        fun commonBorders(tiles: List<Tile>): List<Tile> = tiles.filterNot { it == this }.filterNot { forest.commonBorders(it.forest).isEmpty() }
+        fun allVariations() = forest.allVariations()
 
         override fun toString(): String {
             return "Tile: $num"
         }
 
         fun orient(aNeighbour: Tile, dir: Dir): Tile {
-            val toMatch = forrest.getSide(dir)
+            val toMatch = forest.getSide(dir)
             return Tile(aNeighbour.num, aNeighbour.allVariations().first { toMatch == it.getOtherSide(dir) })
         }
     }
