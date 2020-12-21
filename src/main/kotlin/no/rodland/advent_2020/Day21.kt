@@ -24,7 +24,7 @@ object Day21 {
         return found.toSortedMap().values.joinToString(",")
     }
 
-    private fun findFromAlergens(splitted: List<Pair<List<String>, List<String>>>): MutableMap<String, String> {
+    private fun findFromAlergens(splitted: List<Pair<List<String>, List<String>>>): Map<String, String> {
         val found = mutableMapOf<String, String>()
 
         val alergensToIngredients = splitted
@@ -34,34 +34,19 @@ object Day21 {
             .mapValues { (_, ingredientList) -> ingredientList.map { it.toSet() } }
             .mapValues { (_, ingredientList) -> ingredientList.reduce { acc, set -> acc.intersect(set) } }
 
-        find(found, alergensToIngredients)
-        return found
+        return find(alergensToIngredients)
     }
 
-//    private fun recursiveFind2(alergensToIngredients: Map<String, Set<String>>): MutableMap<String, String> {
-//        val identifyables = alergensToIngredients.filter { it.value.size == 1 }
-//
-//        val ret = identifyables.map { (k, ingredients) -> k to ingredients.first() }
-//
-//        alergensToIngredients.mapValues { (_, v) -> v.filterNot { it == ingredient }.toSet() }.toMutableMap()
-//
-//        ingredients.first().let { ingredient ->
-//            found[k] = ingredient
-//            alergensToIngredients1 =
-//        }
-//    }
-//}
-
-    private fun find(found: MutableMap<String, String>, alergensToIngredients: Map<String, Set<String>>) {
-        var alergensToIngredients1 = alergensToIngredients
-        while (found.size < alergensToIngredients1.size) {
-            val identifyables = alergensToIngredients1.filter { it.value.size == 1 }
-            identifyables.forEach { (k, ingredients) ->
-                ingredients.first().let { ingredient ->
-                    found[k] = ingredient
-                    alergensToIngredients1 = alergensToIngredients1.mapValues { (_, v) -> v.filterNot { it == ingredient }.toSet() }.toMutableMap()
-                }
-            }
+    private fun find(alergensToIngredients: Map<String, Set<String>>): Map<String, String> {
+        if (alergensToIngredients.isEmpty()) {
+            return emptyMap()
         }
+        val identifyables = alergensToIngredients.filter { it.value.size == 1 }
+
+        val ret = identifyables.map { (k, ingredients) -> k to ingredients.first() }.toMap()
+
+        val heisan = alergensToIngredients.filterNot { it.key in ret.keys }.mapValues { (_, v) -> v.filterNot { it in ret.values }.toSet() }
+        return ret + find(heisan)
+
     }
 }
