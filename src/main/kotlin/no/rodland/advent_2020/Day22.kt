@@ -3,15 +3,16 @@ package no.rodland.advent_2020
 // --- Day 22: Crab Combat ---
 object Day22 {
     fun partOne(list: String): Int {
-        val (list1, list2) = parseInput(list)
-        val (p1, p2) = play(list1, list2)
-        var i = 1
-        return (p1 + p2).reversed().fold(0) { acc, card -> acc + (card * i++) }
+        return play(list) { list1: List<Int>, list2: List<Int> -> playNonRec(list1, list2) }
     }
 
     fun partTwo(list: String): Int {
+        return play(list) { list1: List<Int>, list2: List<Int> -> playRec(list1, list2) }
+    }
+
+    private fun play(list: String, f: (List<Int>, List<Int>) -> Pair<ArrayDeque<Int>, ArrayDeque<Int>>): Int {
         val (list1, list2) = parseInput(list)
-        val (p1, p2) = playRec(list1, list2)
+        val (p1, p2) = f(list1, list2)
         var i = 1
         return (p1 + p2).reversed().fold(0) { acc, card -> acc + (card * i++) }
     }
@@ -43,7 +44,7 @@ object Day22 {
         return p1 to p2
     }
 
-    private fun play(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
+    private fun playNonRec(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
         val p1 = ArrayDeque(p1List)
         val p2 = ArrayDeque(p2List)
         while (p1.isNotEmpty() && p2.isNotEmpty()) {
