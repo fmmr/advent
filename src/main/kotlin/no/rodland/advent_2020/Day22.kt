@@ -16,29 +16,21 @@ object Day22 {
         }
     }
 
+    fun partTwo(list: String): Int {
+        val (p1, p2) = parseInput(list)
+        return 2
+    }
+
     private fun play(p1: ArrayDeque<Int>, p2: ArrayDeque<Int>) {
         while (p1.isNotEmpty() && p2.isNotEmpty()) {
             val card1 = p1.remove()
             val card2 = p2.remove()
             when {
-                card1 > card2 -> {
-                    p1.add(card1)
-                    p1.add(card2)
-                }
-                card2 > card1 -> {
-                    p2.add(card2)
-                    p2.add(card1)
-                }
-                else -> {
-                    error("Cards are equal - don't know what to do")
-                }
+                card1 > card2 -> p1.addAll(listOf(card1, card2))
+                card2 > card1 -> p2.addAll(listOf(card2, card1))
+                else -> error("Cards are equal - don't know what to do")
             }
         }
-    }
-
-    fun partTwo(list: String): Int {
-        val (p1, p2) = parseInput(list)
-        return 2
     }
 
     private fun parseInput(str: String): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
