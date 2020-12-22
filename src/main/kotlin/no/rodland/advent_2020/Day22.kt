@@ -1,6 +1,5 @@
 package no.rodland.advent_2020
 
-import java.util.*
 
 // --- Day 22: Crab Combat ---
 
@@ -29,8 +28,8 @@ object Day22 {
             if (!previousGames1.add(p1.toList()) || !previousGames2.add(p2.toList())) {
                 return p1 to ArrayDeque()
             }
-            val card1 = p1.remove()
-            val card2 = p2.remove()
+            val card1 = p1.removeFirst()
+            val card2 = p2.removeFirst()
             if ((p1.size) >= card1 && (p2.size) >= card2) {
                 val (subgame1, subgame2) = playRec(p1.take(card1), p2.take(card2))
                 when {
@@ -51,8 +50,8 @@ object Day22 {
         val p1 = ArrayDeque(p1List)
         val p2 = ArrayDeque(p2List)
         while (p1.isNotEmpty() && p2.isNotEmpty()) {
-            val card1 = p1.remove()
-            val card2 = p2.remove()
+            val card1 = p1.removeFirst()
+            val card2 = p2.removeFirst()
             when {
                 card1 > card2 -> p1.addAll(listOf(card1, card2))
                 card2 > card1 -> p2.addAll(listOf(card2, card1))
