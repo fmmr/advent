@@ -26,7 +26,13 @@ object Day22 {
             }
             val card1 = p1.removeFirst()
             val card2 = p2.removeFirst()
-            if (if (recursive && (p1.size) >= card1 && (p2.size) >= card2) game(p1.take(card1), p2.take(card2), true).second.isEmpty() else card1 > card2) {
+            val player1Wins = if (recursive && (p1.size) >= card1 && (p2.size) >= card2) {
+                game(p1.take(card1), p2.take(card2), true).second.isEmpty()
+            } else {
+                card1 > card2
+            }
+
+            if (player1Wins) {
                 p1.add(card1)
                 p1.add(card2)
             } else {
