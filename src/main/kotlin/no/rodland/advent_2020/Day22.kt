@@ -7,7 +7,8 @@ object Day22 {
     }
 
     fun partTwo(list: String): Int {
-        return play(list, true)
+        val play = play(list, true)
+        return play
     }
 
     private fun play(list: String, recursive: Boolean): Int {
@@ -17,11 +18,11 @@ object Day22 {
     }
 
     private fun game(p1List: List<Int>, p2List: List<Int>, recursive: Boolean): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
-        val previousGames = mutableSetOf<ArrayDeque<Int>>()
+        val previousGames = mutableSetOf<Pair<ArrayDeque<Int>, ArrayDeque<Int>>>()
         val p1 = ArrayDeque(p1List)
         val p2 = ArrayDeque(p2List)
         while (p1.isNotEmpty() && p2.isNotEmpty()) {
-            if (!previousGames.add(p1)) {
+            if (!previousGames.add(p1 to p2)) {
                 return p1 to ArrayDeque()
             }
             val card1 = p1.removeFirst()
