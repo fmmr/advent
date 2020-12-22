@@ -10,9 +10,9 @@ object Day22 {
         return play(list) { list1: List<Int>, list2: List<Int> -> playRec(list1, list2) }
     }
 
-    private fun play(list: String, f: (List<Int>, List<Int>) -> Pair<ArrayDeque<Int>, ArrayDeque<Int>>): Int {
+    private fun play(list: String, gamePlay: (List<Int>, List<Int>) -> Pair<ArrayDeque<Int>, ArrayDeque<Int>>): Int {
         val (list1, list2) = parseInput(list)
-        val (p1, p2) = f(list1, list2)
+        val (p1, p2) = gamePlay(list1, list2)
         var i = 1
         return (p1 + p2).reversed().fold(0) { acc, card -> acc + (card * i++) }
     }
