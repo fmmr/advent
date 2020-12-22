@@ -3,11 +3,11 @@ package no.rodland.advent_2020
 // --- Day 22: Crab Combat ---
 object Day22 {
     fun partOne(list: String): Int {
-        return play(list) { list1: List<Int>, list2: List<Int> -> playNonRec(list1, list2) }
+        return play(list) { l1: List<Int>, l2: List<Int> -> playNonRec(l1, l2) }
     }
 
     fun partTwo(list: String): Int {
-        return play(list) { list1: List<Int>, list2: List<Int> -> playRec(list1, list2) }
+        return play(list) { l1: List<Int>, l2: List<Int> -> playRec(l1, l2) }
     }
 
     private fun play(list: String, gamePlay: (List<Int>, List<Int>) -> Pair<ArrayDeque<Int>, ArrayDeque<Int>>): Int {
