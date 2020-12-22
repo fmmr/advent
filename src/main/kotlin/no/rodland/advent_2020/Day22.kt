@@ -1,9 +1,6 @@
 package no.rodland.advent_2020
 
-
 // --- Day 22: Crab Combat ---
-
-@Suppress("UNUSED_PARAMETER")
 object Day22 {
     fun partOne(list: String): Int {
         val (list1, list2) = parseInput(list)
