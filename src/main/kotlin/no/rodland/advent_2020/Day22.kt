@@ -3,21 +3,21 @@ package no.rodland.advent_2020
 // --- Day 22: Crab Combat ---
 object Day22 {
     fun partOne(list: String): Int {
-        return play(list) { l1: List<Int>, l2: List<Int> -> playNonRec(l1, l2) }
+        return play(list, false)
     }
 
     fun partTwo(list: String): Int {
-        return play(list) { l1: List<Int>, l2: List<Int> -> playRec(l1, l2) }
+        return play(list, true)
     }
 
-    private fun play(list: String, gamePlay: (List<Int>, List<Int>) -> Pair<ArrayDeque<Int>, ArrayDeque<Int>>): Int {
+    private fun play(list: String, recursive: Boolean): Int {
         val (list1, list2) = parseInput(list)
-        val (p1, p2) = gamePlay(list1, list2)
-        var i = 1
-        return (p1 + p2).reversed().fold(0) { acc, card -> acc + (card * i++) }
+        val (p1, p2) = game(list1, list2, recursive)
+        val winner = p1 + p2
+        return winner.foldIndexed(0) { idx, acc, card -> acc + card * (winner.size - idx) }
     }
 
-    private fun playRec(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
+    private fun game(p1List: List<Int>, p2List: List<Int>, recursive: Boolean): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
         val previousGames = mutableSetOf<ArrayDeque<Int>>()
         val p1 = ArrayDeque(p1List)
         val p2 = ArrayDeque(p2List)
@@ -27,26 +27,12 @@ object Day22 {
             }
             val card1 = p1.removeFirst()
             val card2 = p2.removeFirst()
-            if (if ((p1.size) >= card1 && (p2.size) >= card2) playRec(p1.take(card1), p2.take(card2)).second.isEmpty() else card1 > card2) {
+            if (if (recursive && (p1.size) >= card1 && (p2.size) >= card2) game(p1.take(card1), p2.take(card2), true).second.isEmpty() else card1 > card2) {
                 p1.add(card1)
                 p1.add(card2)
             } else {
                 p2.add(card2)
                 p2.add(card1)
-            }
-        }
-        return p1 to p2
-    }
-
-    private fun playNonRec(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
-        val p1 = ArrayDeque(p1List)
-        val p2 = ArrayDeque(p2List)
-        while (p1.isNotEmpty() && p2.isNotEmpty()) {
-            val card1 = p1.removeFirst()
-            val card2 = p2.removeFirst()
-            when {
-                card1 > card2 -> p1.addAll(listOf(card1, card2))
-                card2 > card1 -> p2.addAll(listOf(card2, card1))
             }
         }
         return p1 to p2
