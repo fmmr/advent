@@ -18,27 +18,21 @@ object Day22 {
     }
 
     private fun playRec(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
-        val previousGames1 = mutableSetOf<List<Int>>()
-        val previousGames2 = mutableSetOf<List<Int>>()
+        val previousGames = mutableSetOf<ArrayDeque<Int>>()
         val p1 = ArrayDeque(p1List)
         val p2 = ArrayDeque(p2List)
         while (p1.isNotEmpty() && p2.isNotEmpty()) {
-            if (!previousGames1.add(p1.toList()) || !previousGames2.add(p2.toList())) {
+            if (!previousGames.add(p1)) {
                 return p1 to ArrayDeque()
             }
             val card1 = p1.removeFirst()
             val card2 = p2.removeFirst()
-            if ((p1.size) >= card1 && (p2.size) >= card2) {
-                val (subgame1, subgame2) = playRec(p1.take(card1), p2.take(card2))
-                when {
-                    subgame2.isEmpty() -> p1.addAll(listOf(card1, card2))
-                    subgame1.isEmpty() -> p2.addAll(listOf(card2, card1))
-                }
+            if (if ((p1.size) >= card1 && (p2.size) >= card2) playRec(p1.take(card1), p2.take(card2)).second.isEmpty() else card1 > card2) {
+                p1.add(card1)
+                p1.add(card2)
             } else {
-                when {
-                    card1 > card2 -> p1.addAll(listOf(card1, card2))
-                    card2 > card1 -> p2.addAll(listOf(card2, card1))
-                }
+                p2.add(card2)
+                p2.add(card1)
             }
         }
         return p1 to p2
