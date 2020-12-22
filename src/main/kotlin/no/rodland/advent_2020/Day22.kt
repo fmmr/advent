@@ -33,19 +33,15 @@ object Day22 {
             val card1 = p1.remove()
             val card2 = p2.remove()
             if ((p1.size) >= card1 && (p2.size) >= card2) {
-                val p1List1 = p1.toList().subList(0, card1)
-                val p2List1 = p2.toList().subList(0, card2)
-                val (subgame1, subgame2) = playRec(p1List1, p2List1)
+                val (subgame1, subgame2) = playRec(p1.take(card1), p2.take(card2))
                 when {
                     subgame2.isEmpty() -> p1.addAll(listOf(card1, card2))
                     subgame1.isEmpty() -> p2.addAll(listOf(card2, card1))
-                    else -> error("hm.. no winner of subgame???")
                 }
             } else {
                 when {
                     card1 > card2 -> p1.addAll(listOf(card1, card2))
                     card2 > card1 -> p2.addAll(listOf(card2, card1))
-                    else -> error("Cards are equal - don't know what to do")
                 }
             }
         }
