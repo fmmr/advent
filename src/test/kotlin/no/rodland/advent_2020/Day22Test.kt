@@ -24,6 +24,16 @@ internal class Day22Test {
         7
         10
     """.trimIndent()
+    val test_loop = """
+    Player 1:
+    43
+    19
+    
+    Player 2:
+    2
+    29
+    14
+    """.trimIndent()
 
     @Nested
     inner class Init {
@@ -37,7 +47,7 @@ internal class Day22Test {
         @Test
         fun `22,2,live,init`() {
             report {
-                Day22.partTwo(data22) to 2
+                Day22.partTwo(data22) to 31436
             }
         }
     }
@@ -71,21 +81,28 @@ internal class Day22Test {
         @Test
         fun `22,2,test`() {
             report {
-                Day22.partTwo(test22) to 2
+                Day22.partTwo(test22) to 291
+            }
+        }
+
+        @Test
+        fun `22,2,test,loop`() {
+            report {
+                Day22.partTwo(test_loop) to 105
             }
         }
 
         @Test
         fun `22,2,live,1`() {
             report {
-                Day22.partTwo(data22) to 2
+                Day22.partTwo(data22) to 31436
             }
         }
 
         @Test
         fun `22,2,live,2`() {
             report {
-                Day22.partTwo(data22) to 2
+                Day22.partTwo(data22) to 31436
             }
         }
     }
