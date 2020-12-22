@@ -30,7 +30,7 @@ internal class Day22Test {
         @Test
         fun `22,1,live,init`() {
             report {
-                Day22.partOne(data22) to 2
+                Day22.partOne(data22) to 32401
             }
         }
 
@@ -47,21 +47,21 @@ internal class Day22Test {
         @Test
         fun `22,1,test`() {
             report {
-                Day22.partOne(test22) to 2
+                Day22.partOne(test22) to 306
             }
         }
 
         @Test
         fun `22,1,live,1`() {
             report {
-                Day22.partOne(data22) to 2
+                Day22.partOne(data22) to 32401
             }
         }
 
         @Test
         fun `22,1,live,2`() {
             report {
-                Day22.partOne(data22) to 2
+                Day22.partOne(data22) to 32401
             }
         }
     }
