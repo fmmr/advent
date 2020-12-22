@@ -20,7 +20,6 @@ object Day22 {
         return (p1 + p2).reversed().fold(0) { acc, card -> acc + (card * i++) }
     }
 
-    // your answer is too high  33291
     private fun playRec(p1List: List<Int>, p2List: List<Int>): Pair<ArrayDeque<Int>, ArrayDeque<Int>> {
         val previousGames1 = mutableSetOf<List<Int>>()
         val previousGames2 = mutableSetOf<List<Int>>()
@@ -57,7 +56,6 @@ object Day22 {
             when {
                 card1 > card2 -> p1.addAll(listOf(card1, card2))
                 card2 > card1 -> p2.addAll(listOf(card2, card1))
-                else -> error("Cards are equal - don't know what to do")
             }
         }
         return p1 to p2
