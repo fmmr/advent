@@ -3,20 +3,28 @@ package no.rodland.advent_2020
 @Suppress("UNUSED_PARAMETER")
 object Day23 {
     fun partOne(list: String, iterations: Int = 100): String {
+        val buffer = play(list, iterations)
+        return buffer.result()
+    }
+
+    fun partTwo(list: String, iterations: Int = 10000000): Int {
+//        val buffer = play(list, iterations)
+//        println("result: ${buffer.result()}")
+        return 2
+    }
+
+    private fun play(list: String, iterations: Int): RingBuffer {
         val buffer = RingBuffer(list)
         var idx = 0
-
         for (i in 1..iterations) {
             val num = buffer[idx]
             buffer.blacklist(idx)
             val destination = buffer.destination(num)
-//            debug(i, buffer, num, destination, idx)
+            //  debug(i, buffer, num, destination, idx)
             buffer.moveStuff(num, destination, i)
             idx = buffer.indexAfter(num)
         }
-
-        println("result: ${buffer.result()}")
-        return buffer.result()
+        return buffer
     }
 
     @Suppress("unused")
@@ -28,11 +36,7 @@ object Day23 {
         println("idx_current: $idx")
         println()
     }
-    // 94523678 to high
 
-    fun partTwo(list: String): Int {
-        return 2
-    }
 
     class RingBuffer(data: List<Int>) : Iterable<Int> {
         constructor(str: String) : this(str.map { c -> c.toString().toInt() })
