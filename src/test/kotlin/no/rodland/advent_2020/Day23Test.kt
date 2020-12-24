@@ -124,7 +124,7 @@ internal class Day23Test {
     @Nested
     inner class `Part 2` {
         @Test
-        @Slow(5000)
+//        @Slow(5000)
         fun `23,2,test`() {
             report {
                 Day23.partTwo(test23) to 149245887792
