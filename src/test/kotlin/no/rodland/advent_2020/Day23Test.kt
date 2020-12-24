@@ -1,6 +1,7 @@
 package no.rodland.advent_2020
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import no.rodland.advent_2020.Day23.RingBuffer
 import org.junit.jupiter.api.Nested
@@ -19,13 +20,6 @@ internal class Day23Test {
         fun `23,1,live,init`() {
             report {
                 Day23.partOne(data23) to "78569234"
-            }
-        }
-
-        @Test
-        fun `23,2,live,init`() {
-            report {
-                Day23.partTwo(data23, 1000000) to 2
             }
         }
     }
@@ -130,23 +124,18 @@ internal class Day23Test {
     @Nested
     inner class `Part 2` {
         @Test
+        @Slow(5000)
         fun `23,2,test`() {
             report {
-                Day23.partTwo(test23) to 2
+                Day23.partTwo(test23) to 149245887792
             }
         }
 
         @Test
+        @Slow(5000)
         fun `23,2,live,1`() {
             report {
-                Day23.partTwo(data23) to 2
-            }
-        }
-
-        @Test
-        fun `23,2,live,2`() {
-            report {
-                Day23.partTwo(data23) to 2
+                Day23.partTwo(data23) to 565615814504
             }
         }
     }

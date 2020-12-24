@@ -3,28 +3,57 @@ package no.rodland.advent_2020
 @Suppress("UNUSED_PARAMETER")
 object Day23 {
     fun partOne(list: String, iterations: Int = 100): String {
-        val buffer = play(list, iterations)
+        val buffer = playPart1(list, iterations)
         return buffer.result()
     }
 
-    fun partTwo(list: String, iterations: Int = 10000000): Int {
-//        val buffer = play(list, iterations)
-//        println("result: ${buffer.result()}")
-        return 2
+    fun partTwo(list: String, iterations: Int = 10000000): Long {
+        val original = list.map { c -> c.toString().toInt() }
+        val intList = (original + ((original.maxOrNull()!! + 1)..1000000)).map { LinkNext(it) }.toList()
+        val buffer = RingBuffer2(intList)
+        repeat(10000000) { buffer.play() }
+        val res = buffer.result()
+        return res.second.num.toLong() * res.third.num.toLong()
     }
 
-    private fun play(list: String, iterations: Int): RingBuffer {
-        val buffer = RingBuffer(list)
-        var idx = 0
-        for (i in 1..iterations) {
-            val num = buffer[idx]
-            buffer.blacklist(idx)
-            val destination = buffer.destination(num)
-            //  debug(i, buffer, num, destination, idx)
-            buffer.moveStuff(num, destination, i)
-            idx = buffer.indexAfter(num)
+    class RingBuffer2(data: List<LinkNext>) {
+
+        private var dataArray = Array(data.size) { data[it] }
+        var current = dataArray[0]
+        val size = dataArray.size
+        private var dataArrayFirst = Array(10) { data[it] }
+
+        init {
+            dataArray.indices.take(dataArray.size - 1).forEach { idx -> data[idx].next = data[idx + 1] }
+            dataArray.last().next = dataArray[0]
         }
-        return buffer
+
+        operator fun get(i: Int): LinkNext = dataArray.get(i)
+
+        fun result(): Triple<LinkNext, LinkNext, LinkNext> {
+            val indexOfOne = dataArray[dataArray.indexOfFirst { it.num == 1 }]
+            return Triple(indexOfOne, indexOfOne.next, indexOfOne.next.next)
+        }
+
+        fun play() {
+            val blackList1 = current.next
+            val blackList2 = blackList1.next
+            val blackList3 = blackList2.next
+            val blackList = setOf(blackList1.num, blackList2.num, blackList3.num)
+            val next = blackList3.next
+            val nextValue = setOf(current.num - 1, current.num - 2, current.num - 3, current.num - 4, size, size - 1, size - 2, size - 3).first { it > 0 && it !in blackList }
+            val nextPointer = if (nextValue >= 10) {
+                dataArray[nextValue - 1]
+            } else {
+                dataArray[dataArrayFirst.indexOfFirst { it.num == nextValue }]
+            }
+            val nextNextPointer = nextPointer.next
+
+            current.next = next
+            nextPointer.next = blackList1
+            blackList3.next = nextNextPointer
+            current = next
+        }
     }
 
     @Suppress("unused")
@@ -37,6 +66,24 @@ object Day23 {
         println()
     }
 
+    class LinkNext(val num: Int) {
+        lateinit var next: LinkNext
+        override fun toString() = "link: $num, next: ${next.num}"
+    }
+
+    private fun playPart1(list: String, iterations: Int): RingBuffer {
+        val buffer = RingBuffer(list)
+        var idx = 0
+        for (i in 1..iterations) {
+            val num = buffer[idx]
+            buffer.blacklist(idx)
+            val destination = buffer.destination(num)
+            //  debug(i, buffer, num, destination, idx)
+            buffer.moveStuff(num, destination, i)
+            idx = buffer.indexAfter(num)
+        }
+        return buffer
+    }
 
     class RingBuffer(data: List<Int>) : Iterable<Int> {
         constructor(str: String) : this(str.map { c -> c.toString().toInt() })
