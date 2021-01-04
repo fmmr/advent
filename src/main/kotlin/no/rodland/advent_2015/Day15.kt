@@ -8,7 +8,6 @@ object Day15 {
 
     fun partOne(list: List<String>): Long {
         val ingredients = list.map { Ingredient(it) }
-
         return if (ingredients.size == 2) {
             runTwo(ingredients)
         } else {
@@ -16,8 +15,23 @@ object Day15 {
         }
     }
 
+    fun partTwo(list: List<String>): Long {
+        val ingredients = list.map { Ingredient(it) }
+        return if (ingredients.size == 2) {
+            error("only implemented for 4 ingredients.")
+        } else {
+            cal500(ingredients)
+        }
+    }
+
+    private fun List<Ingredient>.capacity(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.capacity }.sum().toLong())
+    private fun List<Ingredient>.durability(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.durability }.sum().toLong())
+    private fun List<Ingredient>.flavor(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.flavor }.sum().toLong())
+    private fun List<Ingredient>.texture(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.texture }.sum().toLong())
+    private fun List<Ingredient>.calories(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.calories }.sum().toLong())
+
     private fun runTwo(ingredients: List<Ingredient>): Long {
-        return (0..100).map { i ->
+        return (0..100).asSequence().map { i ->
             val j = 100 - i
             val capacity = ingredients.capacity(listOf(i, j))
             val durability = ingredients.durability(listOf(i, j))
@@ -27,36 +41,40 @@ object Day15 {
         }.maxOrNull()!!
     }
 
-    private fun List<Ingredient>.capacity(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.capacity }.sum().toLong())
-    private fun List<Ingredient>.durability(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.durability }.sum().toLong())
-    private fun List<Ingredient>.flavor(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.flavor }.sum().toLong())
-    private fun List<Ingredient>.texture(num: List<Int>) = max(0, mapIndexed { index: Int, ingredient: Ingredient -> num[index] * ingredient.texture }.sum().toLong())
-
     private fun runFour(ingredients: List<Ingredient>): Long {
-        return (0..100).flatMap { i ->
-            (0..(100 - i)).flatMap { j ->
-                (0..(100 - i - j)).map { k ->
-                    val l = 100 - i - j - k
-                    val capacity = ingredients.capacity(listOf(i, j, k, l))
-                    val durability = ingredients.durability(listOf(i, j, k, l))
-                    val flavor = ingredients.flavor(listOf(i, j, k, l))
-                    val texture = ingredients.texture(listOf(i, j, k, l))
-                    capacity * durability * flavor * texture
+        return (0..100).asSequence().flatMap { i ->
+            (0..(100 - i)).asSequence().flatMap { j ->
+                (0..(100 - i - j)).asSequence().map { k ->
+                    score(ingredients, i, j, k, 100 - i - j - k)
                 }
             }
         }.maxOrNull()!!
     }
 
-//    val capacity = max(0, i * ingredients[0].capacity + j * ingredients[1].capacity).toLong()
-//    val durability = max(0, i * ingredients[0].durability + j * ingredients[1].durability).toLong()
-//    val flavor = max(0, i * ingredients[0].flavor + j * ingredients[1].flavor).toLong()
-//    val texture = max(0, i * ingredients[0].texture + j * ingredients[1].texture).toLong()
-//    capacity * durability * flavor * texture
-
-    fun partTwo(list: List<String>): Int {
-        return 2
+    private fun cal500(ingredients: List<Ingredient>): Long {
+        return (0..100).asSequence().flatMap { i ->
+            (0..(100 - i)).asSequence().flatMap { j ->
+                (0..(100 - i - j)).asSequence().map { k ->
+                    (100 - i - j - k).let { l ->
+                        ingredients.calories(listOf(i, j, k, l)) to score(ingredients, i, j, k, l)
+                    }
+                }
+            }
+        }
+            .filter { it.first == 500L && it.second > 0 }
+            .maxByOrNull { it.second }!!
+            .second
     }
 
+    private fun score(ingredients: List<Ingredient>, i: Int, j: Int, k: Int, l: Int): Long {
+        val capacity = ingredients.capacity(listOf(i, j, k, l))
+        val durability = ingredients.durability(listOf(i, j, k, l))
+        val flavor = ingredients.flavor(listOf(i, j, k, l))
+        val texture = ingredients.texture(listOf(i, j, k, l))
+        return capacity * durability * flavor * texture
+    }
+
+    // your answer is too low 8844
     data class Ingredient(val name: String, val capacity: Int, val durability: Int, val flavor: Int, val texture: Int, val calories: Int) {
         constructor(str: String, mr: MatchResult.Destructured = regex.find(str)!!.destructured) : this(
             mr.component1(),
