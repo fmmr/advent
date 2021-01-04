@@ -19,7 +19,7 @@ internal class Day15Test {
         @Test
         fun `15,1,live,init`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 222870
             }
         }
 
@@ -36,21 +36,21 @@ internal class Day15Test {
         @Test
         fun `15,1,test`() {
             report {
-                Day15.partOne(test15) to 2
+                Day15.partOne(test15) to 62842880L
             }
         }
 
         @Test
         fun `15,1,live,1`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 222870
             }
         }
 
         @Test
         fun `15,1,live,2`() {
             report {
-                Day15.partOne(data15) to 2
+                Day15.partOne(data15) to 222870
             }
         }
     }
