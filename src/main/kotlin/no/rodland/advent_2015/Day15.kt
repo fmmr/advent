@@ -2,7 +2,6 @@ package no.rodland.advent_2015
 
 import kotlin.math.max
 
-@Suppress("UNUSED_PARAMETER")
 object Day15 {
     val regex = """(.*): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)""".toRegex()
 
@@ -74,7 +73,6 @@ object Day15 {
         return capacity * durability * flavor * texture
     }
 
-    // your answer is too low 8844
     data class Ingredient(val name: String, val capacity: Int, val durability: Int, val flavor: Int, val texture: Int, val calories: Int) {
         constructor(str: String, mr: MatchResult.Destructured = regex.find(str)!!.destructured) : this(
             mr.component1(),
