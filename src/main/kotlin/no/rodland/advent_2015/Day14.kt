@@ -10,8 +10,15 @@ object Day14 {
         return list.map { Reindeer(it) }.map { it.distanceAfter(seconds) }.maxOrNull()!!
     }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    fun partTwo(list: List<String>, seconds: Int): Int {
+        val reindeers = list.map { Reindeer(it) }
+        val leaders = reindeers.map { it to 0 }.toMap().toMutableMap()
+
+        (1..seconds).forEach { afterSecond ->
+            val leading = reindeers.maxByOrNull { deer -> deer.distanceAfter(afterSecond) }!!
+            leaders[leading] = leaders[leading]!! + 1
+        }
+        return leaders.maxOf { it.value }
     }
 
     data class Reindeer(val name: String, val speed: Int, val flyTime: Int, val restTime: Int) {
