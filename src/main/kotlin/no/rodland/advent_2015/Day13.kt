@@ -1,4 +1,8 @@
+@file:Suppress("UnstableApiUsage")
+
 package no.rodland.advent_2015
+
+import com.google.common.collect.Collections2
 
 object Day13 {
     val regex = """(.+) would (lose|gain) (\d+) happiness units by sitting next to (.+).""".toRegex()
@@ -6,42 +10,14 @@ object Day13 {
     fun partOne(list: List<String>): Int {
         val all = list.map { Line(it) }
         val persons = all.map { it.persons.first }.toSet()
+        val permutations = Collections2.permutations(persons)
         val allMap = all.map { it.persons to it }.toMap()
-        val sorted = persons
-            .flatMap { person ->
-                all.filter { it.persons.first == person }.map { (person to it.persons.second) to it.units + (allMap[it.persons.second to it.persons.first]!!.units) }
-            }
-            .asSequence()
-            .chunked(2)
-            .map { it.first() }
-            .sortedByDescending { it.second }
-            .toList()
-        val placements = mutableListOf<Pair<String, String>>()
-        val seats = persons.mapNotNull { person ->
-            pickNext(person, sorted, placements)
-        }
-        println("persons: $persons")
-        println("found all seats: $seats")
-//        return seats.sumBy { it.second }
-        return 2
+        return permutations.map { calculateHappiness(it, allMap) }.maxOrNull()!!
     }
 
-    private fun pickNext(person: String, sorted: List<Pair<Pair<String, String>, Int>>, placements: MutableList<Pair<String, String>>): Pair<Pair<String, String>, Int>? {
-        val candidates = sorted
-            .filter { it.first.first == person || it.first.second == person }
-            .filterNot { placements.contains(it.first) }
-            .filterNot { (p, _) -> placements.count { it.first == p.first } + placements.count { it.second == p.first } >= 2 }
-            .filterNot { (p, _) -> placements.count { it.first == p.second } + placements.count { it.second == p.second } >= 2 }
-            .firstOrNull()
-
-        if (candidates == null) {
-            println("hmmm... no more space for $person given $placements")
-            return null
-        } else {
-            placements.add(candidates.first)
-            return candidates
-        }
-
+    private fun calculateHappiness(seatings: List<String>, allMap: Map<Pair<String, String>, Line>): Int {
+        val pairs = (seatings.windowed(2).map { it.first() to it.last() }) + (seatings.first() to seatings.last())
+        return pairs.map { allMap[it.first to it.second]!!.units + allMap[it.second to it.first]!!.units }.sum()
     }
 
     // 898  That's not the right answer; your answer is too high.
