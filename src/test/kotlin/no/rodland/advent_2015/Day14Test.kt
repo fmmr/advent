@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Test
 @Suppress("ClassName")
 @DisableSlow
 internal class Day14Test {
-    val data14 = "2020/input_14.txt".readFile()
-    val test14 = listOf("1", "2")
+    val data14 = "2015/input_14.txt".readFile()
+    val test14 = listOf(
+        "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
+        "Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
+    )
 
     @Nested
     inner class Init {
