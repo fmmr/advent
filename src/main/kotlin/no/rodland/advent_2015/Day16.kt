@@ -30,16 +30,11 @@ object Day16 {
     data class Sue(val sue: Int, val map: Map<String, Int>, val nonSpecial: Map<String, Int> = map.filterNot { it.key in listOf("cats", "trees", "pomeranians", "goldfish") }) {
         fun matchesPart1(): Boolean = matchesMap(map)
 
-        fun matchesPart2(): Boolean = if (matchesMap(nonSpecial)) {
-            !(shouldBeGreater("trees") || shouldBeGreater("cats") || shouldBeLess("pomeranians") || shouldBeLess("goldfish"))
-        } else {
-            false
-        }
+        fun matchesPart2(): Boolean = matchesMap(nonSpecial) && greater("trees", "cats") && less("pomeranians", "goldfish")
 
+        private fun greater(vararg params: String) = params.all { map.getOrDefault(it, maxmfcsam) > mfcsam[it]!! }
+        private fun less(vararg params: String) = params.all { map.getOrDefault(it, minmfcsam) < mfcsam[it]!! }
         private fun matchesMap(testMap: Map<String, Int>) = testMap.all { (k, v) -> mfcsam[k] == v }
-
-        private fun shouldBeGreater(param: String) = map.getOrDefault(param, maxmfcsam) <= mfcsam[param]!!
-        private fun shouldBeLess(param: String) = map.getOrDefault(param, minmfcsam) >= mfcsam[param]!!
 
         constructor(str: String, mr: MatchResult.Destructured = regex.find(str)!!.destructured) : this(
             mr.component1().toInt(),
