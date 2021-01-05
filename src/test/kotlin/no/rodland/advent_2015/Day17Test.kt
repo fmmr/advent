@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test
 @Suppress("ClassName")
 @DisableSlow
 internal class Day17Test {
-    val data17 = "2015/input_17.txt".readFile()
-    val test17 = listOf("1", "2")
+    val data17 = "2015/input_17.txt".readFileInts()
+    val test17 = listOf(20, 15, 10, 5, 5)
 
     @Nested
     inner class Init {
         @Test
         fun `17,1,live,init`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17, 150) to 4372
             }
         }
 
@@ -33,21 +33,21 @@ internal class Day17Test {
         @Test
         fun `17,1,test`() {
             report {
-                Day17.partOne(test17) to 2
+                Day17.partOne(test17, 25) to 4
             }
         }
 
         @Test
         fun `17,1,live,1`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17, 150) to 4372
             }
         }
 
         @Test
         fun `17,1,live,2`() {
             report {
-                Day17.partOne(data17) to 2
+                Day17.partOne(data17, 150) to 4372
             }
         }
     }
