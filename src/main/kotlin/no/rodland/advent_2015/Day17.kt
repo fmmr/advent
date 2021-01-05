@@ -2,8 +2,13 @@ package no.rodland.advent_2015
 
 @Suppress("UNUSED_PARAMETER")
 object Day17 {
+
     fun partOne(list: List<Int>, liters: Int): Int {
         return combinations(list).count { it.sum() == liters }
+    }
+
+    fun partTwo(list: List<Int>, liters: Int): Int {
+        return combinations(list).filter { it.sum() == liters }.groupBy { it.size }.minByOrNull { it.key }!!.value.size
     }
 
     // https://stackoverflow.com/a/59877740/13131627
@@ -20,9 +25,5 @@ object Day17 {
             retList.add(working)
         }
         return retList
-    }
-
-    fun partTwo(list: List<Int>): Int {
-        return 2
     }
 }
