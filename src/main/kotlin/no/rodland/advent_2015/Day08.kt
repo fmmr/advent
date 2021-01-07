@@ -9,16 +9,20 @@ object Day08 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return 2
+        return list.map { it.encLength() - it.length }.sum()
     }
 
     private fun String.codeLength(): Int = length
     private fun String.memLength(): Int = mem().length
+    private fun String.encLength(): Int = enc().length
+
+    private fun String.enc() = "\"" + replace("\\\\".toRegex(), "\\\\\\\\").replace("\"".toRegex(), "\\\\\"") + "\""
+
 
     private fun String.mem() = replace("^\"".toRegex(), "")
-        .replace("\"$".toRegex(), "")
-        .replace("""\\x([0-9A-Fa-f][0-9A-Fa-f])""".toRegex()) { matchResult -> matchResult.groupValues[1].toInt(16).toChar().toString() }
-        .replace("""\\(["\\])""".toRegex(), "$1")
+            .replace("\"$".toRegex(), "")
+            .replace("""\\x([0-9A-Fa-f][0-9A-Fa-f])""".toRegex()) { matchResult -> matchResult.groupValues[1].toInt(16).toChar().toString() }
+            .replace("""\\(["\\])""".toRegex(), "$1")
 
     private fun debug(list: List<String>) {
         list.onEach {
@@ -26,4 +30,3 @@ object Day08 {
         }
     }
 }
-// 1344 to high

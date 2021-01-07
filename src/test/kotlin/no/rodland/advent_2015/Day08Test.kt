@@ -10,11 +10,17 @@ import org.junit.jupiter.api.Test
 internal class Day08Test {
     val data08 = "2015/input_08.txt".readFile()
     val test08 = listOf(
-        "\"\"",
-        "\"abc\"",
-        "\"aaa\\\"aaa\"",
-        "\"\\x27\"",
-        "\"l\\\\e\""
+            "\"\"",
+            "\"abc\"",
+            "\"aaa\\\"aaa\"",
+            "\"\\x27\"",
+            "\"l\\\\e\""
+    )
+    val test08_2 = listOf(
+            "\"\"",
+            "\"abc\"",
+            "\"aaa\\\"aaa\"",
+            "\"\\x27\"",
     )
 
     @Nested
@@ -29,7 +35,7 @@ internal class Day08Test {
         @Test
         fun `08,2,live,init`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 2074
             }
         }
     }
@@ -77,21 +83,21 @@ internal class Day08Test {
         @Test
         fun `08,2,test`() {
             report {
-                Day08.partTwo(test08) to 2
+                Day08.partTwo(test08_2) to 19
             }
         }
 
         @Test
         fun `08,2,live,1`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 2074
             }
         }
 
         @Test
         fun `08,2,live,2`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 2074
             }
         }
     }
