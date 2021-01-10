@@ -62,3 +62,19 @@ fun <T> Sequence<T>.takeWhileInclusive(pred: (T) -> Boolean): Sequence<T> {
 }
 
 fun List<Number>.product(): Long = fold(1L) { acc, n -> acc * n.toLong() }
+
+// https://stackoverflow.com/a/59877740/13131627
+fun <T> List<T>.combinations(): List<List<T>> {
+    val retList = mutableListOf<List<T>>()
+    val count = (1 shl size)
+    (0 until count).forEach { i ->
+        val working = mutableListOf<T>()
+        (indices).forEach { j ->
+            if (i and (1 shl j) > 0) {
+                working.add(this[j])
+            }
+        }
+        retList.add(working)
+    }
+    return retList
+}
