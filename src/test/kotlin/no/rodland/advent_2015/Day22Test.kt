@@ -13,14 +13,14 @@ internal class Day22Test {
         @Test
         fun `22,1,live,init`() {
             report {
-                Day22.partOne(51, 9) to 2
+                Day22.partOne(51, 9) to 900
             }
         }
 
         @Test
         fun `22,2,live,init`() {
             report {
-                Day22.partTwo(51, 9) to 2
+                Day22.partTwo(51, 9) to 1216
             }
         }
     }
@@ -28,23 +28,16 @@ internal class Day22Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `22,1,test`() {
-            report {
-                Day22.partOne(51, 9) to 2
-            }
-        }
-
-        @Test
         fun `22,1,live,1`() {
             report {
-                Day22.partOne(51, 9) to 2
+                Day22.partOne(51, 9) to 900
             }
         }
 
         @Test
         fun `22,1,live,2`() {
             report {
-                Day22.partOne(51, 9) to 2
+                Day22.partOne(51, 9) to 900
             }
         }
     }
@@ -52,23 +45,16 @@ internal class Day22Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `22,2,test`() {
-            report {
-                Day22.partTwo(51, 9) to 2
-            }
-        }
-
-        @Test
         fun `22,2,live,1`() {
             report {
-                Day22.partTwo(51, 9) to 2
+                Day22.partTwo(51, 9) to 1216
             }
         }
 
         @Test
         fun `22,2,live,2`() {
             report {
-                Day22.partTwo(51, 9) to 2
+                Day22.partTwo(51, 9) to 1216
             }
         }
     }
