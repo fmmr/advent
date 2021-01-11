@@ -1,7 +1,5 @@
 package no.rodland.advent_2015
 
-
-@Suppress("UNUSED_PARAMETER")
 object Day25 {
     fun partOne(): Long {
         val row = 2947
