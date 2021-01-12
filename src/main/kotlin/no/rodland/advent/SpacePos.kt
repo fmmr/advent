@@ -96,20 +96,20 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     fun next(c: Char, howMuch: Int = 1): Pos {
         return when (c) {
-            'N', '^' -> above(howMuch)
-            'S', 'v' -> below(howMuch)
-            'W', '<' -> left(howMuch)
-            'E', '>' -> right(howMuch)
+            'U', 'N', '^' -> above(howMuch)
+            'D', 'S', 'v' -> below(howMuch)
+            'L', 'W', '<' -> left(howMuch)
+            'R', 'E', '>' -> right(howMuch)
             else -> error("Unable to get pos from direction: $c")
         }
     }
 
     fun next(s: String, howMuch: Int = 1): Pos {
         return when (s) {
-            "N", "^" -> above(howMuch)
-            "S", "v" -> below(howMuch)
-            "W", "<" -> left(howMuch)
-            "E", ">" -> right(howMuch)
+            "U", "N", "^" -> above(howMuch)
+            "D", "S", "v" -> below(howMuch)
+            "L", "W", "<" -> left(howMuch)
+            "R", "E", ">" -> right(howMuch)
             "NE" -> ne()
             "SE" -> se()
             "NW" -> nw()
