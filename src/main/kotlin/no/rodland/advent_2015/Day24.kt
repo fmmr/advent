@@ -1,6 +1,7 @@
 package no.rodland.advent_2015
 
-import combinations
+import no.rodland.advent.combinations
+
 
 @Suppress("UNUSED_PARAMETER")
 object Day24 {
