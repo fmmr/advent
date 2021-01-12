@@ -22,7 +22,7 @@ fun String.readFirstLineInts(): List<Int> {
 }
 
 fun String.readFirstLineStrings(): List<String> {
-    return this.readFile()[0].split(",", " ")
+    return this.readFile()[0].split(",", ", ")
 }
 
 fun String.readFirstLineConvertToInts(): List<Int> {

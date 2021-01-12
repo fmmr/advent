@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test
 internal class Day01Test {
     val data01 = "2016/input_01.txt".readFirstLineStrings()
     val test01 = listOf("R2", "L3")
+    val test01_3 = listOf("R2", "R2", "R2")
+    val test01_2 = listOf("R5", "L5", "R5", "R3")
 
     @Nested
     inner class Init {
@@ -33,7 +35,21 @@ internal class Day01Test {
         @Test
         fun `01,1,test`() {
             report {
-                Day01.partOne(test01) to 2
+                Day01.partOne(test01) to 5
+            }
+        }
+
+        @Test
+        fun `01,1,test,2`() {
+            report {
+                Day01.partOne(test01_2) to 12
+            }
+        }
+
+        @Test
+        fun `01,1,test,3`() {
+            report {
+                Day01.partOne(test01_3) to 2
             }
         }
 
