@@ -41,6 +41,4 @@ object Day04 {
             return chars[pos]
         }
     }
-
 }
-
