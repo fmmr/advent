@@ -1,4 +1,4 @@
-package no.rodland.advent_2015
+package no.rodland.advent_2016
 
 class Util
 
@@ -28,3 +28,4 @@ fun String.readFirstLineStrings(): List<String> {
 fun String.readFirstLineConvertToInts(): List<Int> {
     return this.readFile()[0].map { it.toString().toInt() }
 }
+
