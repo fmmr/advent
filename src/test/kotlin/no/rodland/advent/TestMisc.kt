@@ -8,8 +8,10 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import kotlin.system.measureTimeMillis
 
 fun <T> report(function: () -> Pair<T, T>) {
-    println(getHeader())
-    println("=".repeat(getHeader().length))
+    getHeader().run {
+        println(this)
+        println("=".repeat(this.length).joinToString(""))
+    }
     val millis = measureTimeMillis {
         val value = function()
         println("Result: ${value.first}, Excpected: ${value.second}")

@@ -12,6 +12,7 @@ internal class Day03Test {
     val test03 = listOf(
             "5 10 25",
             "5 10 10",
+            "8 15 5",
     )
 
     @Nested
@@ -26,7 +27,7 @@ internal class Day03Test {
         @Test
         fun `03,2,live,init`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 1838
             }
         }
     }
@@ -67,14 +68,14 @@ internal class Day03Test {
         @Test
         fun `03,2,live,1`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 1838
             }
         }
 
         @Test
         fun `03,2,live,2`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 1838
             }
         }
     }
