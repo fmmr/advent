@@ -19,15 +19,15 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
 
     override fun neighbors(): List<SpacePos> {
         return listOf(0, 1, -1)
-            .flatMap { dx ->
-                listOf(0, 1, -1).flatMap { dy ->
-                    listOf(0, 1, -1).map { dz ->
-                        Triple(x + dx, y + dy, z + dz)
+                .flatMap { dx ->
+                    listOf(0, 1, -1).flatMap { dy ->
+                        listOf(0, 1, -1).map { dz ->
+                            Triple(x + dx, y + dy, z + dz)
+                        }
                     }
                 }
-            }
-            .map { Pos3D(it) }
-            .filterNot { it == this }
+                .map { Pos3D(it) }
+                .filterNot { it == this }
     }
 }
 
@@ -50,18 +50,18 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     fun neighboorCellsReadingOrder(): List<Pos> {
         return listOf(
-            Pos(x, y - 1),
-            Pos(x - 1, y),
-            Pos(x + 1, y),
-            Pos(x, y + 1)
+                Pos(x, y - 1),
+                Pos(x - 1, y),
+                Pos(x + 1, y),
+                Pos(x, y + 1)
         )
     }
 
     fun positiveNeighboor(limitX: Int = Int.MAX_VALUE, limitY: Int = Int.MAX_VALUE): List<Pos> {
         return neighboorCellsReadingOrder()
-            .filter { it.x >= 0 && it.y >= 0 }
-            .filter { it.x < limitX }
-            .filter { it.y < limitY }
+                .filter { it.x >= 0 && it.y >= 0 }
+                .filter { it.x < limitX }
+                .filter { it.y < limitY }
 
     }
 
@@ -73,14 +73,14 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     fun neighboorCellsAllEight(): List<Pos> {
         return listOf(
-            Pos(x, y - 1),
-            Pos(x - 1, y),
-            Pos(x + 1, y),
-            Pos(x, y + 1),
-            Pos(x - 1, y - 1),
-            Pos(x + 1, y - 1),
-            Pos(x - 1, y + 1),
-            Pos(x + 1, y + 1)
+                Pos(x, y - 1),
+                Pos(x - 1, y),
+                Pos(x + 1, y),
+                Pos(x, y + 1),
+                Pos(x - 1, y - 1),
+                Pos(x + 1, y - 1),
+                Pos(x - 1, y + 1),
+                Pos(x + 1, y + 1)
         )
     }
 
@@ -88,9 +88,9 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     fun getDownNeighbors(): List<Pos> {
         return listOf(
-            Pos(x - 1, y),
-            Pos(x + 1, y),
-            Pos(x, y + 1)
+                Pos(x - 1, y),
+                Pos(x + 1, y),
+                Pos(x, y + 1)
         )
     }
 
@@ -116,6 +116,13 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
             "SW" -> sw()
             else -> error("Unable to get pos from direction: $s")
         }
+    }
+
+
+    fun path(s: String, howMuch: Int = 1): List<Pos> {
+        return (1..howMuch).runningFold(this) { acc: Pos, _: Int ->
+            acc.next(s)
+        }.drop(1)
     }
 
     fun getSidesAfterMoving(c: Char): List<Pos> {
@@ -171,15 +178,15 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 data class Pos4D(val x: Int, val y: Int, val z: Int, val w: Int) : SpacePos() {
     override fun neighbors(): List<SpacePos> {
         return listOf(0, 1, -1)
-            .flatMap { dx ->
-                listOf(0, 1, -1).flatMap { dy ->
-                    listOf(0, 1, -1).flatMap { dz ->
-                        listOf(0, 1, -1).map { dw ->
-                            Pos4D(x + dx, y + dy, z + dz, w + dw)
+                .flatMap { dx ->
+                    listOf(0, 1, -1).flatMap { dy ->
+                        listOf(0, 1, -1).flatMap { dz ->
+                            listOf(0, 1, -1).map { dw ->
+                                Pos4D(x + dx, y + dy, z + dz, w + dw)
+                            }
                         }
                     }
                 }
-            }
-            .filterNot { it == this }
+                .filterNot { it == this }
     }
 }

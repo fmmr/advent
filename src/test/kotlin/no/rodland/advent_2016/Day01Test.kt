@@ -12,20 +12,21 @@ internal class Day01Test {
     val test01 = listOf("R2", "L3")
     val test01_3 = listOf("R2", "R2", "R2")
     val test01_2 = listOf("R5", "L5", "R5", "R3")
+    val test02 = listOf("R8", "R4", "R4", "R8")
 
     @Nested
     inner class Init {
         @Test
         fun `01,1,live,init`() {
             report {
-                Day01.partOne(data01) to 2
+                Day01.partOne(data01) to 250
             }
         }
 
         @Test
         fun `01,2,live,init`() {
             report {
-                Day01.partTwo(data01) to 2
+                Day01.partTwo(data01) to 151
             }
         }
     }
@@ -56,14 +57,14 @@ internal class Day01Test {
         @Test
         fun `01,1,live,1`() {
             report {
-                Day01.partOne(data01) to 2
+                Day01.partOne(data01) to 250
             }
         }
 
         @Test
         fun `01,1,live,2`() {
             report {
-                Day01.partOne(data01) to 2
+                Day01.partOne(data01) to 250
             }
         }
     }
@@ -73,21 +74,21 @@ internal class Day01Test {
         @Test
         fun `01,2,test`() {
             report {
-                Day01.partTwo(test01) to 2
+                Day01.partTwo(test02) to 4
             }
         }
 
         @Test
         fun `01,2,live,1`() {
             report {
-                Day01.partTwo(data01) to 2
+                Day01.partTwo(data01) to 151
             }
         }
 
         @Test
         fun `01,2,live,2`() {
             report {
-                Day01.partTwo(data01) to 2
+                Day01.partTwo(data01) to 151
             }
         }
     }

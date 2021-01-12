@@ -6,18 +6,30 @@ import no.rodland.advent.Pos
 object Day01 {
     fun partOne(list: List<String>): Int {
         val start = Pos(0, 0)
-        var dir = Dir.N
         val end = list
                 .map { Cmd(it.trim()) }
-                .fold(start) { pos, command ->
-                    dir = dir.turn(command.dir)
-                    pos.next(dir.toString(), command.length)
+                .fold(Dir.N to start) { p, command ->
+                    val dir = p.first.turn(command.dir)
+                    dir to p.second.next(dir.toString(), command.length)
                 }
-        return end.distanceTo(start)
+        return end.second.distanceTo(start)
     }
+    // 269 too high
 
     fun partTwo(list: List<String>): Int {
-        return 2
+        val map = mutableSetOf<Pos>()
+        val start = Pos(0, 0)
+        val travel = list
+                .asSequence()
+                .map { Cmd(it.trim()) }
+                .runningFold(Dir.N to listOf(start)) { p, command ->
+                    val dir = p.first.turn(command.dir)
+                    val path = p.second.last().path(dir.toString(), command.length)
+                    dir to path
+                }
+                .flatMap { it.second }
+                .first { !map.add(it) }
+        return travel.distanceTo(start)
     }
 
     data class Cmd(val dir: String, val length: Int) {
