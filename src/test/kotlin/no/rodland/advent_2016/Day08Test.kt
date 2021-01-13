@@ -10,71 +10,39 @@ import org.junit.jupiter.api.Test
 internal class Day08Test {
     val data08 = "2016/input_08.txt".readFile()
     val test08 = listOf(
-            "1",
-            "2",
+            "rect 3x2",
+            "rotate column x=1 by 1",
+            "rotate row y=0 by 4",
+            "rotate column x=1 by 1",
     )
-
-    @Nested
-    inner class Init {
-        @Test
-        fun `08,1,live,init`() {
-            report {
-                Day08.partOne(data08) to 2
-            }
-        }
-
-        @Test
-        fun `08,2,live,init`() {
-            report {
-                Day08.partTwo(data08) to 2
-            }
-        }
-    }
 
     @Nested
     inner class `Part 1` {
         @Test
-        fun `08,1,test`() {
+        fun `08,1,test,cmd`() {
             report {
-                Day08.partOne(test08) to 2
+                Day08.Cmd("rotate row y=1 by 13").toString() to "Cmd(op=ROT_R, arg1=1, arg2=13)"
             }
         }
 
         @Test
-        fun `08,1,live,1`() {
+        fun `08,1,test,cmd,2`() {
             report {
-                Day08.partOne(data08) to 2
+                Day08.Cmd("rotate column y=21 by 23").toString() to "Cmd(op=ROT_C, arg1=21, arg2=23)"
+            }
+        }
+
+        @Test
+        fun `08,1,test`() {
+            report {
+                Day08.partOne(test08, 7, 3) to 6
             }
         }
 
         @Test
         fun `08,1,live,2`() {
             report {
-                Day08.partOne(data08) to 2
-            }
-        }
-    }
-
-    @Nested
-    inner class `Part 2` {
-        @Test
-        fun `08,2,test`() {
-            report {
-                Day08.partTwo(test08) to 2
-            }
-        }
-
-        @Test
-        fun `08,2,live,1`() {
-            report {
-                Day08.partTwo(data08) to 2
-            }
-        }
-
-        @Test
-        fun `08,2,live,2`() {
-            report {
-                Day08.partTwo(data08) to 2
+                Day08.partOne(data08, 50, 6) to 115
             }
         }
     }
