@@ -15,6 +15,12 @@ object Day06 {
     }
 
     fun partTwo(list: List<String>): String {
-        return "2"
+        val counters = (list[0].indices).map { mutableMapOf<Char, Int>() }
+        list.forEach { str ->
+            str.forEachIndexed { index, c ->
+                counters[index].increment(c)
+            }
+        }
+        return counters.map { map -> map.filterValues { value -> value == map.values.minOrNull()!! }.keys.first() }.joinToString("")
     }
 }

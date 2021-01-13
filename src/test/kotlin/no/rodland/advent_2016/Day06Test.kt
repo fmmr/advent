@@ -33,14 +33,14 @@ internal class Day06Test {
         @Test
         fun `06,1,live,init`() {
             report {
-                Day06.partOne(data06) to "2"
+                Day06.partOne(data06) to "tkspfjcc"
             }
         }
 
         @Test
         fun `06,2,live,init`() {
             report {
-                Day06.partTwo(data06) to "2"
+                Day06.partTwo(data06) to "xrlmbypn"
             }
         }
     }
@@ -57,14 +57,14 @@ internal class Day06Test {
         @Test
         fun `06,1,live,1`() {
             report {
-                Day06.partOne(data06) to "2"
+                Day06.partOne(data06) to "tkspfjcc"
             }
         }
 
         @Test
         fun `06,1,live,2`() {
             report {
-                Day06.partOne(data06) to "2"
+                Day06.partOne(data06) to "tkspfjcc"
             }
         }
     }
@@ -74,21 +74,21 @@ internal class Day06Test {
         @Test
         fun `06,2,test`() {
             report {
-                Day06.partTwo(test06) to "2"
+                Day06.partTwo(test06) to "advent"
             }
         }
 
         @Test
         fun `06,2,live,1`() {
             report {
-                Day06.partTwo(data06) to "2"
+                Day06.partTwo(data06) to "xrlmbypn"
             }
         }
 
         @Test
         fun `06,2,live,2`() {
             report {
-                Day06.partTwo(data06) to "2"
+                Day06.partTwo(data06) to "xrlmbypn"
             }
         }
     }
