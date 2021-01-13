@@ -10,8 +10,22 @@ import org.junit.jupiter.api.Test
 internal class Day06Test {
     val data06 = "2016/input_06.txt".readFile()
     val test06 = listOf(
-            "1",
-            "2",
+            "eedadn",
+            "drvtee",
+            "eandsr",
+            "raavrd",
+            "atevrs",
+            "tsrnev",
+            "sdttsa",
+            "rasrtv",
+            "nssdts",
+            "ntnada",
+            "svetve",
+            "tesnvt",
+            "vntsnd",
+            "vrdear",
+            "dvrsen",
+            "enarar",
     )
 
     @Nested
@@ -19,14 +33,14 @@ internal class Day06Test {
         @Test
         fun `06,1,live,init`() {
             report {
-                Day06.partOne(data06) to 2
+                Day06.partOne(data06) to "2"
             }
         }
 
         @Test
         fun `06,2,live,init`() {
             report {
-                Day06.partTwo(data06) to 2
+                Day06.partTwo(data06) to "2"
             }
         }
     }
@@ -36,21 +50,21 @@ internal class Day06Test {
         @Test
         fun `06,1,test`() {
             report {
-                Day06.partOne(test06) to 2
+                Day06.partOne(test06) to "easter"
             }
         }
 
         @Test
         fun `06,1,live,1`() {
             report {
-                Day06.partOne(data06) to 2
+                Day06.partOne(data06) to "2"
             }
         }
 
         @Test
         fun `06,1,live,2`() {
             report {
-                Day06.partOne(data06) to 2
+                Day06.partOne(data06) to "2"
             }
         }
     }
@@ -60,21 +74,21 @@ internal class Day06Test {
         @Test
         fun `06,2,test`() {
             report {
-                Day06.partTwo(test06) to 2
+                Day06.partTwo(test06) to "2"
             }
         }
 
         @Test
         fun `06,2,live,1`() {
             report {
-                Day06.partTwo(data06) to 2
+                Day06.partTwo(data06) to "2"
             }
         }
 
         @Test
         fun `06,2,live,2`() {
             report {
-                Day06.partTwo(data06) to 2
+                Day06.partTwo(data06) to "2"
             }
         }
     }

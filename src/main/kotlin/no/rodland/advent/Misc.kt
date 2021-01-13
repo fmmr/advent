@@ -79,3 +79,7 @@ fun <T> List<T>.combinations(): List<List<T>> {
     return retList
 }
 
+fun <K> MutableMap<K, Int>.increment(key: K) {
+    val value = if (containsKey(key)) this[key] else 0
+    this[key] = value!! + 1
+}
