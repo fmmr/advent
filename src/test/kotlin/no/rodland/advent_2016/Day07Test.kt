@@ -16,6 +16,13 @@ internal class Day07Test {
             "ioxxoj[asdfgh]zxcvbn",
     )
 
+    val test07_2 = listOf(
+            "aba[bab]xyz",
+            "xyx[xyx]xyx",
+            "aaa[kek]eke",
+            "zazbz[bzb]cdb",
+    )
+
     @Nested
     inner class Init {
         @Test
@@ -28,7 +35,7 @@ internal class Day07Test {
         @Test
         fun `07,2,live,init`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 242
             }
         }
     }
@@ -62,21 +69,21 @@ internal class Day07Test {
         @Test
         fun `07,2,test`() {
             report {
-                Day07.partTwo(test07) to 2
+                Day07.partTwo(test07_2) to 3
             }
         }
 
         @Test
         fun `07,2,live,1`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 242
             }
         }
 
         @Test
         fun `07,2,live,2`() {
             report {
-                Day07.partTwo(data07) to 2
+                Day07.partTwo(data07) to 242
             }
         }
     }
