@@ -35,7 +35,7 @@ internal class Day11Test {
             ar[1][3] = Day11.Stuff("cerium", Day11.Type.MICROCHIP)
             ar[1][4] = Day11.Stuff("elevator", Day11.Type.ELEVATOR)
             val state = Day11.State(ar, listOf("PG", "PM", "CG", "CM", "EE"))
-            val set = mutableSetOf(state.generic())
+            val set = mutableSetOf(state.toString())
             set.duplicate(state) to true
         }
     }
@@ -61,7 +61,7 @@ internal class Day11Test {
             ar2[0][3] = Day11.Stuff("cerium", Day11.Type.MICROCHIP)
             ar2[1][4] = Day11.Stuff("elevator", Day11.Type.ELEVATOR)
             val state2 = Day11.State(ar2, listOf("PG", "PM", "CG", "CM", "EE"))
-            val set = mutableSetOf(state.generic())
+            val set = mutableSetOf(state.toString())
             set.duplicate(state2) to true
         }
     }
@@ -119,7 +119,7 @@ internal class Day11Test {
             ar2[1][3] = Day11.Stuff("cerium", Day11.Type.MICROCHIP)
             ar2[1][4] = Day11.Stuff("elevator", Day11.Type.ELEVATOR)
             val state2 = Day11.State(ar2, listOf("PG", "PM", "CG", "CM", "EE"))
-            val set = mutableSetOf(state.generic())
+            val set = mutableSetOf(state.toString())
             set.duplicate(state2) to true
         }
     }
