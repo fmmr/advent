@@ -10,18 +10,17 @@ object Day16 {
 
 
     fun calcOneStep(a: String): String {
-        val b = a.reversed().replace("0", "X").replace("1", "0").replace("X", "1")
-        return a + "0" + b
+        return a + "0" + a.reversed().map { if (it == '1') '0' else '1' }.joinToString("")
     }
 
     fun String.toCheckSum(): String {
         return generateSequence(this) { str ->
-            str.chunked(2).map {
+            str.chunked(2).joinToString("") {
                 when (it) {
                     "00", "11" -> "1"
                     else -> "0"
                 }
-            }.joinToString("")
+            }
         }.first { it.length % 2 != 0 }
     }
 
