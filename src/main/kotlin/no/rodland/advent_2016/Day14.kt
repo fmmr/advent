@@ -27,14 +27,14 @@ object Day14 {
     private fun cachedHash(str: String, i: Int, hash: (String, Int) -> String, hashMap: MutableMap<String, String>): String = hashMap.getOrPut(str + i) { hash(str, i) }
 
     fun hashPart2(str: String, i: Int): String {
-        return (0..2016).fold(str + i) { acc, _ ->
-            md5.hashString(acc, Charsets.UTF_8).toString()
-        }
+        return (0..2016).fold(str + i) { acc, _ -> md5(acc) }
     }
 
     fun hashPart1(str: String, i: Int): String {
-        return md5.hashString((str + i), Charsets.UTF_8).toString()
+        return md5(str + i)
     }
+
+    private fun md5(acc: String) = md5.hashString(acc, Charsets.UTF_8).toString()
 
     fun findLastKey(str: String, hash: (String, Int) -> String): Int {
         var i = 0
