@@ -6,7 +6,7 @@ import com.google.common.hash.Hashing
 @Suppress("UNUSED_PARAMETER", "UnstableApiUsage", "DEPRECATION")
 object Day14 {
     private val md5: HashFunction = Hashing.md5()
-    val threeInARow = ".*([a-f0-9])\\1\\1.*".toRegex()
+    val threeInARow = ".*?([a-f0-9])\\1\\1.*".toRegex()
 
     fun partOne(str: String): Int {
         val hashMap = mutableMapOf<String, String>()
@@ -43,7 +43,7 @@ object Day14 {
                 .filter { nextThousandContainsFiveInARow(it.second, str, i, hash) }
                 .onEachIndexed { index, pair -> println("FOUND: ${index + 1} $pair") }
                 .map { it.first }
-                .take(65)  // why 65 and not 64???
+                .take(64)
                 .toList()
         println("Found ${take.count()} keys")
         return take

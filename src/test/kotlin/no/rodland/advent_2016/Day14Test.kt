@@ -30,6 +30,14 @@ internal class Day14Test {
         }
 
         @Test
+        fun `14,1,group_2`() {
+            report {
+                val find = Day14.threeInARow.find("dsjkdsd777tsdhj888sd")
+                find!!.groupValues[1].first() to '7'
+            }
+        }
+
+        @Test
         fun `14,1,next_false`() {
             report {
                 Day14.nextThousandContainsFiveInARow("0034e0923cc38887a57bd7b1d4f953df", "abc", 40, Day14::hashPart1) to false
@@ -82,7 +90,7 @@ internal class Day14Test {
         @Slow(18000)
         fun `14,2,live,1`() {
             report {
-                Day14.partTwo(data14) to 26454
+                Day14.partTwo(data14) to 22423
             }
         }
     }
