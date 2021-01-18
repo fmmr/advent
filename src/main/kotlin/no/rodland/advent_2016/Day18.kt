@@ -4,10 +4,7 @@ package no.rodland.advent_2016
 object Day18 {
     fun partOne(str: String): Int {
         return (1 until 40)
-                .runningFold(str) { acc, _ ->
-                    getNextRow(acc)
-                }
-//                .onEach { println(it.count { it == '.' }) }
+                .runningFold(str) { acc, _ -> getNextRow(acc) }
                 .map { s -> s.count { it == '.' } }
                 .sum()
     }
@@ -18,9 +15,7 @@ object Day18 {
 
     fun partTwo(str: String): Int {
         return (1 until 400000)
-                .runningFold(str) { acc, _ ->
-                    getNextRow(acc)
-                }
+                .runningFold(str) { acc, _ -> getNextRow(acc) }
                 .map { s -> s.count { it == '.' } }
                 .sum()
     }
