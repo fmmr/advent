@@ -48,6 +48,15 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         return Math.sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2))
     }
 
+    fun neighboorCellsNDLR(): List<Pos> {
+        return listOf(
+                Pos(x, y - 1),
+                Pos(x, y + 1),
+                Pos(x - 1, y),
+                Pos(x + 1, y)
+        )
+    }
+
     fun neighboorCellsReadingOrder(): List<Pos> {
         return listOf(
                 Pos(x, y - 1),
@@ -134,6 +143,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     }
 
     fun isPositive(): Boolean = x >= 0 && y >= 0
+    fun isPositiveAndWithin(maxX: Int, maxY: Int): Boolean = isPositive() && x <= maxX && y <= maxY
 
     fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
 
