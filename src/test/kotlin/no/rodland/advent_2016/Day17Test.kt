@@ -22,7 +22,7 @@ internal class Day17Test {
         @Test
         fun `17,2,live,init`() {
             report {
-                Day17.partTwo(data17) to 2
+                Day17.partTwo(data17) to 386
             }
         }
     }
@@ -68,16 +68,39 @@ internal class Day17Test {
     @Nested
     inner class `Part 2` {
         @Test
+        fun `17,1,test,1`() {
+            report {
+                Day17.partTwo("ihgpwlah") to 370
+            }
+        }
+
+        @Test
+        fun `17,1,test,2`() {
+            report {
+                Day17.partTwo("kglvqrro") to 492
+            }
+        }
+
+
+        @Test
+        fun `17,1,test,3`() {
+            report {
+                Day17.partTwo("ulqzkmiv") to 830
+            }
+        }
+
+
+        @Test
         fun `17,2,live,1`() {
             report {
-                Day17.partTwo(data17) to 2
+                Day17.partTwo(data17) to 386
             }
         }
 
         @Test
         fun `17,2,live,2`() {
             report {
-                Day17.partTwo(data17) to 2
+                Day17.partTwo(data17) to 386
             }
         }
     }
