@@ -8,22 +8,22 @@ import org.junit.jupiter.api.Test
 @Suppress("ClassName")
 @DisableSlow
 internal class Day21Test {
-    val data21 = "abcdefgh"
-    val test21 = "abcde"
+    val data21_list = "2016/input_21.txt".readFile()
+    val test21_list = "2016/input_21_test.txt".readFile()
 
     @Nested
     inner class Init {
         @Test
         fun `21,1,live,init`() {
             report {
-                Day21.partOne(data21) to 2
+                Day21.partOne("abcdefgh", data21_list) to "ghfacdbe"
             }
         }
 
         @Test
         fun `21,2,live,init`() {
             report {
-                Day21.partTwo(data21) to 2
+                Day21.partTwo("fbgdceah", data21_list) to "2"
             }
         }
     }
@@ -87,6 +87,24 @@ internal class Day21Test {
         }
 
         @Test
+        fun `21,unit,rotate pos reversed`() {
+            report {
+                val rotatePos = Day21.rotatePos("abcdefghij", 'b')
+                val back = Day21.rotatePosReversed(rotatePos, 'b')
+                back to "abcdefghij"
+            }
+        }
+
+        @Test
+        fun `21,unit,rotate reversed`() {
+            report {
+                val rotatePos = Day21.rotate("abcdefghij", "right", 3)
+                val back = Day21.rotateReversed(rotatePos, "right", 3)
+                back to "abcdefghij"
+            }
+        }
+
+        @Test
         fun `21,unit,rotate pos d`() {
             report {
                 Day21.rotatePos("ecabd", 'd') to "decab"
@@ -120,28 +138,48 @@ internal class Day21Test {
                 Day21.move("bdeac", 3, 0) to "abdec"
             }
         }
+
+        @Test
+        fun `21,unit,move reversed`() {
+            report {
+                val rotatePos = Day21.move("bcdea", 1, 4)
+                val back = Day21.moveReversed(rotatePos, 1, 4)
+                back to "bcdea"
+            }
+        }
+
+        @Test
+        fun `21,unit,move reversed, 2`() {
+            report {
+                val rotatePos = Day21.move("bdeac", 3, 0)
+                val back = Day21.moveReversed(rotatePos, 3, 0)
+                back to "bdeac"
+            }
+        }
+
+
     }
 
     @Nested
     inner class `Part 1` {
-//        @Test
-//        fun `21,1,test`() {
-//            report {
-//                Day21.partOne(test21) to "decab"
-//            }
-//        }
+        @Test
+        fun `21,1,test`() {
+            report {
+                Day21.partOne("abcde", test21_list) to "decab"
+            }
+        }
 
         @Test
         fun `21,1,live,1`() {
             report {
-                Day21.partOne(data21) to 2
+                Day21.partOne("abcdefgh", data21_list) to "ghfacdbe"
             }
         }
 
         @Test
         fun `21,1,live,2`() {
             report {
-                Day21.partOne(data21) to 2
+                Day21.partOne("abcdefgh", data21_list) to "ghfacdbe"
             }
         }
     }
@@ -149,23 +187,16 @@ internal class Day21Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `21,2,test`() {
-            report {
-                Day21.partTwo(test21) to 2
-            }
-        }
-
-        @Test
         fun `21,2,live,1`() {
             report {
-                Day21.partTwo(data21) to 2
+                Day21.partTwo("fbgdceah", data21_list) to "2"
             }
         }
 
         @Test
         fun `21,2,live,2`() {
             report {
-                Day21.partTwo(data21) to 2
+                Day21.partTwo("fbgdceah", data21_list) to "2"
             }
         }
     }
