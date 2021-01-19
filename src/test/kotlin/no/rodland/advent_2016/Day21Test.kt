@@ -1,6 +1,7 @@
 package no.rodland.advent_2016
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -21,6 +22,7 @@ internal class Day21Test {
         }
 
         @Test
+        @Slow(1700)
         fun `21,2,live,init`() {
             report {
                 Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"
@@ -87,6 +89,7 @@ internal class Day21Test {
         }
 
         @Test
+        @Slow(1500)
         fun `21,unit,rotate pos reversed`() {
             report {
                 val rotatePos = Day21.rotatePos("abcdefghij", 'b')
@@ -187,6 +190,7 @@ internal class Day21Test {
     @Nested
     inner class `Part 2` {
         @Test
+        @Slow(1700)
         fun `21,2,live,1`() {
             report {
                 Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"
@@ -194,6 +198,7 @@ internal class Day21Test {
         }
 
         @Test
+        @Slow(1700)
         fun `21,2,live,2`() {
             report {
                 Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"

@@ -4,7 +4,6 @@ import no.rodland.advent.permutations
 import kotlin.math.max
 import kotlin.math.min
 
-@Suppress("UNUSED_PARAMETER")
 object Day21 {
     private val swapRE = """swap position (\d+) with position (\d+)""".toRegex()
     private val swapLetterRE = """swap letter ([a-z]) with letter ([a-z])""".toRegex()
@@ -18,11 +17,18 @@ object Day21 {
     }
 
     fun partTwo(str: String, list: List<String>): String {
-        val functions = parseInput(list)
-        val part2 = functions.reversed().fold(str) { acc, line -> line.r(acc) }
-        val back = functions.runningFold(part2) { acc, func -> func.f(acc) }.last()
-        println("str: $str, part2: $part2, back: $back - equals: ${str == back}")
-        return part2
+
+        // solving with reverse variant of all functions:
+
+//        val functions = parseInput(list)
+//        val part2 = functions.reversed().fold(str) { acc, line -> line.r(acc) }
+//        val back = functions.runningFold(part2) { acc, func -> func.f(acc) }.last()
+//        println("str: $str, part2: $part2, back: $back - equals: ${str == back}")
+
+        // but since one of the implementations above (rotatePosReversed) already has to search through all permutations
+        // of str, I might ass well just do it on the top level.
+        return str.permutations().first { perm -> partOne(perm, list) == str }
+
     }
 
     class Func(val func: (String) -> String, val reversed: (String) -> String = func) {
@@ -66,6 +72,18 @@ object Day21 {
     private fun getRotate(direction: String, idx: Int, steps: Int, length: Int) = (if (direction == "right") idx + (2 * length) - steps else idx + steps) % length
 
     fun rotatePosReversed(s: String, x: Char): String {
+        // could also be solved by mapping position to various rotate left,n and rotate right,n
+        // https://www.reddit.com/r/adventofcode/comments/5ji29h/2016_day_21_solutions/
+        // Position	Rotate by letter	Inverse
+        // 0	rotate right 1	rotate left   1
+        // 1	rotate right 2	rotate left   1
+        // 2	rotate right 3	rotate right 2
+        // 3	rotate right 4	rotate left   2
+        // 4	rotate left   2	rotate right 1
+        // 5	rotate left   1	rotate left   3
+        // 6	no change	no change
+        // 7	rotate right 1	rotate right 4
+
         return s.permutations().first { perm -> rotatePos(perm, x) == s }
     }
 
