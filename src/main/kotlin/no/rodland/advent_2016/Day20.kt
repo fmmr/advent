@@ -1,7 +1,7 @@
 package no.rodland.advent_2016
 
 object Day20 {
-    fun partOne(list: List<String>, max: Long): Long {
+    fun partOne(list: List<String>): Long {
         val ranges = list.map { it.split("-") }.map { it.first().toLong()..it.last().toLong() }.sortedWith(compareBy({ it.first }, { it.last }))
         var currentValue = 0L
         ranges.forEach { range ->
@@ -31,7 +31,4 @@ object Day20 {
         return numWhiteListed
 
     }
-
-    // 771316128 too high
-    // 767079326 too high
 }
