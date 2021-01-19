@@ -8,11 +8,8 @@ import org.junit.jupiter.api.Test
 @Suppress("ClassName")
 @DisableSlow
 internal class Day21Test {
-    val data21 = "2016/input_21.txt".readFile()
-    val test21 = listOf(
-            "1",
-            "2",
-    )
+    val data21 = "abcdefgh"
+    val test21 = "abcde"
 
     @Nested
     inner class Init {
@@ -32,11 +29,91 @@ internal class Day21Test {
     }
 
     @Nested
+    inner class Units {
+        @Test
+        fun `21,unit,swap pos 4 0`() {
+            report {
+                Day21.swapPos("abcde", 4, 0) to "ebcda"
+            }
+        }
+
+        @Test
+        fun `21,unit,swap pos 0 4`() {
+            report {
+                Day21.swapPos("abcde", 0, 4) to "ebcda"
+            }
+        }
+
+        @Test
+        fun `21,unit,swap pos 1 3`() {
+            report {
+                Day21.swapPos("abcde", 1, 3) to "adcbe"
+            }
+        }
+
+        @Test
+        fun `21,unit,swap letter`() {
+            report {
+                Day21.swapLetter("ebcda", 'd', 'b') to "edcba"
+            }
+        }
+
+        @Test
+        fun `21,unit,rotate right`() {
+            report {
+                Day21.rotate("abcd", "right", 1) to "dabc"
+            }
+        }
+
+        @Test
+        fun `21,unit,rotate left`() {
+            report {
+                Day21.rotate("abcde", "left", 1) to "bcdea"
+            }
+        }
+
+        @Test
+        fun `21,unit,rotate pos b`() {
+            report {
+                Day21.rotatePos("abdec", 'b') to "ecabd"
+            }
+        }
+
+        @Test
+        fun `21,unit,rotate pos d`() {
+            report {
+                Day21.rotatePos("ecabd", 'b') to "decab"
+            }
+        }
+
+        @Test
+        fun `21,unit,reverse pos`() {
+            report {
+                Day21.reversePos("edcba", 0, 4) to "abcde"
+            }
+        }
+
+        @Test
+        fun `21,unit,move pos 1`() {
+            report {
+                Day21.move("bcdea", 1, 4) to "bdeac"
+            }
+        }
+
+        @Test
+        fun `21,unit,move pos 2`() {
+            report {
+                Day21.move("bdeac", 3, 0) to "abdec"
+            }
+        }
+    }
+
+    @Nested
     inner class `Part 1` {
         @Test
         fun `21,1,test`() {
             report {
-                Day21.partOne(test21) to 2
+                Day21.partOne(test21) to "decab"
             }
         }
 
