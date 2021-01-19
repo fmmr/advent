@@ -18,8 +18,9 @@ object Day21 {
     }
 
     fun partTwo(str: String, list: List<String>): String {
-        val part2 = parseInput(list).reversed().fold(str) { acc, line -> line.r(acc) }
-        val back = partOne(part2, list)
+        val functions = parseInput(list)
+        val part2 = functions.reversed().fold(str) { acc, line -> line.r(acc) }
+        val back = functions.runningFold(part2) { acc, func -> func.f(acc) }.last()
         println("str: $str, part2: $part2, back: $back - equals: ${str == back}")
         return part2
     }

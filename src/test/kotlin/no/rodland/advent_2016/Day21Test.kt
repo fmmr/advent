@@ -23,7 +23,7 @@ internal class Day21Test {
         @Test
         fun `21,2,live,init`() {
             report {
-                Day21.partTwo("fbgdceah", data21_list) to "2"
+                Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"
             }
         }
     }
@@ -189,14 +189,14 @@ internal class Day21Test {
         @Test
         fun `21,2,live,1`() {
             report {
-                Day21.partTwo("fbgdceah", data21_list) to "2"
+                Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"
             }
         }
 
         @Test
         fun `21,2,live,2`() {
             report {
-                Day21.partTwo("fbgdceah", data21_list) to "2"
+                Day21.partTwo("fbgdceah", data21_list) to "fhgcdaeb"
             }
         }
     }
