@@ -1,5 +1,6 @@
 package no.rodland.advent_2016
 
+import factorial
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
 import no.rodland.advent.report
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.Test
 @DisableSlow
 internal class Day23Test {
     val data23 = "2016/input_23.txt".readFile()
+
+    val data23Mod = "2016/input_23fmr.txt".readFile()
+
+
     val test23 = listOf(
             "cpy 2 a",
             "tgl a",
@@ -61,6 +66,20 @@ internal class Day23Test {
         fun `23,2,live,1`() {
             report {
                 Day23.partTwo(data23) to 479006925
+            }
+        }
+
+        @Test
+        fun `23,2,live,MOD`() {
+            report {
+                Day23.partTwo(data23Mod) to 479006925
+            }
+        }
+
+        @Test
+        fun `23,2,live,Cheat`() {
+            report {
+                (factorial(12) + (71 * 75)) to 479006925
             }
         }
     }

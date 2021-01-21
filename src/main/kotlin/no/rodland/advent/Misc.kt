@@ -83,3 +83,5 @@ fun <K> MutableMap<K, Int>.increment(key: K) {
     val value = if (containsKey(key)) this[key] else 0
     this[key] = value!! + 1
 }
+
+fun factorial(n: Int) = (1..n).map { it.toLong() }.reduce { acc, l -> acc * l }

@@ -1,0 +1,26 @@
+cpy a b
+dec b
+cpy a d
+cpy 0 a
+fmr a
+jnz 1 1
+jnz 1 1
+jnz 1 1
+jnz 1 1
+jnz 1 1
+dec b
+cpy b c
+fmr2
+jnz 1 1
+jnz 1 1
+jnz 1 1
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 71 c
+jnz 75 d
+inc a
+inc d
+jnz d -2
+inc c
+jnz c -5

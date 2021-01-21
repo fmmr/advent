@@ -2,12 +2,21 @@ package no.rodland.advent_2016.assembunny
 
 typealias Program = MutableList<Pair<Instruction, List<String>>>
 
-fun Program.runProgram(initialA: Int, reg: MutableMap<String, Int>): MutableMap<String, Int> {
+fun Program.runProgram(reg: MutableMap<String, Int>): MutableMap<String, Int> {
     var ip = 0
     while (ip < size) {
         val (instr, arg) = this[ip]
-//        println("$instr $arg")
+        // println("reg: $reg     $instr $arg ")
         when (instr) {
+            Instruction.fmr -> {
+                reg["a"] = reg["b"]!! * reg["d"]!!
+                reg["c"] = 0
+                reg["d"] = 0
+            }
+            Instruction.fmr2 -> {
+                reg["c"] = reg["c"]!! * 2
+                reg["d"] = 0
+            }
             Instruction.cpy -> reg[arg[1]] = getValue(reg, arg[0])
             Instruction.inc -> reg[arg[0]] = reg[arg[0]]!! + 1
             Instruction.dec -> reg[arg[0]] = reg[arg[0]]!! - 1
@@ -45,6 +54,6 @@ fun parseProgram(list: List<String>): Program {
 
 
 enum class Instruction {
-    cpy, inc, dec, jnz, tgl
+    cpy, inc, dec, jnz, tgl, fmr, fmr2
 }
 
