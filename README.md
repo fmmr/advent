@@ -2,6 +2,10 @@
 
 fmmr solutions for Advent of code.
 
+20200121:
+
+![stars](gifs/stars.png "ascii art")
+
 ## 2020
 
 [AOC](https://adventofcode.com/2020),
