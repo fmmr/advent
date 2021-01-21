@@ -6,6 +6,7 @@ fun Program.runProgram(initialA: Int, reg: MutableMap<String, Int>): MutableMap<
     var ip = 0
     while (ip < size) {
         val (instr, arg) = this[ip]
+//        println("$instr $arg")
         when (instr) {
             Instruction.cpy -> reg[arg[1]] = getValue(reg, arg[0])
             Instruction.inc -> reg[arg[0]] = reg[arg[0]]!! + 1

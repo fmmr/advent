@@ -11,6 +11,7 @@ object Day23 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return 2
+        val program = parseProgram(list)
+        return program.runProgram(0, mutableMapOf("a" to 12, "b" to 0, "c" to 0, "d" to 0))["a"]!!
     }
 }
