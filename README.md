@@ -4,7 +4,7 @@ fmmr solutions for Advent of code.
 
 20200121:
 
-<img src="gifs/stars.png?raw=true"  alt="stars"/>
+![stars](gifs/stars.png?raw=true "ascii art")
 
 ## 2020
 
