@@ -2,34 +2,42 @@ package no.rodland.advent_2016.assembunny
 
 typealias Program = MutableList<Pair<Instruction, List<String>>>
 
-fun Program.runProgram(reg: MutableMap<String, Int>): MutableMap<String, Int> {
-    var ip = 0
-    while (ip < size) {
-        val (instr, arg) = this[ip]
-        // println("reg: $reg     $instr $arg ")
-        when (instr) {
-            Instruction.fmr -> {
-                reg["a"] = reg["b"]!! * reg["d"]!!
-                reg["c"] = 0
-                reg["d"] = 0
-            }
-            Instruction.fmr2 -> {
-                reg["c"] = reg["c"]!! * 2
-                reg["d"] = 0
-            }
-            Instruction.cpy -> reg[arg[1]] = getValue(reg, arg[0])
-            Instruction.inc -> reg[arg[0]] = reg[arg[0]]!! + 1
-            Instruction.dec -> reg[arg[0]] = reg[arg[0]]!! - 1
-            Instruction.jnz -> ip += getValue(reg, arg[0]).let { if (it != 0) (getValue(reg, arg[1]) - 1) else 0 }
-            Instruction.tgl -> getValue(reg, arg[0]).let { value ->
-                if ((ip + value) < size) {
-                    this[ip + value] = this[ip + value].toggle()
+fun Program.compile(reg: MutableMap<String, Int>): Sequence<Int> {
+    val prog = this
+    val seq = sequence<Int> {
+        var ip = 0
+        while (ip < size) {
+            val (instr, arg) = prog[ip]
+            // println("reg: $reg     $instr $arg ")
+            when (instr) {
+                Instruction.fmr -> {
+                    reg["a"] = reg["b"]!! * reg["d"]!!
+                    reg["c"] = 0
+                    reg["d"] = 0
+                }
+                Instruction.fmr2 -> {
+                    reg["c"] = reg["c"]!! * 2
+                    reg["d"] = 0
+                }
+                Instruction.out -> yield(getValue(reg, arg[0]))
+                Instruction.cpy -> reg[arg[1]] = getValue(reg, arg[0])
+                Instruction.inc -> reg[arg[0]] = reg[arg[0]]!! + 1
+                Instruction.dec -> reg[arg[0]] = reg[arg[0]]!! - 1
+                Instruction.jnz -> ip += getValue(reg, arg[0]).let { if (it != 0) (getValue(reg, arg[1]) - 1) else 0 }
+                Instruction.tgl -> getValue(reg, arg[0]).let { value ->
+                    if ((ip + value) < size) {
+                        prog[ip + value] = prog[ip + value].toggle()
+                    }
                 }
             }
+            ip++
         }
-        ip++
     }
-    return reg
+    return seq
+}
+
+fun Sequence<Int>.runProgram() {
+    toList()
 }
 
 private fun Pair<Instruction, List<String>>.toggle(): Pair<Instruction, List<String>> {
@@ -54,6 +62,6 @@ fun parseProgram(list: List<String>): Program {
 
 
 enum class Instruction {
-    cpy, inc, dec, jnz, tgl, fmr, fmr2
+    cpy, inc, dec, jnz, tgl, fmr, fmr2, out
 }
 
