@@ -3,29 +3,36 @@ package no.rodland.advent_2016
 import no.rodland.advent.Pos
 import no.rodland.advent.permutations
 
-@Suppress("UNUSED_PARAMETER")
 object Day24 {
     fun partOne(list: List<String>): Int {
+        return solve(list) { s -> permutations(s) }
+    }
+
+    fun partTwo(list: List<String>): Int {
+        return solve(list) { s -> permutations(s, '0') }
+    }
+
+    private fun solve(list: List<String>, permutations: (String) -> Sequence<String>): Int {
         val grid = Array(list.size) { y -> CharArray(list[0].length) { x -> list[y][x] } }
-        val allOpen = grid.flatMapIndexed { y, chars ->
-            chars.mapIndexed { x, c -> Pos(x, y) to c }.filter { it.second != '#' }
-        }
-        val digits = allOpen.filter { it.second.isDigit() }
+
+        val digits = grid
+                .flatMapIndexed { y, chars ->
+                    chars.mapIndexed { x, c -> Pos(x, y) to c }.filter { it.second != '#' }
+                }
+                .filter { it.second.isDigit() }
         val digitMap = digits.map { it.second to it.first }.toMap()
         val digitPos = digits.map { it.first }
         val allDistances = digitPos
                 .flatMap { pos ->
                     digitPos.filterNot { it == pos }.map {
-                        //println("calc for ${(pos to it)}")
                         (pos to it) to bfs(grid, pos, it)
                     }
                 }
                 .filter { it.second != null }
                 .toMap()
 
-        val allDigitChar = digits.map { it.second }.joinToString("")
-        val perms = allDigitChar.permutations().filter { it[0] == '0' }
-        return perms.map { it.windowed(2) }
+        return permutations(digits.map { it.second }.joinToString(""))
+                .map { it.windowed(2) }
                 .map { pairs ->
                     pairs
                             .map {
@@ -58,11 +65,10 @@ object Day24 {
         return null
     }
 
-
     data class State(val pos: Pos, val path: List<Pos> = emptyList())
 
-
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
+    private fun permutations(allDigitChar: String, endChar: Char? = null) = allDigitChar
+            .permutations()
+            .filter { it[0] == '0' }
+            .map { str -> endChar?.let { str + endChar } ?: str }
 }
