@@ -28,7 +28,6 @@ object Day24 {
                         (pos to it) to bfs(grid, pos, it)
                     }
                 }
-                .filter { it.second != null }
                 .toMap()
 
         return permutations(digits.map { it.second }.joinToString(""))
@@ -39,13 +38,13 @@ object Day24 {
                                 it[0] to it[1]
                             }
                             .map { (from, to) -> digitMap[from] to digitMap[to] }
-                            .map { allDistances[it.first to it.second] }
+                            .map { allDistances[it.first to it.second]!! }
                 }
-                .map { it.map { it!!.path.size }.sum() }
+                .map { path -> path.map { state -> state.path.size }.sum() }
                 .minOrNull()!!
     }
 
-    private fun bfs(grid: Array<CharArray>, myPos: Pos, endPos: Pos): State? {
+    private fun bfs(grid: Array<CharArray>, myPos: Pos, endPos: Pos): State {
         val visited = mutableSetOf(myPos)
         val queue = ArrayDeque(listOf(State(myPos)))
 
@@ -62,7 +61,7 @@ object Day24 {
                         queue.add(State(pos, state.path + pos))
                     }
         }
-        return null
+        error("no state found for travelling from $myPos to $endPos")
     }
 
     data class State(val pos: Pos, val path: List<Pos> = emptyList())
