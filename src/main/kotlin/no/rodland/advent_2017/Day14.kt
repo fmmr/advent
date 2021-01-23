@@ -2,7 +2,6 @@ package no.rodland.advent_2017
 
 import no.rodland.advent.Pos
 
-@Suppress("UNUSED_PARAMETER")
 object Day14 {
     fun partOne(hashes: Map<Int, String>): Int {
         return hashes.map { (_, row) -> row.count { it == '1' } }.sum()
@@ -48,11 +47,7 @@ object Day14 {
     }
 
     private fun String.toBinary(): String {
-        return map { it.toString() }.map { it.toInt(16) }.map { it.toString(2) }.map { it.padStart(4, '0') }.joinToString("")
+        return map { it.toString() }.map { it.toInt(16) }.map { it.toString(2) }.joinToString("") { it.padStart(4, '0') }
 
     }
-
-
 }
-
-
