@@ -25,7 +25,7 @@ object Day03 {
 
     private fun Array<CharArray>.isTree(pos: Pos) = this[pos.y][pos.x] == '#'
 
-    data class Pos(val x: Int, val y: Int) {
+    private data class Pos(val x: Int, val y: Int) {
         fun next(dX: Int, dY: Int, maxX: Int) = Pos((x + dX) % maxX, y + dY)
     }
 }
