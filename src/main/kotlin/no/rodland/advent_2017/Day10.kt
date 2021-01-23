@@ -11,6 +11,10 @@ object Day10 {
     }
 
     fun partTwo(input: String, range: IntRange = 0..255): String {
+        return knotHash(input, range)
+    }
+
+    fun knotHash(input: String, range: IntRange = 0..255): String {
         val inputs = input.map { it.toInt() }.toMutableList()
         val ar = IntArray(range.last + 1) { it }
 
@@ -56,6 +60,4 @@ object Day10 {
             }
         }
     }
-
-
 }
