@@ -1,5 +1,7 @@
 package no.rodland.advent_2017
 
+import no.rodland.advent.Pos
+
 @Suppress("UNUSED_PARAMETER")
 object Day14 {
     fun partOne(hashes: Map<Int, String>): Int {
@@ -7,10 +9,27 @@ object Day14 {
     }
 
     fun partTwo(hashes: Map<Int, String>): Int {
-        return 2
+        val grid = hashes.map { (_, v) -> v.toCharArray() }
+        val regions = mutableMapOf<Pos, Int>()
+        var currentRegion = 0
+        (0..127).forEach { y ->
+            (0..127).forEach { x ->
+                val pos = Pos(x, y)
+                if (grid[y][x] == '1' && pos !in regions) {
+                    currentRegion++
+                    grid.getAllNeighboors(mutableSetOf(pos), pos).forEach { regions[it] = currentRegion }
+                }
+            }
+        }
+        return regions.values.distinct().count()
     }
 
-    @Suppress("unused")
+    private fun List<CharArray>.getAllNeighboors(seen: MutableSet<Pos>, pos: Pos): List<Pos> {
+        return listOf(pos) + pos.neighboorCellsNDLR().filter { it.isInGrid(this[0].size, size) }.filter { p -> this[p.y][p.x] == '1' }.filter { seen.add(it) }.flatMap { getAllNeighboors(seen, it) }
+    }
+
+
+    @Suppress("unused", "UNUSED_VARIABLE")
     private fun printHashes() {
         listOf("ffayrhll", "flqrgnkx").forEach { str ->
             println(str)
@@ -33,5 +52,7 @@ object Day14 {
 
     }
 
+
 }
+
 

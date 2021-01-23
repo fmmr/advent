@@ -5,7 +5,7 @@ import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@Suppress("ClassName")
+@Suppress("ClassName", "unused")
 @DisableSlow
 internal class Day14Test {
     val data14 = "ffayrhll"
@@ -23,7 +23,7 @@ internal class Day14Test {
         @Test
         fun `14,2,live,init`() {
             report {
-                Day14.partTwo(data14_hashes) to 2
+                Day14.partTwo(data14_hashes) to 1134
             }
         }
     }
@@ -57,21 +57,21 @@ internal class Day14Test {
         @Test
         fun `14,2,test`() {
             report {
-                Day14.partTwo(test14_hashes) to 2
+                Day14.partTwo(test14_hashes) to 1242
             }
         }
 
         @Test
         fun `14,2,live,1`() {
             report {
-                Day14.partTwo(data14_hashes) to 2
+                Day14.partTwo(data14_hashes) to 1134
             }
         }
 
         @Test
         fun `14,2,live,2`() {
             report {
-                Day14.partTwo(data14_hashes) to 2
+                Day14.partTwo(data14_hashes) to 1134
             }
         }
     }
