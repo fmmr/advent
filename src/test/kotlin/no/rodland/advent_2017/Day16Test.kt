@@ -42,21 +42,21 @@ internal class Day16Test {
         @Test
         fun `16,2,test`() {
             report {
-                Day16.partTwo(test, test16) to "2"
+                Day16.partTwo(test, test16) to "abcde"
             }
         }
 
         @Test
         fun `16,2,live,1`() {
             report {
-                Day16.partTwo(data, data16) to "2"
+                Day16.partTwo(data, data16) to "fbidepghmjklcnoa"
             }
         }
 
         @Test
         fun `16,2,live,2`() {
             report {
-                Day16.partTwo(data, data16) to "2"
+                Day16.partTwo(data, data16) to "fbidepghmjklcnoa"
             }
         }
     }
