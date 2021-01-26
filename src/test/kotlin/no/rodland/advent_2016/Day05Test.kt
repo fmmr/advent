@@ -32,7 +32,7 @@ internal class Day05Test {
     }
 
     @Nested
-//    @Slow(15000)
+    @Slow(15000)
     inner class `Part 2` {
         @Test
         fun `05,2,test`() {

@@ -110,16 +110,8 @@ internal class Day11Test {
         }
 
         @Test
-        @Slow(500)
+        @Slow(2000)
         fun `11,2,live,1`() {
-            report {
-                Day11.partTwo(data11) to 2111
-            }
-        }
-
-        @Test
-        @Slow(500)
-        fun `11,2,live,2`() {
             report {
                 Day11.partTwo(data11) to 2111
             }

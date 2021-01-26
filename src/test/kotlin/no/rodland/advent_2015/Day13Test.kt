@@ -78,14 +78,6 @@ internal class Day13Test {
 
         @Test
         @Slow(500)
-        fun `13,2,live,1`() {
-            report {
-                Day13.partTwo(data13) to 725
-            }
-        }
-
-        @Test
-        @Slow(500)
         fun `13,2,live,2`() {
             report {
                 Day13.partTwo(data13) to 725

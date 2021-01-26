@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Test
 internal class Day14Test {
     val data14 = "2020/input_14.txt".readFile()
     val test14 = listOf(
-        "mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X",
-        "mem[8] = 11",
-        "mem[7] = 101",
-        "mem[8] = 0",
+            "mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X",
+            "mem[8] = 11",
+            "mem[7] = 101",
+            "mem[8] = 0",
     )
     val test14_2 = listOf(
-        "mask = 000000000000000000000000000000X1001X",
-        "mem[42] = 100",
-        "mask = 00000000000000000000000000000000X0XX",
-        "mem[26] = 1",
+            "mask = 000000000000000000000000000000X1001X",
+            "mem[42] = 100",
+            "mask = 00000000000000000000000000000000X0XX",
+            "mem[26] = 1",
     )
 
     @Nested
@@ -69,13 +69,6 @@ internal class Day14Test {
         fun `14,2,test`() {
             report {
                 Day14.partTwo(test14_2) to 208
-            }
-        }
-
-        @Test
-        fun `14,2,live,1`() {
-            report {
-                Day14.partTwo(data14) to 2173858456958
             }
         }
 

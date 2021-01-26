@@ -205,7 +205,7 @@ internal class Day11Test {
     }
 
     @Test
-    @Slow(500)
+    @Slow(800)
     fun `11,2,part2`() {
         report {
             Day11.partTwo(data11) to 61

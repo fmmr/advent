@@ -21,6 +21,7 @@ internal class Day22Test {
         }
 
         @Test
+        @Slow(2900)
         fun `22,1,live`() {
             report {
                 Day22.partOne(8112, Pos(13, 743)) to 10395

@@ -1,6 +1,7 @@
 package no.rodland.advent_2015
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,23 +20,6 @@ internal class Day18Test {
     )
 
     @Nested
-    inner class Init {
-        @Test
-        fun `18,1,live,init`() {
-            report {
-                Day18.partOne(data18, 100) to 1061
-            }
-        }
-
-        @Test
-        fun `18,2,live,init`() {
-            report {
-                Day18.partTwo(data18) to 1006
-            }
-        }
-    }
-
-    @Nested
     inner class `Part 1` {
         @Test
         fun `18,1,test`() {
@@ -45,14 +29,8 @@ internal class Day18Test {
         }
 
         @Test
+        @Slow(900)
         fun `18,1,live,1`() {
-            report {
-                Day18.partOne(data18, 100) to 1061
-            }
-        }
-
-        @Test
-        fun `18,1,live,2`() {
             report {
                 Day18.partOne(data18, 100) to 1061
             }
@@ -69,14 +47,8 @@ internal class Day18Test {
         }
 
         @Test
+        @Slow(1500)
         fun `18,2,live,1`() {
-            report {
-                Day18.partTwo(data18) to 1006
-            }
-        }
-
-        @Test
-        fun `18,2,live,2`() {
             report {
                 Day18.partTwo(data18) to 1006
             }

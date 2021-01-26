@@ -1,6 +1,7 @@
 package no.rodland.advent_2015
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -10,23 +11,6 @@ import org.junit.jupiter.api.Test
 internal class Day06Test {
     val data06 = "2015/input_06.txt".readFile()
     val test06 = listOf("1", "2")
-
-    @Nested
-    inner class Init {
-        @Test
-        fun `06,1,live,init`() {
-            report {
-                Day06.partOne(data06) to 543903
-            }
-        }
-
-        @Test
-        fun `06,2,live,init`() {
-            report {
-                Day06.partTwo(data06) to 14687245
-            }
-        }
-    }
 
     @Nested
     inner class `Part 1` {
@@ -73,14 +57,8 @@ internal class Day06Test {
         }
 
         @Test
+        @Slow(900)
         fun `06,1,live,1`() {
-            report {
-                Day06.partOne(data06) to 543903
-            }
-        }
-
-        @Test
-        fun `06,1,live,2`() {
             report {
                 Day06.partOne(data06) to 543903
             }
@@ -104,14 +82,8 @@ internal class Day06Test {
         }
 
         @Test
+        @Slow(800)
         fun `06,2,live,1`() {
-            report {
-                Day06.partTwo(data06) to 14687245
-            }
-        }
-
-        @Test
-        fun `06,2,live,2`() {
             report {
                 Day06.partTwo(data06) to 14687245
             }

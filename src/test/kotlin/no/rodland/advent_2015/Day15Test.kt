@@ -15,23 +15,6 @@ internal class Day15Test {
     )
 
     @Nested
-    inner class Init {
-        @Test
-        fun `15,1,live,init`() {
-            report {
-                Day15.partOne(data15) to 222870
-            }
-        }
-
-        @Test
-        fun `15,2,live,init`() {
-            report {
-                Day15.partTwo(data15) to 117936
-            }
-        }
-    }
-
-    @Nested
     inner class `Part 1` {
         @Test
         fun `15,1,test`() {

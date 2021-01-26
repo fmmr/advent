@@ -44,12 +44,6 @@ internal class Day17Test {
             }
         }
 
-        @Test
-        fun `17,1,live,2`() {
-            report {
-                Day17.partOne(data17, 150) to 4372
-            }
-        }
     }
 
     @Nested
@@ -58,13 +52,6 @@ internal class Day17Test {
         fun `17,2,test`() {
             report {
                 Day17.partTwo(test17, 25) to 3
-            }
-        }
-
-        @Test
-        fun `17,2,live,1`() {
-            report {
-                Day17.partTwo(data17, 150) to 4
             }
         }
 
