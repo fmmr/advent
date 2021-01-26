@@ -1,8 +1,8 @@
 package no.rodland.advent_2017.prog
 
-class Program(list: MutableList<Pair<Instruction, List<String>>>) : MutableList<Pair<Instruction, List<String>>> by list {
+class Program(val name: String, list: MutableList<Pair<Instruction, List<String>>>) : MutableList<Pair<Instruction, List<String>>> by list {
 
-    fun compile(reg: MutableMap<String, Long>, debug: Boolean = false): Sequence<Long> {
+    fun compile(reg: MutableMap<String, Long>, debug: Boolean = false, part1: Boolean = true): Sequence<Long> {
         val prog = this
         val seq = sequence<Long> {
             var ip = 0
@@ -11,12 +11,14 @@ class Program(list: MutableList<Pair<Instruction, List<String>>>) : MutableList<
                 val (instr, arg) = prog[ip]
                 // println("reg: $reg     $instr $arg ")
                 when (instr) {
-                    Instruction.snd -> lastSound = getValue(reg, arg[0])
+                    Instruction.snd -> if (part1) {
+                        lastSound = getValue(reg, arg[0])
+                    }
                     Instruction.set -> reg[arg[0]] = getValue(reg, arg[1])
                     Instruction.add -> reg[arg[0]] = getValue(reg, arg[0]) + getValue(reg, arg[1])
                     Instruction.mul -> reg[arg[0]] = getValue(reg, arg[0]) * getValue(reg, arg[1])
                     Instruction.mod -> reg[arg[0]] = getValue(reg, arg[0]) % getValue(reg, arg[1])
-                    Instruction.rcv -> if (getValue(reg, arg[0]) != 0L) {
+                    Instruction.rcv -> if (part1 && getValue(reg, arg[0]) != 0L) {
                         yield(lastSound)
                     }
                     Instruction.jgz -> if (getValue(reg, arg[0]) > 0L) {
@@ -24,7 +26,7 @@ class Program(list: MutableList<Pair<Instruction, List<String>>>) : MutableList<
                     }
                 }
                 if (debug) {
-                    println("ip: $ip, instr: $instr, args: $arg, reg: $reg")
+                    println("$name: ip: $ip, instr: $instr, args: $arg, reg: $reg")
                 }
                 ip++
             }
@@ -36,8 +38,8 @@ class Program(list: MutableList<Pair<Instruction, List<String>>>) : MutableList<
     fun getValue(reg: MutableMap<String, Long>, arg: String) = (if (arg[0] in ('a'..'z')) (reg.getOrPut(arg, { 0 })) else arg.toLong())
 
     companion object {
-        fun parse(list: List<String>): Program {
-            return Program(
+        fun parse(name: String, list: List<String>): Program {
+            return Program(name,
                     list
                             .map { Instruction.valueOf(it.substringBefore(" ")) to it.substringAfter(" ") }
                             .map {
