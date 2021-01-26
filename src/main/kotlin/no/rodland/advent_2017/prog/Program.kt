@@ -1,8 +1,11 @@
 package no.rodland.advent_2017.prog
 
-class Program(val name: String, list: MutableList<Pair<Instruction, List<String>>>) : MutableList<Pair<Instruction, List<String>>> by list {
+import java.util.concurrent.LinkedBlockingDeque
 
-    fun compile(reg: MutableMap<String, Long>, debug: Boolean = false, part1: Boolean = true): Sequence<Long> {
+class Program(val name: String, list: MutableList<Pair<Instruction, List<String>>>) : MutableList<Pair<Instruction, List<String>>> by list {
+    val queue = LinkedBlockingDeque<Long>()
+    var numSent = 0
+    fun compile(reg: MutableMap<String, Long>, debug: Boolean = false, other: Program? = null): Sequence<Long> {
         val prog = this
         val seq = sequence<Long> {
             var ip = 0
@@ -11,15 +14,20 @@ class Program(val name: String, list: MutableList<Pair<Instruction, List<String>
                 val (instr, arg) = prog[ip]
                 // println("reg: $reg     $instr $arg ")
                 when (instr) {
-                    Instruction.snd -> if (part1) {
+                    Instruction.snd -> if (other == null) {
                         lastSound = getValue(reg, arg[0])
+                    } else {
+                        numSent++
+                        other.queue.addLast(getValue(reg, arg[0]))
                     }
                     Instruction.set -> reg[arg[0]] = getValue(reg, arg[1])
                     Instruction.add -> reg[arg[0]] = getValue(reg, arg[0]) + getValue(reg, arg[1])
                     Instruction.mul -> reg[arg[0]] = getValue(reg, arg[0]) * getValue(reg, arg[1])
                     Instruction.mod -> reg[arg[0]] = getValue(reg, arg[0]) % getValue(reg, arg[1])
-                    Instruction.rcv -> if (part1 && getValue(reg, arg[0]) != 0L) {
+                    Instruction.rcv -> if (other == null && getValue(reg, arg[0]) != 0L) {
                         yield(lastSound)
+                    } else if (other != null) {
+                        reg[arg[0]] = queue.takeFirst()
                     }
                     Instruction.jgz -> if (getValue(reg, arg[0]) > 0L) {
                         ip += getValue(reg, arg[1]).toInt() - 1
