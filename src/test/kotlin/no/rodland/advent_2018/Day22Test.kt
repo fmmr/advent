@@ -49,7 +49,7 @@ internal class Day22Test {
                 // 1000 => 1027
                 // 1300 => 1027
                 // 2500 => 1027
-                Day22.partTwo(8112, Pos(13, 743)) to 1004
+                Day22.partTwo(8112, Pos(13, 743)) to 1006
             }
         }
     }

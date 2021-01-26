@@ -27,7 +27,7 @@ internal class Day19Test {
         @Slow(10000)
         fun `19,2,printMap`() {
             report {
-                Day19.printMap(data19, 900, 1100, 900, 1100) to 2L
+                Day19.printMap(data19, 900, 1100, 900, 1100) to Unit
             }
         }
 
