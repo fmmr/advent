@@ -23,7 +23,7 @@ object Day20 {
     }
 
     private fun List<Particle>.filterCollisions(): List<Particle> {
-        return this.map { particle -> particle to this.filterNot { it == particle }.filter { it.pos == particle.pos } }.filter { it.second.isEmpty() }.map { it.first }
+        return this.groupBy { it.pos }.filterValues { it.size == 1 }.flatMap { it.value }
     }
 
     private fun List<Particle>.move(): List<Particle> {
