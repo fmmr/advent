@@ -6,6 +6,16 @@ import no.rodland.advent.Pos
 @Suppress("UNUSED_PARAMETER")
 object Day19 {
     fun partOne(list: List<String>): String {
+        val seq = traverse(list)
+        return seq.mapNotNull { it?.char }.filter { it in 'A'..'Z' }.joinToString("")
+    }
+
+    fun partTwo(list: List<String>): Int {
+        val seq = traverse(list)
+        return seq.count()
+    }
+
+    private fun traverse(list: List<String>): Sequence<State?> {
         val size = list.maxOfOrNull { it.length }!!
         val grid = Array(list.size) { y ->
             CharArray(size) { x -> if (x < list[y].length) list[y][x] else ' ' }
@@ -23,7 +33,8 @@ object Day19 {
                 }
             }
         }
-        return states.takeWhile { it != null }.mapNotNull { it?.char }.filter { it in 'A'..'Z' }.joinToString("")
+        val seq = states.takeWhile { it != null }
+        return seq
     }
 
     data class State(val pos: Pos, val char: Char, val dir: Direction) {
@@ -69,8 +80,5 @@ object Day19 {
         }
     }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
 }
 
