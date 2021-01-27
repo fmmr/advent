@@ -11,6 +11,8 @@ typealias Pos2D = Pos
 
 sealed class SpacePos {
     abstract fun neighbors(): List<SpacePos>
+    abstract fun manhattan(): Int
+
     fun activeNeighbors(space: Map<out SpacePos, Char>): Int = neighbors().mapNotNull { space[it] }.count { it.active() }
 }
 
@@ -29,6 +31,12 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
                 .map { Pos3D(it) }
                 .filterNot { it == this }
     }
+
+    override fun manhattan(): Int = abs(x) + abs(y) + abs(z)
+
+    operator fun plus(other: Pos3D) = Pos3D(x + other.x, y + other.y, z + other.z)
+    operator fun minus(other: Pos3D) = Pos3D(x - other.x, y - other.y, z - other.z)
+
 }
 
 
@@ -157,7 +165,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     fun sw(): Pos = Pos(x - 1, y + 1)
     fun se(): Pos = Pos(x + 1, y + 1)
 
-    fun manhattan(): Int = abs(x) + abs(y)
+    override fun manhattan(): Int = abs(x) + abs(y)
 
     operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
     operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
@@ -200,4 +208,6 @@ data class Pos4D(val x: Int, val y: Int, val z: Int, val w: Int) : SpacePos() {
                 }
                 .filterNot { it == this }
     }
+
+    override fun manhattan(): Int = abs(x) + abs(y) + abs(z) + abs(w)
 }
