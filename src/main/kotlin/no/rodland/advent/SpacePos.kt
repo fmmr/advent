@@ -111,6 +111,8 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         )
     }
 
+    fun next(d: Direction, howMuch: Int = 1): Pos = next(d.toString()[0], howMuch)
+
     fun next(c: Char, howMuch: Int = 1): Pos {
         return when (c) {
             'U', 'N', '^' -> above(howMuch)
