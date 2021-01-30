@@ -24,12 +24,12 @@ internal class Day22Test {
             }
         }
 
-        @Test
-        fun `22,2,live,init`() {
-            report {
-                Day22.partTwo(data22) to 2
-            }
-        }
+//        @Test
+//        fun `22,2,live,init`() {
+//            report {
+//                Day22.partTwo(data22, 10000000) to 2
+//            }
+//        }
     }
 
     @Nested
@@ -68,22 +68,22 @@ internal class Day22Test {
         @Test
         fun `22,2,test`() {
             report {
-                Day22.partTwo(test22) to 2
+                Day22.partTwo(test22, 100) to 26
             }
         }
 
-        @Test
-        fun `22,2,live,1`() {
-            report {
-                Day22.partTwo(data22) to 2
-            }
-        }
-
-        @Test
-        fun `22,2,live,2`() {
-            report {
-                Day22.partTwo(data22) to 2
-            }
-        }
+//        @Test
+//        fun `22,2,test,1`() {
+//            report {
+//                Day22.partTwo(test22, 10000000) to 2511944
+//            }
+//        }
+//
+//        @Test
+//        fun `22,2,live,2`() {
+//            report {
+//                Day22.partTwo(data22, 10000000) to 2
+//            }
+//        }
     }
 }
