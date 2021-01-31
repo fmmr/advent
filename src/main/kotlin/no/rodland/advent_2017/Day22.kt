@@ -6,17 +6,16 @@ import no.rodland.advent.Pos
 
 @Suppress("UNUSED_PARAMETER")
 object Day22 {
+    private const val CLEANED = '.'
+    private const val INFECTED = '#'
+    private const val WEAKENED = 'W'
+    private const val FLAGGED = 'F'
 
     fun partOne(list: List<String>, iterations: Int): Int {
         val newStateFunc: (Char) -> Char = { if (it == '#') '.' else '#' }
         val newDirFunc: (Char, Direction) -> Direction = { c, d -> if (c == '#') d.right() else d.left() }
         return runSimulation(list, newStateFunc, newDirFunc, iterations)
     }
-
-    const val CLEANED = '.'
-    const val INFECTED = '#'
-    const val WEAKENED = 'W'
-    const val FLAGGED = 'F'
 
     fun partTwo(list: List<String>, iterations: Int): Int {
         val newStateFunc: (Char) -> Char = {
@@ -37,48 +36,33 @@ object Day22 {
                 else -> error("unsupported char new dir: $c")
             }
         }
-        var i = 1
-        val seq = generateSequence(0 to 0) { _ ->
-            i to runSimulation(list, newStateFunc, newDirFunc, i++)
-        }.drop(1).take(100)
-//                .forEach { println(it) }
-        return seq.last().second
+        return runSimulation(list, newStateFunc, newDirFunc, iterations)
     }
 
     private fun runSimulation(list: List<String>, newStateFunc: (Char) -> Char, newDirFunc: (Char, Direction) -> Direction, iterations: Int): Int {
         var infectedCounter = 0
-        val map = list.flatMapIndexed { y, str -> str.mapIndexed { x, c -> Pos(x, y) to c } }.toMap()
-        val start = PosDir(Pos(list[0].length / 2, list.size / 2), Direction.NORTH)
-        val last = generateSequence(start to map) { acc ->
-            val (next, didInfect) = acc.burst(newStateFunc, newDirFunc)
+        val map = list.flatMapIndexed { y, str -> str.mapIndexed { x, c -> Pos(x, y) to c } }.toMap().toMutableMap()
+        var current = PosDir(Pos(list[0].length / 2, list.size / 2), Direction.NORTH)
+        repeat(iterations) {
+            val (posDir, didInfect) = map.burst(current, newStateFunc, newDirFunc)
             if (didInfect) {
                 infectedCounter++
             }
-            next
+            current = posDir
         }
-                .drop(1)
-                .take(iterations)
-                //                .forEach { println("${it.first}, $infectedCounter:\n${it.second.printAsGrid(it.first)}") }
-                .last()
-
-//                println(last.second.printAsGrid(last.first))
         return infectedCounter
     }
 
-    private fun Pair<PosDir, Map<Pos, Char>>.burst(newStateFunc: (Char) -> Char, newDirFunc: (Char, Direction) -> Direction): Pair<Pair<PosDir, Map<Pos, Char>>, Boolean> {
-        val (posdir, map) = this
-        val (current, dir) = posdir
-        val currentChar = map.getOrDefault(current, '.')
+    private fun MutableMap<Pos, Char>.burst(posDir: PosDir, newStateFunc: (Char) -> Char, newDirFunc: (Char, Direction) -> Direction): Pair<PosDir, Boolean> {
+        val (current, dir) = posDir
+        val currentChar = getOrDefault(current, '.')
         val newStatus = newStateFunc(currentChar)
-        val didInfect = newStatus == INFECTED
         val newDir = newDirFunc(currentChar, dir)
-        val newPos = current.next(newDir)
-        return (PosDir(newPos, newDir) to (map + (current to newStatus))) to didInfect
+        this[current] = newStatus
+        return PosDir(current.next(newDir), newDir) to (newStatus == INFECTED)
     }
 
-    data class PosDir(val pos: Pos, val dir: Direction)
-
-
+    @Suppress("unused")
     private fun Map<Pos, Char>.printAsGrid(current: PosDir): String {
         val maxX = keys.maxByOrNull { it.x }!!.x
         val minX = keys.minByOrNull { it.x }!!.x
@@ -98,7 +82,7 @@ object Day22 {
         }.joinToString("", postfix = "\n") { it.joinToString("", postfix = "\n") }
     }
 
-    private fun Boolean.getChar() = if (this) '#' else '.'
+    data class PosDir(val pos: Pos, val dir: Direction)
 }
 
 
