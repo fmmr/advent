@@ -34,6 +34,8 @@ fmmr solutions for Advent of code.
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2017),
 [Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2017)
 
+![ascii art](gifs/2017.gif?raw=true "ascii art")
+
 ## 2016
 
 [AOC](https://adventofcode.com/2016),
