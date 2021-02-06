@@ -3,13 +3,24 @@ package no.rodland.advent_2017
 @Suppress("UNUSED_PARAMETER")
 object Day24 {
     fun partOne(list: List<String>): Int {
+        val bridges = bridges(list)
+        return bridges.map { l -> l.sumBy { it.strength } }.maxOrNull()!!
+    }
 
+    fun partTwo(list: List<String>): Int {
+        val bridges = bridges(list)
+        val size = bridges.map { it.size }.maxOrNull()!!
+        val candidates = bridges.filter { it.size == size }
+        return candidates.map { l -> l.sumBy { it.strength } }.maxOrNull()!!
+    }
+
+    private fun bridges(list: List<String>): List<List<Port>> {
         val start = Port(0, 0, Used.FIRST)
         val ports = list.map { it.split("/") }.map { Port(it.first().toInt(), it.last().toInt()) }.toSet()
         val bridges = build(listOf(start), ports)
-        val strongestBridge = bridges.map { l -> l.sumBy { it.strength } }
-        return strongestBridge.maxOrNull()!!
+        return bridges
     }
+
 
     fun build(ports: List<Port> = emptyList(), available: Set<Port>): List<List<Port>> {
         val last = ports.last()
@@ -27,10 +38,6 @@ object Day24 {
         }
     }
 
-
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
 
     data class Port(val port1: Int, val port2: Int, val used: Used = Used.NONE) {
         constructor(port1: Int, port2: Int, usedNum: Int) : this(port1, port2, if (usedNum == port1) Used.FIRST else Used.SECOND)

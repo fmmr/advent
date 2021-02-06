@@ -21,15 +21,6 @@ internal class Day24Test {
             "9/10",
     )
 
-    @Nested
-    inner class Init {
-        @Test
-        fun `24,2,live,init`() {
-            report {
-                Day24.partTwo(data24) to 2
-            }
-        }
-    }
 
     @Nested
     inner class `Part 1` {
@@ -52,23 +43,10 @@ internal class Day24Test {
     @Nested
     inner class `Part 2` {
         @Test
+        @Slow(1800)
         fun `24,2,test`() {
             report {
-                Day24.partTwo(test24) to 2
-            }
-        }
-
-        @Test
-        fun `24,2,live,1`() {
-            report {
-                Day24.partTwo(data24) to 2
-            }
-        }
-
-        @Test
-        fun `24,2,live,2`() {
-            report {
-                Day24.partTwo(data24) to 2
+                Day24.partTwo(test24) to 1824
             }
         }
     }
