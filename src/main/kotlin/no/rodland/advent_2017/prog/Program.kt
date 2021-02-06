@@ -22,7 +22,11 @@ class Program(val name: String, list: MutableList<Pair<Instruction, List<String>
                     }
                     Instruction.set -> reg[arg[0]] = getValue(reg, arg[1])
                     Instruction.add -> reg[arg[0]] = getValue(reg, arg[0]) + getValue(reg, arg[1])
-                    Instruction.mul -> reg[arg[0]] = getValue(reg, arg[0]) * getValue(reg, arg[1])
+                    Instruction.sub -> reg[arg[0]] = getValue(reg, arg[0]) - getValue(reg, arg[1])
+                    Instruction.mul -> {
+                        // println("mul CALLED")
+                        reg[arg[0]] = getValue(reg, arg[0]) * getValue(reg, arg[1])
+                    }
                     Instruction.mod -> reg[arg[0]] = getValue(reg, arg[0]) % getValue(reg, arg[1])
                     Instruction.rcv -> if (other == null && getValue(reg, arg[0]) != 0L) {
                         yield(lastSound)
@@ -30,6 +34,9 @@ class Program(val name: String, list: MutableList<Pair<Instruction, List<String>
                         reg[arg[0]] = queue.takeFirst()
                     }
                     Instruction.jgz -> if (getValue(reg, arg[0]) > 0L) {
+                        ip += getValue(reg, arg[1]).toInt() - 1
+                    }
+                    Instruction.jnz -> if (getValue(reg, arg[0]) != 0L) {
                         ip += getValue(reg, arg[1]).toInt() - 1
                     }
                 }
@@ -59,7 +66,7 @@ class Program(val name: String, list: MutableList<Pair<Instruction, List<String>
 }
 
 enum class Instruction {
-    snd, set, add, mul, mod, rcv, jgz
+    snd, set, add, mul, mod, rcv, jgz, sub, jnz
 }
 
 fun Sequence<Long>.runProgram(): List<Long> {
