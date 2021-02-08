@@ -1,76 +1,80 @@
 package no.rodland.advent_2019
 
-import no.rodland.advent.Direction
 import no.rodland.advent.Pos
 
 object Day18 {
     fun partOne(list: List<String>): Int {
-        val setup = Setup(list)
-
-        val allPos = (setup.keys + setup.entrance + setup.doors)
-
-        val allDistances = allPos.map { keyPos ->
-            val distances = mutableMapOf<Pos, Int>()
-            buildDistance(keyPos.first, setup.map, distances)
-            keyPos to distances.filter { distance -> allPos.any { distance.key == it.first } }
-                    .map { dist -> dist.key to (dist.value to setup.cellMaps[dist.key]) }
-        }
-
-        return 2
+        val maze = Maze.from(list)
+        return maze.minimumSteps()
     }
 
+    // copied from: https://github.com/tginsberg/advent-2019-kotlin/blob/master/src/main/kotlin/com/ginsberg/advent2019/Day18.kt
+    class Maze(private val starts: Set<Pos>, private val keys: Map<Pos, Char>, private val doors: Map<Pos, Char>, private val openSpaces: Set<Pos>) {
+        private fun findReachableKeys(from: Pos, haveKeys: Set<Char> = mutableSetOf()): Map<Char, Pair<Pos, Int>> {
+            val queue = ArrayDeque<Pos>().apply { add(from) }
+            val distance = mutableMapOf(from to 0)
+            val keyDistance = mutableMapOf<Char, Pair<Pos, Int>>()
+            while (queue.isNotEmpty()) {
+                val next = queue.removeFirst()
+                next.neighboorCellsNDLR()
+                        .filter { it in openSpaces }
+                        .filterNot { it in distance }
+                        .forEach { point: Pos ->
+                            distance[point] = distance[next]!! + 1
+                            val door = doors[point]
+                            val key = keys[point]
+                            if (door == null || door.toLowerCase() in haveKeys) {
+                                if (key != null && key !in haveKeys) {
+                                    keyDistance[key] = point to distance[point]!!
+                                } else {
+                                    queue.add(point)
+                                }
+                            }
+                        }
+            }
+            return keyDistance
+        }
 
-    fun buildDistance(
-            current: Pos,
-            map: List<List<Char>>,
-            distances: MutableMap<Pos, Int>,
-            distance: Int = 0,
-            doorsPassed: MutableList<Cell> = mutableListOf(),
-            keysPassed: MutableList<Cell> = mutableListOf()) {
-        if (map[current.y][current.x] == '#') {
-            return
+        private fun findReachableFromPoints(from: Set<Pos>, haveKeys: Set<Char>): Map<Char, Triple<Pos, Int, Pos>> =
+                from.map { point ->
+                    findReachableKeys(point, haveKeys).map { entry ->
+                        entry.key to Triple(entry.value.first, entry.value.second, point)
+                    }
+                }.flatten().toMap()
+
+        fun minimumSteps(from: Set<Pos> = starts,
+                         haveKeys: Set<Char> = mutableSetOf(),
+                         seen: MutableMap<Pair<Set<Pos>, Set<Char>>, Int> = mutableMapOf()): Int {
+            val state = Pair(from, haveKeys)
+
+            if (state in seen) return seen.getValue(state)
+
+            val answer = findReachableFromPoints(from, haveKeys).map { entry ->
+                val (at, dist, cause) = entry.value
+                dist + minimumSteps((from - cause) + at, haveKeys + entry.key, seen)
+            }.minOrNull() ?: 0
+            seen[state] = answer
+            return answer
         }
-        if (map[current.y][current.x].isKey()) {
-            keysPassed.add(Cell(current.x, current.y, map[current.y][current.x]))
-        }
-        if (map[current.y][current.x].isDoor()) {
-            doorsPassed.add(Cell(current.x, current.y, map[current.y][current.x]))
-        }
-        val last = distances[current] ?: (distance + 1)
-        if (distance < last) {
-            distances[current] = distance
-            Direction.values().forEach { dir ->
-                buildDistance(current.next(dir.c), map, distances, distance + 1, doorsPassed, keysPassed)
+
+        companion object {
+            fun from(input: List<String>): Maze {
+                val starts = mutableSetOf<Pos>()
+                val keys = mutableMapOf<Pos, Char>()
+                val doors = mutableMapOf<Pos, Char>()
+                val openSpaces = mutableSetOf<Pos>()
+
+                input.forEachIndexed { y, row ->
+                    row.forEachIndexed { x, c ->
+                        val place = Pos(x, y)
+                        if (c == '@') starts += place
+                        if (c != '#') openSpaces += place
+                        if (c in ('a'..'z')) keys[place] = c
+                        if (c in ('A'..'Z')) doors[place] = c
+                    }
+                }
+                return Maze(starts, keys, doors, openSpaces)
             }
         }
-    }
-
-
-    class Setup(list: List<String>) {
-        val map by lazy { list.map { it.map { it } } }
-        val cells by lazy { map.mapIndexed { y, line -> line.mapIndexed { x, c -> Pos(x, y) to Cell(x, y, c) } }.flatten() }
-        val cellMaps = cells.map { it.first to it.second.char }.toMap()
-        val entrance by lazy { cells.filter { it.second.char == '@' }.first() }
-        val keys by lazy { cells.filter { it.second.char.isKey() } }
-        val doors by lazy { cells.filter { it.second.char.isDoor() } }
-        val pairs by lazy { keys.map { key -> key to doors.filter { door -> key.second.char == door.second.char.toLowerCase() }.firstOrNull() } }
-        val exit by lazy { pairs.filter { it.second == null }.map { it.first } }
-        val walkable by lazy { cells.filter { it.second.char.isWalkable() } }
-
-    }
-
-    data class Cell(val pos: Pos, val char: Char) {
-        constructor(x: Int, y: Int, c: Char) : this(Pos(x, y), c)
-
-        val x = pos.x
-        val y = pos.y
-    }
-
-    private fun Char.isWalkable() = this != '#'
-    private fun Char.isKey() = toLowerCase() == this && this != '#' && this != '@' && this != '.'
-    private fun Char.isDoor() = toUpperCase() == this && this != '#' && this != '@' && this != '.'
-
-    fun partTwo(list: List<String>): Int {
-        return 2
     }
 }

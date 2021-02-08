@@ -1,8 +1,8 @@
 package no.rodland.advent_2019
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -10,6 +10,7 @@ import readFile
 @DisableSlow
 internal class Day18Test {
     val data18 = "2019/input_18.txt".readFile()
+    val data18_2 = "2019/input_18_2.txt".readFile()
     val test18_1 = listOf(
             "#########",
             "#b.A.@.a#",
@@ -40,6 +41,19 @@ internal class Day18Test {
             "#l.F..d...h..C.m#",
             "#################"
     )
+
+    val test18_part2 = listOf(
+            "#############",
+            "#g#f.D#..h#l#",
+            "#F###e#E###.#",
+            "#dCba@#@BcIJ#",
+            "#############",
+            "#nK.L@#@G...#",
+            "#M###N#H###.#",
+            "#o#m..#i#jk.#",
+            "#############",
+    )
+
     val test18_5 = listOf(
             "########################",
             "#@..............ac.GI.b#",
@@ -50,7 +64,6 @@ internal class Day18Test {
     )
 
     @Nested
-    @Disabled
     inner class `Part 1` {
         @Test
         fun `18,1,test,1`() {
@@ -83,11 +96,12 @@ internal class Day18Test {
         @Test
         fun `18,1,test,5`() {
             report {
-                Day18.partOne(test18_4) to 81
+                Day18.partOne(test18_5) to 81
             }
         }
 
         @Test
+        @Slow(2600)
         fun `18,1,live`() {
             report {
                 Day18.partOne(data18) to 2
@@ -100,14 +114,15 @@ internal class Day18Test {
         @Test
         fun `18,2,test`() {
             report {
-                Day18.partTwo(test18_1) to 2
+                Day18.partOne(test18_part2) to 72
             }
         }
 
         @Test
+        @Slow(3100)
         fun `18,2,live`() {
             report {
-                Day18.partTwo(data18) to 2
+                Day18.partOne(data18_2) to 2144
             }
         }
     }

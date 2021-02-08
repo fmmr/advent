@@ -3,6 +3,7 @@ package no.rodland.advent_2019
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
 import no.rodland.advent.report
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.math.BigInteger
@@ -29,7 +30,8 @@ internal class Day12Test {
     )
 
     @Nested
-    inner class `Part 1` {
+    @DisplayName("Part 1")
+    inner class Part1 {
         @Test
         fun `12,1,test,1`() {
             report {
