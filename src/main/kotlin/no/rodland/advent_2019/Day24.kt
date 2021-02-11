@@ -7,13 +7,20 @@ import kotlin.math.pow
 object Day24 {
     fun partOne(list: List<String>): Int {
         val set = mutableSetOf<List<String>>()
-        val firstTile = generateSequence(list) { l ->
-            runSim(l)
+        val grid = Grid(0, list, null, null)
+        val firstTile = generateSequence(grid) { g ->
+            runSim(g, ::getNeighboorsPart1)
         }.first { !set.add(it) }
         return biodiversityRating(firstTile)
     }
 
-    fun partTwo(list: List<String>): Int {
+    private fun getNeighboorsPart1(grid: Grid, x: Int, y: Int) = Pos(x, y).neighboorCellsNDLR()
+
+    data class Grid(val level: Int, val list: List<String>, var parent: Grid?, var child: Grid?) : List<String> by list
+
+    fun emptyGrid(): List<String> = (1..5).map { "....." }
+
+    fun partTwo(list: List<String>, iterations: Int): Int {
         return 2
     }
 
@@ -22,10 +29,10 @@ object Day24 {
             .mapIndexed { idx, c -> 2.toDouble().pow(idx.toDouble()).toInt() * if (c == '#') 1 else 0 }
             .sum()
 
-    fun runSim(grid: List<String>): List<String> {
-        return grid.mapIndexed { y, row ->
+    private fun runSim(grid: Grid, neighboorsFunc: (Grid, Int, Int) -> List<Pos>): Grid {
+        val newList = grid.mapIndexed { y, row ->
             row.mapIndexed { x, c ->
-                val neighboors = Pos(x, y).neighboorCellsNDLR().filter { it.isInGrid(grid) }
+                val neighboors = neighboorsFunc(grid, x, y).filter { it.isInGrid(grid) }
                 val numEmpty = neighboors.count { grid[it.y][it.x] == '.' } + (4 - neighboors.size)
                 val infected = 4 - numEmpty
                 val ret = if (c == '#' && infected != 1) {
@@ -38,6 +45,8 @@ object Day24 {
                 ret
             }.joinToString("")
         }
+        return Grid(grid.level, newList, grid.parent, grid.child)
     }
+
 
 }
