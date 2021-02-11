@@ -85,3 +85,9 @@ fun <K> MutableMap<K, Int>.increment(key: K) {
 }
 
 fun factorial(n: Int) = (1..n).map { it.toLong() }.reduce { acc, l -> acc * l }
+
+fun arrayOfCharArrays(list: List<String>) = Array(list.size) { y ->
+    CharArray(list[y].length) { x ->
+        list[y][x]
+    }
+}
