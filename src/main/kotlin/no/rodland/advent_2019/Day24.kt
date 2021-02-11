@@ -14,7 +14,7 @@ object Day24 {
         return biodiversityRating(firstTile)
     }
 
-    private fun getNeighboorsPart1(grid: Grid, x: Int, y: Int) = Pos(x, y).neighboorCellsNDLR()
+    private fun getNeighboorsPart1(grid: Grid, x: Int, y: Int) = Pos(x, y).neighboorCellsNDLR().filter { it.isInGrid(grid) }
 
     data class Grid(val level: Int, val list: List<String>, var parent: Grid?, var child: Grid?) : List<String> by list
 
@@ -32,21 +32,18 @@ object Day24 {
     private fun runSim(grid: Grid, neighboorsFunc: (Grid, Int, Int) -> List<Pos>): Grid {
         val newList = grid.mapIndexed { y, row ->
             row.mapIndexed { x, c ->
-                val neighboors = neighboorsFunc(grid, x, y).filter { it.isInGrid(grid) }
-                val numEmpty = neighboors.count { grid[it.y][it.x] == '.' } + (4 - neighboors.size)
-                val infected = 4 - numEmpty
-                val ret = if (c == '#' && infected != 1) {
-                    '.'
-                } else if (c == '.' && infected in 1..2) {
-                    '#'
-                } else {
-                    c
-                }
-                ret
+                val neighboors = neighboorsFunc(grid, x, y)
+                val infected = neighboors.count { grid[it.y][it.x] == '#' }
+                c.newChar(infected)
             }.joinToString("")
         }
         return Grid(grid.level, newList, grid.parent, grid.child)
     }
 
+    private fun Char.newChar(infected: Int) = when {
+        this == '#' && infected != 1 -> '.'
+        this == '.' && infected in 1..2 -> '#'
+        else -> this
+    }
 
 }
