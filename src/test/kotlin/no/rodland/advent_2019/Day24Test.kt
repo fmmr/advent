@@ -3,10 +3,10 @@ package no.rodland.advent_2019
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
 import no.rodland.advent.report
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 @DisableSlow
 internal class Day24Test {
