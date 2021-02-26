@@ -47,7 +47,7 @@ object Day23 {
                             }
                             latestDelivery = toSend.second
                         }
-                        delay(15) // Give the computers a chance to work
+                        delay(30) // Give the computers a chance to work
                     }
                 }
             }
