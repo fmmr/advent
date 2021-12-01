@@ -6,7 +6,7 @@ object Day01 {
         return countIncreased(list)
     }
 
-    private fun countIncreased(list: List<Int>) = list.windowed(2).map { it.last() - it.first() }.count { it > 0 }
+    private fun countIncreased(list: List<Int>) = list.zipWithNext().count { it.second > it.first }
 
     fun partTwo(list: List<Int>): Int {
         return countIncreased(list.windowed(3).map { it.sum() })
