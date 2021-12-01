@@ -5,7 +5,7 @@ import get
 object Day23 {
     fun partOne(list: List<String>): Int {
         val bots = list.map { NanoBot(it) }
-        val mostPowerFull = bots.maxBy { it.sigalRadius }
+        val mostPowerFull = bots.maxByOrNull { it.sigalRadius }
         return bots.count { mostPowerFull?.inRange(it) ?: false }
     }
 
@@ -17,18 +17,18 @@ object Day23 {
 
         val clique: Set<NanoBot> = BronKerbosch(neighbors).largestClique()
 
-        return clique.map { it.distanceTo(NanoBot(0, 0, 0, 0)) - it.sigalRadius }.max()!!
+        return clique.map { it.distanceTo(NanoBot(0, 0, 0, 0)) - it.sigalRadius }.maxOrNull()!!
     }
 
 
     fun naivePartTwo(list: List<String>): NanoBot {
         val bots = list.map { NanoBot(it) }
-        val maxX = bots.maxBy { it.x }!!.x
-        val minX = bots.minBy { it.x }!!.x
-        val maxY = bots.maxBy { it.y }!!.y
-        val minY = bots.minBy { it.y }!!.y
-        val maxZ = bots.maxBy { it.z }!!.z
-        val minZ = bots.minBy { it.z }!!.z
+        val maxX = bots.maxByOrNull { it.x }!!.x
+        val minX = bots.minByOrNull { it.x }!!.x
+        val maxY = bots.maxByOrNull { it.y }!!.y
+        val minY = bots.minByOrNull { it.y }!!.y
+        val maxZ = bots.maxByOrNull { it.z }!!.z
+        val minZ = bots.minByOrNull { it.z }!!.z
         val points = (minX..maxX).flatMap { x ->
             (minY..maxY).flatMap { y ->
                 (minZ..maxZ).map { z ->
@@ -37,7 +37,7 @@ object Day23 {
                     point to num
                 }
             }
-        }.maxBy { it.second }
+        }.maxByOrNull { it.second }
         return points!!.first
     }
 
@@ -77,14 +77,14 @@ object Day23 {
                 // We have found a potential best R value, compare it to the best so far.
                 if (r.size > bestR.size) bestR = r
             } else {
-                val mostNeighborsOfPandX: T = (p + x).maxBy { neighbors.getValue(it).size }!!
+                val mostNeighborsOfPandX: T = (p + x).maxByOrNull { neighbors.getValue(it).size }!!
                 val pWithoutNeighbors = p.minus(neighbors[mostNeighborsOfPandX]!!)
                 pWithoutNeighbors.forEach { v ->
                     val neighborsOfV = neighbors[v]!!
                     execute(
-                            p.intersect(neighborsOfV),
-                            r + v,
-                            x.intersect(neighborsOfV)
+                        p.intersect(neighborsOfV),
+                        r + v,
+                        x.intersect(neighborsOfV)
                     )
                 }
             }

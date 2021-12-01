@@ -110,10 +110,10 @@ object Day17 {
 
 
     fun getMinMax(coordinates: List<Pair<IntRange, IntRange>>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-        val xmin = coordinates.map { it.first }.map { it.first }.min()!!
-        val xmax = coordinates.map { it.first }.map { it.last }.max()!!
-        val ymin = coordinates.map { it.second }.map { it.first }.min()!!
-        val ymax = coordinates.map { it.second }.map { it.last }.max()!!
+        val xmin = coordinates.map { it.first }.map { it.first }.minOrNull()!!
+        val xmax = coordinates.map { it.first }.map { it.last }.maxOrNull()!!
+        val ymin = coordinates.map { it.second }.map { it.first }.minOrNull()!!
+        val ymax = coordinates.map { it.second }.map { it.last }.maxOrNull()!!
         return (xmin to xmax) to (ymin to ymax)
     }
 

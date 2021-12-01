@@ -1,4 +1,5 @@
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Deque
 import kotlin.math.absoluteValue
 
 object Day9 {
@@ -6,10 +7,10 @@ object Day9 {
         val game = Game(players, worth)
         game.playGame()
         game.scores.toList().println()
-        return game.scores.max()
+        return game.scores.maxOrNull()
     }
 
-    fun partTwo(players: Int, worth: Int): Long? {
+    fun partTwo(players: Int, worth: Int): Long {
         // part 2 copied from: https://todd.ginsberg.com/post/advent-of-code/2018/day9/
         return play(players, worth)
     }
@@ -36,7 +37,7 @@ object Day9 {
                 }
             }
         }
-        return scores.max()!!
+        return scores.maxOrNull()!!
     }
 
     private fun <T> Deque<T>.shift(n: Int): Unit =
@@ -50,7 +51,7 @@ object Day9 {
             }
 
 
-    class Game(val numPlayers: Int, val lastMarble: Int) {
+    class Game(private val numPlayers: Int, private val lastMarble: Int) {
         val game = mutableListOf<Long>(0)
         var currentPlayer = -1
         var currentMarblePos = 0

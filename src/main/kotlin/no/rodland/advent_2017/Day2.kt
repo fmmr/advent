@@ -4,8 +4,8 @@ object Day2 {
 
     fun partOne(list: List<String>): Int {
         return list
-                .spread()
-                .map { it.max()!! - it.min()!! }
+            .spread()
+            .map { it.maxOrNull()!! - it.minOrNull()!! }
                 .sum()
     }
 

@@ -6,7 +6,7 @@ import kotlin.math.max
 object Day21 {
     fun partOne(bossHitPoints: Int, bossDamage: Int, bossArmor: Int): Int {
         return items()
-                .sortedBy { tmpItems -> tmpItems.sumBy { it.cost } }
+            .sortedBy { tmpItems -> tmpItems.sumOf { it.cost } }
                 .map { playGame(it, bossHitPoints, bossDamage, bossArmor) }
                 .first { it.first }
                 .second
@@ -15,7 +15,7 @@ object Day21 {
 
     fun partTwo(bossHitPoints: Int, bossDamage: Int, bossArmor: Int): Int {
         return items()
-                .sortedByDescending { tmpItems -> tmpItems.sumBy { it.cost } }
+            .sortedByDescending { tmpItems -> tmpItems.sumOf { it.cost } }
                 .map { playGame(it, bossHitPoints, bossDamage, bossArmor) }
                 .first { !it.first }
                 .second
@@ -29,7 +29,7 @@ object Day21 {
             player.hit(boss)
             boss.hit(player)
         }
-        return (boss.hitPoints <= 0) to items.sumBy { it.cost }
+        return (boss.hitPoints <= 0) to items.sumOf { it.cost }
     }
 
     data class Item(val name: String, val cost: Int, val damage: Int, val armor: Int)

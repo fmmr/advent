@@ -10,14 +10,14 @@ object Day24 {
 
     fun partOne(imuneList: List<String>, infectionList: List<String>, boost: Int = 0): Int {
         val endGame = play(imuneList, infectionList, boost)
-        return endGame.first.sumBy { it.num }
+        return endGame.first.sumOf { it.num }
     }
 
     fun partTwo(imuneList: List<String>, infectionList: List<String>, initialBoost: Int = 0): Int {
         return generateSequence(initialBoost) { it + 1 }.takeWhile { boost ->
             val end = play(imuneList, infectionList, boost)
             val teamWon = end.first.first().team
-            val fighters = end.first.sumBy { it.num }
+            val fighters = end.first.sumOf { it.num }
             println("team $teamWon won with a remaining army of $fighters for boost $boost")
             end.first.first().team != Team.IMMUNE
         }.last() + 1

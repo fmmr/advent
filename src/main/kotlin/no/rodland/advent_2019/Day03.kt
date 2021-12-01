@@ -8,21 +8,21 @@ object Day03 {
         val pos1: List<Pos2> = path(wire1)
         val pos2: List<Pos2> = path(wire2)
         val intersects = pos1.intersect(pos2).filterNot { it == Pos2(0, 0) }
-        return intersects.map { origo.distanceTo(it) }.min()!!
+        return intersects.map { origo.distanceTo(it) }.minOrNull()!!
     }
 
     private fun path(wire: List<String>): List<Pos2> {
-        return wire.fold(listOf(origo), { acc, op ->
+        return wire.fold(listOf(origo)) { acc, op ->
             val last = acc.last()
             acc.dropLast(1) + (last..(last.pos(Op(op))))
-        })
+        }
     }
 
     fun partTwo(wire1: List<String>, wire2: List<String>): Int {
         val pos1: List<Pos2> = path(wire1)
         val pos2: List<Pos2> = path(wire2)
         val intersects = pos1.intersect(pos2).filterNot { it == Pos2(0, 0) }
-        return intersects.map { pos1.indexOf(it) + pos2.indexOf(it) }.min()!!
+        return intersects.map { pos1.indexOf(it) + pos2.indexOf(it) }.minOrNull()!!
     }
 }
 

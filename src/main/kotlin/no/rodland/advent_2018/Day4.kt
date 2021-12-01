@@ -4,7 +4,7 @@ object Day4 {
 
     fun partOne(data: List<String>): Int {
         val guards = readGuards(data)
-        val id = guards.mapValues { it.value.sumMinutes() }.maxBy { it.value }!!.key
+        val id = guards.mapValues { it.value.sumMinutes() }.maxByOrNull { it.value }!!.key
         val guardWithMostSleep = guards[id]!!
         val maxSleepMinute = guardWithMostSleep.maxSleepMinute()
         val maxMinute = guardWithMostSleep.maxMinute()
@@ -22,7 +22,7 @@ object Day4 {
         val guards = readGuards(data)
 
         val hei = (0..59).map { min ->
-            val maxGuard = guards.maxBy { e ->
+            val maxGuard = guards.maxByOrNull { e ->
                 e.value.numTimesSleptOnMinute(min)
             }
             min to maxGuard!!.value
@@ -31,7 +31,7 @@ object Day4 {
         hei.forEach {
             debug("min: ${it.first}, guard: ${it.second}, num: ${it.second.numTimesSleptOnMinute(it.first)}")
         }
-        val (min, guard) = hei.maxBy { it.second.numTimesSleptOnMinute(it.first) }!!
+        val (min, guard) = hei.maxByOrNull { it.second.numTimesSleptOnMinute(it.first) }!!
         println("min = $min, guard: $guard")
         println("mult min * guard.id = ${min * guard.id}")
         return min * guard.id
@@ -39,7 +39,7 @@ object Day4 {
 
 
     fun find_best_guard_to_trick(data: List<String>): Guard? {
-        val guard = readGuards(data).maxBy { it.value.sleepPrOnCall() }?.value
+        val guard = readGuards(data).maxByOrNull { it.value.sleepPrOnCall() }?.value
         println("guard = $guard")
         return guard
     }
@@ -65,6 +65,7 @@ object Day4 {
                             guard.wake(msg.min)
                             debug("wake $guard $msg")
                         }
+                        else -> error("Added when converting to 1.6")
                     }
                 }
         return guards
@@ -114,7 +115,7 @@ object Day4 {
 
         fun sumMinutes() = arr.sum()
 
-        fun maxSleepMinute() = arr.max()!!
+        fun maxSleepMinute() = arr.maxOrNull()!!
 
         fun numTimesSleptOnMinute(min: Int) = arr[min]
 

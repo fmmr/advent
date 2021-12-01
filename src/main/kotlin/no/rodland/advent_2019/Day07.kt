@@ -9,12 +9,12 @@ import kotlinx.coroutines.runBlocking
 @ExperimentalCoroutinesApi
 object Day07 {
     fun partOne(program: List<String>): Long {
-        return permute(0..4).map { runBlocking { runAmplifiersPart1(program, it) } }.max()!!
+        return permute(0..4).map { runBlocking { runAmplifiersPart1(program, it) } }.maxOrNull()!!
     }
 
     fun partTwo(program: List<String>): Long {
         val map = permute(5..9).map { runBlocking { runAmplifiersPart2(program, it) } }
-        return map.max()!!
+        return map.maxOrNull()!!
     }
 
     @ExperimentalCoroutinesApi

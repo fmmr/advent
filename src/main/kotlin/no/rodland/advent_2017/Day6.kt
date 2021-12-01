@@ -18,7 +18,7 @@ object Day6 {
         seen.put(list, 0)
         var added: Int? = null
         while (added == null) {
-            val maxindex = mutable.indexOf(mutable.max())
+            val maxindex = mutable.indexOf(mutable.maxOrNull())
             val toDist = mutable[maxindex]
             mutable[maxindex] = 0
             val seq = sequence(maxindex + 1, list.size).iterator()

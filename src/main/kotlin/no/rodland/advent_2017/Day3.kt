@@ -26,8 +26,8 @@ object Day3 {
         val middle = nextSquare - onSquare
         // find the closest "middle" element
         val closest = genMiddles(middle, nextOddNumber)
-                .associate { it to abs(num - it) }
-                .minBy { it.value }
+            .associate { it to abs(num - it) }
+            .minByOrNull { it.value }
 
         println("num: $num, s: $s, o: $nextOddNumber, nextSquare: $nextSquare, square: $onSquare, side-length: $nextOddNumber, middle: $middle, closest: $closest")
         return onSquare + (closest?.value ?: 0)

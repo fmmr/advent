@@ -13,8 +13,8 @@ object Day10 {
         while (!found) {
             count++
             val newPos = points.map { it.move() }
-            val min = newPos.minBy { it.y }!!.y
-            val max = newPos.maxBy { it.y }!!.y
+            val min = newPos.minByOrNull { it.y }!!.y
+            val max = newPos.maxByOrNull { it.y }!!.y
             found = max - min == height
         }
 
@@ -23,10 +23,10 @@ object Day10 {
         val xs = points.map { it.x }
         val ys = points.map { it.y }
 
-        val minY = (ys.min() ?: 0) - BORDER
-        val maxY = ((ys.max() ?: 0)) + BORDER
-        val minX = (xs.min() ?: 0) - BORDER
-        val maxX = ((xs.max() ?: 0)) + BORDER
+        val minY = (ys.minOrNull() ?: 0) - BORDER
+        val maxY = ((ys.maxOrNull() ?: 0)) + BORDER
+        val minX = (xs.minOrNull() ?: 0) - BORDER
+        val maxX = ((xs.maxOrNull() ?: 0)) + BORDER
 
         (minY..maxY).forEach { y ->
             (minX..maxX).forEach { x ->

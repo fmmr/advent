@@ -19,10 +19,10 @@ object Day11 {
 
     fun partTwo(program: List<String>): Int {
         val paint = paint(program, WHITE).filter { it.value == BLACK }
-        val minX = paint.map { it.key.x }.min()!!
-        val minY = paint.map { it.key.y }.min()!!
-        val maxX = paint.map { it.key.x }.max()!!
-        val maxY = paint.map { it.key.y }.max()!!
+        val minX = paint.map { it.key.x }.minOrNull()!!
+        val minY = paint.map { it.key.y }.minOrNull()!!
+        val maxX = paint.map { it.key.x }.maxOrNull()!!
+        val maxY = paint.map { it.key.y }.maxOrNull()!!
 
         (minY..maxY).forEach { y ->
             (0..(maxX - minX)).forEach { x -> print(printable(paint.getOrDefault(Pos(x, y), WHITE))) }

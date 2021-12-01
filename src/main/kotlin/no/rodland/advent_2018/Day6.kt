@@ -1,44 +1,44 @@
 object Day6 {
     fun partOne(coordinates: List<Pair<Int, Int>>): Int {
-        val minX = coordinates.minBy { it.first }!!.first
-        val maxX = coordinates.maxBy { it.first }!!.first
-        val minY = coordinates.minBy { it.second }!!.second
-        val maxY = coordinates.maxBy { it.second }!!.second
+        val minX = coordinates.minByOrNull { it.first }!!.first
+        val maxX = coordinates.maxByOrNull { it.first }!!.first
+        val minY = coordinates.minByOrNull { it.second }!!.second
+        val maxY = coordinates.maxByOrNull { it.second }!!.second
 
         val closestPos = (minX..maxX)
-                .flatMap { x ->
-                    (minY..maxY).map { y ->
-                        (x to y) to getClosestPos(coordinates, x, y)
-                    }
+            .flatMap { x ->
+                (minY..maxY).map { y ->
+                    (x to y) to getClosestPos(coordinates, x, y)
                 }
-                .filter { it.second != null } // remove points with multiple closest
+            }
+            .filter { it.second != null } // remove points with multiple closest
 
 
         val infiniteCoordinates = getInfinites(closestPos, minX, maxX, minY, maxY)
 
         val result = closestPos.filter { !infiniteCoordinates.contains(it.second) }
-                .map { it.second }
-                .groupingBy { it?.first }
-                .eachCount()
-                .maxBy { it.value }?.value
+            .map { it.second }
+            .groupingBy { it?.first }
+            .eachCount()
+            .maxByOrNull { it.value }?.value
         println("MIN: x: $minX, y: $minY, MAX: x: $maxX, y: $maxY")
 
         return result!!
     }
 
     fun partTwo(coordinates: List<Pair<Int, Int>>, limit: Int): Int {
-        val minX = coordinates.minBy { it.first }!!.first
-        val maxX = coordinates.maxBy { it.first }!!.first
-        val minY = coordinates.minBy { it.second }!!.second
-        val maxY = coordinates.maxBy { it.second }!!.second
+        val minX = coordinates.minByOrNull { it.first }!!.first
+        val maxX = coordinates.maxByOrNull { it.first }!!.first
+        val minY = coordinates.minByOrNull { it.second }!!.second
+        val maxY = coordinates.maxByOrNull { it.second }!!.second
 
         return (minX..maxX)
-                .flatMap { x ->
-                    (minY..maxY).map { y ->
-                        (x to y) to getSumOfDistances(coordinates, x, y)
-                    }
-                }.filter { it.second < limit }
-                .count()
+            .flatMap { x ->
+                (minY..maxY).map { y ->
+                    (x to y) to getSumOfDistances(coordinates, x, y)
+                }
+            }.filter { it.second < limit }
+            .count()
 
 
     }
@@ -61,7 +61,7 @@ object Day6 {
 
     fun getClosestPos(coordinates: List<Pair<Int, Int>>, x: Int, y: Int): Pair<Int, Int>? {
         val map = getDistances(coordinates, x, y)
-        val minDistance = map.minBy { it.second }!!.second
+        val minDistance = map.minByOrNull { it.second }!!.second
         val filtered = map.filter { it.second == minDistance }
         return if (filtered.size == 1) {
             filtered[0].first

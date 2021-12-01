@@ -206,7 +206,7 @@ internal class Day15Test {
                 creatures.add(Creature(ELF, "3", Pos(1, 2), hitPoints = 131))
                 creatures.add(Creature(ELF, "2", Pos(4, 1), hitPoints = 59))
                 creatures.add(Creature(ELF, "1", Pos(2, 1), hitPoints = 200))
-                creatures.filterNot { it.dead() }.sumBy { it.hitPoints } * 47 to 27730
+                creatures.filterNot { it.dead() }.sumOf { it.hitPoints } * 47 to 27730
             }
         }
     }

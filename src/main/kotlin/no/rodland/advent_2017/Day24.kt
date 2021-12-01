@@ -4,14 +4,14 @@ package no.rodland.advent_2017
 object Day24 {
     fun partOne(list: List<String>): Int {
         val bridges = bridges(list)
-        return bridges.map { l -> l.sumBy { it.strength } }.maxOrNull()!!
+        return bridges.map { l -> l.sumOf { it.strength } }.maxOrNull()!!
     }
 
     fun partTwo(list: List<String>): Int {
         val bridges = bridges(list)
         val size = bridges.map { it.size }.maxOrNull()!!
         val candidates = bridges.filter { it.size == size }
-        return candidates.map { l -> l.sumBy { it.strength } }.maxOrNull()!!
+        return candidates.map { l -> l.sumOf { it.strength } }.maxOrNull()!!
     }
 
     private fun bridges(list: List<String>): List<List<Port>> {

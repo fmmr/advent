@@ -1,12 +1,12 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.Pos
-import java.util.*
+import java.util.ArrayDeque
 
 object Day20 {
     fun partOne(re: String): Int {
         val map = parse(re, Pos(0, 0))
-        return map.maxBy { it.value }?.value ?: -1
+        return map.maxByOrNull { it.value }?.value ?: -1
     }
 
     fun parse(input: String, start: Pos = Pos(0, 0)): MutableMap<Pos, Int> {

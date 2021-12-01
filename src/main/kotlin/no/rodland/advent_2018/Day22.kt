@@ -1,8 +1,10 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.Pos
-import no.rodland.advent_2018.Day22.Gear.*
-import java.util.*
+import no.rodland.advent_2018.Day22.Gear.CLIMB
+import no.rodland.advent_2018.Day22.Gear.NEITHER
+import no.rodland.advent_2018.Day22.Gear.TORCH
+import java.util.PriorityQueue
 
 object Day22 {
     fun partOne(depth: Int, target: Pos): Int {
@@ -31,7 +33,7 @@ object Day22 {
             } else {
                 it.copy(cost = it.cost + 7)
             }
-        }.minBy { it.cost }!!
+        }.minByOrNull { it.cost }!!
         println("count: $count")
         return result.cost
     }
@@ -131,13 +133,13 @@ object Day22 {
             } else {
                 it.copy(cost = it.cost + 7)
             }
-        }.minBy { it.cost }!!
+        }.minByOrNull { it.cost }!!
         return result.cost to count
     }
 
     private fun clean(heisan: List<Combo>): List<Combo> {
         return heisan.groupBy({ it.pos to it.gear }, { it.cost }).map {
-            Combo(it.key.first, it.key.second, it.value.min()!!)
+            Combo(it.key.first, it.key.second, it.value.minOrNull()!!)
         }
     }
 

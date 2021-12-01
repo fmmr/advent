@@ -8,21 +8,21 @@ object Day5 {
         return ('a'..'z').map { c ->
             val testString = newStr.replace("""[$c${c.toUpperCase()}]""".toRegex(), "")
             reducePolymer(testString).length
-        }.min() ?: throw IllegalStateException("Could not find a solution")
+        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
     }
 
     fun partTwo_take2(str: String): Int {
         val newStr = reducePolymer(str)
         return ('a'..'z').map { c ->
             reducePolymer_take_2(newStr, c).length
-        }.min() ?: throw IllegalStateException("Could not find a solution")
+        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
     }
 
     fun partTwo_chriswk(str: String): Int {
         val newStr = reducePolymer(str)
         return ('a'..'z').map { c ->
             react(newStr, c).length
-        }.min() ?: throw IllegalStateException("Could not find a solution")
+        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
     }
 
 

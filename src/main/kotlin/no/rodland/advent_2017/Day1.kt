@@ -22,9 +22,9 @@ object Day1 {
 
     fun partTwo(str: String): Int {
         return str.subSequence(0, str.length / 2)
-                .zip(str.subSequence(str.length / 2, str.length))
-                .filter { it.first == it.second }
-                .sumBy { it.first.toString().toInt() * 2 }
+            .zip(str.subSequence(str.length / 2, str.length))
+            .filter { it.first == it.second }
+            .sumOf { it.first.toString().toInt() * 2 }
 
     }
 }

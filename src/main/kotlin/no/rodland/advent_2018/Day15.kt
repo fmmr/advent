@@ -3,7 +3,8 @@ package no.rodland.advent_2018
 import no.rodland.advent.Pos
 import no.rodland.advent_2018.Day15.Team.ELF
 import no.rodland.advent_2018.Day15.Team.GOBLIN
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Deque
 
 typealias Caves = Array<CharArray>
 typealias Path = List<Pos>
@@ -17,7 +18,7 @@ object Day15 {
         val creatures: List<Creature> = Creature.findCreatures(caves)
 
         val rounds = fight(creatures, caves)
-        return creatures.filterNot { it.dead() }.sumBy { it.hitPoints } * rounds
+        return creatures.filterNot { it.dead() }.sumOf { it.hitPoints } * rounds
     }
 
     fun partTwo(list: List<String>): Int {
@@ -33,7 +34,7 @@ object Day15 {
             println("$dead DEAD elves after $rounds rounds.  org: $elves, surv: $elvesSurvivors")
 
             if (creatures.filter { it.team == Team.ELF }.none { it.dead() }) {
-                creatures.filterNot { it.dead() }.sumBy { it.hitPoints } * rounds
+                creatures.filterNot { it.dead() }.sumOf { it.hitPoints } * rounds
             } else {
                 null
             }

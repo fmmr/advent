@@ -7,16 +7,16 @@ object Day11 {
             (1..(300 - grid)).map { y ->
                 getAggregatedValues(x, y, serial, grid)
             }
-        }.maxBy { it.second }
+        }.maxByOrNull { it.second }
         println("call and value: $max")
         return max!!.first
     }
 
     fun partTwo(
-            serial: Int,
-            minRange: Int,
-            maxRange: Int,
-            stopPredicate: (current: Int, maxReached: Int) -> Boolean = { i1, i2 -> i1 < (i2 - (20 * i2 / 100)) }): Pair<Pair<Int, Int>, Int>? {
+        serial: Int,
+        minRange: Int,
+        maxRange: Int,
+        stopPredicate: (current: Int, maxReached: Int) -> Boolean = { i1, i2 -> i1 < (i2 - (20 * i2 / 100)) }): Pair<Pair<Int, Int>, Int> {
         var maxReachedValue = 1
         var stop = false
         val max = (minRange..maxRange).map { grid ->
@@ -28,14 +28,14 @@ object Day11 {
                         ((x to y) to -1) to grid
                     }
                 }
-            }.maxBy { it.first.second }
+            }.maxByOrNull { it.first.second }
             println("grid: $grid:   $max2   maxReached: $maxReachedValue")
             if (stopPredicate(max2!!.first.second, maxReachedValue)) {
                 stop = true
             }
-            maxReachedValue = max((max2.first.second ?: 0), maxReachedValue)
+            maxReachedValue = max(max2.first.second, maxReachedValue)
             max2
-        }.maxBy { it!!.first.second }
+        }.maxByOrNull { it.first.second }
         println("max $max")
         return (max!!.first.first.first to max.first.first.second) to (max.second)
     }

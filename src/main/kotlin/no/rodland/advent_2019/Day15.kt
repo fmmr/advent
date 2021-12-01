@@ -28,7 +28,7 @@ object Day15 {
 
             val distances = mutableMapOf<Pos, Int>()
             buildDistance(oxygen, map, distances)
-            distances.values.max()!!
+            distances.values.maxOrNull()!!
         }
     }
 

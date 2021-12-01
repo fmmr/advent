@@ -20,7 +20,7 @@ object Day8 {
                     }
                     reg
                 }
-        return final.values.max()!! to allTimeMax
+        return final.values.maxOrNull()!! to allTimeMax
     }
 
     private val re = """(.*) (inc|dec) ([\d-]+) if (.+) (.*) ([\d-]+)""".toRegex()

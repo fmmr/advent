@@ -22,26 +22,24 @@ object Day7 {
     }
 
     private fun init(list: List<String>): Pair<Map<String, Node>, Node> {
-        val nodes = list.map { str ->
+        val nodes = list.associate { str ->
             val name = re.getString(str)!!
             val weight = re.get(str, 2)
             val subnodesStr = re.getString(str, 3)
             name to Node(name, weight, subnodesStr)
-        }.toMap()
+        }
 
         nodes.values.forEach { node ->
             val subNodes = node.subnodesStr
-                    ?.split(" ", ", ", ",")
-                    ?.toList()
-                    ?.map { nodes[it] }
-                    ?.filterNotNull() ?: emptyList()
+                ?.split(" ", ", ", ",")
+                ?.toList()?.mapNotNull { nodes[it] } ?: emptyList()
 
             node.subnodes.addAll(subNodes)
             subNodes.forEach {
                 it.parent = node
             }
         }
-        val rootNode = nodes.values.filter { it.parent == null }.first()
+        val rootNode = nodes.values.first { it.parent == null }
         return Pair(nodes, rootNode)
     }
 
@@ -54,7 +52,7 @@ object Day7 {
             var parent: Node? = null) {
 
         val totalWeight: Int by lazy {
-            weight + subnodes.sumBy { it.totalWeight }
+            weight + subnodes.sumOf { it.totalWeight }
         }
 
         val haveBalancedChildTotal: Boolean by lazy {
@@ -77,8 +75,8 @@ object Day7 {
                     val subtreesByWeight = subnodes.groupBy { it.totalWeight }
 
                     // Find the imbalanced child tree (they will be the lone node in the list, when grouped by weight)
-                    val badTree = subtreesByWeight.minBy { it.value.size }?.value?.first()
-                            ?: throw IllegalStateException("Should not be balanced here.")
+                    val badTree = subtreesByWeight.minByOrNull { it.value.size }?.value?.first()
+                        ?: throw IllegalStateException("Should not be balanced here.")
 
                     // Recurse, passing down our imbalance. If we don't know the imbalance, calculate it.
                     // Calculate the imbalance as the absolute value of the difference of all distinct weights

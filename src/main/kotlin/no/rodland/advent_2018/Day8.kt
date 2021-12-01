@@ -15,11 +15,11 @@ object Day8 {
 
     data class Node(val subNodes: List<Node>, val meta: List<Int>) {
         val partTwo: Int =
-                if (subNodes.isEmpty()) {
-                    meta.sum()
-                } else {
-                    meta.sumBy { subNodes.getOrNull(it - 1)?.partTwo ?: 0 }
-                }
-        val partOne: Int = meta.sum() + subNodes.sumBy { it.partOne }
+            if (subNodes.isEmpty()) {
+                meta.sum()
+            } else {
+                meta.sumOf { subNodes.getOrNull(it - 1)?.partTwo ?: 0 }
+            }
+        val partOne: Int = meta.sum() + subNodes.sumOf { it.partOne }
     }
 }

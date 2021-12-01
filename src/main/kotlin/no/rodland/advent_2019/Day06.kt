@@ -5,7 +5,7 @@ object Day06 {
 
     fun partOne(list: List<String>): Int {
         val tree = parseNodes(list)
-        return tree.values.sumBy { stepsToCom(it) }
+        return tree.values.sumOf { stepsToCom(it) }
     }
 
     fun partTwo(list: List<String>): Int {

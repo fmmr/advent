@@ -6,8 +6,8 @@ object Day10 {
     fun partOne(list: List<String>): Int {
         val asteroids = getAsteroids(list)
         val max = asteroids
-                .map { a -> a to asteroids.filter { it != a }.distinctBy { it.pos.angle(a.pos) }.count() }
-                .maxBy { it.second }
+            .map { a -> a to asteroids.filter { it != a }.distinctBy { it.pos.angle(a.pos) }.count() }
+            .maxByOrNull { it.second }
         println("Found ${max!!.second} in ${max.first}")
         return max.second
     }
