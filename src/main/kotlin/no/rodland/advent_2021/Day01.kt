@@ -1,6 +1,5 @@
 package no.rodland.advent_2021
 
-@Suppress("UNUSED_PARAMETER")
 object Day01 {
     fun partOne(list: List<Int>): Int {
         return list.countIncreased()
