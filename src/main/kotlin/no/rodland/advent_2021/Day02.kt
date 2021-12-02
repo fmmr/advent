@@ -3,11 +3,12 @@ package no.rodland.advent_2021
 @Suppress("UNUSED_PARAMETER")
 object Day02 {
     fun partOne(list: List<String>): Int {
-        val final = list.map { Command(it) }.fold(Pos()) { acc, command ->
-            acc.add(command)
-        }
-        println(final)
-        return final.horisontal * final.vertical
+        return list
+            .map { Command(it) }
+            .fold(Pos()) { acc, command ->
+                acc + command
+            }
+            .product()
     }
 
     fun partTwo(list: List<String>): Int {
@@ -21,13 +22,15 @@ object Day02 {
 
 
     private data class Pos(val horisontal: Int = 0, val vertical: Int = 0) {
-        fun add(command: Command): Pos {
+        operator fun plus(command: Command): Pos {
             return when (command.direction) {
                 Dir.UP -> copy(vertical = vertical - command.num)
                 Dir.DOWN -> copy(vertical = vertical + command.num)
                 Dir.FORWARD -> copy(horisontal = horisontal + command.num)
             }
         }
+
+        fun product() = horisontal * vertical
     }
 
     private fun String.toDir(): Dir = Dir.valueOf(this.uppercase())
