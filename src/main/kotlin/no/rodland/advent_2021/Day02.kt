@@ -28,7 +28,6 @@ object Day02 {
                 Dir.FORWARD -> copy(horisontal = horisontal + command.num, depth = depth + aim * command.num)
             }
         }
-
         fun productPartTwo() = horisontal * depth
         fun productPartOne() = horisontal * aim
     }
