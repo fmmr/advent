@@ -6,10 +6,9 @@ object Day19 {
     // The Josephus Problem - Numberphile https://www.youtube.com/watch?v=uCsD3ZGzMgE
 
     fun partOne(numElves: Int): Int {
-        val solutionA = (generateSequence(1) { i -> 2 * i }.first { it > numElves } / 2).let { (numElves - it) * 2 + 1 }
-        val solutionB = (numElves.toString(2).replaceFirst('1', '0') + '1').toInt(2)
-//        val solutionC = solvePart1(numElves)
-        return solutionB
+        (generateSequence(1) { i -> 2 * i }.first { it > numElves } / 2).let { (numElves - it) * 2 + 1 }
+        //        val solutionC = solvePart1(numElves)
+        return (numElves.toString(2).replaceFirst('1', '0') + '1').toInt(2)
     }
 
     fun partTwo(numElves: Int): Int {

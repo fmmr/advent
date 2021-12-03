@@ -52,7 +52,6 @@ object Day20 {
             visited[next] = '.'
             next
         }
-        val rest = re.substring(taken)
         return oki
     }
 
@@ -81,7 +80,5 @@ private fun Char.getDoor(): Char = when (this) {
     in "NS" -> '-'
     else -> error("not a valid dir: $this")
 }
-
-private fun String.isDirection(): Boolean = this.all { it.isDirection() }
 
 private fun Char.isDirection(): Boolean = this in "NWES"

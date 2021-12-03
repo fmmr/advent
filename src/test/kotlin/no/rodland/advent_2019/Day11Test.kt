@@ -1,5 +1,6 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test
 
 @DisableSlow
 @ExperimentalCoroutinesApi
+@DelicateCoroutinesApi
 internal class Day11Test {
     val data11 = "2019/input_11.txt".readFirstLineStrings()
     val test11 = listOf("1", "2")

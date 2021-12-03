@@ -1,8 +1,10 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
+@DelicateCoroutinesApi
 object Day19 {
     fun partOne(program: List<String>): Long {
 //        printMap(program, 100, 100)

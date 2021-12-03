@@ -1,5 +1,6 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class IntCodeComputer {
 
+    @DelicateCoroutinesApi
     fun launch(program: List<String>, receiveChannel: ReceiveChannel<Long>, sendChannel: SendChannel<Long>): Job {
         return GlobalScope.launch {
             try {

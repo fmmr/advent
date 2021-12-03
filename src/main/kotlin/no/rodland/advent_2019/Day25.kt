@@ -71,7 +71,7 @@ object Day25 {
                     )
                             + drop.map { "drop $it" }
                             + listOf("south")
-                    ).map { it + "\n" }.forEach { str -> str.forEach { c -> computer.input.send(c.toLong()) } }
+                    ).map { it + "\n" }.forEach { str -> str.forEach { c -> computer.input.send(c.code.toLong()) } }
         }
 
         launch {
@@ -81,13 +81,13 @@ object Day25 {
                     if (computer.output.isClosedForReceive) {
                         return@launch
                     }
-                    val char = computer.output.receive().toChar()
+                    val char = computer.output.receive().toInt().toChar()
                     print(char)
                 }
                 if (!computer.output.isClosedForReceive) {
                     withContext(Dispatchers.Default) {
                         "${readLine()!!}\n"
-                    }.forEach { c -> computer.input.send(c.toLong()) }
+                    }.forEach { c -> computer.input.send(c.code.toLong()) }
                 }
             }
         }

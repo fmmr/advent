@@ -15,7 +15,7 @@ object Day10 {
     }
 
     fun knotHash(input: String, range: IntRange = 0..255): String {
-        val inputs = input.map { it.toInt() }.toMutableList()
+        val inputs = input.map { it.code }.toMutableList()
         val ar = IntArray(range.last + 1) { it }
 
         inputs.addAll(listOf(17, 31, 73, 47, 23))
@@ -28,14 +28,13 @@ object Day10 {
             skipSize = p.second
         }
         return ar
-                .toList()
-                .chunked(16)
-                .map { it.fold(0) { agg, n -> agg xor n } }
-                .map { if (it < 16) "0${it.toString(16)}" else it.toString(16) }
-                .joinToString("")
+            .toList()
+            .chunked(16)
+            .map { it.fold(0) { agg, n -> agg xor n } }
+            .joinToString("") { if (it < 16) "0${it.toString(16)}" else it.toString(16) }
     }
 
-    fun fix(ar: IntArray, input: List<Int>, pointer: Int = 0, skipSize: Int = 0): Pair<Int, Int> {
+    private fun fix(ar: IntArray, input: List<Int>, pointer: Int = 0, skipSize: Int = 0): Pair<Int, Int> {
         var p = pointer
         var s = skipSize
         input.forEach { length ->

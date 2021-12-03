@@ -1,5 +1,6 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
@@ -7,6 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Pos
 
+@DelicateCoroutinesApi
 @ExperimentalCoroutinesApi
 object Day11 {
     const val BLACK = 0L

@@ -1,5 +1,6 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -7,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Pos
 import kotlin.math.sign
 
+@DelicateCoroutinesApi
 object Day13 {
     fun partOne(list: List<String>): Int {
         return runProgram(list).first.filter { it.value == Tile.BLOCK }.size
@@ -37,7 +39,7 @@ object Day13 {
                     val scoreOrTile = output.receive()
                     if (x == -1L && y == 0L) {
                         score = scoreOrTile
-                        println("new score: $score")
+//                        println("new score: $score")
                     } else {
                         val tile = tile(scoreOrTile)
                         tiles[Pos(x.toInt(), y.toInt())] = tile

@@ -62,7 +62,7 @@ object Day7 {
         private fun okToAddWork(): Boolean = inProgress.size < numWorkers
 
         fun getSeconds(w: String): Int {
-            return secPrTask + (w.toCharArray()[0].toInt() - 64)
+            return secPrTask + (w.toCharArray()[0].code - 64)
         }
     }
 
@@ -101,7 +101,8 @@ object Day7 {
                 .map { it[0] to it[1] }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun debug(wp: WorkPlace, werb: String, w: String, todo: MutableList<String>, done: MutableList<String>) {
-        println("${wp.secondsTicking.pad()}  $werb  $w      workers: ${wp.inProgress.size}  todo: ${todo.joinToString("").pad(25)}  done: ${done.joinToString("")}")
+//        println("${wp.secondsTicking.pad()}  $werb  $w      workers: ${wp.inProgress.size}  todo: ${todo.joinToString("").pad(25)}  done: ${done.joinToString("")}")
     }
 }

@@ -1,5 +1,7 @@
 package no.rodland.advent_2020
 
+import java.util.Locale
+
 object Day04 {
     fun partOne(list: String): Int {
         return list.split("\n\n").count { it.validPassportPart1() }
@@ -10,7 +12,7 @@ object Day04 {
     }
 
     private fun String.validPassportPart1(): Boolean {
-        val fields = this.split("\n", " ").map { it.split(":")[0] }.map { it.toUpperCase() }
+        val fields = this.split("\n", " ").map { it.split(":")[0] }.map { it.uppercase(Locale.getDefault()) }
         return ValidationType.values().filterNot { it == ValidationType.CID }.map { it.toString() }.all { fields.contains(it) }
     }
 
@@ -18,7 +20,7 @@ object Day04 {
         val fields = this
             .split("\n", " ")
             .map { it.split(":") }
-            .map { it[0].toUpperCase() to it[1] }
+            .map { it[0].uppercase(Locale.getDefault()) to it[1] }
             .toMap()
         return ValidationType.values().all { it.isValid(fields[it.toString()]) }
     }

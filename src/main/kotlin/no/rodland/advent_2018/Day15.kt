@@ -22,18 +22,18 @@ object Day15 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return generateSequence(4, Int::inc).map { ap ->
+        return generateSequence(4, Int::inc).map { _ ->
             // Reset
             val caves: Caves = init(list)
             val creatures: List<Creature> = Creature.findCreatures(caves, 19)
-            val elves = creatures.filter { it.team == ELF }.count()
+            val elves = creatures.count { it.team == ELF }
             val rounds = fight(creatures, caves)
-            val elvesSurvivors = creatures.filterNot { it.dead() }.filter { it.team == ELF }.count()
+            val elvesSurvivors = creatures.filterNot { it.dead() }.count { it.team == ELF }
             val dead = elves - elvesSurvivors
 
             println("$dead DEAD elves after $rounds rounds.  org: $elves, surv: $elvesSurvivors")
 
-            if (creatures.filter { it.team == Team.ELF }.none { it.dead() }) {
+            if (creatures.filter { it.team == ELF }.none { it.dead() }) {
                 creatures.filterNot { it.dead() }.sumOf { it.hitPoints } * rounds
             } else {
                 null

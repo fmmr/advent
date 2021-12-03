@@ -14,8 +14,8 @@ object Day9 {
             }
         }
 
-        println("input:         $input")
-        println("only groups:   ${onlyGroups.first}")
+//        println("input:         $input")
+//        println("only groups:   ${onlyGroups.first}")
         println("current value: $value, sum: $sum")
         return sum
     }

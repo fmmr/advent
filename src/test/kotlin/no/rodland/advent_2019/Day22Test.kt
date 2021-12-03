@@ -28,7 +28,7 @@ internal class Day22Test {
         @Test
         fun `22,1,deal into new stack`() {
             report {
-                test22.deal_new() to listOf(9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+                test22.dealNew() to listOf(9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
             }
         }
 
@@ -49,43 +49,43 @@ internal class Day22Test {
         @Test
         fun `22,1,deal_increment`() {
             report {
-                test22.deal_increment(3) to listOf(0, 7, 4, 1, 8, 5, 2, 9, 6, 3)
+                test22.dealIncrement(3) to listOf(0, 7, 4, 1, 8, 5, 2, 9, 6, 3)
             }
         }
 
         @Test
         fun `22,1,routine,1`() {
             report {
-                test22.deal_increment(7).deal_new().deal_new() to listOf(0, 3, 6, 9, 2, 5, 8, 1, 4, 7)
+                test22.dealIncrement(7).dealNew().dealNew() to listOf(0, 3, 6, 9, 2, 5, 8, 1, 4, 7)
             }
         }
 
         @Test
         fun `22,1,routine,2`() {
             report {
-                test22.cut(6).deal_increment(7).deal_new() to listOf(3, 0, 7, 4, 1, 8, 5, 2, 9, 6)
+                test22.cut(6).dealIncrement(7).dealNew() to listOf(3, 0, 7, 4, 1, 8, 5, 2, 9, 6)
             }
         }
 
         @Test
         fun `22,1,routine,3`() {
             report {
-                test22.deal_increment(7).deal_increment(9).cutNegative(2) to listOf(6, 3, 0, 7, 4, 1, 8, 5, 2, 9)
+                test22.dealIncrement(7).dealIncrement(9).cutNegative(2) to listOf(6, 3, 0, 7, 4, 1, 8, 5, 2, 9)
             }
         }
 
         @Test
         fun `22,1,routine,4`() {
             report {
-                test22.deal_new()
+                test22.dealNew()
                         .cutNegative(2)
-                        .deal_increment(7)
+                        .dealIncrement(7)
                         .cut(8)
                         .cutNegative(4)
-                        .deal_increment(7)
+                        .dealIncrement(7)
                         .cut(3)
-                        .deal_increment(9)
-                        .deal_increment(3)
+                        .dealIncrement(9)
+                        .dealIncrement(3)
                         .cutNegative(1) to listOf(9, 2, 5, 8, 1, 4, 7, 0, 3, 6)
             }
         }

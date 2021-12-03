@@ -82,7 +82,7 @@ internal class Day20Test {
         }
 
         @Test
-        fun `20,1,test,fmr_simplest_wne|ne`() {
+        fun `20,1,test,fmr_simplest_wne-ne`() {
             report {
                 val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
                 val partOne = Day20.traverse("^WNE|NE$", map, Pos(0, 0))
@@ -100,7 +100,7 @@ internal class Day20Test {
         }
 
         @Test
-        fun `20,1,test,fmr_simplest_(wne|ne)`() {
+        fun `20,1,test,fmr_simplest_(wne-ne)`() {
             report {
                 val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
                 val partOne = Day20.traverse("^(WNE|NE)$", map, Pos(0, 0))
@@ -118,7 +118,7 @@ internal class Day20Test {
         }
 
         @Test
-        fun `20,1,test,fmr_simplest_(wne|)`() {
+        fun `20,1,test,fmr_simplest_(wne-)`() {
             report {
                 val map = mutableMapOf<Pos, Char>(Pos(0, 0) to 'X')
                 val partOne = Day20.traverse("^(WNE|)$", map, Pos(0, 0))
@@ -149,42 +149,42 @@ internal class Day20Test {
 
 
         @Test
-        fun `20,1,test,fmr_^(WNE|NE)$`() {
+        fun `20,1,test,fmr_^(WNE-NE)$`() {
             report {
                 Day20.parse("^(WNE|NE)$").size to 5
             }
         }
 
         @Test
-        fun `20,1,part1,fmr_^(WNE|NE)$`() {
+        fun `20,1,part1,fmr_^(WNE-NE)$`() {
             report {
                 Day20.partOne("^(WNE|NE)$") to 2
             }
         }
 
         @Test
-        fun `20,1,test,^ENWWW(NEEE|SSE(EE|N))$`() {
+        fun `20,1,test,^ENWWW(NEEE-SSE(EE-N))$`() {
             report {
                 Day20.parse("^ENWWW(NEEE|SSE(EE|N))$").size to 16
             }
         }
 
         @Test
-        fun `20,1,part1,^ENWWW(NEEE|SSE(EE|N))$`() {
+        fun `20,1,part1,^ENWWW(NEEE-SSE(EE-N))$`() {
             report {
                 Day20.partOne("^ENWWW(NEEE|SSE(EE|N))$") to 10
             }
         }
 
         @Test
-        fun `20,1,test,^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$`() {
+        fun `20,1,test,^ENNWSWW(NEWS-)SSSEEN(WNSE-)EE(SWEN-)NNN$`() {
             report {
                 Day20.parse("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$").size to 25
             }
         }
 
         @Test
-        fun `20,1,part1,^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$`() {
+        fun `20,1,part1,^ENNWSWW(NEWS-)SSSEEN(WNSE-)EE(SWEN-)NNN$`() {
             report {
                 Day20.partOne("^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$") to 18
             }

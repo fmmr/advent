@@ -15,7 +15,7 @@ object Day22 {
 
     private fun doit(cmd: String, list: List<Int>): List<Int> {
         if (cmd == "deal into new stack") {
-            return list.deal_new()
+            return list.dealNew()
         }
         "cut -(\\d+)".toRegex().matchEntire(cmd)?.let { match ->
             val (precision) = match.destructured
@@ -27,7 +27,7 @@ object Day22 {
         }
         "deal with increment (\\d+)".toRegex().matchEntire(cmd)?.let { match ->
             val (precision) = match.destructured
-            return list.deal_increment(precision.toInt())
+            return list.dealIncrement(precision.toInt())
         }
         error("unable to parse $cmd")
     }
@@ -58,17 +58,17 @@ object Day22 {
         }
         val power = memory[0].modPow(SHUFFLES, NUMBER_OF_CARDS)
         return ((power * find) +
-                ((memory[1] * (power + NUMBER_OF_CARDS.dec())) *
-                        ((memory[0].dec()).modPow(NUMBER_OF_CARDS - TWO, NUMBER_OF_CARDS))))
-                .mod(NUMBER_OF_CARDS)
+            ((memory[1] * (power + NUMBER_OF_CARDS.dec())) *
+                ((memory[0].dec()).modPow(NUMBER_OF_CARDS - TWO, NUMBER_OF_CARDS))))
+            .mod(NUMBER_OF_CARDS)
     }
 }
 
-fun List<Int>.deal_new(): List<Int> = reversed()
-fun List<Int>.deal_increment(i: Int): List<Int> {
+fun List<Int>.dealNew(): List<Int> = reversed()
+fun List<Int>.dealIncrement(i: Int): List<Int> {
     val newList = Array(size) { 0 }
     var count = 0
-    forEachIndexed { idx, v ->
+    forEach { v ->
         newList[count] = v
         count += i
         if (count > size) {

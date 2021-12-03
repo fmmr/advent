@@ -52,6 +52,7 @@ object Day24 {
         return all.partition { it.alive() }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun partTwo(list: List<String>): Int {
         return 2
     }

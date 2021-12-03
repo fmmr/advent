@@ -5,24 +5,24 @@ object Day5 {
 
     fun partTwo(str: String): Int {
         val newStr = reducePolymer(str)
-        return ('a'..'z').map { c ->
-            val testString = newStr.replace("""[$c${c.toUpperCase()}]""".toRegex(), "")
+        return ('a'..'z').minOfOrNull { c ->
+            val testString = newStr.replace("""[$c${c.uppercaseChar()}]""".toRegex(), "")
             reducePolymer(testString).length
-        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
+        } ?: throw IllegalStateException("Could not find a solution")
     }
 
-    fun partTwo_take2(str: String): Int {
+    fun partTwoTake2(str: String): Int {
         val newStr = reducePolymer(str)
-        return ('a'..'z').map { c ->
-            reducePolymer_take_2(newStr, c).length
-        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
+        return ('a'..'z').minOfOrNull { c ->
+            reducePolymerTake2(newStr, c).length
+        } ?: throw IllegalStateException("Could not find a solution")
     }
 
-    fun partTwo_chriswk(str: String): Int {
+    fun partTwoChriswk(str: String): Int {
         val newStr = reducePolymer(str)
-        return ('a'..'z').map { c ->
+        return ('a'..'z').minOfOrNull { c ->
             react(newStr, c).length
-        }.minOrNull() ?: throw IllegalStateException("Could not find a solution")
+        } ?: throw IllegalStateException("Could not find a solution")
     }
 
 
@@ -59,14 +59,14 @@ object Day5 {
     private infix fun Char?.matches(other: Char): Boolean {
         return when {
             this == null -> false
-            this.toUpperCase() != other.toUpperCase() -> false
+            this.uppercaseChar() != other.uppercaseChar() -> false
             else -> this != other
         }
     }
 
 
     // inspired by Christopher
-    private fun reducePolymer_take_2(str: String, ignore: Char? = null): StringBuffer {
+    private fun reducePolymerTake2(str: String, ignore: Char? = null): StringBuffer {
         val output = str.fold(StringBuffer()) { acc, c ->
             acc.apply {
                 when {
@@ -86,8 +86,8 @@ object Day5 {
     }
 
     private fun Char.rCap() = if (isUpperCase()) {
-        toLowerCase()
+        lowercaseChar()
     } else {
-        toUpperCase()
+        uppercaseChar()
     }
 }

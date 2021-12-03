@@ -1,11 +1,13 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Pos
 
+@DelicateCoroutinesApi
 object Day17 {
     fun partOne(list: List<String>): Int {
         val map = runBlocking { runAmp(list) }
@@ -21,7 +23,7 @@ object Day17 {
             //            print(it.toChar())
             list.add(it)
         })
-        return list.map { it.toChar() }
+        return list.map { it.toInt().toChar() }
                 .joinToString("").split(10.toChar())
                 .mapIndexed { y, line -> line.mapIndexed { x, char -> Pos(x, y) to char } }
                 .flatten()
@@ -54,15 +56,15 @@ object Day17 {
         // C L,8,R,4,R,4,R,6
 
         runBlocking {
-            "A,B,A,C,A,B,C,A,B,C".forEach { input.send(it.toLong()) }
+            "A,B,A,C,A,B,C,A,B,C".forEach { input.send(it.code.toLong()) }
             input.send(10L)
-            "R,12,R,4,R,10,R,12".forEach { input.send(it.toLong()) }
+            "R,12,R,4,R,10,R,12".forEach { input.send(it.code.toLong()) }
             input.send(10L)
-            "R,6,L,8,R,10".forEach { input.send(it.toLong()) }
+            "R,6,L,8,R,10".forEach { input.send(it.code.toLong()) }
             input.send(10L)
-            "L,8,R,4,R,4,R,6".forEach { input.send(it.toLong()) }
+            "L,8,R,4,R,4,R,6".forEach { input.send(it.code.toLong()) }
             input.send(10L)
-            input.send('n'.toLong())
+            input.send('n'.code.toLong())
             input.send(10L)
         }
 

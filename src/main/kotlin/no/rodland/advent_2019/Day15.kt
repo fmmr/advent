@@ -1,11 +1,13 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import no.rodland.advent.Direction
 import no.rodland.advent.Pos
 import no.rodland.advent.Pos.Companion.getMinMax
 
+@DelicateCoroutinesApi
 object Day15 {
     fun partOne(program: List<String>): Int {
         return runBlocking {

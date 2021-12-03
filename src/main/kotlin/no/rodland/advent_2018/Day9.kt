@@ -6,7 +6,7 @@ object Day9 {
     fun partOne(players: Int, worth: Int): Long? {
         val game = Game(players, worth)
         game.playGame()
-        game.scores.toList().println()
+//        game.scores.toList().println()
         return game.scores.maxOrNull()
     }
 

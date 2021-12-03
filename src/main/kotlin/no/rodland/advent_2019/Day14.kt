@@ -17,7 +17,7 @@ object Day14 {
         var mid = min + (max - min) / 2
         while (true) {
             val test = process(process, Step("FUEL", mid), mutableMapOf()).map { it.quantity }.sum()
-            println("min: $min, max: $max, mid: $mid, test: $test")
+//            println("min: $min, max: $max, mid: $mid, test: $test")
             if (test > storage) {
                 max = mid
                 mid = min + ((max - min) / 2)

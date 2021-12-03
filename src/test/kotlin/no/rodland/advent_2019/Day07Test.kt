@@ -1,15 +1,18 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@DelicateCoroutinesApi
 @ExperimentalCoroutinesApi
+@ObsoleteCoroutinesApi
 @DisableSlow
 internal class Day07Test {
-    val data0701 = "2019/input_07.txt".readFirstLineInts()
     val data07 = "2019/input_07.txt".readFirstLineStrings()
 
     @Nested

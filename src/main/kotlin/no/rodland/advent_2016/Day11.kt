@@ -59,7 +59,7 @@ object Day11 {
         constructor(str: String) : this(str.split("_")[0], Type.fromStr(str.split("_")[1]))
 
         override fun toString(): String {
-            return "${element.first().toUpperCase()}${type.toString().first()}"
+            return "${element.first().uppercaseChar()}${type.toString().first()}"
         }
 
         fun sameElement(other: Stuff?) = element == other?.element

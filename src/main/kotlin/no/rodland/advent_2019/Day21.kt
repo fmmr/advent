@@ -1,10 +1,12 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+@DelicateCoroutinesApi
 object Day21 {
     fun partOne(program: List<String>): Long {
         // X A B C D
@@ -77,7 +79,7 @@ object Day21 {
             while (true) {
                 try {
                     h = output.receive()
-                    val hei = h.toChar()
+                    val hei = h.toInt().toChar()
                     count++
                     print("$hei")
                 } catch (e: Exception) {
@@ -92,7 +94,7 @@ object Day21 {
         runBlocking {
             cmds.forEach { line ->
                 line.forEach {
-                    input.send(it.toLong())
+                    input.send(it.code.toLong())
                 }
                 input.send(10L)
             }

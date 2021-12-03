@@ -1,5 +1,9 @@
 package no.rodland.advent_2017
 
+import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.max
+
 object Day11 {
     fun partOne(directions: String): Int {
         val origo = Hex(0, 0, 0)
@@ -12,9 +16,9 @@ object Day11 {
     fun partTwo(directions: String): Int {
         val origo = Hex(0, 0, 0)
         var maxDistance = 0
-        val end = directions.split(",").map { Dir.of(it) }.fold(origo) { acc, d ->
+        directions.split(",").map { Dir.of(it) }.fold(origo) { acc, d ->
             val now = acc.goTo(d)
-            maxDistance = Math.max(maxDistance, origo.distanceTo(now))
+            maxDistance = max(maxDistance, origo.distanceTo(now))
             now
         }
         return maxDistance
@@ -35,7 +39,7 @@ object Day11 {
         }
 
         fun distanceTo(other: Hex): Int {
-            return (Math.abs(x - other.x) + Math.abs(y - other.y) + Math.abs(z - other.z)) / 2
+            return (abs(x - other.x) + abs(y - other.y) + abs(z - other.z)) / 2
         }
     }
 
@@ -44,7 +48,7 @@ object Day11 {
 
         companion object {
             fun of(str: String): Dir {
-                return valueOf(str.toUpperCase())
+                return valueOf(str.uppercase(Locale.getDefault()))
             }
         }
     }

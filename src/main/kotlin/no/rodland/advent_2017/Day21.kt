@@ -30,10 +30,10 @@ object Day21 {
     data class Grid(val list: List<List<Char>>) : List<List<Char>> by list {
         constructor(s: String) : this(s.split("/").let { row -> row.map { it.toCharArray().toList() } })
 
-        val on by lazy { map { row -> row.count { it == '#' } }.sum() }
+        val on by lazy { sumOf { row -> row.count { it == '#' } } }
 
         val variants by lazy {
-            (0..2).runningFold(this@Grid) { acc, i -> acc.rotate() }
+            (0..2).runningFold(this@Grid) { acc, _ -> acc.rotate() }
                     .let { rotations -> rotations + rotations.map { it.flip() } }
         }
 

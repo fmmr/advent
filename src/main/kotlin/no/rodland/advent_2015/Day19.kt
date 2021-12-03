@@ -8,7 +8,7 @@ object Day19 {
 
     // https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/cy4etju/
     fun partTwo(list: List<String>): Int {
-        val (replacements, medicineMolecule) = parseList(list)
+        val (_, medicineMolecule) = parseList(list)
 
         val replaced = medicineMolecule
                 .replace("Rn", "(")

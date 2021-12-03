@@ -26,7 +26,7 @@ internal class Day11Test {
     @Test
     fun `11,1,duplicates_same`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -43,7 +43,7 @@ internal class Day11Test {
     @Test
     fun `11,1,duplicates_similar`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -52,7 +52,7 @@ internal class Day11Test {
             ar[1][3] = Day11.Stuff("cerium", Day11.Type.MICROCHIP)
             ar[1][4] = Day11.Stuff("elevator", Day11.Type.ELEVATOR)
             val state = Day11.State(ar, listOf("PG", "PM", "CG", "CM", "EE"))
-            val ar2 = Array(4) { i ->
+            val ar2 = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar2[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -69,7 +69,7 @@ internal class Day11Test {
     @Test
     fun `11,1,endstate`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -85,7 +85,7 @@ internal class Day11Test {
     @Test
     fun `11,1,endstate_true`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[3][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -101,7 +101,7 @@ internal class Day11Test {
     @Test
     fun `11,1,duplicates_equals`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -110,7 +110,7 @@ internal class Day11Test {
             ar[1][3] = Day11.Stuff("cerium", Day11.Type.MICROCHIP)
             ar[1][4] = Day11.Stuff("elevator", Day11.Type.ELEVATOR)
             val state = Day11.State(ar, listOf("PG", "PM", "CG", "CM", "EE"))
-            val ar2 = Array(4) { i ->
+            val ar2 = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar2[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -127,7 +127,7 @@ internal class Day11Test {
     @Test
     fun `11,1,nextstates`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -144,7 +144,7 @@ internal class Day11Test {
     @Test
     fun `11,1,nextstates,2`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -161,7 +161,7 @@ internal class Day11Test {
     @Test
     fun `11,1,state_valid`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[1][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)
@@ -177,7 +177,7 @@ internal class Day11Test {
     @Test
     fun `11,1,state_invalid`() {
         report {
-            val ar = Array(4) { i ->
+            val ar = Array(4) {
                 Array<Day11.Stuff?>(5) { null }
             }
             ar[0][0] = Day11.Stuff("plutonion", Day11.Type.GENERATOR)

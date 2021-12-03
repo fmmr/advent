@@ -12,8 +12,7 @@ object Day16 {
         val (rules, ticket, nearbyTickets) = parseInput(str)
         val okTickets = nearbyTickets.filterNot { it.invalid(rules) }
         val usedRules = mutableSetOf<Rule>()
-        val indexRules = ticket
-            .mapIndexed { index, value -> index to rules.findRules(index, okTickets) }
+        val indexRules = List(ticket.size) { index -> index to rules.findRules(index, okTickets) }
             .sortedBy { it.second.size }
             .map { (idx, rules) ->
                 val rule = rules.first { r -> r !in usedRules }

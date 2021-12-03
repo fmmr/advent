@@ -1,11 +1,15 @@
 package no.rodland.advent_2019
 
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.toList
 import kotlinx.coroutines.runBlocking
 
+@DelicateCoroutinesApi
+@ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
 object Day07 {
     fun partOne(program: List<String>): Long {

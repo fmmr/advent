@@ -23,7 +23,7 @@ object Day18 {
                             distance[point] = distance[next]!! + 1
                             val door = doors[point]
                             val key = keys[point]
-                            if (door == null || door.toLowerCase() in haveKeys) {
+                            if (door == null || door.lowercaseChar() in haveKeys) {
                                 if (key != null && key !in haveKeys) {
                                     keyDistance[key] = point to distance[point]!!
                                 } else {

@@ -53,7 +53,7 @@ internal class Day5Test {
         @Test
         fun `5,2,test,2`() {
             report {
-                Day5.partTwo_take2(test5) to 4
+                Day5.partTwoTake2(test5) to 4
             }
         }
 
@@ -61,14 +61,14 @@ internal class Day5Test {
         @Slow(550)
         fun `5,2,live,2`() {
             report {
-                Day5.partTwo_take2(data5) to 4624
+                Day5.partTwoTake2(data5) to 4624
             }
         }
 
         @Test
         fun `5,2,test,chriswk`() {
             report {
-                Day5.partTwo_chriswk(test5) to 4
+                Day5.partTwoChriswk(test5) to 4
             }
         }
 
@@ -76,7 +76,7 @@ internal class Day5Test {
         @Slow(550)
         fun `5,2,live,chriswk`() {
             report {
-                Day5.partTwo_chriswk(data5) to 4624
+                Day5.partTwoChriswk(data5) to 4624
             }
         }
     }
