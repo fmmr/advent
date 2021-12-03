@@ -2,7 +2,7 @@ package no.rodland.advent_2021
 
 object Day03 {
     fun partOne(list: List<String>): Int {
-        val gamma = (0 until list[0].length).map { mostUsedBit(list, it) }.joinToString("")
+        val gamma = list[0].indices.map { mostUsedBit(list, it) }.joinToString("")
         val epsilon = gamma.flipBits()
         return gamma.toInt(2) * epsilon.toInt(2)
     }
