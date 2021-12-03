@@ -33,13 +33,6 @@ internal class Day03Test {
                 Day03.partOne(data03) to 1997414
             }
         }
-
-        @Test
-        fun `03,2,live,init`() {
-            report {
-                Day03.partTwo(data03) to 2
-            }
-        }
     }
 
     @Nested
@@ -71,21 +64,21 @@ internal class Day03Test {
         @Test
         fun `03,2,test`() {
             report {
-                Day03.partTwo(test03) to 2
+                Day03.partTwo(test03) to 230
             }
         }
 
         @Test
         fun `03,2,live,1`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 1032597
             }
         }
 
         @Test
         fun `03,2,live,2`() {
             report {
-                Day03.partTwo(data03) to 2
+                Day03.partTwo(data03) to 1032597
             }
         }
     }
