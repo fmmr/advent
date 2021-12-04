@@ -1,91 +1,73 @@
 package no.rodland.advent_2021
 
+import println
+
 @Suppress("UNUSED_PARAMETER")
 object Day04 {
     fun partOne(list: List<String>): Int {
         val (numbers, boards) = parseInput(list)
-        val bingo = numbers
+        val picked = mutableSetOf<Int>()
+        val (board, lastNumber) = numbers
             .asSequence()
-            .flatMap { num ->
-                boards
-                    .asSequence()
-                    .map { board ->
-                        board.pick(num)
-                        num to board
-                    }
+            .runningFold(emptyList<Pair<Board, Int>>()) { acc, num ->
+                picked.add(num)
+                boards.filter { it.isBingo(picked) }.map { it to num }
             }
-            .filter { (_, board) -> board.isBingo() }
+            .first { it.size == 1 }
             .first()
-
-        return bingo.first * bingo.second.sumUnmarked()
+        return board.sumUnmarked(picked) * lastNumber
     }
 
 
     fun partTwo(list: List<String>): Int {
         val (numbers, boards) = parseInput(list)
-        val bingo = numbers
+        val picked = mutableSetOf<Int>()
+        val (board, lastNumber) = numbers
             .asSequence()
-            .runningFold(boards) { b, num ->
-                boards.forEach { it.pick(num) }
-                boards.filterNot { it.isBingo() }
+            .runningFold(emptyList<Pair<Board, Int>>()) { acc, num ->
+                picked.add(num)
+                boards.filter { it.isBingo(picked) }.map { it to num }
             }
-            .first { it.size == 1 }
+            .zipWithNext()
+            .filter { it.first.size != it.second.size }
+            .map { (prev, next) ->
+                next.filter { it.first !in prev.map { prevBoard -> prevBoard.first } }
+            }
+//            .onEach { it.println() }
+            .last()
             .first()
-        // replay the game
-        val lastWon = numbers
-            .asSequence()
-            .map { it to bingo.pick(it) }
-            .first { bingo.isBingo() }
-        return lastWon.first * bingo.sumUnmarked()
+        val played = numbers.takeWhile { it != lastNumber } + lastNumber
+        println()
+        return board.sumUnmarked(played.toSet()) * lastNumber
     }
 
-    private class Board(val board: List<List<Int>>) {
-        val picked = Array(5) {
-            BooleanArray(5) { false }
+    private data class Board(val board: List<List<Int>>) {
+        val columns = board[0].indices.map { idx -> board.map { it[idx] } }
+
+        fun sumUnmarked(numbers: Set<Int>): Int {
+            return board.flatten().filterNot { it in numbers }.sum()
         }
 
-        fun pick(num: Int): Boolean {
-            board.flatMapIndexed { x: Int, ints: List<Int> ->
-                ints.mapIndexedNotNull { y: Int, i: Int ->
-                    if (i == num) {
-                        x to y
-                    } else {
-                        null
-                    }
-                }
-            }.forEach { (x, y) ->
-                picked[x][y] = true
+        fun isBingo(numbers: Set<Int>): Boolean {
+            return listOf(board, columns).any { b ->
+                b.any { r -> r.all { n -> n in numbers } }
             }
-            return isBingo()
-        }
-
-        fun sumUnmarked(): Int {
-            return picked.flatMapIndexed { x, a ->
-                a.mapIndexed { y, b ->
-                    if (b) 0 else board[x][y]
-                }
-            }.sum()
-        }
-
-        fun isBingo(): Boolean {
-            val rowBingo = picked.any { row -> row.all { it } }
-            val colBingo = picked.first().indices.any { idx -> picked.all { row -> row[idx] } }
-            return rowBingo || colBingo
-
         }
 
         override fun toString(): String {
-            return board.joinToString("\n")
+            return board[0].joinToString(" ")
         }
+
     }
 
     private fun parseInput(list: List<String>): Pair<List<Int>, List<Board>> {
         val numbers = list.take(2).first().split(",").map { it.trim().toInt() }
         val boards = list
             .drop(2)
-            .windowed(5, 6)
+            .filter { it.isNotEmpty() }
+            .chunked(5)
             .map { l ->
-                l.map { it.split(" ").filter { it.isNotBlank() }.map { it.trim().toInt() } }
+                l.map { line -> line.split(" ").filter { it.isNotBlank() }.map { it.trim().toInt() } }
             }
             .map { Board(it) }
         return Pair(numbers, boards)
