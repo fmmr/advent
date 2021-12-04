@@ -21,6 +21,8 @@ object Day03 {
         .first()
 
     // could be implemented with xor FF - "101011" xor "111111" => "010100"
+    // private fun String.flipBits() = (toInt(2) xor map { '1' }.joinToString("").toInt(2)).toString(2)
+
     private fun String.flipBits() = map { it.flip() }.joinToString("")
 
     private fun Char.flip() = if (this == '0') '1' else '0'
