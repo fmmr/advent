@@ -10,6 +10,10 @@ object ConsoleColors {
         println(col + msg + RESET)
     }
 
+    fun printGreen(msg: String) {
+        println(GREEN_BRIGHT + msg + RESET)
+    }
+
     // Reset
     const val RESET = "\u001b[0m" // Text Reset
 
