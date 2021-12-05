@@ -30,6 +30,7 @@ object Day05 {
     data class Vent(val from: Pos, val to: Pos) {
         private val signX = sign((to.x - from.x).toDouble()).toInt()
         private val signY = sign((to.y - from.y).toDouble()).toInt()
+        private val delta = Pos(signX, signY)
 
         constructor(str: String, mr: MatchResult.Destructured = regex.find(str)!!.destructured) :
             this(
@@ -40,13 +41,7 @@ object Day05 {
         fun isDiagonal() = from.x != to.x && from.y != to.y
 
         fun allPos(): List<Pos> {
-            return generateSequence(from) { last ->
-                if (last != to) {
-                    last + Pos(signX, signY)
-                } else {
-                    null
-                }
-            }.toList()
+            return generateSequence(from) { last -> if (last != to) last + delta else null }.toList()
         }
     }
 }
