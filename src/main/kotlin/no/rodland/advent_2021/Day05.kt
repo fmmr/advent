@@ -7,15 +7,14 @@ val regex = """(-?\d+),(-?\d+) -> (-?\d+),(-?\d+)""".toRegex()
 
 object Day05 {
     fun partOne(list: List<String>): Int {
-        return solve(list) { it.isLine() }
+        return list.solve { it.isLine() }
     }
 
     fun partTwo(list: List<String>): Int {
-        return solve(list) { true }
+        return list.solve { true }
     }
 
-    private fun solve(list: List<String>, filter: (Vent) -> Boolean) = list
-        .map { Vent(it) }
+    private fun List<String>.solve(filter: (Vent) -> Boolean) = map { Vent(it) }
         .filter { filter(it) }
         .flatMap { it.allPos() }
         .groupingBy { it }
