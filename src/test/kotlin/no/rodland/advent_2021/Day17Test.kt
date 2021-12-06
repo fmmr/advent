@@ -37,7 +37,7 @@ internal class Day17Test {
         @Test
         fun `17,1,live,1`() {
             report {
-                Day17.partOne(data17) to 23
+                Day17.partOne(data17) to 2
             }
         }
 
