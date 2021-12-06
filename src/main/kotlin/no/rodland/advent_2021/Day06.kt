@@ -15,8 +15,7 @@ object Day06 {
     private fun countFishes(list: List<Long>, iterations: Int): Long {
         val fishes = list.groupingBy { it }.eachCount()
         val ar = LongArray(9) { fishes[it.toLong()]?.toLong() ?: 0L }
-        val fold = (1..iterations).fold(ar) { acc, i -> acc.cycle() }
-        return fold.reduce { acc, l -> acc + l }
+        return (1..iterations).fold(ar) { acc, i -> acc.cycle() }.sum()
     }
 
     private fun LongArray.cycle(): LongArray {
