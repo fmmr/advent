@@ -16,7 +16,7 @@ object Day07 {
     fun partTwo(list: List<Int>): Int {
         // loop through list: return solve(list, ::costPart2)
         val potentialPositions = list.average().let { setOf(floor(it).toInt(), ceil(it).toInt()) }
-        return potentialPositions.minOfOrNull { list.sumOf { crab -> costPart1(crab, it) } }!!
+        return potentialPositions.minOfOrNull { list.sumOf { crab -> costPart2(crab, it) } }!!
     }
 
     @Suppress("unused")
