@@ -23,9 +23,7 @@ object Day05 {
         .size
 
     data class Vent(val from: Pos, val to: Pos) {
-        private val signX = sign((to.x - from.x).toDouble()).toInt()
-        private val signY = sign((to.y - from.y).toDouble()).toInt()
-        private val delta = Pos(signX, signY)
+        private val delta = Pos((to.x - from.x).sign, (to.y - from.y).sign)
 
         constructor(str: String, mr: MatchResult.Destructured = regex.find(str)!!.destructured) :
             this(
@@ -36,7 +34,7 @@ object Day05 {
         fun isLine() = from.x == to.x || from.y == to.y
 
         fun allPos(): List<Pos> {
-            return generateSequence(from) { last -> if (last != to) last + delta else null }.toList()
+            return generateSequence(from) { pos -> if (pos != to) pos + delta else null }.toList()
         }
     }
 }

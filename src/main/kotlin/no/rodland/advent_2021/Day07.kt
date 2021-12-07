@@ -1,6 +1,7 @@
 package no.rodland.advent_2021
 
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 @Suppress("UNUSED_PARAMETER")
 object Day07 {
@@ -25,6 +26,6 @@ object Day07 {
 
     fun costPart2(crab: Int, pos: Int) = triangular(pos - crab)
 
-    private fun triangular(diff: Int) = abs(diff) * (abs(diff) + 1) / 2
+    private fun triangular(diff: Int) = diff.absoluteValue.let { it * (it + 1) / 2 }
 
 }
