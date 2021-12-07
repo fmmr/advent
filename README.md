@@ -9,6 +9,12 @@ fmmr solutions for Advent of code.
 
 ## 2020
 
+[AOC](https://adventofcode.com/2021),
+[Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2021),
+[Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2021)
+
+## 2020
+
 [AOC](https://adventofcode.com/2020),
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2020),
 [Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2020)

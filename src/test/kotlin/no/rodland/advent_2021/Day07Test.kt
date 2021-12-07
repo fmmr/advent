@@ -9,18 +9,15 @@ import readFile
 @Suppress("ClassName")
 @DisableSlow
 internal class Day07Test {
-    val data07 = "2021/input_07.txt".readFile()
-    val test07 = listOf(
-        "1",
-        "2",
-    )
+    val data07 = "2021/input_07.txt".readFile()[0].split(",").map { it.toInt() }
+    val test07 = listOf(16, 1, 2, 0, 4, 2, 7, 1, 2, 14)
 
     @Nested
     inner class Init {
         @Test
         fun `07,1,live,init`() {
             report {
-                Day07.partOne(data07) to 2
+                Day07.partOne(data07) to 342534
             }
         }
     }
@@ -30,21 +27,21 @@ internal class Day07Test {
         @Test
         fun `07,1,test`() {
             report {
-                Day07.partOne(test07) to 2
+                Day07.partOne(test07) to 37
             }
         }
 
         @Test
         fun `07,1,live,1`() {
             report {
-                Day07.partOne(data07) to 2
+                Day07.partOne(data07) to 342534
             }
         }
 
         @Test
         fun `07,1,live,2`() {
             report {
-                Day07.partOne(data07) to 2
+                Day07.partOne(data07) to 342534
             }
         }
     }
