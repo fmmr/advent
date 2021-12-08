@@ -3,9 +3,10 @@ package no.rodland.advent_2021
 import no.rodland.advent.Pos
 import kotlin.math.sign
 
-val regex = """(-?\d+),(-?\d+) -> (-?\d+),(-?\d+)""".toRegex()
 
 object Day05 {
+    val regex = """(-?\d+),(-?\d+) -> (-?\d+),(-?\d+)""".toRegex()
+
     fun partOne(list: List<String>): Int {
         return list.solve { it.isLine() }
     }
