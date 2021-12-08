@@ -17,21 +17,21 @@ object Day08 {
 
     class Entry(input: List<Code>, val output: List<Code>) {
         private val decoding = run {
-            val one = input.decoding(length = 2)
-            val seven = input.decoding(length = 3)
-            val four = input.decoding(length = 4)
-            val eight = input.decoding(length = 7)
-            val nine = input.decoding(length = 6, containsAll = four)
-            val zero = input.decoding(length = 6, others = setOf(nine), containsAll = one)
-            val six = input.decoding(length = 6, others = setOf(nine, zero))
-            val three = input.decoding(length = 5, containsAll = one)
-            val five = input.decoding(length = 5, others = setOf(three), containedIn = nine)
-            val two = input.decoding(length = 5, others = setOf(five, three))
+            val one = input.decoding(2)
+            val seven = input.decoding(3)
+            val four = input.decoding(4)
+            val eight = input.decoding(7)
+            val nine = input.decoding(6, containsAll = four)
+            val zero = input.decoding(6, setOf(nine), containsAll = one)
+            val six = input.decoding(6, setOf(nine, zero))
+            val three = input.decoding(5, containsAll = one)
+            val five = input.decoding(5, setOf(three), containedIn = nine)
+            val two = input.decoding(5, setOf(five, three))
             mapOf(zero to 0, one to 1, two to 2, three to 3, four to 4, five to 5, six to 6, seven to 7, eight to 8, nine to 9)
         }
 
         fun outputAsint(): Int {
-            return output.map { decoding[it]!! }.joinToString("").toInt()
+            return output.map { decoding[it] }.joinToString("").toInt()
         }
 
         private fun List<Code>.decoding(length: Int, others: Set<Code> = emptySet(), containsAll: Code = emptySet(), containedIn: Code = setOf('a', 'b', 'c', 'd', 'e', 'f', 'g')) = asSequence()
