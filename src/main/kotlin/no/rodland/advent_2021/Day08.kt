@@ -4,13 +4,14 @@ object Day08 {
 
     fun partOne(list: List<String>): Int {
         val sizes = setOf(2, 4, 3, 7)
-        return parseInput(list)
+        return list
+            .toEntries()
             .flatMap { it.output }
             .count { it.length in sizes }
     }
 
     fun partTwo(list: List<String>): Int {
-        return parseInput(list).sumOf { it.outputAsint() }
+        return list.toEntries().sumOf { it.outputAsint() }
     }
 
     class Entry(signalPattern: List<String>, val output: List<String>) {
@@ -43,5 +44,5 @@ object Day08 {
             .single()
     }
 
-    private fun parseInput(list: List<String>) = list.map { it.split(" | ") }.map { Entry(it.first().split(" ").map { str -> str.trim() }, it.last().split(" ").map { str -> str.trim() }) }
+    private fun List<String>.toEntries() = map { it.split(" | ") }.map { Entry(it.first().split(" ").map { str -> str.trim() }, it.last().split(" ").map { str -> str.trim() }) }
 }
