@@ -10,7 +10,7 @@ import readFile
 @DisableSlow
 internal class Day08Test {
     val data08 = "2021/input_08.txt".readFile()
-    val test08_simple = listOf(
+    val test08Simple = listOf(
         "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
     )
     val test08 = listOf(
@@ -41,7 +41,7 @@ internal class Day08Test {
         @Test
         fun `08,1,test_simple`() {
             report {
-                Day08.partOne(test08_simple) to 0
+                Day08.partOne(test08Simple) to 0
             }
         }
 
@@ -70,23 +70,30 @@ internal class Day08Test {
     @Nested
     inner class `Part 2` {
         @Test
+        fun `08,2,test_simple`() {
+            report {
+                Day08.partTwo(test08Simple) to 5353
+            }
+        }
+
+        @Test
         fun `08,2,test`() {
             report {
-                Day08.partTwo(test08) to 2
+                Day08.partTwo(test08) to 61229
             }
         }
 
         @Test
         fun `08,2,live,1`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 990964
             }
         }
 
         @Test
         fun `08,2,live,2`() {
             report {
-                Day08.partTwo(data08) to 2
+                Day08.partTwo(data08) to 990964
             }
         }
     }

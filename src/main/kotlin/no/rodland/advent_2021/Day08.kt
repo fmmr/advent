@@ -1,42 +1,49 @@
 package no.rodland.advent_2021
 
-//     aaaa  
-//    b    c 
-//    b    c 
-//     dddd  
-//    e    f 
-//    e    f 
-//     gggg  
-
-@Suppress("UNUSED_PARAMETER")
 object Day08 {
-
-    private val digits = mapOf(
-        0 to listOf("a", "b", "c", "e", "f", "g"),
-        1 to listOf("c", "f"),
-        2 to listOf("a", "c", "d", "e", "g"),
-        3 to listOf("a", "c", "d", "f", "g"),
-        4 to listOf("b", "c", "d", "f"),
-        5 to listOf("a", "b", "d", "f", "g"),
-        6 to listOf("a", "b", "d", "e", "f", "g"),
-        7 to listOf("a", "c", "f"),
-        8 to listOf("a", "b", "c", "d", "e", "f", "g"),
-        9 to listOf("a", "b", "c", "d", "f", "g"),
-    )
-    private val numDigits = digits.mapValues { (_, v) -> v.size }
-
+    fun partTwo(list: List<String>): Int {
+        return parseInput(list).sumOf { it.outputAsint() }
+    }
 
     fun partOne(list: List<String>): Int {
         val entries = parseInput(list)
-        val lengths = listOf(1, 4, 7, 8).map { numDigits[it]!! }.toSet()
-        return entries.map { it.output }.flatMap { output -> output.filter { it.length in lengths } }.count()
+        return entries
+            .map { it.output }
+            .flatMap { output -> output.filter { it.length in setOf(2, 4, 3, 7) } }
+            .count()
     }
 
-    private fun parseInput(list: List<String>) = list.map { it.split(" | ") }.map { Entry(it.first().split(" ").map { it.trim() }, it.last().split(" ").map { it.trim() }) }
+    private fun parseInput(list: List<String>) = list.map { it.split(" | ") }.map { Entry(it.first().split(" ").map { str -> str.trim() }, it.last().split(" ").map { str -> str.trim() }) }
 
-    fun partTwo(list: List<String>): Int {
-        return 2
+    class Entry(signalPattern: List<String>, val output: List<String>) {
+        private val signalPatternSorted = signalPattern.map { str -> str.normalize() }
+        private val decoding = run {
+            val four = signalPatternSorted.decoding(length = 4)
+            val one = signalPatternSorted.decoding(length = 2)
+            val seven = signalPatternSorted.decoding(length = 3)
+            val eight = signalPatternSorted.decoding(length = 7)
+            val three = signalPatternSorted.decoding(length = 5, containsAll = one)
+            val nine = signalPatternSorted.decoding(length = 6, containsAll = four)
+            val zero = signalPatternSorted.decoding(length = 6, others = setOf(nine), containsAll = one)
+            val six = signalPatternSorted.decoding(length = 6, others = setOf(nine, zero))
+            val five = signalPatternSorted.decoding(length = 5, others = setOf(three), containedIn = nine)
+            val two = signalPatternSorted.decoding(length = 5, others = setOf(five, three))
+            mapOf(zero to 0, one to 1, two to 2, three to 3, four to 4, five to 5, six to 6, seven to 7, eight to 8, nine to 9)
+        }
+
+        fun outputAsint(): Int {
+            return output.map { it.normalize() }.map { decoding[it]!! }.joinToString("").toInt()
+        }
+
+        private fun String.normalize() = toList().sorted().joinToString("")
+
+        private fun List<String>.decoding(length: Int, others: Set<String> = emptySet(), containsAll: String = "", containedIn: String = "abcdefg") = asSequence()
+            .filter { it.length == length }
+            .filter { potential -> containsAll.all { it in potential } }
+            .filter { potential -> potential.all { it in containedIn } }
+            .filterNot { it in others }
+            .single()
+
+
     }
-
-    data class Entry(val signalPattern: List<String>, val output: List<String>)
 }
