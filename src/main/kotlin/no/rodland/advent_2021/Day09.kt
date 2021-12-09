@@ -6,32 +6,12 @@ import no.rodland.advent.Pos
 @Suppress("UNUSED_PARAMETER")
 object Day09 {
     fun partOne(list: List<String>): Int {
-        val grid = Array(list.size) { row ->
-            val line = list[row].toCharArray().map { it.asInt() }
-            IntArray(line.size) { line[it] }
-        }
+        val grid = list.toGrid()
         return lowPoints(grid, list).map { it.second }.sumOf { it + 1 }
     }
 
-    private fun lowPoints(grid: Array<IntArray>, list: List<String>): List<Pair<Pos, Int>> {
-        val lowPoints = grid.flatMapIndexed { y, line ->
-            line.mapIndexed { x, value ->
-                val neighboors = Pos(x, y).neighboorCellsNDLR().filter { it.isInGrid(grid) }
-                if (neighboors.all { grid[it.y][it.x] > value }) {
-                    Pos(x, y) to value
-                } else {
-                    null
-                }
-            }
-        }.filterNotNull()
-        return lowPoints
-    }
-
     fun partTwo(list: List<String>): Int {
-        val grid = Array(list.size) { row ->
-            val line = list[row].toCharArray().map { it.asInt() }
-            IntArray(line.size) { line[it] }
-        }
+        val grid = list.toGrid()
         return lowPoints(grid, list)
             .map {
                 it to getRegion(it.first, grid).distinct()
@@ -53,6 +33,25 @@ object Day09 {
         return (included + pos + newNeighboors).let { list ->
             list + newNeighboors.flatMap { n -> getRegion(n, grid, list) }
         }
+    }
+
+    private fun lowPoints(grid: Array<IntArray>, list: List<String>): List<Pair<Pos, Int>> {
+        val lowPoints = grid.flatMapIndexed { y, line ->
+            line.mapIndexed { x, value ->
+                val neighboors = Pos(x, y).neighboorCellsNDLR().filter { it.isInGrid(grid) }
+                if (neighboors.all { grid[it.y][it.x] > value }) {
+                    Pos(x, y) to value
+                } else {
+                    null
+                }
+            }
+        }.filterNotNull()
+        return lowPoints
+    }
+
+    private fun List<String>.toGrid() = Array(size) { row ->
+        val line = this[row].toCharArray().map { it.asInt() }
+        IntArray(line.size) { line[it] }
     }
 }
 
