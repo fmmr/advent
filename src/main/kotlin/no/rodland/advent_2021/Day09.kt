@@ -26,13 +26,13 @@ object Day09 {
     }
 
     private fun Grid.getRegion(lowPos: Pos): Set<Pos> {
-        val frontier = ArrayDeque<Pos>()
+        val explore = ArrayDeque<Pos>()
         val visited = mutableSetOf<Pos>()
-        frontier.add(lowPos)
-        while (!frontier.isEmpty()) {
-            frontier.removeFirst().let { pos ->
+        explore.add(lowPos)
+        while (!explore.isEmpty()) {
+            explore.removeFirst().let { pos ->
                 if (visited.add(pos)) {
-                    frontier.addAll(neighboors(pos).filter { this[it] < 9 })
+                    explore.addAll(neighboors(pos).filter { this[it] < 9 })
                 }
             }
         }
