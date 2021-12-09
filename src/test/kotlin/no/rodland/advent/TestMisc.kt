@@ -83,15 +83,22 @@ annotation class DisableSlow
 annotation class Slow(val approximateRunTimeInMillis: Int)
 
 data class AOCTest<I, T>(
+    val name: String,
     val function: (I) -> T,
     val data: I,
     val expected: T,
-    val numTests: Int,
-    val day: Int,
-    val part: Part,
-    val live: Boolean,
-    val name: String = day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST"
-)
+    val numTests: Int = 1
+) {
+    constructor(
+        function: (I) -> T,
+        data: I,
+        expected: T,
+        numTests: Int,
+        day: Int,
+        part: Part,
+        live: Boolean,
+    ) : this(day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST", function, data, expected, numTests)
+}
 
 fun Int.padDate(): String = if (this < 10) "0$this" else this.toString()
 

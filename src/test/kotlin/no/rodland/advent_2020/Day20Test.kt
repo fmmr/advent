@@ -1,5 +1,6 @@
 package no.rodland.advent_2020
 
+import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
@@ -177,20 +178,26 @@ internal class Day20Test {
     inner class Misc {
         @Test
         fun `20,2,test,forrest_rotate_2`() {
-            report {
-                val l = listOf(listOf('a', 'b'), listOf('c', 'd'))
-                val f = Day20.Forest(l)
-                f.rotateR() to listOf(listOf('c', 'a'), listOf('d', 'b'))
-            }
+            report(
+                AOCTest(
+                    name = "20.Rotate_2x2",
+                    Day20.Forest::rotateR,
+                    Day20.Forest(listOf(listOf('a', 'b'), listOf('c', 'd'))),
+                    listOf(listOf('c', 'a'), listOf('d', 'b'))
+                )
+            )
         }
 
         @Test
         fun `20,2,test,forrest_rotate_3`() {
-            report {
-                val l = listOf(listOf('a', 'b', 'c'), listOf('e', 'f', 'g'), listOf('i', 'j', 'k'))
-                val f = Day20.Forest(l)
-                f.rotateR() to listOf(listOf('i', 'e', 'a'), listOf('j', 'f', 'b'), listOf('k', 'g', 'c'))
-            }
+            report(
+                AOCTest(
+                    "20.Rotate_3x3",
+                    Day20.Forest::rotateR,
+                    Day20.Forest(listOf(listOf('a', 'b', 'c'), listOf('e', 'f', 'g'), listOf('i', 'j', 'k'))),
+                    listOf(listOf('i', 'e', 'a'), listOf('j', 'f', 'b'), listOf('k', 'g', 'c'))
+                )
+            )
         }
     }
 }
