@@ -1,15 +1,18 @@
 package no.rodland.advent_2020
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.time.ExperimentalTime
 
 @Suppress("ClassName")
+@ExperimentalTime
 @DisableSlow
 internal class Day20Test {
-    val data20 = "2020/input_20.txt".readFileAsOneString()
-    val test20 = """
+    private val data20 = "2020/input_20.txt".readFileAsOneString()
+    private val test20 = """
         Tile 2311:
         ..##.#..#.
         ##..#.....
@@ -119,20 +122,28 @@ internal class Day20Test {
         ..#.###...
         """.trimIndent()
 
+
+    val test = defaultTestSuite(
+        20,
+        Day20::partOne,
+        Day20::partTwo,
+        data20,
+        test20,
+        20899048083289L, 12519494280967L, 273, 2442,
+        1, 1
+    )
+
+
     @Nested
     inner class Init {
         @Test
         fun `20,1,live,init`() {
-            report {
-                Day20.partOne(data20) to 12519494280967
-            }
+            report(test.livePart1.copy(numTests = 1))
         }
 
         @Test
         fun `20,2,live,init`() {
-            report {
-                Day20.partTwo(data20) to 2442
-            }
+            report(test.livePart2.copy(numTests = 1))
         }
     }
 
@@ -140,23 +151,12 @@ internal class Day20Test {
     inner class `Part 1` {
         @Test
         fun `20,1,test`() {
-            report {
-                Day20.partOne(test20) to 20899048083289
-            }
+            report(test.testPart1)
         }
 
         @Test
-        fun `20,1,live,1`() {
-            report {
-                Day20.partOne(data20) to 12519494280967
-            }
-        }
-
-        @Test
-        fun `20,1,live,2`() {
-            report {
-                Day20.partOne(data20) to 12519494280967
-            }
+        fun `20,1,live`() {
+            report(test.livePart1)
         }
     }
 
@@ -164,18 +164,23 @@ internal class Day20Test {
     inner class `Part 2` {
         @Test
         fun `20,2,test`() {
-            report {
-                Day20.partTwo(test20) to 273
-            }
+            report(test.testPart2)
         }
 
+        @Test
+        fun `20,2,live`() {
+            report(test.livePart2)
+        }
+    }
+
+    @Nested
+    inner class Misc {
         @Test
         fun `20,2,test,forrest_rotate_2`() {
             report {
                 val l = listOf(listOf('a', 'b'), listOf('c', 'd'))
                 val f = Day20.Forest(l)
                 f.rotateR() to listOf(listOf('c', 'a'), listOf('d', 'b'))
-
             }
         }
 
@@ -185,21 +190,6 @@ internal class Day20Test {
                 val l = listOf(listOf('a', 'b', 'c'), listOf('e', 'f', 'g'), listOf('i', 'j', 'k'))
                 val f = Day20.Forest(l)
                 f.rotateR() to listOf(listOf('i', 'e', 'a'), listOf('j', 'f', 'b'), listOf('k', 'g', 'c'))
-
-            }
-        }
-
-        @Test
-        fun `20,2,live,1`() {
-            report {
-                Day20.partTwo(data20) to 2442
-            }
-        }
-
-        @Test
-        fun `20,2,live,2`() {
-            report {
-                Day20.partTwo(data20) to 2442
             }
         }
     }

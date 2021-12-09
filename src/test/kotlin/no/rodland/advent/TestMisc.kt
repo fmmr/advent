@@ -114,9 +114,11 @@ fun <T, S, U> defaultTestSuite(
     livePart1: T,
     testPart2: S,
     livePart2: S,
+    numTestPart1: Int = 10,
+    numTestPart2: Int = 10,
 ) = AOCTestSuite(
-    AOCTest(part1, liveData, livePart1, 10, day = day, part = Part.ONE, live = true),
-    AOCTest(part2, liveData, livePart2, 10, day = day, part = Part.TWO, live = true),
+    AOCTest(part1, liveData, livePart1, numTestPart1, day = day, part = Part.ONE, live = true),
+    AOCTest(part2, liveData, livePart2, numTestPart2, day = day, part = Part.TWO, live = true),
     AOCTest(part1, testData, testPart1, 1, day, part = Part.ONE, live = false),
     AOCTest(part2, testData, testPart2, 1, day, part = Part.TWO, live = false),
 )
