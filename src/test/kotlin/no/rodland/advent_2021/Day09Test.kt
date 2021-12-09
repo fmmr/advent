@@ -21,6 +21,7 @@ internal class Day09Test {
         "9899965678",
     )
     val test = defaultTestSuite(
+        9,
         Day09::partOne,
         Day09::partTwo,
         liveData,

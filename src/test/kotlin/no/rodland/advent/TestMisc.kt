@@ -26,13 +26,13 @@ fun <T> report(function: () -> Pair<T, T>) {
 @ExperimentalTime
 @Suppress("RemoveToStringInStringTemplate")  // runtime error without on duration.toString
 fun <T> report(test: AOCTest<T>) {
-    getHeader().run {
+    test.name.run {
         println(this)
         println("=".repeat(this.length).joinToString(""))
     }
     val results = (1..test.numTests).map {
         val start = System.nanoTime()
-        val value = test.function(test.data) to test.result
+        val value = test.function(test.data) to test.expected
         (System.nanoTime() - start) to (value.first to value.second)
     }
     val (result, expected) = results.first().second
@@ -42,7 +42,7 @@ fun <T> report(test: AOCTest<T>) {
         println("Result: ${result}, Excpected: $expected, time: ${avg.toString()}")
     } else {
         println("Result: $result")
-        println("Ran ${nanos.size}, time: ${avg.toString()}")
+        println("Ran ${nanos.size}, time_pr_test: ${avg.toString()}")
     }
     println()
     Assertions.assertEquals(expected, result)
@@ -74,21 +74,28 @@ class DisableSlowCond : ExecutionCondition {
 
 //@Target(AnnotationTarget.CLASS, AnnotationTarget.FILE, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.FILE, AnnotationTarget.FUNCTION)
-@Retention()
+@Retention
 @ExtendWith(DisableSlowCond::class)
 annotation class DisableSlow
 
 @Target(AnnotationTarget.TYPE, AnnotationTarget.CLASS, AnnotationTarget.FILE, AnnotationTarget.FUNCTION)
-@Retention()
+@Retention
 annotation class Slow(val approximateRunTimeInMillis: Int)
-
 
 data class AOCTest<T>(
     val function: (List<String>) -> T,
     val data: List<String>,
-    val result: T,
-    val numTests: Int = 10
+    val expected: T,
+    val numTests: Int,
+    val day: Int,
+    val part: Part,
+    val live: Boolean,
+    val name: String = day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST"
 )
+
+fun Int.padDate(): String = if (this < 10) "0$this" else this.toString()
+
+enum class Part { ONE, TWO }
 
 class AOCTestSuite<T, S>(
     val livePart1: AOCTest<T>,
@@ -98,19 +105,20 @@ class AOCTestSuite<T, S>(
 )
 
 fun <T, S> defaultTestSuite(
+    day: Int,
     part1: (List<String>) -> T,
     part2: (List<String>) -> S,
     liveData: List<String>,
     testData: List<String>,
-    testResultPart1: T,
-    liveResultPart1: T,
-    testResultPart2: S,
-    liveResultPart2: S,
+    testPart1: T,
+    livePart1: T,
+    testPart2: S,
+    livePart2: S,
 ) = AOCTestSuite(
-    AOCTest(part1, liveData, liveResultPart1),
-    AOCTest(part2, liveData, liveResultPart2),
-    AOCTest(part1, testData, testResultPart1, 1),
-    AOCTest(part2, testData, testResultPart2, 1),
+    AOCTest(part1, liveData, livePart1, 10, day = day, part = Part.ONE, live = true),
+    AOCTest(part2, liveData, livePart2, 10, day = day, part = Part.TWO, live = true),
+    AOCTest(part1, testData, testPart1, 1, day, part = Part.ONE, live = false),
+    AOCTest(part2, testData, testPart2, 1, day, part = Part.TWO, live = false),
 )
 
 

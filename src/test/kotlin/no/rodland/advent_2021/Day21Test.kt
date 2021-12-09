@@ -18,11 +18,11 @@ internal class Day21Test {
         "2"
     )
     val test = defaultTestSuite(
-        Day21::partOne,
-        Day21::partTwo,
-        liveData,
-        testData,
-        2, 2, 2, 2
+        21, Day21::partOne, Day21::partTwo, liveData, testData,
+        testPart1 = 2,
+        livePart1 = 2,
+        testPart2 = 2,
+        livePart2 = 2
     )
 
     @Nested
