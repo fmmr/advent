@@ -3,11 +3,11 @@
 
 fmmr solutions for Advent of code.
 
-20211202:
+20211209:
 
 ![stars](gifs/stars.png?raw=true "ascii art")
 
-## 2020
+## 2021
 
 [AOC](https://adventofcode.com/2021),
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2021),
