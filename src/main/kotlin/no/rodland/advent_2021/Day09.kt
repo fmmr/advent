@@ -20,8 +20,8 @@ object Day09 {
         return grid
             .lowPoints()
             .map { (lowPos, _) -> grid.getRegion(lowPos).size }
-            .sorted()
-            .takeLast(3)
+            .sortedDescending()
+            .take(3)
             .product()
     }
 
