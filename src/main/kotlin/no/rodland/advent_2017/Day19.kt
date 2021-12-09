@@ -47,9 +47,9 @@ object Day19 {
                 return State(nextSameDirection, grid[nextSameDirection.y][nextSameDirection.x], dir)
             }
 
-            val neighboors = pos.neighboorCellsNDLR()
-                    .filter { it.isValid(grid) }
-                    .map { it to grid[it.y][it.x] }
+            val neighboors = pos.neighboorCellsUDLR()
+                .filter { it.isValid(grid) }
+                .map { it to grid[it.y][it.x] }
 
             if (neighboors.size == 1) {
                 return State(neighboors[0].first, neighboors[0].second, getDirection(pos, neighboors[0].first))

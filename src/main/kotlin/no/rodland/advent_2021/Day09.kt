@@ -3,56 +3,54 @@ package no.rodland.advent_2021
 import asInt
 import no.rodland.advent.Pos
 
-@Suppress("UNUSED_PARAMETER")
+typealias Grid = List<IntArray>
+
 object Day09 {
     fun partOne(list: List<String>): Int {
-        val grid = list.toGrid()
-        return lowPoints(grid, list).map { it.second }.sumOf { it + 1 }
+        return list
+            .toGrid()
+            .lowPoints()
+            .map { (_, value) -> value }
+            .sumOf { it + 1 }
     }
 
     fun partTwo(list: List<String>): Int {
         val grid = list.toGrid()
-        return lowPoints(grid, list)
-            .map { getRegion(it.first, grid).size }
+        return grid
+            .lowPoints()
+            .map { (lowPos, _) -> grid.getRegion(lowPos).size }
             .sorted()
             .takeLast(3)
             .reduce { acc, i -> acc * i }
     }
 
-    private fun getRegion(pos: Pos, grid: Array<IntArray>): Set<Pos> {
+    private fun Grid.getRegion(lowPos: Pos): Set<Pos> {
         val frontier = ArrayDeque<Pos>()
         val visited = mutableSetOf<Pos>()
-        frontier.add(pos)
+        frontier.add(lowPos)
         while (!frontier.isEmpty()) {
             frontier.removeFirst().let { potentialPos ->
-                if (grid[potentialPos.y][potentialPos.x] < 9 && visited.add(potentialPos)) {
-                    grid.neighboors(potentialPos).forEach { frontier.add(it) }
+                if (this[potentialPos.y][potentialPos.x] < 9 && visited.add(potentialPos)) {
+                    neighboors(potentialPos).forEach { frontier.add(it) }
                 }
             }
         }
         return visited
     }
 
-
-    private fun lowPoints(grid: Array<IntArray>, list: List<String>): List<Pair<Pos, Int>> {
-        val lowPoints = grid.flatMapIndexed { y, line ->
-            line.mapIndexed { x, value ->
-                val neighboors = grid.neighboors(Pos(x, y))
-                if (neighboors.all { grid[it.y][it.x] > value }) {
-                    Pos(x, y) to value
-                } else {
-                    null
-                }
-            }
-        }.filterNotNull()
-        return lowPoints
+    private fun Grid.lowPoints(): List<Pair<Pos, Int>> {
+        return flatMapIndexed { y, line ->
+            line.mapIndexed { x, value -> Pos(x, y) to value }
+                .filter { (pos, value) -> neighboors(pos).all { neighboor -> this[neighboor.y][neighboor.x] > value } }
+        }
     }
 
-    private fun Array<IntArray>.neighboors(p: Pos) = p.neighboorCellsNDLR().filter { it.isInGrid(this) }
+    private fun Grid.neighboors(p: Pos) = p.neighboorCellsUDLR().filter { it.isInGrid(this) }
 
-    private fun List<String>.toGrid() = Array(size) { row ->
-        val line = this[row].toCharArray().map { it.asInt() }
-        IntArray(line.size) { line[it] }
+    private fun List<String>.toGrid() = List(size) { row ->
+        this[row].toCharArray().map { it.asInt() }.let { ints ->
+            IntArray(ints.size) { value -> ints[value] }
+        }
     }
 }
 

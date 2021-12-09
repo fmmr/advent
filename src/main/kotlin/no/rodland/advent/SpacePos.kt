@@ -3,11 +3,10 @@ package no.rodland.advent
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 internal const val ACTIVE = '#'
 private fun Char.active() = this == ACTIVE
-
-typealias Pos2D = Pos
 
 sealed class SpacePos {
     abstract fun neighbors(): List<SpacePos>
@@ -21,15 +20,15 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
 
     override fun neighbors(): List<SpacePos> {
         return listOf(0, 1, -1)
-                .flatMap { dx ->
-                    listOf(0, 1, -1).flatMap { dy ->
-                        listOf(0, 1, -1).map { dz ->
-                            Triple(x + dx, y + dy, z + dz)
-                        }
+            .flatMap { dx ->
+                listOf(0, 1, -1).flatMap { dy ->
+                    listOf(0, 1, -1).map { dz ->
+                        Triple(x + dx, y + dy, z + dz)
                     }
                 }
-                .map { Pos3D(it) }
-                .filterNot { it == this }
+            }
+            .map { Pos3D(it) }
+            .filterNot { it == this }
     }
 
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z)
@@ -49,55 +48,51 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     }
 
     fun distanceTo(other: Pos): Int {
-        return Math.abs(other.x - x) + Math.abs(other.y - y)
+        return abs(other.x - x) + abs(other.y - y)
     }
 
     fun directDistance(other: Pos): Double {
-        return Math.sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2))
+        return sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2))
     }
 
-    fun neighboorCellsNDLR(): List<Pos> {
+    fun neighboorCellsUDLR(): List<Pos> {
         return listOf(
-                Pos(x, y - 1),
-                Pos(x, y + 1),
-                Pos(x - 1, y),
-                Pos(x + 1, y)
+            Pos(x, y - 1),
+            Pos(x, y + 1),
+            Pos(x - 1, y),
+            Pos(x + 1, y)
         )
     }
 
     fun neighboorCellsReadingOrder(): List<Pos> {
         return listOf(
-                Pos(x, y - 1),
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1)
+            Pos(x, y - 1),
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1)
         )
     }
 
     fun positiveNeighboor(limitX: Int = Int.MAX_VALUE, limitY: Int = Int.MAX_VALUE): List<Pos> {
         return neighboorCellsReadingOrder()
-                .filter { it.x >= 0 && it.y >= 0 }
-                .filter { it.x < limitX }
-                .filter { it.y < limitY }
+            .filter { it.x >= 0 && it.y >= 0 }
+            .filter { it.x < limitX }
+            .filter { it.y < limitY }
 
-    }
-
-    fun getNeighboorsNotInMap(map: Map<Pos, *>): List<Pos> {
-        return neighboorCellsReadingOrder().filter { !map.containsKey(it) }
     }
 
     override fun neighbors(): List<SpacePos> = neighboorCellsAllEight()
 
     fun neighboorCellsAllEight(): List<Pos> {
         return listOf(
-                Pos(x, y - 1),
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1),
-                Pos(x - 1, y - 1),
-                Pos(x + 1, y - 1),
-                Pos(x - 1, y + 1),
-                Pos(x + 1, y + 1)
+            Pos(x, y - 1),
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1),
+            Pos(x - 1, y - 1),
+            Pos(x + 1, y - 1),
+            Pos(x - 1, y + 1),
+            Pos(x + 1, y + 1)
         )
     }
 
@@ -105,9 +100,9 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     fun getDownNeighbors(): List<Pos> {
         return listOf(
-                Pos(x - 1, y),
-                Pos(x + 1, y),
-                Pos(x, y + 1)
+            Pos(x - 1, y),
+            Pos(x + 1, y),
+            Pos(x, y + 1)
         )
     }
 
@@ -152,22 +147,34 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         }
     }
 
-    fun isPositive(): Boolean = x >= 0 && y >= 0
+    private fun isPositive(): Boolean = x >= 0 && y >= 0
     fun isPositiveAndWithin(maxX: Int, maxY: Int): Boolean = isPositive() && x <= maxX && y <= maxY
 
-    fun isInGrid(list: List<String>): Boolean = x >= 0 && y >= 0 && x < list[0].length && y < list.size
+    fun isInGrid(list: List<*>): Boolean = x >= 0 && y >= 0 && x < list[0].size() && y < list.size
     fun isInGrid(grid: Array<CharArray>): Boolean = x >= 0 && y >= 0 && x < grid[0].size && y < grid.size
-    fun isInGrid(grid: Array<IntArray>): Boolean = x >= 0 && y >= 0 && x < grid[0].size && y < grid.size
     fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
 
     fun above(howMuch: Int = 1): Pos = Pos(x, y - howMuch)
     fun below(howMuch: Int = 1): Pos = Pos(x, y + howMuch)
     fun left(howMuch: Int = 1): Pos = Pos(x - howMuch, y)
     fun right(howMuch: Int = 1): Pos = Pos(x + howMuch, y)
-    fun nw(): Pos = Pos(x - 1, y - 1)
+    private fun nw(): Pos = Pos(x - 1, y - 1)
     fun ne(): Pos = Pos(x + 1, y - 1)
     fun sw(): Pos = Pos(x - 1, y + 1)
-    fun se(): Pos = Pos(x + 1, y + 1)
+    private fun se(): Pos = Pos(x + 1, y + 1)
+
+    private fun Any?.size(): Int {
+        return when (this) {
+            is Collection<*> -> size
+            is String -> length
+            is IntArray -> size
+            is CharArray -> size
+            else -> {
+                error("unable to get size for $this")
+            }
+        }
+
+    }
 
     override fun manhattan(): Int = abs(x) + abs(y)
 
@@ -187,10 +194,10 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     companion object {
         fun getMinMax(coordinates: Collection<Pos>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-            val xmin = coordinates.map { it.x }.minOrNull()!!
-            val xmax = coordinates.map { it.x }.maxOrNull()!!
-            val ymin = coordinates.map { it.y }.minOrNull()!!
-            val ymax = coordinates.map { it.y }.maxOrNull()!!
+            val xmin = coordinates.minOf { it.x }
+            val xmax = coordinates.maxOf { it.x }
+            val ymin = coordinates.minOf { it.y }
+            val ymax = coordinates.maxOf { it.y }
             return (xmin to xmax) to (ymin to ymax)
         }
     }
@@ -201,16 +208,16 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 data class Pos4D(val x: Int, val y: Int, val z: Int, val w: Int) : SpacePos() {
     override fun neighbors(): List<SpacePos> {
         return listOf(0, 1, -1)
-                .flatMap { dx ->
-                    listOf(0, 1, -1).flatMap { dy ->
-                        listOf(0, 1, -1).flatMap { dz ->
-                            listOf(0, 1, -1).map { dw ->
-                                Pos4D(x + dx, y + dy, z + dz, w + dw)
-                            }
+            .flatMap { dx ->
+                listOf(0, 1, -1).flatMap { dy ->
+                    listOf(0, 1, -1).flatMap { dz ->
+                        listOf(0, 1, -1).map { dw ->
+                            Pos4D(x + dx, y + dy, z + dz, w + dw)
                         }
                     }
                 }
-                .filterNot { it == this }
+            }
+            .filterNot { it == this }
     }
 
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z) + abs(w)
