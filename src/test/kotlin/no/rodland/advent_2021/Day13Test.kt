@@ -3,7 +3,7 @@ package no.rodland.advent_2021
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
-import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
@@ -25,42 +25,39 @@ internal class Day13Test {
         livePart2 = 2
     )
 
-    @Nested
-    inner class Init {
-        @Test
-        fun `13,1,live,init`() {
-            report(test.livePart1.copy(numTests = 1))
-        }
-
-        @Test
-        fun `13,1,simple,init`() {
-            report { 2 to 2 }
-        }
+    @BeforeAll
+    @Test
+    fun `0_init`() {
+        report(test.livePart1.copy(numTests = 1))
     }
 
-    @Nested
-    inner class `Part 1` {
-        @Test
-        fun `13,1,test`() {
-            report(test.testPart1)
-        }
-
-        @Test
-        fun `13,1,live`() {
-            report(test.livePart1)
-        }
+    @Test
+    fun `1_test`() {
+        report(test.testPart1)
     }
 
-    @Nested
-    inner class `Part 2` {
-        @Test
-        fun `13,2,test`() {
-            report(test.testPart2)
-        }
-
-        @Test
-        fun `13,2,live`() {
-            report(test.livePart2)
-        }
+    @Test
+    fun `1_live`() {
+        report(test.livePart1)
     }
+
+    @Test
+    fun `2_test`() {
+        report(test.testPart2)
+    }
+
+    @Test
+    fun `2_live`() {
+        report(test.livePart2)
+    }
+
+    // @Test
+    // fun `13,1,demo_1`() {
+    //     report { 2 to 2 }
+    // }
+
+    // @Test
+    // fun `13,1,demo_2`() {
+    //     report(AOCTest("13.demo", { it }, 2, 2))
+    // }
 }
