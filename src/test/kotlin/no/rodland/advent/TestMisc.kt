@@ -83,8 +83,8 @@ annotation class DisableSlow
 annotation class Slow(val approximateRunTimeInMillis: Int)
 
 data class AOCTest<I, T>(
-    val function: (List<I>) -> T,
-    val data: List<I>,
+    val function: (I) -> T,
+    val data: I,
     val expected: T,
     val numTests: Int,
     val day: Int,
@@ -106,10 +106,10 @@ class AOCTestSuite<I, T, S>(
 
 fun <T, S, U> defaultTestSuite(
     day: Int,
-    part1: (List<U>) -> T,
-    part2: (List<U>) -> S,
-    liveData: List<U>,
-    testData: List<U>,
+    part1: (U) -> T,
+    part2: (U) -> S,
+    liveData: U,
+    testData: U,
     testPart1: T,
     livePart1: T,
     testPart2: S,
