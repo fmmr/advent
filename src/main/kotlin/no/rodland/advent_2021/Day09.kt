@@ -30,19 +30,21 @@ object Day09 {
         val visited = mutableSetOf<Pos>()
         frontier.add(lowPos)
         while (!frontier.isEmpty()) {
-            frontier.removeFirst().let { potentialPos ->
-                if (this[potentialPos.y][potentialPos.x] < 9 && visited.add(potentialPos)) {
-                    neighboors(potentialPos).forEach { frontier.add(it) }
+            frontier.removeFirst().let { pos ->
+                if (visited.add(pos)) {
+                    frontier.addAll(neighboors(pos).filter { this[it] < 9 })
                 }
             }
         }
         return visited
     }
 
+    private operator fun Grid.get(pos: Pos): Int = this[pos.y][pos.x]
+
     private fun Grid.lowPoints(): List<Pair<Pos, Int>> {
         return flatMapIndexed { y, line ->
             line.mapIndexed { x, value -> Pos(x, y) to value }
-                .filter { (pos, value) -> neighboors(pos).all { neighboor -> this[neighboor.y][neighboor.x] > value } }
+                .filter { (pos, value) -> neighboors(pos).all { neighboor -> this[neighboor] > value } }
         }
     }
 
