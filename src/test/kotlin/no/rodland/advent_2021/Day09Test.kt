@@ -57,21 +57,21 @@ internal class Day09Test {
         @Test
         fun `09,2,test`() {
             report {
-                Day09.partTwo(test09) to 2
+                Day09.partTwo(test09) to 1134
             }
         }
 
         @Test
         fun `09,2,live,1`() {
             report {
-                Day09.partTwo(data09) to 2
+                Day09.partTwo(data09) to 949905
             }
         }
 
         @Test
         fun `09,2,live,2`() {
             report {
-                Day09.partTwo(data09) to 2
+                Day09.partTwo(data09) to 949905
             }
         }
     }
