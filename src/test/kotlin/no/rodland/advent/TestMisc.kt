@@ -25,7 +25,7 @@ fun <T> report(function: () -> Pair<T, T>) {
 
 @ExperimentalTime
 @Suppress("RemoveToStringInStringTemplate")  // runtime error without on duration.toString
-fun <T> report(test: AOCTest<T>) {
+fun <T, U> report(test: AOCTest<T, U>) {
     test.name.run {
         println(this)
         println("=".repeat(this.length).joinToString(""))
@@ -82,9 +82,9 @@ annotation class DisableSlow
 @Retention
 annotation class Slow(val approximateRunTimeInMillis: Int)
 
-data class AOCTest<T>(
-    val function: (List<String>) -> T,
-    val data: List<String>,
+data class AOCTest<I, T>(
+    val function: (List<I>) -> T,
+    val data: List<I>,
     val expected: T,
     val numTests: Int,
     val day: Int,
@@ -97,19 +97,19 @@ fun Int.padDate(): String = if (this < 10) "0$this" else this.toString()
 
 enum class Part { ONE, TWO }
 
-class AOCTestSuite<T, S>(
-    val livePart1: AOCTest<T>,
-    val livePart2: AOCTest<S>,
-    val testPart1: AOCTest<T>,
-    val testPart2: AOCTest<S>,
+class AOCTestSuite<I, T, S>(
+    val livePart1: AOCTest<T, I>,
+    val livePart2: AOCTest<S, I>,
+    val testPart1: AOCTest<T, I>,
+    val testPart2: AOCTest<S, I>,
 )
 
-fun <T, S> defaultTestSuite(
+fun <T, S, U> defaultTestSuite(
     day: Int,
-    part1: (List<String>) -> T,
-    part2: (List<String>) -> S,
-    liveData: List<String>,
-    testData: List<String>,
+    part1: (List<U>) -> T,
+    part2: (List<U>) -> S,
+    liveData: List<U>,
+    testData: List<U>,
     testPart1: T,
     livePart1: T,
     testPart2: S,
