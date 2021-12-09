@@ -2,6 +2,7 @@ package no.rodland.advent_2021
 
 import asInt
 import no.rodland.advent.Pos
+import product
 
 typealias Grid = List<IntArray>
 
@@ -14,14 +15,14 @@ object Day09 {
             .sumOf { it + 1 }
     }
 
-    fun partTwo(list: List<String>): Int {
+    fun partTwo(list: List<String>): Long {
         val grid = list.toGrid()
         return grid
             .lowPoints()
             .map { (lowPos, _) -> grid.getRegion(lowPos).size }
             .sorted()
             .takeLast(3)
-            .reduce { acc, i -> acc * i }
+            .product()
     }
 
     private fun Grid.getRegion(lowPos: Pos): Set<Pos> {
