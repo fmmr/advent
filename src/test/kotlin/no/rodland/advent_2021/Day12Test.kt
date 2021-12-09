@@ -1,27 +1,40 @@
 package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @Suppress("ClassName")
 @DisableSlow
 internal class Day12Test {
-    val data12 = "2021/input_12.txt".readFile()
-    val test12 = listOf(
+    private val liveData = "2021/input_12.txt".readFile()
+    private val testData = listOf(
         "1",
-        "2",
+        "2"
+    )
+    val test = defaultTestSuite(
+        Day12::partOne,
+        Day12::partTwo,
+        liveData,
+        testData,
+        2, 2, 2, 2
     )
 
     @Nested
     inner class Init {
         @Test
         fun `12,1,live,init`() {
-            report {
-                Day12.partOne(data12) to 2
-            }
+            report(test.livePart1.copy(numTests = 1))
+        }
+
+        @Test
+        fun `12,1,simple,init`() {
+            report { 2 to 2 }
         }
     }
 
@@ -29,23 +42,12 @@ internal class Day12Test {
     inner class `Part 1` {
         @Test
         fun `12,1,test`() {
-            report {
-                Day12.partOne(test12) to 2
-            }
+            report(test.testPart1)
         }
 
         @Test
-        fun `12,1,live,1`() {
-            report {
-                Day12.partOne(data12) to 2
-            }
-        }
-
-        @Test
-        fun `12,1,live,2`() {
-            report {
-                Day12.partOne(data12) to 2
-            }
+        fun `12,1,live`() {
+            report(test.livePart1)
         }
     }
 
@@ -53,23 +55,12 @@ internal class Day12Test {
     inner class `Part 2` {
         @Test
         fun `12,2,test`() {
-            report {
-                Day12.partTwo(test12) to 2
-            }
+            report(test.testPart2)
         }
 
         @Test
-        fun `12,2,live,1`() {
-            report {
-                Day12.partTwo(data12) to 2
-            }
-        }
-
-        @Test
-        fun `12,2,live,2`() {
-            report {
-                Day12.partTwo(data12) to 2
-            }
+        fun `12,2,live`() {
+            report(test.livePart2)
         }
     }
 }

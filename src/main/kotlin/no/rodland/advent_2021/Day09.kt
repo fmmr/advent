@@ -7,12 +7,13 @@ import product
 typealias Grid = List<IntArray>
 
 object Day09 {
-    fun partOne(list: List<String>): Int {
+    fun partOne(list: List<String>): Long {
         return list
             .toGrid()
             .lowPoints()
             .map { (_, value) -> value }
             .sumOf { it + 1 }
+            .toLong()
     }
 
     fun partTwo(list: List<String>): Long {
