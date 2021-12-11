@@ -1,9 +1,9 @@
 package no.rodland.advent_2021
 
+import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
@@ -14,18 +14,25 @@ import kotlin.time.ExperimentalTime
 internal class Day10Test {
     private val liveData = "2021/input_10.txt".readFile()
     private val testData = listOf(
-        "1",
-        "2"
+        "[({(<(())[]>[[{[]{<()<>>",
+        "[(()[<>])]({[<{<<[]>>(",
+        "{([(<{}[<>[]}>{[]{[(<()>",
+        "(((({<>}<{<{<>}{[]{[]{}",
+        "[[<[([]))<([[{}[[()]]]",
+        "[{[{({}]{}}([{[{{{}}([]",
+        "{<[[]]>}<{[{[{[]{()[[[]",
+        "[<(<(<(<{}))><([]([]()",
+        "<{([([[(<>()){}]>(<<{{",
+        "<{([{{}}[<[[[<>{}]]]>[]]",
     )
     val test = defaultTestSuite(
         10, Day10::partOne, Day10::partTwo, liveData, testData,
-        testPart1 = 2,
-        livePart1 = 2,
-        testPart2 = 2,
-        livePart2 = 2
+        testPart1 = 26397,
+        livePart1 = 316851,
+        testPart2 = 288957,
+        livePart2 = 2182912364 // not 45691823, 63101831 That's not the right answer; your answer is too low.
     )
 
-    @BeforeAll
     @Test
     fun `0_init`() {
         report(test.livePart1.copy(numTests = 1))
@@ -56,8 +63,8 @@ internal class Day10Test {
     //     report { 2 to 2 }
     // }
 
-    // @Test
-    // fun `10,1,demo_2`() {
-    //     report(AOCTest("10.demo", { it }, 2, 2))
-    // }
+    @Test
+    fun `10,1,demo_2`() {
+        report(AOCTest("10.points", Day10::toPointsPart1, ')', 3))
+    }
 }
