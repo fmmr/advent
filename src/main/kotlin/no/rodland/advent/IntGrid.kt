@@ -30,14 +30,20 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
     fun neighboors(p: Pos) = p.neighboorCellsUDLR().filter { it.isInGrid(this) }
 
     fun increase(i: Int = 1): IntGrid {
-        return IntGrid(map { ar ->
-            IntArray(ar.size) { value -> i + ar[value] }
-        })
+        return IntGrid(map { ar -> IntArray(ar.size) { value -> i + ar[value] } })
+    }
+
+    override fun toString(): String {
+        return list.map {
+            it.joinToString("")
+        }.joinToString("\n")
     }
 
     companion object {
         fun fromInput(input: List<String>) = IntGrid(input.toGrid())
     }
+
+
 }
 
 fun List<String>.toGrid() = List(size) { row ->
