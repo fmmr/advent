@@ -139,7 +139,7 @@ internal class Day20Test {
     inner class Init {
         @Test
         fun `20,1,live,init`() {
-            report(test.livePart1.copy(numTests = 1))
+            test.livePart1.run { function(data) }
         }
 
         @Test

@@ -3,6 +3,7 @@ package no.rodland.advent_2021
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -30,12 +31,9 @@ internal class Day09Test {
     )
 
 
-    @Nested
-    inner class Init {
-        @Test
-        fun `09,1,live,init`() {
-            report(test.livePart1.copy(numTests = 1))
-        }
+    @BeforeAll
+    fun `09,1,live,init`() {
+        test.livePart1.run { function(data) }
     }
 
     @Nested

@@ -26,9 +26,8 @@ internal class Day12Test {
     )
 
     @BeforeAll
-    @Test
     fun `0_init`() {
-        report(test.livePart1.copy(numTests = 1))
+        test.livePart1.run { function(data) }
     }
 
     @Test

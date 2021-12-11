@@ -33,9 +33,8 @@ internal class Day10Test {
         livePart2 = 2182912364 // not 45691823, 63101831 That's not the right answer; your answer is too low.
     )
 
-    @Test
     fun `0_init`() {
-        report(test.livePart1.copy(numTests = 1))
+        test.livePart1.run { function(data) }
     }
 
     @Test
@@ -65,6 +64,7 @@ internal class Day10Test {
 
     @Test
     fun `10,1,demo_2`() {
+        report(AOCTest("10.points", Day10::toPointsPart1, ')', 3))
         report(AOCTest("10.points", Day10::toPointsPart1, ')', 3))
     }
 }
