@@ -2,7 +2,7 @@ package no.rodland.advent_2021
 
 typealias Caves = Map<Day12.Cave, List<Day12.Cave>>
 
-object Day12 {
+object Day12 {  // Graph traversal
     fun partOne(list: List<String>): Int {
         return solve(list.toCaves())
     }
@@ -13,8 +13,7 @@ object Day12 {
 
     private fun List<String>.toCaves() = map { it.split('-') }
         .flatMap { (v1, v2) -> listOf(Cave(v1) to Cave(v2), Cave(v2) to Cave(v1)) }
-        .groupBy { it.first }
-        .mapValues { (_, v) -> v.map { it.second } }
+        .groupBy({ it.first }, { it.second })
 
 
     private fun solve(initialGraph: Caves, visitSingleNodeTwice: Boolean = false, current: Cave = Cave("start"), visited: Set<Cave> = hashSetOf(current)): Int {
