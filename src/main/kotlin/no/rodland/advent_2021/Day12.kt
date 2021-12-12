@@ -1,29 +1,30 @@
 package no.rodland.advent_2021
 
+typealias Caves = Map<Day12.Cave, List<Day12.Cave>>
+
 object Day12 {
     fun partOne(list: List<String>): Int {
-        return solve(list.toGraph(), Cave("start"))
+        return solve(list.toCaves())
     }
 
     fun partTwo(list: List<String>): Int {
-        return solve(list.toGraph(), Cave("start"), visitSingleNodeTwice = true)
+        return solve(list.toCaves(), true)
     }
 
-    private fun List<String>.toGraph() = map { it.split('-') }
+    private fun List<String>.toCaves() = map { it.split('-') }
         .flatMap { (v1, v2) -> listOf(Cave(v1) to Cave(v2), Cave(v2) to Cave(v1)) }
         .groupBy { it.first }
         .mapValues { (_, v) -> v.map { it.second } }
 
 
-    private fun solve(initialGraph: Map<Cave, List<Cave>>, current: Cave, visitSingleNodeTwice: Boolean = false, visited: Set<Cave> = hashSetOf(current)): Int {
-        val rec = initialGraph[current]!!
-        return rec.sumOf {
+    private fun solve(initialGraph: Caves, visitSingleNodeTwice: Boolean = false, current: Cave = Cave("start"), visited: Set<Cave> = hashSetOf(current)): Int {
+        return initialGraph[current]!!.sumOf {
             when {
                 it.end -> 1
                 it.start -> 0
-                it.big -> solve(initialGraph, it, visitSingleNodeTwice, visited = visited + it)
-                it !in visited -> solve(initialGraph, it, visitSingleNodeTwice, visited = visited + it)
-                visitSingleNodeTwice -> solve(initialGraph, it, false, visited + it)
+                it.big -> solve(initialGraph, visitSingleNodeTwice, it, visited = visited + it)
+                it !in visited -> solve(initialGraph, visitSingleNodeTwice, it, visited = visited + it)
+                visitSingleNodeTwice -> solve(initialGraph, false, it, visited + it)
                 else -> 0
             }
         }
