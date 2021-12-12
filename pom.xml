@@ -59,11 +59,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-core</artifactId>
-            <version>${jgrapht-core.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
@@ -73,8 +68,6 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
-        <!-- https://mvnrepository.com/artifact/com.beust/klaxon -->
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>klaxon</artifactId>

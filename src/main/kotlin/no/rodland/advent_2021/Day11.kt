@@ -3,8 +3,6 @@ package no.rodland.advent_2021
 import no.rodland.advent.IntGrid
 import no.rodland.advent.Pos
 
-
-@Suppress("UNUSED_PARAMETER")
 object Day11 {
     fun partOne(list: List<String>, steps: Int = 100): Int {
         return solve(list, steps)
@@ -38,7 +36,7 @@ object Day11 {
     }
 
     private fun IntGrid.flash(positions: Set<Pos>): IntGrid {
-        val allNeighbors = positions.flatMap { pos -> pos.neighboorCellsAllEight().filter { it.isInGrid(this) } }.groupingBy { it }.eachCount()
+        val allNeighbors = positions.flatMap { pos -> neighboorCellsAllEight(pos) }.groupingBy { it }.eachCount()
         return IntGrid(mapIndexed { y, ar -> IntArray(ar.size) { x -> this[y][x] + allNeighbors.getOrDefault(Pos(x, y), 0) } })
     }
 

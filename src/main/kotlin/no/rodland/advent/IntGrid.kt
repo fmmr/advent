@@ -27,7 +27,8 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
         }
     }
 
-    fun neighboors(p: Pos) = p.neighboorCellsUDLR().filter { it.isInGrid(this) }
+    private fun neighboors(p: Pos) = p.neighboorCellsUDLR().filter { it.isInGrid(this) }
+    fun neighboorCellsAllEight(p: Pos) = p.neighboorCellsAllEight().filter { it.isInGrid(this) }
 
     fun increase(i: Int = 1): IntGrid {
         return IntGrid(map { ar -> IntArray(ar.size) { value -> i + ar[value] } })
@@ -40,14 +41,12 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
     }
 
     companion object {
-        fun fromInput(input: List<String>) = IntGrid(input.toGrid())
-    }
+        private fun toGrid(strings: List<String>) = List(strings.size) { row ->
+            strings[row].toCharArray().map { it.asInt() }.let { ints ->
+                IntArray(ints.size) { value -> ints[value] }
+            }
+        }
 
-
-}
-
-fun List<String>.toGrid() = List(size) { row ->
-    this[row].toCharArray().map { it.asInt() }.let { ints ->
-        IntArray(ints.size) { value -> ints[value] }
+        fun fromInput(input: List<String>) = IntGrid(toGrid(input))
     }
 }
