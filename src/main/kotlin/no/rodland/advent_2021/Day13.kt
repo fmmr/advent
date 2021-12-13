@@ -2,7 +2,6 @@ package no.rodland.advent_2021
 
 import no.rodland.advent.Pos
 
-@Suppress("UNUSED_PARAMETER")
 object Day13 {
     fun partOne(list: List<String>): Int {
         val (grid, instructions) = list.parse()
@@ -10,20 +9,27 @@ object Day13 {
     }
 
     fun partTwo(list: List<String>): Int {
+        val (grid, instructions) = list.parse()
+        val endGrid = instructions.fold(grid) { acc, instruction -> acc.foldPaper(instruction) }
+        println(endGrid.asPrintedGrid())
         return 2
     }
 
+    private fun Set<Pos>.asPrintedGrid(): String {
+        return (0..maxOf { it.y }).joinToString("\n") { y -> (0..maxOf { it.x }).joinToString("") { x -> char(x, y) } }
+    }
+
+    private fun Set<Pos>.char(x: Int, y: Int) = if (Pos(x, y) in this) "#" else " "
+
     private fun Set<Pos>.foldPaper(instruction: Instruction): Set<Pos> {
-        return if (instruction.axis == 'y') {
-            map { pos ->
+        return map { pos ->
+            if (instruction.axis == 'y') {
                 if (pos.y < instruction.value) {
                     pos
                 } else {
                     Pos(pos.x, instruction.value - (pos.y - instruction.value))
                 }
-            }
-        } else {
-            map { pos ->
+            } else {
                 if (pos.x < instruction.value) {
                     pos
                 } else {
@@ -31,8 +37,8 @@ object Day13 {
                 }
             }
         }.toSet()
-    }
 
+    }
 
     data class Instruction(val axis: Char, val value: Int) {
         constructor(str: String) : this(str.substringBefore("=").last(), str.substringAfter("=").toInt())
@@ -43,5 +49,6 @@ object Day13 {
         return g.map { it.split(",") }.map { (x, y) -> Pos(x.toInt(), y.toInt()) }.toSet() to i.map { Instruction(it) }
     }
 }
+
 
 

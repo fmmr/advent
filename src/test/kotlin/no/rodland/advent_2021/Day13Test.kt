@@ -3,6 +3,7 @@ package no.rodland.advent_2021
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
@@ -40,13 +41,14 @@ internal class Day13Test {
         testPart1 = 17,
         livePart1 = 675,
         testPart2 = 2,
-        livePart2 = 2
+        livePart2 = 2,
+        numTestPart2 = 1
     )
 
-//    @BeforeAll
-//    fun `0_init`() {
-//        test.livePart1.run { function(data) }
-//    }
+    @BeforeAll
+    fun `0_init`() {
+        test.livePart1.run { function(data) }
+    }
 
     @Test
     fun `1_test`() {
@@ -67,14 +69,4 @@ internal class Day13Test {
     fun `2_live`() {
         report(test.livePart2)
     }
-
-    // @Test
-    // fun `13,1,demo_1`() {
-    //     report { 2 to 2 }
-    // }
-
-    // @Test
-    // fun `13,1,demo_2`() {
-    //     report(AOCTest("13.demo", { it }, 2, 2))
-    // }
 }
