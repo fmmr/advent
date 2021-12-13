@@ -8,11 +8,14 @@ object Day13 {
         return grid.foldPaper(instructions[0]).size
     }
 
-    fun partTwo(list: List<String>): Int {
+    fun partTwo(list: List<String>): String {
         val (grid, instructions) = list.parse()
         val endGrid = instructions.fold(grid) { acc, instruction -> acc.foldPaper(instruction) }
-        println(endGrid.asPrintedGrid())
-        return 2
+        val code = endGrid.asPrintedGrid()
+        println("CODE:")
+        println(code)
+        println()
+        return code
     }
 
     private fun Set<Pos>.asPrintedGrid(): String {
@@ -21,24 +24,16 @@ object Day13 {
 
     private fun Set<Pos>.char(x: Int, y: Int) = if (Pos(x, y) in this) "#" else " "
 
-    private fun Set<Pos>.foldPaper(instruction: Instruction): Set<Pos> {
-        return map { pos ->
-            if (instruction.axis == 'y') {
-                if (pos.y < instruction.value) {
-                    pos
-                } else {
-                    Pos(pos.x, instruction.value - (pos.y - instruction.value))
-                }
-            } else {
-                if (pos.x < instruction.value) {
-                    pos
-                } else {
-                    Pos(instruction.value - (pos.x - instruction.value), pos.y)
-                }
-            }
-        }.toSet()
+    private fun Set<Pos>.foldPaper(instruction: Instruction): Set<Pos> = map { pos -> Pos(value(instruction, pos.x, 'x'), value(instruction, pos.y, 'y')) }.toSet()
 
+    private fun value(instruction: Instruction, value: Int, axis: Char): Int {
+        return if (instruction.axis != axis || value < instruction.value) {
+            value
+        } else {
+            instruction.value - (value - instruction.value)
+        }
     }
+
 
     data class Instruction(val axis: Char, val value: Int) {
         constructor(str: String) : this(str.substringBefore("=").last(), str.substringAfter("=").toInt())

@@ -40,8 +40,19 @@ internal class Day13Test {
         13, Day13::partOne, Day13::partTwo, liveData, testData,
         testPart1 = 17,
         livePart1 = 675,
-        testPart2 = 2,
-        livePart2 = 2,
+        testPart2 = """
+            #####
+            #   #
+            #   #
+            #   #
+            #####""".trimIndent(),
+        livePart2 = """
+            #  # #### #  # #  # #### ####   ## ####
+            #  #    # # #  #  # #    #       #    #
+            ####   #  ##   #### ###  ###     #   # 
+            #  #  #   # #  #  # #    #       #  #  
+            #  # #    # #  #  # #    #    #  # #   
+            #  # #### #  # #  # #    ####  ##  ####""".trimIndent(),
         numTestPart2 = 1
     )
 
