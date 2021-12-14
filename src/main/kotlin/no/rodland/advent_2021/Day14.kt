@@ -27,22 +27,20 @@ object Day14 {
 
     fun partTwo(list: List<String>, iterations: Int): Long {
         val (template, rules) = parse(list)
-        val initialCounts = template
-            .windowed(2)
-            .groupingBy { it.first() to it.last() }
-            .eachCount()
-            .mapValues { it.value.toLong() }
+        val initialCounts = initialCounts(template)
+        val pairCounts = (0 until iterations).fold(initialCounts) { acc, i -> insert(acc, rules) }
+        val (max, min) = maxMin(pairCounts, template)
+        return max - min
+    }
 
-        val doubleCounts = (0 until iterations)
-            .fold(initialCounts) { acc, i ->
-                acc.flatMap { (pair, count) ->
-                    val (first, second) = pair
-                    val middle = rules[pair]!!
-                    listOf((first to middle) to count, (middle to second) to count)
-                }
-                    .groupingBy { it.first }
-                    .fold(0L) { a, e -> a + e.second }
-            }
+    private fun initialCounts(template: List<Char>) = template
+        .windowed(2)
+        .groupingBy { it.first() to it.last() }
+        .eachCount()
+        .mapValues { it.value.toLong() }
+
+    private fun maxMin(pairCounts: Map<Pair<Char, Char>, Long>, template: List<Char>): Pair<Long, Long> {
+        val doubleCounts = pairCounts
             .toList()
             .flatMap { (pair, count) -> listOf(pair.first to count, pair.second to count) }
             .groupingBy { it.first }
@@ -56,8 +54,19 @@ object Day14 {
         // doubleCounts is... well... double counted.
         val counts = doubleCounts.map { it.value / 2 }
 
-        return counts.maxOrNull()!! - counts.minOrNull()!!
+        val max = counts.maxOrNull()!!
+        val min = counts.minOrNull()!!
+        return Pair(max, min)
     }
+
+    private fun insert(acc: Map<Pair<Char, Char>, Long>, rules: Map<Pair<Char, Char>, Char>) =
+        acc.flatMap { (pair, count) ->
+            val (first, second) = pair
+            val middle = rules[pair]!!
+            listOf((first to middle) to count, (middle to second) to count)
+        }
+            .groupingBy { it.first }
+            .fold(0L) { a, e -> a + e.second }
 
     private fun parse(list: List<String>): Pair<List<Char>, Map<Pair<Char, Char>, Char>> {
         return Pair(list[0].toList(), list.drop(2).associate { str -> (str[0] to str[1]) to str.substringAfter("-> ")[0] })
