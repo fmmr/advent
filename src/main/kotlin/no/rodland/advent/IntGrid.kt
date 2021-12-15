@@ -18,7 +18,7 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
         return visited
     }
 
-    operator fun IntGrid.get(pos: Pos): Int = this[pos.y][pos.x]
+    private operator fun IntGrid.get(pos: Pos): Int = this[pos.y][pos.x]
 
     fun lowPoints(): List<Pair<Pos, Int>> {
         return flatMapIndexed { y, line ->
@@ -49,4 +49,5 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
 
         fun fromInput(input: List<String>) = IntGrid(toGrid(input))
     }
+
 }

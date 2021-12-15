@@ -2,7 +2,7 @@ package no.rodland.advent_2021
 
 typealias Caves = Map<Day12.Cave, List<Day12.Cave>>
 
-object Day12 {  // Graph traversal
+object Day12 {  // Graph traversal dfs
     fun partOne(list: List<String>): Int {
         return solve(list.toCaves())
     }
