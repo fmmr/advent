@@ -1,6 +1,5 @@
 package no.rodland.advent_2021
 
-import asInt
 import no.rodland.advent.Pos
 import java.util.PriorityQueue
 import kotlin.math.max
@@ -14,7 +13,7 @@ object Day15ChrisWK {
     fun buildRiskMap(input: List<String>): Map<Pos, Int> {
         return input.flatMapIndexed { y, line ->
             line.mapIndexed { x, risk ->
-                Pos(x, y) to risk.asInt()
+                Pos(x, y) to risk.digitToInt()
             }
         }.toMap()
     }

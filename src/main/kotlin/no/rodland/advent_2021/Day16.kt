@@ -1,16 +1,22 @@
 package no.rodland.advent_2021
 
-import prePad
-
 object Day16 {
     fun partOne(str: String): Int {
-        val parse = str.toListOfBits().parse()
+        val parse = str.bitList().parse()
         return parse.versionSum()
     }
 
     fun partTwo(str: String): Long {
-        val parse = str.toListOfBits().parse()
-        return parse.value()
+        return eval(str)
+    }
+
+    // Only used in tests to check parsing
+    fun allLiterals(str: String): List<Long> {
+        return str.bitList().parse().allLiterals().map { it.value }
+    }
+
+    fun eval(str: String): Long {
+        return str.bitList().parse().value()
     }
 
     fun List<Char>.parse(): Packet {
@@ -48,8 +54,7 @@ object Day16 {
             return if (subPacketCharList.isEmpty()) {
                 emptyList()
             } else {
-                val packet = subPacketCharList.parse()
-                listOf(packet) + parseLengthSub(packet.rest)
+                subPacketCharList.parse().let { listOf(it) + parseLengthSub(it.rest) }
             }
         }
 
@@ -63,11 +68,11 @@ object Day16 {
     private fun getLiteral(versionId: Int, typeId: Int, seq: List<Char>): Packet {
         fun getLiteral(seq: List<Char>): Pair<List<Char>, List<Char>> {
             val (literal, rest) = seq.takeDrop(5)
-            return if (literal.first() == '1') {
-                val (next, rem) = getLiteral(rest)
-                (literal.drop(1) + next) to rem
-            } else {
-                literal.drop(1) to rest
+            val (continueBit, literalRest) = literal.takeDrop(1)
+            return when (continueBit.single()) {
+                '1' -> getLiteral(rest).let { (next, rem) -> (literalRest + next) to rem }
+                '0' -> literal.drop(1) to rest
+                else -> error("Invalid length bit: $continueBit")
             }
         }
 
@@ -76,31 +81,11 @@ object Day16 {
         return Literal(versionId, typeId, value, rest)
     }
 
-
-    private fun String.toListOfBits() = map { it.toString().toLong(16) }
-        .map { it.toString(2) }
-        .map { it.prePad(4, "0") }
-        .flatMap { it.toList() }
-
-
+    private fun String.bitList() = map { it.digitToInt(16).toString(2).padStart(4, '0') }.flatMap { it.toList() }
     private fun List<Char>.toInt(): Int = toBits().toInt(2)
     private fun List<Char>.toLong(): Long = toBits().toLong(2)
-
     private fun List<Char>.toBits() = toList().joinToString("")
-
-    private fun List<Char>.takeDrop(i: Long): Pair<List<Char>, List<Char>> {
-        return take(i.toInt()) to drop(i.toInt())
-    }
-
-    // Only used in tests to check parsing
-    fun allLiterals(str: String): List<Long> {
-        return str.toListOfBits().parse().allLiterals().map { it.value }
-    }
-
-    // Only used in tests to check parsing
-    fun eval(str: String): Long {
-        return str.toListOfBits().parse().value()
-    }
+    private fun List<Char>.takeDrop(i: Long): Pair<List<Char>, List<Char>> = take(i.toInt()) to drop(i.toInt())
 
     sealed class Packet(val version: Int, val typeId: Int, val rest: List<Char>) {
         abstract fun versionSum(): Int

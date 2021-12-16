@@ -1,7 +1,5 @@
 package no.rodland.advent_2018
 
-import asInt
-
 object Day14 {
     var count = 0  // only for debug
 
@@ -32,7 +30,7 @@ object Day14 {
     }
 
     fun partTwo(numRec: String): Int {
-        val find = numRec.toCharArray().map { it.asInt() }
+        val find = numRec.toCharArray().map { it.digitToInt() }
         while (true) {
             val result = scores.windowed(numRec.length).indexOf(find)
             if (result >= 0) {

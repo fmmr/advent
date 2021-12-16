@@ -1,7 +1,5 @@
 package no.rodland.advent
 
-import asInt
-
 class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
 
     fun getRegion(lowPos: Pos): Set<Pos> {
@@ -42,7 +40,7 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
 
     companion object {
         private fun toGrid(strings: List<String>) = List(strings.size) { row ->
-            strings[row].toCharArray().map { it.asInt() }.let { ints ->
+            strings[row].toCharArray().map { it.digitToInt() }.let { ints ->
                 IntArray(ints.size) { value -> ints[value] }
             }
         }

@@ -26,21 +26,6 @@ fun Int.isEven() = this % 2 == 0
 
 fun Any.println() = println(this)
 
-fun String.pad(i: Int): String = this + (" ".repeat(i - this.length))
-
-fun String.prePad(i: Int, sep: String = " "): String = (sep.repeat(i - this.length)) + this
-
-fun Int.pad(): String {
-    return when {
-        this < 10 -> "   $this"
-        this < 100 -> "  $this"
-        this < 1000 -> " $this"
-        else -> this.toString()
-    }
-}
-
-fun Char.asInt(): Int = toString().toInt()
-
 operator fun Caves.set(pos: Pos, value: Char) {
     this[pos.y][pos.x] = value
 }
