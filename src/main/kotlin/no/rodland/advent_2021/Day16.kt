@@ -1,12 +1,9 @@
 package no.rodland.advent_2021
 
-import no.rodland.advent_2021.Day16.Packet.Companion.getOp
 import prePad
 
-
-@Suppress("UNUSED_PARAMETER")
 object Day16 {
-    fun partOne(str: String): Long {
+    fun partOne(str: String): Int {
         val parse = str.toListOfBits().parse()
         return parse.versionSum()
     }
@@ -19,64 +16,66 @@ object Day16 {
     fun List<Char>.parse(): Packet {
         val (version, rest1) = takeDrop(3)
         val (type, rest2) = rest1.takeDrop(3)
-
-        val versionId = version.toLong()
-        val packet = when (val typeId = type.toLong()) {
-            4L -> {
-                getLiteralPacket(versionId, typeId, rest2)
+        val versionId = version.toInt()
+        val packet = when (val typeId = type.toInt()) {
+            4 -> {
+                getLiteral(versionId, typeId, rest2)
             }
             else -> {
                 val (length, rest3) = rest2.takeDrop(1)
                 when (length.single()) {
                     '0' -> parseLengthSub(versionId, typeId, rest3)
-                    else -> parseNumSub(versionId, typeId, rest3)
+                    '1' -> parseNumSub(versionId, typeId, rest3)
+                    else -> error("invalid length: $length")
                 }
             }
         }
         return packet
     }
 
-    private fun parseNumSub(versionId: Long, typeId: Long, rest3: List<Char>): Operator {
+    private fun parseNumSub(versionId: Int, typeId: Int, rest3: List<Char>): Operator {
         val (numberSubPackets, rest4) = rest3.takeDrop(11)
         val subPackets = (0 until numberSubPackets.toLong()).fold(emptyList<Packet>() to rest4) { acc, _ ->
             val (list, rest) = acc
             val packet = rest.parse()
             list + packet to packet.rest
         }
-        return getOp(versionId, typeId, subPackets.first, subPackets.second)
+        return Operator(versionId, typeId, subPackets.first, subPackets.second)
     }
 
-    private fun parseLengthSub(versionId: Long, typeId: Long, seq: List<Char>): Operator {
+    private fun parseLengthSub(versionId: Int, typeId: Int, seq: List<Char>): Operator {
+        fun parseLengthSub(subPacketCharList: List<Char>): List<Packet> {
+            return if (subPacketCharList.isEmpty()) {
+                emptyList()
+            } else {
+                val packet = subPacketCharList.parse()
+                listOf(packet) + parseLengthSub(packet.rest)
+            }
+        }
+
         val (lengthSubPackets, rest1) = seq.takeDrop(15)
         val (subPacketCharList, rest2) = rest1.takeDrop(lengthSubPackets.toLong())
         val subPackets = parseLengthSub(subPacketCharList)
-        return getOp(versionId, typeId, subPackets, rest2)
+        return Operator(versionId, typeId, subPackets, rest2)
     }
 
-    private fun parseLengthSub(subPacketCharList: List<Char>): List<Packet> {
-        return if (subPacketCharList.isEmpty()) {
-            emptyList()
-        } else {
-            val packet = subPacketCharList.parse()
-            listOf(packet) + parseLengthSub(packet.rest)
+
+    private fun getLiteral(versionId: Int, typeId: Int, seq: List<Char>): Packet {
+        fun getLiteral(seq: List<Char>): Pair<List<Char>, List<Char>> {
+            val (literal, rest) = seq.takeDrop(5)
+            return if (literal.first() == '1') {
+                val (next, rem) = getLiteral(rest)
+                (literal.drop(1) + next) to rem
+            } else {
+                literal.drop(1) to rest
+            }
         }
-    }
 
-    private fun getLiteralPacket(versionId: Long, typeId: Long, seq: List<Char>): Packet {
         val (lit, rest) = getLiteral(seq)
         val value = lit.joinToString("").toLong(2)
         return Literal(versionId, typeId, value, rest)
     }
 
-    private fun getLiteral(seq: List<Char>): Pair<List<Char>, List<Char>> {
-        val (literal, rest) = seq.takeDrop(5)
-        return if (literal.first() == '1') {
-            val (next, rem) = getLiteral(rest)
-            (literal.drop(1) + next) to rem
-        } else {
-            literal.drop(1) to rest
-        }
-    }
 
     private fun String.toListOfBits() = map { it.toString().toLong(16) }
         .map { it.toString(2) }
@@ -84,6 +83,7 @@ object Day16 {
         .flatMap { it.toList() }
 
 
+    private fun List<Char>.toInt(): Int = toBits().toInt(2)
     private fun List<Char>.toLong(): Long = toBits().toLong(2)
 
     private fun List<Char>.toBits() = toList().joinToString("")
@@ -91,7 +91,6 @@ object Day16 {
     private fun List<Char>.takeDrop(i: Long): Pair<List<Char>, List<Char>> {
         return take(i.toInt()) to drop(i.toInt())
     }
-
 
     // Only used in tests to check parsing
     fun allLiterals(str: String): List<Long> {
@@ -103,81 +102,42 @@ object Day16 {
         return str.toListOfBits().parse().value()
     }
 
-
-    sealed class Packet(val version: Long, val typeId: Long, val rest: List<Char>) {
-        abstract fun versionSum(): Long
+    sealed class Packet(val version: Int, val typeId: Int, val rest: List<Char>) {
+        abstract fun versionSum(): Int
         abstract fun value(): Long
         abstract fun allLiterals(): List<Literal>
-        abstract fun all(): List<Packet>
 
         override fun toString(): String {
-            return "Packet(version=$version, typeId=$typeId, rest=$rest)"
-        }
-
-        companion object {
-            fun getOp(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>): Operator {
-                return when (typeId) {
-                    0L -> Sum(version, subPackets, rest)
-                    1L -> Product(version, subPackets, rest)
-                    2L -> Min(version, subPackets, rest)
-                    3L -> Max(version, subPackets, rest)
-                    5L -> GT(version, subPackets, rest)
-                    6L -> LT(version, subPackets, rest)
-                    7L -> EQ(version, subPackets, rest)
-                    else -> error("No Op for $typeId")
-                }
-            }
-
+            return "Packet(version=$version, typeId=$typeId)"
         }
     }
 
-    class Literal(version: Long, typeId: Long, val value: Long, rest: List<Char>) : Packet(version, typeId, rest) {
-        override fun versionSum(): Long = version
+    class Literal(version: Int, typeId: Int, val value: Long, rest: List<Char>) : Packet(version, typeId, rest) {
+        override fun versionSum(): Int = version
         override fun value(): Long = value
         override fun allLiterals(): List<Literal> = listOf(this)
-        override fun all(): List<Packet> = listOf(this)
 
         override fun toString(): String {
             return "Literal(version=$version, value=$value)"
         }
-
     }
 
-    sealed class Operator(version: Long, typeId: Long, val subPackets: List<Packet>, rest: List<Char>) : Packet(version, typeId, rest) {
-        override fun versionSum(): Long = version + subPackets.sumOf { it.versionSum() }
+    class Operator(version: Int, typeId: Int, private val subPackets: List<Packet>, rest: List<Char>) : Packet(version, typeId, rest) {
+        override fun versionSum(): Int = version + subPackets.sumOf { it.versionSum() }
         override fun allLiterals(): List<Literal> = subPackets.flatMap { it.allLiterals() }
         override fun toString(): String {
             return "Operator(version=$version, typeId=$typeId, subpackets=$subPackets)"
         }
 
-        override fun all(): List<Packet> = listOf(this) + subPackets.flatMap { it.all() }
-    }
-
-    class Sum(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 0, subPackets, rest) {
-        override fun value(): Long = subPackets.sumOf { it.value() }
-    }
-
-    class Product(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 1, subPackets, rest) {
-        override fun value() = subPackets.fold(1L) { acc, packet -> acc * packet.value() }
-    }
-
-    class Min(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 2, subPackets, rest) {
-        override fun value() = subPackets.fold(Long.MAX_VALUE) { acc, packet -> if (acc < packet.value()) acc else packet.value() }
-    }
-
-    class Max(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 3, subPackets, rest) {
-        override fun value() = subPackets.fold(Long.MIN_VALUE) { acc, packet -> if (acc > packet.value()) acc else packet.value() }
-    }
-
-    class GT(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 5, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() > subPackets[1].value()) 1L else 0L
-    }
-
-    class LT(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 6, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() < subPackets[1].value()) 1L else 0L
-    }
-
-    class EQ(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 7, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() == subPackets[1].value()) 1L else 0L
+        override fun value(): Long = when (typeId) {
+            0 -> subPackets.sumOf { it.value() }
+            1 -> subPackets.fold(1) { acc, next -> acc * next.value() }
+            2 -> subPackets.minOf { it.value() }
+            3 -> subPackets.maxOf { it.value() }
+            5 -> if (subPackets[0].value() > subPackets[1].value()) 1 else 0
+            6 -> if (subPackets[0].value() < subPackets[1].value()) 1 else 0
+            7 -> if (subPackets[0].value() == subPackets[1].value()) 1 else 0
+            else -> error("No Op for $typeId")
+        }
     }
 }
