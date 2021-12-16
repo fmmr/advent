@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
 
+@ExperimentalStdlibApi
 @ExperimentalTime
 @Suppress("ClassName")
 @DisableSlow
@@ -31,7 +32,16 @@ internal class Day15Test {
         testPart1 = 40,
         livePart1 = 390,
         testPart2 = 315,
-        livePart2 = 2
+        livePart2 = 2814,
+        numTestPart2 = 1
+    )
+    val testChrisWk = defaultTestSuite(
+        15, Day15ChrisWK::part1, Day15ChrisWK::part2, liveData, testData,
+        testPart1 = 40,
+        livePart1 = 390,
+        testPart2 = 315,
+        livePart2 = 2814,
+        numTestPart2 = 1
     )
 
     @BeforeAll
@@ -55,8 +65,29 @@ internal class Day15Test {
     }
 
     @Test
-    @Slow(6770)
+    @Slow(700)
     fun `2_live`() {
         report(test.livePart2)
+    }
+
+    @Test
+    fun `1_test_chriswk`() {
+        report(testChrisWk.testPart1)
+    }
+
+    @Test
+    fun `1_live_chriswk`() {
+        report(testChrisWk.livePart1)
+    }
+
+    @Test
+    fun `2_test_chriswk`() {
+        report(testChrisWk.testPart2)
+    }
+
+    @Test
+    @Slow(1000)
+    fun `2_live_chriswk`() {
+        report(testChrisWk.livePart2)
     }
 }

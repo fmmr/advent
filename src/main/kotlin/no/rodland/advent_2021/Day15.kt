@@ -6,7 +6,7 @@ import java.util.PriorityQueue
 
 // more or less a copy of:
 // https://todd.ginsberg.com/post/advent-of-code/2021/day15/
-object Day15 {
+object Day15 { // dijkstra
     fun partOne(list: List<String>): Int {
         return IntGrid.fromInput(list).traverse()
     }
