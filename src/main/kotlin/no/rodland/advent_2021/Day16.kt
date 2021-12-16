@@ -36,7 +36,7 @@ object Day16 {
         return packet
     }
 
-    private fun parseNumSub(versionId: Long, typeId: Long, rest3: List<Char>): Operation {
+    private fun parseNumSub(versionId: Long, typeId: Long, rest3: List<Char>): Operator {
         val (numberSubPackets, rest4) = rest3.takeDrop(11)
         val subPackets = (0 until numberSubPackets.toLong()).fold(emptyList<Packet>() to rest4) { acc, _ ->
             val (list, rest) = acc
@@ -46,7 +46,7 @@ object Day16 {
         return getOp(versionId, typeId, subPackets.first, subPackets.second)
     }
 
-    private fun parseLengthSub(versionId: Long, typeId: Long, seq: List<Char>): Operation {
+    private fun parseLengthSub(versionId: Long, typeId: Long, seq: List<Char>): Operator {
         val (lengthSubPackets, rest1) = seq.takeDrop(15)
         val (subPacketCharList, rest2) = rest1.takeDrop(lengthSubPackets.toLong())
         val subPackets = parseLengthSub(subPacketCharList)
@@ -108,21 +108,24 @@ object Day16 {
         abstract fun versionSum(): Long
         abstract fun value(): Long
         abstract fun allLiterals(): List<Literal>
+        abstract fun all(): List<Packet>
 
         override fun toString(): String {
             return "Packet(version=$version, typeId=$typeId, rest=$rest)"
         }
 
         companion object {
-            fun getOp(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) = when (typeId) {
-                0L -> Sum(version, typeId, subPackets, rest)
-                1L -> Product(version, typeId, subPackets, rest)
-                2L -> Min(version, typeId, subPackets, rest)
-                3L -> Max(version, typeId, subPackets, rest)
-                5L -> GT(version, typeId, subPackets, rest)
-                6L -> LT(version, typeId, subPackets, rest)
-                7L -> EQ(version, typeId, subPackets, rest)
-                else -> error("No Op for $typeId")
+            fun getOp(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>): Operator {
+                return when (typeId) {
+                    0L -> Sum(version, subPackets, rest)
+                    1L -> Product(version, subPackets, rest)
+                    2L -> Min(version, subPackets, rest)
+                    3L -> Max(version, subPackets, rest)
+                    5L -> GT(version, subPackets, rest)
+                    6L -> LT(version, subPackets, rest)
+                    7L -> EQ(version, subPackets, rest)
+                    else -> error("No Op for $typeId")
+                }
             }
 
         }
@@ -132,38 +135,49 @@ object Day16 {
         override fun versionSum(): Long = version
         override fun value(): Long = value
         override fun allLiterals(): List<Literal> = listOf(this)
+        override fun all(): List<Packet> = listOf(this)
+
+        override fun toString(): String {
+            return "Literal(version=$version, value=$value)"
+        }
+
     }
 
-    sealed class Operation(version: Long, typeId: Long, val subPackets: List<Packet>, rest: List<Char>) : Packet(version, typeId, rest) {
+    sealed class Operator(version: Long, typeId: Long, val subPackets: List<Packet>, rest: List<Char>) : Packet(version, typeId, rest) {
         override fun versionSum(): Long = version + subPackets.sumOf { it.versionSum() }
         override fun allLiterals(): List<Literal> = subPackets.flatMap { it.allLiterals() }
+        override fun toString(): String {
+            return "Operator(version=$version, typeId=$typeId, subpackets=$subPackets)"
+        }
+
+        override fun all(): List<Packet> = listOf(this) + subPackets.flatMap { it.all() }
     }
 
-    class Sum(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
+    class Sum(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 0, subPackets, rest) {
         override fun value(): Long = subPackets.sumOf { it.value() }
     }
 
-    class Product(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
+    class Product(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 1, subPackets, rest) {
         override fun value() = subPackets.fold(1L) { acc, packet -> acc * packet.value() }
     }
 
-    class Min(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
+    class Min(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 2, subPackets, rest) {
         override fun value() = subPackets.fold(Long.MAX_VALUE) { acc, packet -> if (acc < packet.value()) acc else packet.value() }
     }
 
-    class Max(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
-        override fun value() = subPackets.fold(Long.MAX_VALUE) { acc, packet -> if (acc > packet.value()) acc else packet.value() }
+    class Max(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 3, subPackets, rest) {
+        override fun value() = subPackets.fold(Long.MIN_VALUE) { acc, packet -> if (acc > packet.value()) acc else packet.value() }
     }
 
-    class GT(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() > subPackets[1].value()) 1.toLong() else 0.toLong()
+    class GT(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 5, subPackets, rest) {
+        override fun value() = if (subPackets[0].value() > subPackets[1].value()) 1L else 0L
     }
 
-    class LT(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() < subPackets[1].value()) 1.toLong() else 0.toLong()
+    class LT(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 6, subPackets, rest) {
+        override fun value() = if (subPackets[0].value() < subPackets[1].value()) 1L else 0L
     }
 
-    class EQ(version: Long, typeId: Long, subPackets: List<Packet>, rest: List<Char>) : Operation(version, 0, subPackets, rest) {
-        override fun value() = if (subPackets[0].value() == subPackets[1].value()) 1.toLong() else 0.toLong()
+    class EQ(version: Long, subPackets: List<Packet>, rest: List<Char>) : Operator(version, 7, subPackets, rest) {
+        override fun value() = if (subPackets[0].value() == subPackets[1].value()) 1L else 0L
     }
 }

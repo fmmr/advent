@@ -4,6 +4,7 @@ import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -14,21 +15,20 @@ import kotlin.time.ExperimentalTime
 @DisableSlow
 internal class Day16Test {
     private val liveData = "2021/input_16.txt".readFile().first()
-//    private val liveDataChris = "2021/input_16_chris.txt".readFile().first()
-private val testData = "D2FE28"
+    private val testData = "D2FE28"
 
     val test = defaultTestSuite(
         16, Day16::partOne, Day16::partTwo, liveData, testData,
         testPart1 = 6,
         livePart1 = 847,
         testPart2 = 2021,
-        livePart2 = 329836099306L
+        livePart2 = 333794664059L,  // too low: 329836099306
     )
 
-//    @BeforeAll
-//    fun `0_init`() {
-//        test.livePart1.run { function(data) }
-//    }
+    @BeforeAll
+    fun `0_init`() {
+        test.livePart1.run { function(data) }
+    }
 
     @Nested
     inner class Eval {
@@ -57,11 +57,6 @@ private val testData = "D2FE28"
             report(AOCTest("test_0", Day16::eval, "D8005AC2A8F0", 1L))
         }
 
-//        @Test
-//        fun `2_eval_699ac25fcc200`() {
-//            report(AOCTest("test_0", Day16::eval, "699ac25fcc200", 1L))
-//        }
-
         @Test
         fun `2_eval_F600BC2D8F`() {
             report(AOCTest("test_0", Day16::eval, "F600BC2D8F", 0L))
@@ -78,15 +73,6 @@ private val testData = "D2FE28"
         }
 
     }
-//    @Nested
-//    inner class Chris{
-//        @Test
-//        fun `1_chris`() {
-//            report(AOCTest("chris", Day16::partOne, liveData, listOf(2021L), 1))
-//        }
-//
-//    }
-
 
     @Nested
     inner class Parsing {
@@ -104,10 +90,6 @@ private val testData = "D2FE28"
         fun `1_parse_EE00D40C823060`() {
             report(AOCTest("test_0", Day16::allLiterals, "EE00D40C823060", listOf(1L, 2L, 3L)))
         }
-//        @Test
-//        fun `1_parse_699AC25FCC200`() {
-//            report(AOCTest("test_0", Day16::allLiterals, "699AC25FCC200", listOf(1L, 2L, 3L)))
-//        }
 
         @Test
         fun `1_parse_8A004A801A8002F478`() {
@@ -149,14 +131,4 @@ private val testData = "D2FE28"
     fun `2_live`() {
         report(test.livePart2)
     }
-
-    // @Test
-    // fun `16,1,demo_1`() {
-    //     report { 2 to 2 }
-    // }
-
-    // @Test
-    // fun `16,1,demo_2`() {
-    //     report(AOCTest("16.demo", { it }, 2, 2))
-    // }
 }
