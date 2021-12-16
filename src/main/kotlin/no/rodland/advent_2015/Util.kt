@@ -4,17 +4,17 @@ class Util
 
 fun String.readFile(): List<String> {
     val resource = Util::class.java.getResource("/$this")
-    return resource.readText().split("\n").filter { it.isNotEmpty() }
+    return resource!!.readText().split("\n").filter { it.isNotEmpty() }
 }
 
 fun String.readFileAsOneString(): String {
     val resource = Util::class.java.getResource("/$this")
-    return resource.readText()
+    return resource!!.readText()
 }
 
 fun String.readFileInts(): List<Int> {
     val resource = Util::class.java.getResource("/$this")
-    return resource.readText().split("\n").filter { it.isNotEmpty() }.map { it.toInt() }
+    return resource!!.readText().split("\n").filter { it.isNotEmpty() }.map { it.toInt() }
 }
 
 fun String.readFirstLineInts(): List<Int> {

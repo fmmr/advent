@@ -26,9 +26,9 @@ fun Int.isEven() = this % 2 == 0
 
 fun Any.println() = println(this)
 
-fun String.pad(i: Int): String {
-    return this + (" ".repeat(i - this.length))
-}
+fun String.pad(i: Int): String = this + (" ".repeat(i - this.length))
+
+fun String.prePad(i: Int, sep: String = " "): String = (sep.repeat(i - this.length)) + this
 
 fun Int.pad(): String {
     return when {
