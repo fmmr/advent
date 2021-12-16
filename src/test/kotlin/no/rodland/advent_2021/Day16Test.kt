@@ -12,11 +12,9 @@ import kotlin.time.ExperimentalTime
 @Suppress("ClassName")
 @DisableSlow
 internal class Day16Test {
-    private val liveData = "2021/input_16.txt".readFile()
-    private val testData = listOf(
-        "1",
-        "2"
-    )
+    private val liveData = "2021/input_16.txt".readFile().first()
+    private val testData = "D2FE28"
+
     val test = defaultTestSuite(
         16, Day16::partOne, Day16::partTwo, liveData, testData,
         testPart1 = 2,
