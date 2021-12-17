@@ -24,15 +24,14 @@ object Day16 {
         val (type, rest2) = rest1.takeDrop(3)
         val versionId = version.toInt()
         val packet = when (val typeId = type.toInt()) {
-            4 -> {
-                getLiteral(versionId, typeId, rest2)
-            }
+            4 -> getLiteral(versionId, typeId, rest2)
             else -> {
-                val (length, rest3) = rest2.takeDrop(1)
-                when (length.single()) {
-                    '0' -> parseLengthSub(versionId, typeId, rest3)
-                    '1' -> parseNumSub(versionId, typeId, rest3)
-                    else -> error("invalid length: $length")
+                rest2.takeDrop(1).let { (length, rest3) ->
+                    when (length.single()) {
+                        '0' -> parseLengthSub(versionId, typeId, rest3)
+                        '1' -> parseNumSub(versionId, typeId, rest3)
+                        else -> error("invalid length: $length")
+                    }
                 }
             }
         }

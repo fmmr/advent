@@ -5,24 +5,21 @@ import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import readFile
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 @Suppress("ClassName")
 @DisableSlow
 internal class Day17Test {
-    private val liveData = "2021/input_17.txt".readFile()
-    private val testData = listOf(
-        "1",
-        "2"
-    )
+    private val liveData = "target area: x=179..201, y=-109..-63"
+    private val testData = "target area: x=20..30, y=-10..-5"
     val test = defaultTestSuite(
         17, Day17::partOne, Day17::partTwo, liveData, testData,
-        testPart1 = 2,
-        livePart1 = 2,
-        testPart2 = 2,
-        livePart2 = 2
+        testPart1 = 45,
+        livePart1 = 5886,
+        testPart2 = 112,
+        livePart2 = 1806,
+        numTestPart2 = 1
     )
 
     @BeforeAll

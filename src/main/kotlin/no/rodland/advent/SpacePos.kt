@@ -154,6 +154,8 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     fun isInGrid(grid: Array<CharArray>): Boolean = x >= 0 && y >= 0 && x < grid[0].size && y < grid.size
     fun isInGrid(maxX: Int, maxY: Int): Boolean = x >= 0 && y >= 0 && x < maxX && y < maxY
 
+    fun inRange(xRange: IntRange, yRange: IntRange) = x in xRange && y in yRange
+
     fun above(howMuch: Int = 1): Pos = Pos(x, y - howMuch)
     fun below(howMuch: Int = 1): Pos = Pos(x, y + howMuch)
     fun left(howMuch: Int = 1): Pos = Pos(x - howMuch, y)
