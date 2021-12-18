@@ -4,8 +4,8 @@ import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
-import no.rodland.advent_2021.Day18.magnitude
-import no.rodland.advent_2021.Day18.split
+import no.rodland.advent_2021.Day18.FishNumber
+import no.rodland.advent_2021.Day18.FishPair
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
@@ -58,29 +58,24 @@ internal class Day18Test {
         report(test.livePart2)
     }
 
-    // @Test
-    // fun `18,1,demo_1`() {
-    //     report { 2 to 2 }
-    // }
-
     @Test
     fun `18,1,split_10`() {
-        report(AOCTest("18.demo", { it.split() }, 10, 5 to 5))
+        report(AOCTest("18.demo", { it.split() }, FishNumber(10), FishPair(FishNumber(5), FishNumber(5))))
     }
 
     @Test
     fun `18,1,split_11`() {
-        report(AOCTest("18.demo", { it.split() }, 11, 5 to 6))
+        report(AOCTest("18.demo", { it.split() }, FishNumber(11), FishPair(FishNumber(5), FishNumber(6))))
     }
 
     @Test
     fun `18,1,magnitude_9,1`() {
-        report(AOCTest("18.demo", { it.magnitude() }, 9 to 1, 29))
+        report(AOCTest("18.demo", { it.magnitude() }, FishPair(FishNumber(9), FishNumber(1)), 29))
     }
 
     @Test
     fun `18,1,magnitude_1,9`() {
-        report(AOCTest("18.demo", { it.magnitude() }, 1 to 9, 21))
+        report(AOCTest("18.demo", { it.magnitude() }, FishPair(FishNumber(1), FishNumber(9)), 21))
     }
 }
 
