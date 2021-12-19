@@ -4,7 +4,6 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 // heavily inspired by https://gitlab.com/Nohus/adventofcode2021/-/blob/master/src/main/kotlin/day18_2/Solution.kt
-@Suppress("UNUSED_PARAMETER")
 object Day18 {
     fun partOne(list: List<String>): Int {
         return list.map { it.parse() }.reduce { acc, fish -> acc + fish }.magnitude()
@@ -21,7 +20,6 @@ object Day18 {
             }
         }.maxOrNull()!!
     }
-
 
     fun String.parse(): Fish {
         if (!startsWith('[')) return FishNumber(toInt())
