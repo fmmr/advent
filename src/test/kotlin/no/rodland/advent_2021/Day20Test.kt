@@ -1,6 +1,7 @@
 package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
@@ -24,10 +25,12 @@ internal class Day20Test {
     )
     val test = defaultTestSuite(
         20, Day20::partOne, Day20::partTwo, liveData, testData,
-        testPart1 = 2,
-        livePart1 = 2,
-        testPart2 = 2,
-        livePart2 = 2
+        testPart1 = 35,
+        livePart1 = 5425,  // 5570 too high
+        testPart2 = 3351,
+        livePart2 = 14052,
+        numTestPart1 = 1,
+        numTestPart2 = 1,
     )
 
     @BeforeAll
@@ -46,22 +49,14 @@ internal class Day20Test {
     }
 
     @Test
+    @Slow(300)
     fun `2_test`() {
         report(test.testPart2)
     }
 
     @Test
+    @Slow(1400)
     fun `2_live`() {
         report(test.livePart2)
     }
-
-    // @Test
-    // fun `20,1,demo_1`() {
-    //     report { 2 to 2 }
-    // }
-
-    // @Test
-    // fun `20,1,demo_2`() {
-    //     report(AOCTest("20.demo", { it }, 2, 2))
-    // }
 }

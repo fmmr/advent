@@ -96,6 +96,14 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         )
     }
 
+    fun neighboorCellsAllEightIncludingSelf(): List<Pos> {
+        return listOf(
+            Pos(x - 1, y - 1), Pos(x, y - 1), Pos(x + 1, y - 1),
+            Pos(x - 1, y), Pos(x, y), Pos(x + 1, y),
+            Pos(x - 1, y + 1), Pos(x, y + 1), Pos(x + 1, y + 1),
+        )
+    }
+
     fun angle(another: Pos) = atan2((another.x - x).toDouble(), (another.y - y).toDouble())
 
     fun getDownNeighbors(): List<Pos> {
