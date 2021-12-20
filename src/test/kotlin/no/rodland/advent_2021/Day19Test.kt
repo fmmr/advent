@@ -207,9 +207,9 @@ internal class Day19Test {
     val test = defaultTestSuite(
         19, Day19::partOne, Day19::partTwo, liveData, testData3,
         testPart1 = 79,
-        livePart1 = 2,
-        testPart2 = 2,
-        livePart2 = 2
+        livePart1 = 496,
+        testPart2 = 3621,
+        livePart2 = 14478
     )
 
 //    @BeforeAll
@@ -234,6 +234,7 @@ internal class Day19Test {
     }
 
     @Test
+    @Slow(43000)
     fun `2_live`() {
         report(test.livePart2)
     }
