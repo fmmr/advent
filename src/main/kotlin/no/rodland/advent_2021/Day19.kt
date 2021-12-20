@@ -47,9 +47,7 @@ object Day19 {
                 pos.forEach { sourcePos ->
                     test.pos.forEach { otherPos ->
                         val diff = sourcePos - otherPos
-                        val count = test.pos.map { it + diff }.count {
-                            pos.contains(it)
-                        }
+                        val count = test.pos.map { it + diff }.count { pos.contains(it) }
                         if (count >= 12) {
                             return Scanner(pos + test.pos.map { it + diff }) to diff
                         }
