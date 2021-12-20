@@ -22,7 +22,7 @@ object Day20 {
         return (1..iterations).fold(grid) { acc, _ -> acc.transform() }.size
     }
 
-    class Grid(val pos: Map<Pos, Char>, val algorithm: CharArray, private val infinty: Char = '.') : Map<Pos, Char> by pos {
+    class Grid(val pos: Map<Pos, Char>, private val algorithm: CharArray, private val infinty: Char = '.') : Map<Pos, Char> by pos {
         private val xMin = pos.keys.minOf { it.x }
         private val xMax = pos.keys.maxOf { it.x }
         private val yMin = pos.keys.minOf { it.y }
