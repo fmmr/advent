@@ -2,7 +2,11 @@ package no.rodland.advent_2021
 
 import no.rodland.advent.Pos
 
-@Suppress("UNUSED_PARAMETER")
+// trick here was:  
+// starting with everything unlit - all places beyond the initial grid will end up having the value of algorithm.first() (00000000)
+// - and the next iteration they will have  the value of algorithm.last() (111111111)
+// no prob for the example, but the real data has 0=>'#' and last=>'.'
+// so this has to be modelled as default
 object Day20 {
     fun partOne(list: List<String>): Int {
         return solve(list, 2)
