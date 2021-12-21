@@ -15,8 +15,8 @@ internal class Day21Test {
     private val testData = 4 to 8
     val test = defaultTestSuite(
         21, Day21::partOne, Day21::partTwo, liveData, testData,
-        testPart1 = 2,
-        livePart1 = 2,
+        testPart1 = 739785,
+        livePart1 = 597600,
         testPart2 = 2,
         livePart2 = 2
     )
