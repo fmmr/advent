@@ -8,17 +8,18 @@
     <version>2021</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.6.0</kotlin.version>
-        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <assertj.version>3.21.0</assertj.version>
         <guava.version>31.0.1-jre</guava.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <junit.version>5.8.2</junit.version>
         <klaxon.version>5.5</klaxon.version>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <kotlin.version>1.6.10</kotlin.version>
         <kotlinx-coroutines.version>1.5.2</kotlinx-coroutines.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <surefire.version>3.0.0-M5</surefire.version>
     </properties>
     <repositories>
@@ -150,7 +151,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
