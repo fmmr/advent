@@ -19,7 +19,8 @@ internal class Day21Test {
         testPart1 = 739785,
         livePart1 = 597600,
         testPart2 = 444356092776315L,
-        livePart2 = 634769613696613L
+        livePart2 = 634769613696613L,
+        numTestPart2 = 2
     )
 
     @BeforeAll
@@ -43,7 +44,7 @@ internal class Day21Test {
     }
 
     @Test
-    @Slow(500)
+    @Slow(250)
     fun `2_live`() {
         report(test.livePart2)
     }

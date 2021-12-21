@@ -48,13 +48,12 @@ object Day21 {
             return cached
         }
 
-        var ans = 0L to 0L
-        for (x in 1..3) {
-            for (y in 1..3) {
-                for (z in 1..3) {
+        val ans = (1..3).fold(0L to 0L) { a1, x ->
+            (1..3).fold(a1) { a2, y ->
+                (1..3).fold(a2) { a3, z ->
                     val newp1 = p1.turn(Dice(x, y, z))
                     val (p2wins, p1wins) = countGames(p2, newp1, cache)
-                    ans = ans.first + p1wins to ans.second + p2wins
+                    a3.first + p1wins to a3.second + p2wins
                 }
             }
         }
