@@ -1,6 +1,7 @@
 package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
@@ -17,8 +18,8 @@ internal class Day21Test {
         21, Day21::partOne, Day21::partTwo, liveData, testData,
         testPart1 = 739785,
         livePart1 = 597600,
-        testPart2 = 2,
-        livePart2 = 2
+        testPart2 = 444356092776315L,
+        livePart2 = 634769613696613L
     )
 
     @BeforeAll
@@ -42,17 +43,8 @@ internal class Day21Test {
     }
 
     @Test
+    @Slow(500)
     fun `2_live`() {
         report(test.livePart2)
     }
-
-    // @Test
-    // fun `21,1,demo_1`() {
-    //     report { 2 to 2 }
-    // }
-
-    // @Test
-    // fun `21,1,demo_2`() {
-    //     report(AOCTest("21.demo", { it }, 2, 2))
-    // }
 }
