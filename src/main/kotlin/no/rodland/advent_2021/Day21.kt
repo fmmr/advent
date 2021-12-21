@@ -29,6 +29,10 @@ object Day21 {
         return maxOf(answer.first, answer.second)
     }
 
+    private val universes = sequence {
+        for (x in 1..3) for (y in 1..3) for (z in 1..3) this.yield(Dice(x, y, z))
+    }
+
     // implemented DP after watching Jonathan Paulson's solution: https://www.youtube.com/watch?v=a6ZdJEntKkk&t=1226s 
     private fun countGames(p1: Player, p2: Player, cache: MutableMap<Players, Answer> = mutableMapOf()): Answer {
         if (p1.score >= 21) {
@@ -38,16 +42,11 @@ object Day21 {
             return 0L to 1L
         }
         cache[p1 to p2]?.let { return it }
-
-        val ans = (1..3).fold(0L to 0L) { a1, x ->
-            (1..3).fold(a1) { a2, y ->
-                (1..3).fold(a2) { a3, z ->
-                    countGames(p2, p1.turn(Dice(x, y, z)), cache).let { (p2wins, p1wins) -> a3.first + p1wins to a3.second + p2wins }
-                }
+        return universes
+            .fold(Answer(0L, 0L)) { answer, dice ->
+                countGames(p2, p1.turn(dice), cache).let { (p2wins, p1wins) -> answer.first + p1wins to answer.second + p2wins }
             }
-        }
-        cache[Players(p1, p2)] = ans
-        return ans
+            .also { cache[Players(p1, p2)] = it }
     }
 
     data class TossedGame(val players: Players, val tossed: Int = 0) {
