@@ -6,7 +6,6 @@ typealias Dice = Triple<Int, Int, Int>
 typealias Answer = Pair<Long, Long>
 typealias Players = Pair<Day21.Player, Day21.Player>
 
-@Suppress("UNUSED_PARAMETER")
 object Day21 {
 
     fun partOne(startingPositions: Pair<Int, Int>): Int {
@@ -14,11 +13,7 @@ object Day21 {
         val player2 = Player(startingPositions.second - 1, 0)
         val game = TossedGame(player1, player2)
 
-        val endGame = generateSequence(Dice(1, 2, 3)) { Dice(it.third + 1, it.third + 2, it.third + 3) }
-            .chunked(2)
-            .runningFold(game) { g, dice -> g.turn(dice.first() to dice.last()) }
-            .drop(1)
-            .first { max(it.player1.score, it.player2.score) >= 1000 }
+        val endGame = generateSequence(Dice(1, 2, 3)) { Dice(it.third + 1, it.third + 2, it.third + 3) }.chunked(2).runningFold(game) { g, dice -> g.turn(dice.first() to dice.last()) }.drop(1).first { max(it.player1.score, it.player2.score) >= 1000 }
 
         return if (endGame.player1.score >= 1000) {
             (endGame.tossed - 3) * (endGame.player2.score - endGame.player2.position)
@@ -30,7 +25,6 @@ object Day21 {
     fun partTwo(startingPositions: Pair<Int, Int>): Long {
         val player1 = Player(startingPositions.first - 1, 0)
         val player2 = Player(startingPositions.second - 1, 0)
-
         val answer = countGames(player1, player2)
         return java.lang.Long.max(answer.first, answer.second)
     }
@@ -43,17 +37,12 @@ object Day21 {
         if (p2.score >= 21) {
             return 0L to 1L
         }
-        val cached = cache[p1 to p2]
-        if (cached != null) {
-            return cached
-        }
+        cache[p1 to p2]?.let { return it }
 
         val ans = (1..3).fold(0L to 0L) { a1, x ->
             (1..3).fold(a1) { a2, y ->
                 (1..3).fold(a2) { a3, z ->
-                    val newp1 = p1.turn(Dice(x, y, z))
-                    val (p2wins, p1wins) = countGames(p2, newp1, cache)
-                    a3.first + p1wins to a3.second + p2wins
+                    countGames(p2, p1.turn(Dice(x, y, z)), cache).let { (p2wins, p1wins) -> a3.first + p1wins to a3.second + p2wins }
                 }
             }
         }
