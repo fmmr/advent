@@ -33,7 +33,8 @@ object Day21 {
         for (x in 1..3) for (y in 1..3) for (z in 1..3) this.yield(Dice(x, y, z))
     }
 
-    // implemented DP after watching Jonathan Paulson's solution: https://www.youtube.com/watch?v=a6ZdJEntKkk&t=1226s 
+    // inspiration - though not identical:
+    // Jonathan Paulson's solution: https://www.youtube.com/watch?v=a6ZdJEntKkk&t=1226s 
     private fun countGames(p1: Player, p2: Player, cache: MutableMap<Players, Answer> = mutableMapOf()): Answer {
         if (p1.score >= 21) {
             return 1L to 0L
