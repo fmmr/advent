@@ -22,31 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <surefire.version>3.0.0-M5</surefire.version>
     </properties>
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://central.maven.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>repo1</id>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core -->
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-core</artifactId>
