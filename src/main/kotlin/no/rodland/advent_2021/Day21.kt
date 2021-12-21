@@ -1,7 +1,5 @@
 package no.rodland.advent_2021
 
-import java.lang.Integer.max
-
 typealias Dice = Triple<Int, Int, Int>
 typealias Answer = Pair<Long, Long>
 typealias Players = Pair<Day21.Player, Day21.Player>
@@ -9,11 +7,13 @@ typealias Players = Pair<Day21.Player, Day21.Player>
 object Day21 {
 
     fun partOne(startingPositions: Pair<Int, Int>): Int {
-        val player1 = Player(startingPositions.first - 1, 0)
-        val player2 = Player(startingPositions.second - 1, 0)
-        val game = TossedGame(player1, player2)
+        val game = TossedGame(Player(startingPositions.first - 1, 0), Player(startingPositions.second - 1, 0))
 
-        val endGame = generateSequence(Dice(1, 2, 3)) { Dice(it.third + 1, it.third + 2, it.third + 3) }.chunked(2).runningFold(game) { g, dice -> g.turn(dice.first() to dice.last()) }.drop(1).first { max(it.player1.score, it.player2.score) >= 1000 }
+        val endGame = generateSequence(Dice(1, 2, 3)) { Dice(it.third + 1, it.third + 2, it.third + 3) }
+            .chunked(2)
+            .runningFold(game) { g, dice -> g.turn(dice.first() to dice.last()) }
+            .drop(1)
+            .first { maxOf(it.player1.score, it.player2.score) >= 1000 }
 
         return if (endGame.player1.score >= 1000) {
             (endGame.tossed - 3) * (endGame.player2.score - endGame.player2.position)
@@ -26,7 +26,7 @@ object Day21 {
         val player1 = Player(startingPositions.first - 1, 0)
         val player2 = Player(startingPositions.second - 1, 0)
         val answer = countGames(player1, player2)
-        return java.lang.Long.max(answer.first, answer.second)
+        return maxOf(answer.first, answer.second)
     }
 
     // implemented DP after watching Jonathan Paulson's solution: https://www.youtube.com/watch?v=a6ZdJEntKkk&t=1226s 
@@ -49,7 +49,6 @@ object Day21 {
         cache[Players(p1, p2)] = ans
         return ans
     }
-
 
     data class TossedGame(val players: Players, val tossed: Int = 0) {
         val player1 = players.first
