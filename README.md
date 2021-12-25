@@ -4,7 +4,6 @@
 fmmr solutions for Advent of code.
 
 20211209:
-
 ![stars](gifs/stars.png?raw=true "ascii art")
 
 ## 2021
@@ -12,6 +11,8 @@ fmmr solutions for Advent of code.
 [AOC](https://adventofcode.com/2021),
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2021),
 [Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2021)
+
+![ascii art](gifs/2021.gif?raw=true "ascii art")
 
 ## 2020
 

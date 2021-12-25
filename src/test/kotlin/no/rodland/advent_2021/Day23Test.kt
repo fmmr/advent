@@ -1,61 +1,51 @@
-//package no.rodland.advent_2021
-//
-//import no.rodland.advent.AOCTest
-//import no.rodland.advent.AOCTestSuite
-//import no.rodland.advent.DisableSlow
-//import no.rodland.advent.Part
-//import no.rodland.advent.defaultTestSuite
-//import no.rodland.advent.report
-//import org.junit.jupiter.api.BeforeAll
-//import org.junit.jupiter.api.Test
-//import readFile
-//import kotlin.time.ExperimentalTime
-//
-//@ExperimentalTime
-//@Suppress("ClassName")
-//@DisableSlow
-//internal class Day23Test {
-//    private val liveData = listOf("CD", "AD", "BB", "CA")
-//    private val testData = listOf("BA", "CD", "BC", "DA")
-//    val test = defaultTestSuite(
-//        16, Day23::partOne, Day23::partTwo, liveData, testData,
-//        testPart1 = 6,
-//        livePart1 = 847,
-//        testPart2 = 2021,
-//        livePart2 = 333794664059L,  // too low: 329836099306
-//    )
-////    @BeforeAll
-////    fun `0_init`() {
-////        test.livePart1.run { function(data) }
-////    }
-//
-//    @Test
-//    fun `1_test`() {
-//        report(test.testPart1)
-//    }
-//
-//    @Test
-//    fun `1_live`() {
-//        report(test.livePart1)
-//    }
-//
-//    @Test
-//    fun `2_test`() {
-//        report(test.testPart2)
-//    }
-//
-//    @Test
-//    fun `2_live`() {
-//        report(test.livePart2)
-//    }
-//
-//    // @Test
-//    // fun `23,1,demo_1`() {
-//    //     report { 2 to 2 }
-//    // }
-//
-//    // @Test
-//    // fun `23,1,demo_2`() {
-//    //     report(AOCTest("23.demo", { it }, 2, 2))
-//    // }
-//}
+package no.rodland.advent_2021
+
+import no.rodland.advent.DisableSlow
+import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.report
+import org.junit.jupiter.api.Test
+import readFile
+import kotlin.time.ExperimentalTime
+
+@ExperimentalTime
+@Suppress("ClassName")
+@DisableSlow
+internal class Day23Test {
+    private val liveData = "2021/input_23.txt".readFile()
+    private val testData = listOf(
+        "#############",
+        "#...........#",
+        "###B#C#B#D###",
+        "  #A#D#C#A#",
+        "  #########",
+    )
+    val test = defaultTestSuite(
+        16, Day23::partOne, Day23::partTwo, liveData, testData,
+        testPart1 = 12521,
+        livePart1 = 18300,
+        testPart2 = 44169,
+        livePart2 = 50190,  // too low: 329836099306
+        numTestPart1 = 1,
+        numTestPart2 = 1,
+    )
+
+    @Test
+    fun `1_test`() {
+        report(test.testPart1)
+    }
+
+    @Test
+    fun `1_live`() {
+        report(test.livePart1)
+    }
+
+    @Test
+    fun `2_test`() {
+        report(test.testPart2)
+    }
+
+    @Test
+    fun `2_live`() {
+        report(test.livePart2)
+    }
+}
