@@ -1,9 +1,9 @@
 package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.defaultTestSuite
 import no.rodland.advent.report
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
@@ -14,28 +14,29 @@ import kotlin.time.ExperimentalTime
 internal class Day25Test {
     private val liveData = "2021/input_25.txt".readFile()
     private val testData = listOf(
-        "...>>.vv>",
+        "v...>>.vv>",
         ".vv>>.vv..",
         ">>.>v>...v",
         ">>v>>.>.v.",
-        ">v.vv.v..",
+        "v>v.vv.v..",
         ">.>>..v...",
         ".vv..>.>v.",
-        ".v..>>v.v",
+        "v.v..>>v.v",
         "....v..v.>",
     )
     val test = defaultTestSuite(
         25, Day25::partOne, Day25::partTwo, liveData, testData,
-        testPart1 = 2, // 58
+        testPart1 = 58,
         livePart1 = 2,
         testPart2 = 2,
-        livePart2 = 2
+        livePart2 = 2,
+        numTestPart1 = 1,
     )
 
-    @BeforeAll
-    fun `0_init`() {
-        test.livePart1.run { function(data) }
-    }
+//    @BeforeAll
+//    fun `0_init`() {
+//        test.livePart1.run { function(data) }
+//    }
 
     @Test
     fun `1_test`() {
@@ -43,6 +44,7 @@ internal class Day25Test {
     }
 
     @Test
+    @Slow(2700)
     fun `1_live`() {
         report(test.livePart1)
     }
