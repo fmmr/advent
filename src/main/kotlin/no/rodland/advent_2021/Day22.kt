@@ -5,10 +5,14 @@ import kotlin.math.max
 import kotlin.math.min
 
 // heavily "inspired" by https://github.com/MikeEnRegalia/AdventOfCode2021/blob/main/kotlin/src/main/kotlin/Day22.kt
+
+// also see https://todd.ginsberg.com/post/advent-of-code/2021/day22/ - frankly easier to grasp 
 object Day22 {
 
     fun partOneNaive(list: List<String>): Long {
         val instructions = list.parse().filter { it.isPartOne }
+
+
         return instructions.fold<Ranges, Set<Pos3D>>(emptySet()) { acc, ranges ->
             val pos = ranges.toPos3D()
             when (ranges.on) {

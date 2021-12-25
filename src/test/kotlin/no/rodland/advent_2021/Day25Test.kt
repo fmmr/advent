@@ -14,12 +14,19 @@ import kotlin.time.ExperimentalTime
 internal class Day25Test {
     private val liveData = "2021/input_25.txt".readFile()
     private val testData = listOf(
-        "1",
-        "2"
+        "...>>.vv>",
+        ".vv>>.vv..",
+        ">>.>v>...v",
+        ">>v>>.>.v.",
+        ">v.vv.v..",
+        ">.>>..v...",
+        ".vv..>.>v.",
+        ".v..>>v.v",
+        "....v..v.>",
     )
     val test = defaultTestSuite(
         25, Day25::partOne, Day25::partTwo, liveData, testData,
-        testPart1 = 2,
+        testPart1 = 2, // 58
         livePart1 = 2,
         testPart2 = 2,
         livePart2 = 2
