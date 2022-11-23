@@ -8,19 +8,20 @@
     <version>2021</version>
 
     <properties>
-        <assertj.version>3.21.0</assertj.version>
-        <guava.version>31.0.1-jre</guava.version>
-        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
-        <junit.version>5.8.2</junit.version>
-        <klaxon.version>5.5</klaxon.version>
+        <assertj.version>3.23.1</assertj.version>
+        <guava.version>31.1-jre</guava.version>
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <junit.version>5.9.1</junit.version>
+        <klaxon.version>5.6</klaxon.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <kotlin.version>1.6.10</kotlin.version>
-        <kotlinx-coroutines.version>1.6.0</kotlinx-coroutines.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <kotlin.jvmTarget>11</kotlin.jvmTarget>
+        <kotlin.version>1.7.20</kotlin.version>
+        <kotlinx-coroutines.version>1.6.4</kotlinx-coroutines.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <surefire.version>3.0.0-M5</surefire.version>
+        <surefire.version>3.0.0-M7</surefire.version>
     </properties>
 
     <dependencies>
@@ -124,6 +125,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <jvmTarget>${kotlin.jvmTarget}</jvmTarget>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
