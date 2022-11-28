@@ -3,7 +3,7 @@ import no.rodland.advent.Pos
 typealias Caves = Array<CharArray>
 
 fun String.readFile(): List<String> {
-    val resource = Pos::class.java.getResource("/$this")
+    val resource = Pos::class.java.getResource("/$this")!!
     return resource.readText().split("\n")
 }
 
