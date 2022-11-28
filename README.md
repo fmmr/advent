@@ -3,7 +3,7 @@
 
 fmmr solutions for Advent of code.
 
-20211209:
+20220104:
 ![stars](gifs/stars.png?raw=true "ascii art")
 
 ## 2021
