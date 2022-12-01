@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExecutionCondition
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import kotlin.system.measureTimeMillis
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.ExperimentalTime
 
 fun <T> report(function: () -> Pair<T, T>) {
@@ -37,7 +37,7 @@ fun <T, U> report(test: AOCTest<T, U>) {
     }
     val (result, expected) = results.first().second
     val nanos = results.map { it.first }
-    val avg = Duration.nanoseconds(nanos.average())
+    val avg = nanos.average().nanoseconds
     if (result != expected) {
         println("Result: ${result}, Excpected: $expected, time: ${avg.toString()}")
     } else {
