@@ -8,7 +8,17 @@ fun String.readFile(): List<String> {
 }
 
 fun String.readFileAsInt(): List<Int> {
-    return this.readFile().map { it.toInt() }
+    return readFile().map { it.toInt() }
+}
+fun List<String>.chunckedInts(): List<List<Int>> {
+    return map { it.toIntOrNull() }
+        .joinToString("\n")
+        .split("null")
+        .map {
+            it.split("\n")
+                .filterNot { it.isEmpty() }
+                .map { it.replace("\n", "").toInt() }
+        }
 }
 
 @Suppress("ConstantConditionIf")
@@ -70,9 +80,3 @@ fun <K> MutableMap<K, Int>.increment(key: K) {
 }
 
 fun factorial(n: Int) = (1..n).map { it.toLong() }.reduce { acc, l -> acc * l }
-
-fun arrayOfCharArrays(list: List<String>) = Array(list.size) { y ->
-    CharArray(list[y].length) { x ->
-        list[y][x]
-    }
-}

@@ -13,8 +13,9 @@ internal class Day18Test {
     val test18 = listOf("1", "2")
 
     val resultTestOne = 2L
-    val resultTestTwo = 2L
     val resultOne = 2L
+
+    val resultTestTwo = 2L
     val resultTwo = 2L
 
     @Nested
