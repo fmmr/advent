@@ -13,14 +13,7 @@ object Day02 {
     }
 
     fun partTwo(list: List<String>): Int {
-        return list.playAllGames { c, elf ->
-            when (c) {
-                'X' -> elf.win()
-                'Y' -> elf
-                'Z' -> elf.lose()
-                else -> error("unknown char ${c}")
-            }
-        }
+        return list.playAllGames { c, elf -> c.fromOutcome(elf) }
     }
 
     private fun List<String>.playAllGames(resolveXYZ: (Char, Game) -> Game) =
@@ -31,6 +24,13 @@ object Day02 {
             elfGame to playerGame
 
         }.sumOf { round(it.first, it.second) + it.second.points }
+
+    private fun Char.fromOutcome(elf: Game) = when (this) {
+        'X' -> elf.win()
+        'Y' -> elf
+        'Z' -> elf.lose()
+        else -> error("unknown char ${this}")
+    }
 
     private fun Char.toHand(): Game = when (this) {
         'A', 'X' -> ROCK
