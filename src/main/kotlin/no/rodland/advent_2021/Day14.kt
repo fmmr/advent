@@ -8,7 +8,7 @@ object Day14 {
     fun partOne(list: List<String>): Long {
         val (template, rules) = parse(list)
         val result = (0 until 10)
-            .fold(template) { acc, n ->
+            .fold(template) { acc, _ ->
                 acc
                     .windowed(2)
                     .flatMap { (first, second) ->
@@ -28,7 +28,7 @@ object Day14 {
     fun partTwo(list: List<String>, iterations: Int): Long {
         val (template, rules) = parse(list)
         val initialCounts = initialCounts(template)
-        val pairCounts = (0 until iterations).fold(initialCounts) { acc, i -> insert(acc, rules) }
+        val pairCounts = (0 until iterations).fold(initialCounts) { acc, _ -> insert(acc, rules) }
         val (max, min) = maxMin(pairCounts, template)
         return max - min
     }

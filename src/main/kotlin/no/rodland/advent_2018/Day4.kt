@@ -1,3 +1,8 @@
+package no.rodland.advent_2018
+
+import debug
+import get
+
 object Day4 {
     private val BEGIN = """.*Guard #(\d+) begins.*""".toRegex()
     private val SLEEP = """.* 00:(\d\d).*""".toRegex()
@@ -38,7 +43,7 @@ object Day4 {
     }
 
 
-    fun find_best_guard_to_trick(data: List<String>): Guard? {
+    fun findBestGuardToTrick(data: List<String>): Guard? {
         val guard = readGuards(data).maxByOrNull { it.value.sleepPrOnCall() }?.value
         println("guard = $guard")
         return guard
@@ -65,7 +70,6 @@ object Day4 {
                             guard.wake(msg.min)
                             debug("wake $guard $msg")
                         }
-                        else -> error("Added when converting to 1.6")
                     }
                 }
         return guards

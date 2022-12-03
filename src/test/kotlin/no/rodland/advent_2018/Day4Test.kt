@@ -1,6 +1,5 @@
 package no.rodland.advent_2018
 
-import Day4
 import no.rodland.advent.report
 import org.junit.jupiter.api.Test
 import readFile
@@ -40,14 +39,14 @@ internal class Day4Test {
     @Test
     fun `4,FMR_WORST_GUARD,test`() {
         report {
-            Day4.find_best_guard_to_trick(test4) to Day4.Guard(id = 10)
+            Day4.findBestGuardToTrick(test4) to Day4.Guard(id = 10)
         }
     }
 
     @Test
     fun `4,FMR_WORST_GUARD,live`() {
         report {
-            Day4.find_best_guard_to_trick(data4) to Day4.Guard(id = 1663)
+            Day4.findBestGuardToTrick(data4) to Day4.Guard(id = 1663)
         }
     }
 }
