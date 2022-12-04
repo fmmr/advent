@@ -19,5 +19,5 @@ object Day04 {
     private fun String.toRange() = split("-").let { it.first().toInt()..it.last().toInt() }
 
     private fun fullyContained(first: IntRange, second: IntRange) = first.first in second && first.last in second
-    private fun partlyContained(first: IntRange, second: IntRange) = first.first in second || first.last in second
+    private fun partlyContained(first: IntRange, second: IntRange) =  first.first <= second.last && second.first <= first.last
 }
