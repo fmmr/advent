@@ -5,18 +5,20 @@ package no.rodland.advent_2022
 
 object Day04 {
     fun partOne(list: List<String>): Int {
-        return list.map { CleaningPair(it) }.count { it.fullyContained }
+        return list.map { CleaningPair(it) }.count { it.second fullyContained it.first || it.first fullyContained it.second }
     }
 
     fun partTwo(list: List<String>): Int {
-        return list.map { CleaningPair(it) }.count { it.overlap }
+        return list.map { CleaningPair(it) }.count { it.first partlyContained it.second || it.second partlyContained it.first }
     }
 
     data class CleaningPair(val input: String) {
-        val first = input.split(",").first().let { firstStr -> firstStr.split("-").let { it.first().toInt()..it.last().toInt() } }
-        val second = input.split(",").last().let { secondStr -> secondStr.split("-").let { it.first().toInt()..it.last().toInt() } }
-
-        val fullyContained = first.all { it in second } || second.all { it in first }
-        val overlap = first.any { it in second } || second.any { it in first }
+        val first = input.split(",").first().toRange()
+        val second = input.split(",").last().toRange()
     }
+
+    private fun String.toRange() = split("-").let { it.first().toInt()..it.last().toInt() }
+
+    private infix fun IntRange.fullyContained(other: IntRange) = first in other && last in other
+    private infix fun IntRange.partlyContained(other: IntRange) = first in other || last in other
 }
