@@ -10,6 +10,7 @@ object Day05 {
         inputCommands.map { Command(it) }.forEach { crates.apply(it) }
         return crates.signature()
     }
+
     fun partTwo(inputCrates: List<String>, inputCommands: List<String>): String {
         val crates = Crates(inputCrates)
         inputCommands.map { Command(it) }.forEach { crates.apply(it, false) }
@@ -23,11 +24,15 @@ object Day05 {
     }
 
     private class Crates(input: List<String>) {
-        val cratesList = input.last().split(" ").filterNot { it.isEmpty() }.map { it.toInt() }.map { it to it.stringIdx() }
-        val content = input.reversed().subList(1, input.size)
-        val inventory = cratesList.associate { (num, idx) ->
-            num to content.mapNotNull { if (it.length > idx) it[idx] else null }.filterNot { it == ' ' }
-        }.toMutableMap()
+        private val content = input.reversed().takeLast(input.size - 1)
+        private val inventory = input.last()
+            .split(" ")
+            .filterNot { it.isEmpty() }
+            .map { it.toInt() }
+            .map { it to it.stringIdx() }
+            .associate { (num, idx) ->
+                num to content.mapNotNull { if (it.length > idx) it[idx] else null }.filterNot { it == ' ' }
+            }.toMutableMap()
 
         fun apply(cmd: Command, reversed: Boolean = true) {
             val oldFrom = inventory[cmd.from]!!
