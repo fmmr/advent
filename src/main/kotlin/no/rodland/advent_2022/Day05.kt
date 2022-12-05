@@ -24,15 +24,15 @@ object Day05 {
     }
 
     private class Crates(input: List<String>) {
-        private val content = input.reversed().takeLast(input.size - 1)
+        private val crates = input.reversed().takeLast(input.size - 1)
         private val inventory = input.last()
             .split(" ")
             .filterNot { it.isEmpty() }
             .map { it.toInt() }
-            .map { it to it.stringIdx() }
-            .associate { (num, idx) ->
-                num to content.mapNotNull { if (it.length > idx) it[idx] else null }.filterNot { it == ' ' }
-            }.toMutableMap()
+            .associateWith { num ->
+                crates.mapNotNull { if (it.length > num.stringIdx()) it[num.stringIdx()] else null }.filterNot { it == ' ' }
+            }
+            .toMutableMap()
 
         fun apply(cmd: Command, reversed: Boolean = true) {
             val oldFrom = inventory[cmd.from]!!
