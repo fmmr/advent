@@ -5,15 +5,14 @@ package no.rodland.advent_2022
 
 object Day04 {
     fun partOne(list: List<String>): Int {
-        return count(list, ::fullyContained)
+        return list.count { first, second -> fullyContained(first, second) }
     }
 
     fun partTwo(list: List<String>): Int {
-        return count(list, ::partlyContained)
+        return list.count { first, second -> partlyContained(first, second) }
     }
 
-    private fun count(list: List<String>, func: (IntRange, IntRange) -> Boolean) = list
-        .map { input -> input.split(",").let { it.first().toRange() to it.last().toRange() } }
+    private fun List<String>.count(func: (IntRange, IntRange) -> Boolean) = map { input -> input.split(",").let { it.first().toRange() to it.last().toRange() } }
         .count { func(it.first, it.second) || func(it.second, it.first) }
 
     private fun String.toRange() = split("-").let { it.first().toInt()..it.last().toInt() }
