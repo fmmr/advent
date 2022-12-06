@@ -6,6 +6,10 @@ fun String.readFile(): List<String> {
     val resource = Pos::class.java.getResource("/$this")!!
     return resource.readText().split("\n")
 }
+fun String.readFileAsString(): String {
+    val resource = Pos::class.java.getResource("/$this")!!
+    return resource.readText()
+}
 
 fun String.readFileAsInt(): List<Int> {
     return readFile().map { it.toInt() }
