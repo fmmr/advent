@@ -17,18 +17,13 @@ object Day06 {
 
     private fun findPos(input: String, length: Int): Int {
         val last4 = ArrayDeque<Char>()
-        var counter = 0
-        input.forEach { c ->
-            debug("debug: $counter $last4")
-            if (last4.toSet().size == length) {
-                return counter
-            }
+        return input.indexOfFirst { c ->
+            debug("debug:  $last4")
             if (last4.size == length) {
                 last4.removeFirst()
             }
             last4.addLast(c)
-            counter++
-        }
-        error("No solution found for: counter: $counter length: $length deque: $last4")
+            last4.toSet().size == length
+        } + 1
     }
 }
