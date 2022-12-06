@@ -13,5 +13,5 @@ object Day06 {
         return findPos(input, 14)
     }
 
-    private fun findPos(input: String, length: Int): Int = input.windowed(length).indexOfFirst { it.toSet().size == length } + length
+    private fun findPos(input: String, length: Int): Int = input.windowedSequence(length).indexOfFirst { it.toSet().size == length } + length
 }
