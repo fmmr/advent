@@ -11,7 +11,6 @@ object Day07 {
         return sizes.filter { it.second < 100000 }.sumOf { it.second }
     }
 
-    @Suppress("UNUSED_PARAMETER")
     fun partTwo(list: List<String>): Int {
         val sizes = sizes(list)
         val used = sizes.first { it.first.name == "/" }.second
