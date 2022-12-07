@@ -29,8 +29,7 @@ object Day07 {
                     null
                 }
                 line.startsWith("\$ cd") -> {
-                    val name = line.substringAfter("cd ").appendSlashIfMissing()
-                    stack.push(name)
+                    val name = stack.push(line.substringAfter("cd ").appendSlashIfMissing())
                     Dir(name, path)
                 }
                 line.matches("^\\d+ .*".toRegex()) -> line.toFile(path)
