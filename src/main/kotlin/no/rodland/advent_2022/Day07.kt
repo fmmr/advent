@@ -19,7 +19,7 @@ object Day07 {
         return sizes.filter { it.second >= required }.minOf { it.second }
     }
 
-    private fun sizes(list: List<String>): List<Pair<Dir, Int>> {
+    private fun sizes(list: List<String>): List<Pair<Node, Int>> {
         val stack = Stack<String>()
         val (directories, files) = list.mapNotNull { line ->
             val path = stack.toList().joinToString("/").replace("//", "/")
@@ -38,8 +38,8 @@ object Day07 {
             }
         }.partition { it is Dir }
 
-        return directories.filterIsInstance<Dir>().map { dir ->
-            dir to files.filter { it.path.startsWith(dir.pathWithSelf) }.sumOf { it.size() }
+        return directories.map { dir ->
+            dir to files.filter { it.path.startsWith(dir.pathWithSelf()) }.sumOf { it.size() }
         }
     }
 
@@ -55,12 +55,12 @@ object Day07 {
     }
 
     sealed class Node(open val name: String, open val path: String) {
+        fun pathWithSelf() = path + name
         abstract fun size(): Int
     }
 
     data class Dir(override val name: String, override val path: String) : Node(name, path) {
         override fun size(): Int = 0
-        val pathWithSelf = path + name
     }
 
     data class File(override val name: String, override val path: String, val size: Int) : Node(name, path) {
