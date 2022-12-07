@@ -10,13 +10,36 @@ import readFile
 @DisableSlow
 internal class Day07Test {
     val data07 = "2022/input_07.txt".readFile()
-    val test07 = listOf("1", "2")
+    val test07 = listOf(
+        "$ cd /",
+        "$ ls",
+        "dir a",
+        "14848514 b.txt",
+        "8504156 c.dat",
+        "dir d",
+        "$ cd a",
+        "$ ls",
+        "dir e",
+        "29116 f",
+        "2557 g",
+        "62596 h.lst",
+        "$ cd e",
+        "$ ls",
+        "584 i",
+        "$ cd ..",
+        "$ cd ..",
+        "$ cd d",
+        "$ ls",
+        "4060174 j",
+        "8033020 d.log",
+        "5626152 d.ext",
+        "7214296 k",
+    )
+    val resultTestOne = 95437
+    val resultOne = 1391690
 
-    val resultTestOne = 2L
-    val resultOne = 2L
-
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestTwo = 24933642
+    val resultTwo = 5469168
 
     @Nested
     inner class Init {
