@@ -22,14 +22,14 @@ object Day07 {
     private fun sizes(list: List<String>): List<Pair<Dir, Int>> {
         val stack = Stack<String>()
         val all = list.mapNotNull { line ->
-            val path = stack.toList().joinToString("/").replace("//", "/")
+            val path = stack.path()
             when {
                 line == "\$ cd .." -> {
                     stack.pop()
                     null
                 }
                 line.startsWith("\$ cd") -> {
-                    val name = stack.push(line.substringAfter("cd ").appendSlashIfMissing())
+                    val name = stack.push(line.toDirName())
                     Dir(name, path)
                 }
                 line.matches("^\\d+ .*".toRegex()) -> line.toFile(path)
@@ -40,7 +40,12 @@ object Day07 {
         return all.filterIsInstance<Dir>().map { dir -> dir to files.filter { dir.isParent(it) }.sumOf { it.size() } }
     }
 
-    private fun String.appendSlashIfMissing(): String = if (endsWith("/")) this else "$this/"
+    private fun String.toDirName(): String {
+        val substringAfter = substringAfter("cd ")
+        return if (substringAfter.endsWith("/")) substringAfter else "${substringAfter}/"
+    }
+
+    private fun Stack<String>.path() = joinToString("/").replace("//", "/")
 
     private fun String.toFile(path: String): File = split(" ").let { (first, second) -> File(second, path, first.toInt()) }
 
