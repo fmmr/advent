@@ -38,9 +38,7 @@ object Day07 {
             }
         }
         val files = all.filterIsInstance<File>()
-        return all.filterIsInstance<Dir>().map { dir ->
-            dir to files.filter { it.path.startsWith(dir.pathWithSelf()) }.sumOf { it.size() }
-        }
+        return all.filterIsInstance<Dir>().map { dir -> dir to files.filter { dir.isParent(it) }.sumOf { it.size() } }
     }
 
     private fun String.appendSlashIfMissing(): String = if (endsWith("/")) this else "$this/"
@@ -54,6 +52,7 @@ object Day07 {
 
     data class Dir(override val name: String, override val path: String) : Node(name, path) {
         override fun size(): Int = 0
+        fun isParent(file: Node): Boolean = file.path.startsWith(pathWithSelf())
     }
 
     data class File(override val name: String, override val path: String, val size: Int) : Node(name, path) {
