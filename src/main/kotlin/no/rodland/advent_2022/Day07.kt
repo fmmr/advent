@@ -19,9 +19,9 @@ object Day07 {
         return sizes.filter { it.second >= required }.minOf { it.second }
     }
 
-    private fun sizes(list: List<String>): List<Pair<Node, Int>> {
+    private fun sizes(list: List<String>): List<Pair<Dir, Int>> {
         val stack = Stack<String>()
-        val (directories, files) = list.mapNotNull { line ->
+        val all = list.mapNotNull { line ->
             val path = stack.toList().joinToString("/").replace("//", "/")
             when {
                 line == "\$ cd .." -> {
@@ -33,26 +33,19 @@ object Day07 {
                     stack.push(name)
                     Dir(name, path)
                 }
-                line.matches("^\\d+ .*".toRegex()) -> line.toNode(path)
+                line.matches("^\\d+ .*".toRegex()) -> line.toFile(path)
                 else -> null // dir are already created by cd-command.
             }
-        }.partition { it is Dir }
-
-        return directories.map { dir ->
+        }
+        val files = all.filterIsInstance<File>()
+        return all.filterIsInstance<Dir>().map { dir ->
             dir to files.filter { it.path.startsWith(dir.pathWithSelf()) }.sumOf { it.size() }
         }
     }
 
     private fun String.appendSlashIfMissing(): String = if (endsWith("/")) this else "$this/"
 
-    private fun String.toNode(path: String): Node {
-        val (first, second) = split(" ")
-        return if (first == "dir") {
-            Dir(second, path)
-        } else {
-            File(second, path, first.toInt())
-        }
-    }
+    private fun String.toFile(path: String): File = split(" ").let { (first, second) -> File(second, path, first.toInt()) }
 
     sealed class Node(open val name: String, open val path: String) {
         fun pathWithSelf() = path + name
