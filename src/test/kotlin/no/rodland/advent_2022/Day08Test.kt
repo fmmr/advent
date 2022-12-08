@@ -19,7 +19,7 @@ internal class Day08Test {
     )
 
     val resultTestOne = 21
-    val resultOne = 21
+    val resultOne = 1803
 
     val resultTestTwo = 2L
     val resultTwo = 2L
