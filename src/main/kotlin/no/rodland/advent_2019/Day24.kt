@@ -15,7 +15,7 @@ object Day24 {
     }
 
     private fun getNeighboorsPart1(grid: Grid, x: Int, y: Int, map: Map<Int, Grid>?) = Pos(x, y)
-        .neighboorCellsUDLR()
+        .neighbourCellsUDLR()
             .filter { it.isInGrid(grid) }
             .count { grid[it.y][it.x] == '#' }
 
@@ -27,7 +27,7 @@ object Day24 {
         val parent = map!![grid.level - 1] ?: error("cannot find parent for $grid")
         val child = map[grid.level + 1] ?: error("cannot find child for $grid")
         val pos = Pos(x, y)
-        val countSameGrid = pos.neighboorCellsUDLR()
+        val countSameGrid = pos.neighbourCellsUDLR()
             .filter { it.isInGrid(grid) }
             .filterNot { it.x == 2 && it.y == 2 }
             .count { grid[it.y][it.x] == '#' }

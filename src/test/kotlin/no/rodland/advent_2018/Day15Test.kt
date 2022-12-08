@@ -32,7 +32,7 @@ internal class Day15Test {
         @Test
         fun `15,1,neighbours`() {
             report {
-                Pos(2, 3).neighboorCellsReadingOrder() to listOf(Pos(x = 2, y = 2), Pos(x = 1, y = 3), Pos(x = 3, y = 3), Pos(x = 2, y = 4))
+                Pos(2, 3).neighbourCellsReadingOrder() to listOf(Pos(x = 2, y = 2), Pos(x = 1, y = 3), Pos(x = 3, y = 3), Pos(x = 2, y = 4))
             }
         }
     }

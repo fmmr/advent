@@ -69,7 +69,7 @@ object Day15ChrisWK {
         while (q.isNotEmpty()) {
             val (current, myRisk) = q.remove()
             current
-                .neighboorCellsUDLR().filter { it.x in 0..target.x && it.y in 0..target.y }
+                .neighbourCellsUDLR().filter { it.x in 0..target.x && it.y in 0..target.y }
                 .forEach { neighbour ->
                     if (riskMap.containsKey(neighbour) && !accumulatedRiskMap.containsKey(neighbour)) {
                         val totalRisk = myRisk + riskMap.getValue(neighbour)

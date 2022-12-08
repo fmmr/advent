@@ -55,7 +55,7 @@ object Day20 {
             return if (c == '#') 1 else 0
         }
 
-        private fun algIndex(p: Pos) = p.neighboorCellsAllEightIncludingSelf().map { getValue(it) }.joinToString("").toInt(radix = 2)
+        private fun algIndex(p: Pos) = p.neighbourCellsAllEightIncludingSelf().map { getValue(it) }.joinToString("").toInt(radix = 2)
     }
 
     private fun List<String>.parse() = first().toCharArray() to drop(2).flatMapIndexed { y, line -> line.mapIndexed { x, char -> Pos(x, y) to char } }.toMap().filterValues { it == '#' }

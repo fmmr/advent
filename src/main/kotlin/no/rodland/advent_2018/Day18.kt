@@ -57,7 +57,7 @@ object Day18 {
     }
 
     private fun getNewValue(c: Char, pos: Pos, cave: Caves): Char {
-        val num = pos.neighboorCellsAllEight().filter { it in cave }.map { cave[it] }.groupingBy { it }.eachCount()
+        val num = pos.neighbourCellsAllEight().filter { it in cave }.map { cave[it] }.groupingBy { it }.eachCount()
         val trees = num[TREE] ?: 0
         val lumberyard = num[LUMBERYARD] ?: 0
         return with(c) {
@@ -76,6 +76,7 @@ object Day18 {
     private fun Char.isOpen(): Boolean = this == OPEN
     private fun Char.isTree(): Boolean = this == TREE
 
+    @Suppress("unused")
     fun partTwoTrialAndError(list: List<String>): Int {
         var cave: Caves = init(list)
         // 508 - 536

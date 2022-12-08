@@ -24,7 +24,7 @@ object Day14 {
     }
 
     private fun List<CharArray>.getAllNeighboors(seen: MutableSet<Pos>, pos: Pos): List<Pos> {
-        return listOf(pos) + pos.neighboorCellsUDLR().filter { it.isInGrid(this[0].size, size) }.filter { p -> this[p.y][p.x] == '1' }.filter { seen.add(it) }.flatMap { getAllNeighboors(seen, it) }
+        return listOf(pos) + pos.neighbourCellsUDLR().filter { it.isInGrid(this[0].size, size) }.filter { p -> this[p.y][p.x] == '1' }.filter { seen.add(it) }.flatMap { getAllNeighboors(seen, it) }
     }
 
 

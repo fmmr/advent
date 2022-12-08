@@ -7,7 +7,7 @@ typealias Maze = Array<CharArray>
 object Day11 {
     fun partOne(list: List<String>): Int {
         val grid: Maze = list.toMaze()
-        val findNeighbours: (Pos, Maze /* = kotlin.Array<kotlin.CharArray> */) -> List<Pos> = { p, maze -> p.neighboorCellsAllEight().filter { it.isInGrid(maze[0].size, maze.size) } }
+        val findNeighbours: (Pos, Maze /* = kotlin.Array<kotlin.CharArray> */) -> List<Pos> = { p, maze -> p.neighbourCellsAllEight().filter { it.isInGrid(maze[0].size, maze.size) } }
         return findSeatsTaken(grid) { g: Maze -> iteration(g, grid[0].size, grid.size, 4, findNeighbours) }
     }
 

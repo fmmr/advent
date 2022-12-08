@@ -113,7 +113,7 @@ object Day15 {
             val paths: Deque<Path> = ArrayDeque()
 
             // Seed the queue with each of our neighbors, in reading order (that's important)
-            pos.neighboorCellsReadingOrder()
+            pos.neighbourCellsReadingOrder()
                     .filter { caves[it] == '.' }
                     .forEach { paths.add(listOf(it)) }
 
@@ -132,7 +132,7 @@ object Day15 {
                 // to the queue.
                 if (pathEnd !in seen) {
                     seen.add(pathEnd)
-                    pathEnd.neighboorCellsReadingOrder()
+                    pathEnd.neighbourCellsReadingOrder()
                             .filter { caves[it] == '.' }
                             .filterNot { it in seen }
                             .forEach { paths.add(path + it) }
@@ -146,7 +146,7 @@ object Day15 {
                 creatures
                         .filterNot { it.dead() }
                         .filterNot { it.team == team }
-                        .flatMap { it.pos.neighboorCellsReadingOrder().filter { neighbor -> caves[neighbor.y][neighbor.x] == '.' } }
+                        .flatMap { it.pos.neighbourCellsReadingOrder().filter { neighbor -> caves[neighbor.y][neighbor.x] == '.' } }
                         .toSet()
 
         fun attack(target: Creature, caves: Caves) {
@@ -197,17 +197,6 @@ operator fun Array<CharArray>.contains(pos: Pos): Boolean =
 
 operator fun Array<CharArray>.get(pos: Pos): Char {
     return this[pos.y][pos.x]
-}
-
-
-fun Array<CharArray>.printme() {
-    this.forEach { row ->
-        row.forEach { c ->
-            print(c)
-        }
-        println()
-    }
-    println()
 }
 
 

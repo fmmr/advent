@@ -16,7 +16,7 @@ object Day18 {
             val keyDistance = mutableMapOf<Char, Pair<Pos, Int>>()
             while (queue.isNotEmpty()) {
                 val next = queue.removeFirst()
-                next.neighboorCellsUDLR()
+                next.neighbourCellsUDLR()
                         .filter { it in openSpaces }
                         .filterNot { it in distance }
                         .forEach { point: Pos ->

@@ -54,7 +54,7 @@ object Day24 {
                 return state
             }
 
-            state.pos.neighboorCellsUDLR()
+            state.pos.neighbourCellsUDLR()
                     .filter { visited.add(it) }
                     .filterNot { pos -> grid[pos.y][pos.x] == '#' }
                     .forEach { pos ->

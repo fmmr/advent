@@ -60,9 +60,9 @@ object Day22 {
 
     // from https://todd.ginsberg.com/post/advent-of-code/2018/day22/
     private fun cheapestPath(to: Pos, map: List<Array<Type>>): List<Combo> {
-        val seenMinimumCost: MutableMap<Pair<Pos, Gear>, Int> = mutableMapOf(Pos(0, 0) to Gear.TORCH to 0, Pos(0, 0) to Gear.CLIMB to 0)
+        val seenMinimumCost: MutableMap<Pair<Pos, Gear>, Int> = mutableMapOf(Pos(0, 0) to TORCH to 0, Pos(0, 0) to CLIMB to 0)
         val pathsToEvaluate = PriorityQueue<Combo>().apply {
-            add(Combo(Pos(0, 0), Gear.TORCH, 0))
+            add(Combo(Pos(0, 0), TORCH, 0))
 //            add(Combo(Pos(0, 0), Gear.CLIMB, 0))
         }
         val returnList = mutableListOf<Combo>()
@@ -84,7 +84,7 @@ object Day22 {
             val nextSteps = mutableListOf<Combo>()
 
             // Move to each neighbor, holding the same Gear.
-            pos.positiveNeighboor(map[0].size, map.size).forEach { neighbor ->
+            pos.positiveNeighbour(map[0].size, map.size).forEach { neighbor ->
                 // Add a Traversal for each if we can go there without changing Gears
                 if (thisPath.gear in map[pos.y][pos.x].validTools()) {
                     // Can keep the Gear.
@@ -112,6 +112,7 @@ object Day22 {
         return listOf(Combo(Pos(-1, -1), CLIMB, -1))// No path!? Come on...
     }
 
+    @Suppress("unused")
     private fun calcDistances(map: List<Array<Type>>, target: Pos): Pair<Int, Int> {
         val start = Pos(0, 0)
         var Poss = listOf(Combo(start, TORCH, 0), Combo(start, CLIMB, 0))
@@ -152,7 +153,7 @@ object Day22 {
                     val ptype = map[ppos.y][ppos.x]
                     val pgear = combo.gear
                     val cost = combo.cost
-                    ppos.positiveNeighboor()
+                    ppos.positiveNeighbour()
                             .map { n -> n to map[n.y][n.x] }
                             .map { t -> t.first to ptype.next(t.second, pgear) }
                             .filter { it.second.second > 0 }
@@ -185,6 +186,7 @@ object Day22 {
         }
     }
 
+    @Suppress("unused")
     private fun erosion(pos: Pos, target: Pos, depth: Int): Int {
         val geologicIndex = if (pos == Pos(0, 0) || pos == target) {
             0
@@ -205,6 +207,7 @@ object Day22 {
     enum class Type(val modRes: Int) {
         ROCKY(0), WET(1), NARROW(2);
 
+        @Suppress("KotlinConstantConditions")
         fun next(toType: Type, gear: Gear): Pair<Gear, Int> {
             return if (this == toType) {
                 // no need to include the expensive path-segment here - always cheaper to not change 

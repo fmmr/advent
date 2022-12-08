@@ -9,16 +9,16 @@ internal const val ACTIVE = '#'
 private fun Char.active() = this == ACTIVE
 
 sealed class SpacePos {
-    abstract fun neighbors(): List<SpacePos>
+    abstract fun neighbours(): List<SpacePos>
     abstract fun manhattan(): Int
-
-    fun activeNeighbors(space: Map<out SpacePos, Char>): Int = neighbors().mapNotNull { space[it] }.count { it.active() }
+    abstract fun any(predicate: (Int) -> Boolean): Boolean
+    fun activeNeighbors(space: Map<out SpacePos, Char>): Int = neighbours().mapNotNull { space[it] }.count { it.active() }
 }
 
 data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
     constructor(triple: Triple<Int, Int, Int>) : this(triple.first, triple.second, triple.third)
 
-    override fun neighbors(): List<SpacePos> {
+    override fun neighbours(): List<SpacePos> {
         return listOf(0, 1, -1)
             .flatMap { dx ->
                 listOf(0, 1, -1).flatMap { dy ->
@@ -32,6 +32,7 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
     }
 
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z)
+    override fun any(predicate: (Int) -> Boolean): Boolean = listOf(x, y, z).any(predicate)
 
     operator fun plus(other: Pos3D) = Pos3D(x + other.x, y + other.y, z + other.z)
     operator fun minus(other: Pos3D) = Pos3D(x - other.x, y - other.y, z - other.z)
@@ -55,7 +56,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         return sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2))
     }
 
-    fun neighboorCellsUDLR(): List<Pos> {
+    fun neighbourCellsUDLR(): List<Pos> {
         return listOf(
             Pos(x, y - 1),
             Pos(x, y + 1),
@@ -64,7 +65,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         )
     }
 
-    fun neighboorCellsReadingOrder(): List<Pos> {
+    fun neighbourCellsReadingOrder(): List<Pos> {
         return listOf(
             Pos(x, y - 1),
             Pos(x - 1, y),
@@ -73,17 +74,17 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         )
     }
 
-    fun positiveNeighboor(limitX: Int = Int.MAX_VALUE, limitY: Int = Int.MAX_VALUE): List<Pos> {
-        return neighboorCellsReadingOrder()
+    fun positiveNeighbour(limitX: Int = Int.MAX_VALUE, limitY: Int = Int.MAX_VALUE): List<Pos> {
+        return neighbourCellsReadingOrder()
             .filter { it.x >= 0 && it.y >= 0 }
             .filter { it.x < limitX }
             .filter { it.y < limitY }
 
     }
 
-    override fun neighbors(): List<SpacePos> = neighboorCellsAllEight()
+    override fun neighbours(): List<SpacePos> = neighbourCellsAllEight()
 
-    fun neighboorCellsAllEight(): List<Pos> {
+    fun neighbourCellsAllEight(): List<Pos> {
         return listOf(
             Pos(x, y - 1),
             Pos(x - 1, y),
@@ -96,7 +97,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         )
     }
 
-    fun neighboorCellsAllEightIncludingSelf(): List<Pos> {
+    fun neighbourCellsAllEightIncludingSelf(): List<Pos> {
         return listOf(
             Pos(x - 1, y - 1), Pos(x, y - 1), Pos(x + 1, y - 1),
             Pos(x - 1, y), Pos(x, y), Pos(x + 1, y),
@@ -105,14 +106,6 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     }
 
     fun angle(another: Pos) = atan2((another.x - x).toDouble(), (another.y - y).toDouble())
-
-    fun getDownNeighbors(): List<Pos> {
-        return listOf(
-            Pos(x - 1, y),
-            Pos(x + 1, y),
-            Pos(x, y + 1)
-        )
-    }
 
     fun next(d: Direction, howMuch: Int = 1): Pos = next(d.toString()[0], howMuch)
 
@@ -187,6 +180,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     }
 
     override fun manhattan(): Int = abs(x) + abs(y)
+    override fun any(predicate: (Int) -> Boolean): Boolean = predicate(x) || predicate(y)
 
     operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
     operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
@@ -216,7 +210,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
 
 data class Pos4D(val x: Int, val y: Int, val z: Int, val w: Int) : SpacePos() {
-    override fun neighbors(): List<SpacePos> {
+    override fun neighbours(): List<SpacePos> {
         return listOf(0, 1, -1)
             .flatMap { dx ->
                 listOf(0, 1, -1).flatMap { dy ->
@@ -231,4 +225,5 @@ data class Pos4D(val x: Int, val y: Int, val z: Int, val w: Int) : SpacePos() {
     }
 
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z) + abs(w)
+    override fun any(predicate: (Int) -> Boolean): Boolean = listOf(x, y, z, w).any(predicate)
 }

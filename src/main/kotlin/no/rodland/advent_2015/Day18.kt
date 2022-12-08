@@ -30,7 +30,7 @@ object Day18 {
                 (0 until width).forEach { x ->
                     val p = Pos(x, y)
                     val light = newMaze[p]
-                    val litNeighbours = p.neighboorCellsAllEight().filter { it.isInGrid(maze[0].size, maze.size) }.count { newMaze[it].isLit() }
+                    val litNeighbours = p.neighbourCellsAllEight().filter { it.isInGrid(maze[0].size, maze.size) }.count { newMaze[it].isLit() }
                     yield(p to when (litNeighbours) {
                         2 -> if (light.isLit()) '#' else '.'
                         3 -> '#'

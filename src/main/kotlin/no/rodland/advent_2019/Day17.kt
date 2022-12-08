@@ -11,7 +11,7 @@ import no.rodland.advent.Pos
 object Day17 {
     fun partOne(list: List<String>): Int {
         val map = runBlocking { runAmp(list) }
-        val calibration = map.filter { cell -> cell.value != '.' && cell.key.neighboorCellsReadingOrder().all { nei -> map[nei] != '.' } }
+        val calibration = map.filter { cell -> cell.value != '.' && cell.key.neighbourCellsReadingOrder().all { nei -> map[nei] != '.' } }
                 .map { it.key.x * it.key.y }
                 .sum()
         return calibration

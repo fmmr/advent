@@ -36,7 +36,7 @@ object Day11 {
     }
 
     private fun IntGrid.flash(positions: Set<Pos>): IntGrid {
-        val allNeighbors = positions.flatMap { pos -> neighboorCellsAllEight(pos) }.groupingBy { it }.eachCount()
+        val allNeighbors = positions.flatMap { pos -> neighbourCellsAllEight(pos) }.groupingBy { it }.eachCount()
         return IntGrid(mapIndexed { y, ar -> IntArray(ar.size) { x -> this[y][x] + allNeighbors.getOrDefault(Pos(x, y), 0) } })
     }
 

@@ -28,7 +28,7 @@ object Day15 { // dijkstra
             }
             if (visited.add(here.pos)) {
                 here.pos
-                    .neighboorCellsUDLR().filter { it.x in 0..destination.x && it.y in 0..destination.y }
+                    .neighbourCellsUDLR().filter { it.x in 0..destination.x && it.y in 0..destination.y }
                     .forEach { toBeEvaluated.offer(Traversal(it, here.totalRisk + get(this, it))) }
 
             }

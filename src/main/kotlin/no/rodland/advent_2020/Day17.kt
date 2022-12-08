@@ -26,7 +26,7 @@ object Day17 {
         return generateSequence(initial) { space ->
             space
                 .keys
-                .flatMap { it.neighbors() }
+                .flatMap { it.neighbours() }
                 .toSet()
                 .mapNotNull { pos ->
                     val state = space[pos] ?: INACTIVE

@@ -40,7 +40,7 @@ object Day20 {
                 return state
             }
             val jump = portalsMap[state.pos]
-            val neighboors = state.pos.neighboorCellsUDLR().filter { it in paths }.filter { seen.add(it) } + if (jump != null) listOf(jump) else emptyList()
+            val neighboors = state.pos.neighbourCellsUDLR().filter { it in paths }.filter { seen.add(it) } + if (jump != null) listOf(jump) else emptyList()
             queue.addAll(neighboors.map { State(it, state.path + it) })
         }
         error("No path found")
@@ -58,7 +58,7 @@ object Day20 {
             }
 
             val jump = portalsMap[state.pos.pos]
-            val neighboors = (state.pos.pos.neighboorCellsUDLR().filter { it in paths }.map { PosLevel(it, state.pos.level) }.filter { seen.add(it) } + if (jump != null) listOf(PosLevel(state.pos, jump, outerX, outerY)) else emptyList())
+            val neighboors = (state.pos.pos.neighbourCellsUDLR().filter { it in paths }.map { PosLevel(it, state.pos.level) }.filter { seen.add(it) } + if (jump != null) listOf(PosLevel(state.pos, jump, outerX, outerY)) else emptyList())
                 .filter { it.level >= 0 }
 
             queue.addAll(neighboors.map { State2(it, state.path + it) })

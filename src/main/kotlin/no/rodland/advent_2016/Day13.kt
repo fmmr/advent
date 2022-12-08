@@ -28,7 +28,7 @@ object Day13 {
             if (pos == destination) {
                 return p to null
             }
-            queue.addAll(pos.neighboorCellsReadingOrder().filter { it.isPostive() }.filterNot { it.isWall(magicNumber) }.filter { seen.add(it) }.map { p + it })
+            queue.addAll(pos.neighbourCellsReadingOrder().filter { it.isPostive() }.filterNot { it.isWall(magicNumber) }.filter { seen.add(it) }.map { p + it })
         }
         return null to null
     }
