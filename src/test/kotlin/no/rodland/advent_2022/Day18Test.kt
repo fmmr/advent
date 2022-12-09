@@ -10,7 +10,9 @@ import readFile
 @DisableSlow
 internal class Day18Test {
     val data18 = "2022/input_18.txt".readFile()
-    val test18 = listOf("1", "2")
+    val test18 = listOf(
+        "1"
+    )
 
     val resultTestOne = 2L
     val resultOne = 2L
