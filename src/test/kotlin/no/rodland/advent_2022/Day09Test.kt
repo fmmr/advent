@@ -35,9 +35,9 @@ internal class Day09Test {
     val resultTestOne = 13
     val resultOne = 6391
 
-    val resultTestTwo = 2
-    val resultTestTwoB = 2
-    val resultTwo = 2
+    val resultTestTwo = 1
+    val resultTestTwoB = 36
+    val resultTwo = 2593
 
     @Nested
     inner class Init {
@@ -81,6 +81,7 @@ internal class Day09Test {
                 Day09.partTwo(test09) to resultTestTwo
             }
         }
+
         @Test
         fun `09,2,test,2`() {
             report {
@@ -94,5 +95,30 @@ internal class Day09Test {
                 Day09.partTwo(data09) to resultTwo
             }
         }
+    }
+
+    @Nested
+    inner class `Part 2 Only Tests` {
+        @Test
+        fun `09,1,test`() {
+            report {
+                Day09.partOne(test09) to resultTestOne
+            }
+        }
+
+        @Test
+        fun `09,2,test,1`() {
+            report {
+                Day09.partTwo(test09) to resultTestTwo
+            }
+        }
+
+        @Test
+        fun `09,2,test,2`() {
+            report {
+                Day09.partTwo(test092) to resultTestTwoB
+            }
+        }
+
     }
 }
