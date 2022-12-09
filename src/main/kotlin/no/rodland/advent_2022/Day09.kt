@@ -19,17 +19,17 @@ object Day09 {
 
     private fun List<Dir>.walk(numberOfKnots: Int): State {
         val initialKnots = (1..numberOfKnots).map { Pos(0, 0) }
-        val state = fold(State(ArrayDeque(initialKnots), emptySet())) { acc, dir ->
+        val state = fold(State(initialKnots, emptySet())) { acc, dir ->
             val knots = nextPositions(acc.knots, dir)
             State(knots, acc.visited + knots.last())
         }
         return state
     }
 
-    private fun nextPositions(knots: ArrayDeque<Pos>, dir: Dir): ArrayDeque<Pos> {
-        val newHead = dir.move(knots.removeFirst())
-        val nextKnots = knots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) }
-        return ArrayDeque(nextKnots)
+    private fun nextPositions(knots: List<Pos>, dir: Dir): List<Pos> {
+        val mutableKnots = knots.toMutableList()
+        val newHead = dir.move(mutableKnots.removeFirst())
+        return mutableKnots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) }
     }
 
     private fun nextPos(head: Pos, tail: Pos): Pos {
@@ -40,7 +40,7 @@ object Day09 {
         }
     }
 
-    private data class State(val knots: ArrayDeque<Pos>, val visited: Set<Pos>)
+    private data class State(val knots: List<Pos>, val visited: Set<Pos>)
 
     enum class Dir {
         U, D, L, R;
