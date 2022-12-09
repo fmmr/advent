@@ -1,47 +1,65 @@
+@file:Suppress("unused")
+
 package no.rodland.advent_2022
 
 import no.rodland.advent.Pos
+import kotlin.math.absoluteValue
 import kotlin.math.sign
 
-private typealias Combo = Triple<Pos, Pos, Set<Pos>>
+private typealias Combo = Pair<List<Pos>, Set<Pos>>
 
 // template generated: 28/11/2022
 // Fredrik Rødland 2022
 
 object Day09 {
     fun partOne(list: List<String>): Int {
+        return visited(list, 2)
+    }
+    @Suppress("UNUSED_PARAMETER")
+    fun partTwo(list: List<String>): Int {
+        return 2
+    }
+
+    private fun visited(list: List<String>, numberOfKnots: Int): Int {
         val cmds = list
             .asSequence()
             .map { it.split(" ") }
             .map { it.first() to it.last().toInt() }
             .flatMap { (dir, howMuch) -> (1..howMuch).map { dir } }
             .map { Dir.valueOf(it) }
-        val fold = cmds.fold(Combo(Pos(0, 0), Pos(0, 0), setOf(Pos(0, 0)))) { acc, dir ->
-            val (newPosH, newPosT) = newPos(acc.first, acc.second, dir)
-            Combo(newPosH, newPosT, acc.third + newPosT)
+        val initial = (1..numberOfKnots).map { _ -> Pos(0, 0) }
+        val fold = cmds.fold(Combo(initial, setOf(Pos(0, 0)))) { acc, dir ->
+            val newList = newPos(acc.first, dir)
+            Combo(newList, acc.second + newList.last())
         }
-        return fold.third.size
+        return fold.second.size
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun partTwo(list: List<String>): Int {
-        return 2
-    }
+    private fun newPos(list: List<Pos>, dir: Dir): List<Pos> {
+        val newPosH = dir.newPos(list.first())
 
 
-    private fun newPos(posH: Pos, posT: Pos, dir: Dir): Pair<Pos, Pos> {
-        val newPosH = dir.newPos(posH)
-        val newPosT = newPosT(newPosH, posT)
-        return newPosH to newPosT
+        val newPosT = newPosT(newPosH, list.last())
+        return listOf(newPosH, newPosT)
     }
 
     private fun newPosT(posH: Pos, posT: Pos): Pos {
         val diffX = posH.x - posT.x
         val diffY = posH.y - posT.y
-        val distance = posH.directDistance(posT)
+//        val distance = posH.directDistance(posT)
         return when {
-            distance.adjacent() -> posT
+            posH.adjacent(posT) -> posT
             else -> Pos(posT.x + diffX.sign, posT.y + diffY.sign)
+        }
+    }
+
+    private fun Pos.adjacent(pos: Pos): Boolean {
+        val diffX = this.x - pos.x
+        val diffY = this.y - pos.y
+        return when {
+            diffY.absoluteValue <= 1 -> diffX.absoluteValue <= 1
+            diffX.absoluteValue <= 1 -> diffY.absoluteValue <= 1
+            else -> false
         }
     }
 
@@ -61,3 +79,5 @@ object Day09 {
         }
     }
 }
+
+

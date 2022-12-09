@@ -20,12 +20,23 @@ internal class Day09Test {
         "L 5",
         "R 2",
     )
+    val test092 = listOf(
+        "R 5",
+        "U 8",
+        "L 8",
+        "D 3",
+        "R 17",
+        "D 10",
+        "L 25",
+        "U 20",
+    )
 
 
     val resultTestOne = 13
     val resultOne = 6391
 
     val resultTestTwo = 2
+    val resultTestTwoB = 2
     val resultTwo = 2
 
     @Nested
@@ -65,9 +76,15 @@ internal class Day09Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `09,2,test`() {
+        fun `09,2,test,1`() {
             report {
                 Day09.partTwo(test09) to resultTestTwo
+            }
+        }
+        @Test
+        fun `09,2,test,2`() {
+            report {
+                Day09.partTwo(test092) to resultTestTwoB
             }
         }
 
