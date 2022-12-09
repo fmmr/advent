@@ -19,9 +19,10 @@ object Day09 {
 
     private fun List<Dir>.walk(numberOfKnots: Int): State {
         val initialKnots = (1..numberOfKnots).map { Pos(0, 0) }
-        val state = fold(State(initialKnots, emptySet())) { acc, dir ->
+        val state = fold(State(initialKnots, mutableSetOf())) { acc, dir ->
             val knots = nextPositions(acc.knots, dir)
-            State(knots, acc.visited + knots.last())
+            acc.visited.add(knots.last())
+            State(knots, acc.visited )
         }
         return state
     }
@@ -40,7 +41,7 @@ object Day09 {
         }
     }
 
-    private data class State(val knots: List<Pos>, val visited: Set<Pos>)
+    private data class State(val knots: List<Pos>, val visited: MutableSet<Pos>)
 
     enum class Dir {
         U, D, L, R;
