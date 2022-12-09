@@ -22,11 +22,11 @@ internal class Day09Test {
     )
 
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    val resultTestOne = 13
+    val resultOne = 6391
 
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestTwo = 2
+    val resultTwo = 2
 
     @Nested
     inner class Init {
