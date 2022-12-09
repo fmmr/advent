@@ -28,7 +28,8 @@ object Day09 {
 
     private fun nextPositions(knots: ArrayDeque<Pos>, dir: Dir): ArrayDeque<Pos> {
         val newHead = dir.move(knots.removeFirst())
-        return ArrayDeque(knots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) })
+        val nextKnots = knots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) }
+        return ArrayDeque(nextKnots)
     }
 
     private fun nextPos(head: Pos, tail: Pos): Pos {
