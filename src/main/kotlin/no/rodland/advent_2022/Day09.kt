@@ -1,8 +1,6 @@
 package no.rodland.advent_2022
 
 import no.rodland.advent.Pos
-import java.util.*
-import kotlin.collections.ArrayDeque
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -11,52 +9,35 @@ import kotlin.math.sign
 // Fredrik Rødland 2022
 
 object Day09 {
-    fun partOne(list: List<String>): Int {
-        return run(list, 2).visited.size
+    fun partOne(input: List<String>): Int {
+        return input.toDirections().walk(2).visited.size
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun partTwo(list: List<String>): Int {
-        return run(list, 10).visited.size
+    fun partTwo(input: List<String>): Int {
+        return input.toDirections().walk(10).visited.size
     }
 
-    private fun run(list: List<String>, numberOfKnots: Int): State {
-        val commands = parseDirections(list)
-        val knots = (1..numberOfKnots).map { Pos(0, 0) }
-        val state = commands.fold(State(ArrayDeque(knots), emptySet())) { acc, dir ->
-            val newList = nextPositions(acc.knots, dir)
-            State(newList, acc.visited + newList.last())
+    private fun List<Dir>.walk(numberOfKnots: Int): State {
+        val initialKnots = (1..numberOfKnots).map { Pos(0, 0) }
+        val state = fold(State(ArrayDeque(initialKnots), emptySet())) { acc, dir ->
+            val knots = nextPositions(acc.knots, dir)
+            State(knots, acc.visited + knots.last())
         }
         return state
     }
 
-    private fun parseDirections(list: List<String>) = list
-        .map { it.split(" ") }
-        .map { it.first() to it.last().toInt() }
-        .flatMap { (dir, howMuch) -> (1..howMuch).map { dir } }
-        .map { Dir.valueOf(it) }
-
-    private fun nextPositions(list: ArrayDeque<Pos>, dir: Dir): ArrayDeque<Pos> {
-        val newPosHead = dir.move(list.removeFirst())
-        return ArrayDeque(list.runningFold(newPosHead) { acc: Pos, pos: Pos -> newPosT(acc, pos) })
+    private fun nextPositions(knots: ArrayDeque<Pos>, dir: Dir): ArrayDeque<Pos> {
+        val newHead = dir.move(knots.removeFirst())
+        return ArrayDeque(knots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) })
     }
 
-    private fun newPosT(posH: Pos, posT: Pos): Pos {
+    private fun nextPos(head: Pos, tail: Pos): Pos {
+        val diff = head - tail
         return when {
-            posH.adjacent(posT) -> posT
-            else -> Pos(posT.x + (posH.x - posT.x).sign, posT.y + (posH.y - posT.y).sign)
+            diff.y.absoluteValue <= 1 && diff.x.absoluteValue <= 1 -> tail
+            else -> Pos(tail.x + diff.x.sign, tail.y + diff.y.sign)
         }
     }
-
-    @Suppress("unused")
-    private fun Pos.adjacent(pos: Pos): Boolean {
-        val diffX = this.x - pos.x
-        val diffY = this.y - pos.y
-        return diffY.absoluteValue <= 1 && diffX.absoluteValue <= 1
-    }
-
-    @Suppress("unused")
-    private fun Double.adjacent() = this < 1.9
 
     private data class State(val knots: ArrayDeque<Pos>, val visited: Set<Pos>)
 
@@ -72,6 +53,11 @@ object Day09 {
             }
         }
     }
+
+    private fun List<String>.toDirections() = map { it.split(" ") }
+        .map { it.first() to it.last().toInt() }
+        .flatMap { (dir, howMuch) -> (1..howMuch).map { dir } }
+        .map { Dir.valueOf(it) }
 }
 
 
