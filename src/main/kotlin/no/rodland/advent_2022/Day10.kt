@@ -15,7 +15,7 @@ object Day10 {
         list.flatMapCommands()
             .forEach {
                 cycles++
-                if ((cycles - 20) % 40 == 0) {
+                if (cycles % 40 == 20) {
                     singleStrength += cycles * x
                 }
                 if (it != "noop") {
