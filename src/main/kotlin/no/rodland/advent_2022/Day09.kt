@@ -30,14 +30,14 @@ object Day09 {
     private fun nextPositions(knots: List<Pos>, dir: Dir): List<Pos> {
         val mutableKnots = knots.toMutableList()
         val newHead = dir.move(mutableKnots.removeFirst())
-        return mutableKnots.runningFold(newHead) { head: Pos, tail: Pos -> nextPos(head, tail) }
+        return mutableKnots.runningFold(newHead) { head: Pos, tail: Pos -> tail.follow(head) }
     }
 
-    private fun nextPos(head: Pos, tail: Pos): Pos {
-        val diff = head - tail
+    private fun Pos.follow(head: Pos): Pos {
+        val diff = head - this
         return when {
-            diff.y.absoluteValue <= 1 && diff.x.absoluteValue <= 1 -> tail
-            else -> Pos(tail.x + diff.x.sign, tail.y + diff.y.sign)
+            diff.y.absoluteValue <= 1 && diff.x.absoluteValue <= 1 -> this
+            else -> Pos(x + diff.x.sign, y + diff.y.sign)
         }
     }
 

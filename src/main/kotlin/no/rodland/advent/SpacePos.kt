@@ -1,9 +1,6 @@
 package no.rodland.advent
 
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 internal const val ACTIVE = '#'
 private fun Char.active() = this == ACTIVE
@@ -183,6 +180,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     override fun any(predicate: (Int) -> Boolean): Boolean = predicate(x) || predicate(y)
 
     operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
+
     operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
 
 
