@@ -84,3 +84,7 @@ fun <K> MutableMap<K, Int>.increment(key: K) {
 }
 
 fun factorial(n: Int) = (1..n).map { it.toLong() }.reduce { acc, l -> acc * l }
+
+fun getCharForTyping(on: Char = '█', off: Char = ' ', predicate: () -> Boolean): Char {
+    return if (predicate()) on else off
+}
