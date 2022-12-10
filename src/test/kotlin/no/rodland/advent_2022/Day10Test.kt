@@ -19,8 +19,22 @@ internal class Day10Test {
 
     val resultTestOne = 13140
     val resultOne = 12980
-    val resultTestTwo = "HHHHHHHH"
-    val resultTwo = "HHHHHHHH"
+    val resultTestTwo = """
+##  ##  ##  ##  ##  ##  ##  ##  ##  ##  
+###   ###   ###   ###   ###   ###   ### 
+####    ####    ####    ####    ####    
+#####     #####     #####     #####     
+######      ######      ######      ####
+#######       #######       #######     
+    """.trimIndent()
+    val resultTwo = """
+###  ###    ## #    #### #  # #    ###  
+#  # #  #    # #    #    #  # #    #  # 
+###  #  #    # #    ###  #  # #    #  # 
+#  # ###     # #    #    #  # #    ###  
+#  # # #  #  # #    #    #  # #    #    
+###  #  #  ##  #### #     ##  #### #    
+""".trimIndent()  // BRJLFULP
 
     @Nested
     inner class Init {

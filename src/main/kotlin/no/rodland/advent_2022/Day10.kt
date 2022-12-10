@@ -5,8 +5,6 @@ package no.rodland.advent_2022
 
 object Day10 {
 
-
-    @Suppress("UNUSED_PARAMETER")
     fun partOne(list: List<String>): Int {
         val breakPoints = listOf(20, 60, 100, 140, 180, 220)
         var cycles = 1
@@ -29,8 +27,31 @@ object Day10 {
         return singleStrength
     }
 
-    @Suppress("UNUSED_PARAMETER")
+
     fun partTwo(list: List<String>): String {
-        return "HHHHHHHH"
+        val breakPoints = listOf(40, 80, 120, 160, 200, 240)
+        val screen = mutableListOf<String>()
+        var row = ""
+        var cycles = 1
+        var x = 1
+        list.flatMap {
+            when (it) {
+                "noop" -> listOf(it)
+                else -> listOf("noop", it)
+            }
+        }.forEach {
+            row += if (x.lit((cycles - 1) % 40)) "#" else " "
+            if (cycles in breakPoints) {
+                screen.add(row)
+                row = ""
+            }
+            if (it.startsWith("addx")) {
+                x += it.substringAfter(" ").toInt()
+            }
+            cycles++
+        }
+        return screen.joinToString("\n")
     }
+
+    private fun Int.lit(pos: Int): Boolean = this in (pos - 1)..(pos + 1)
 }
