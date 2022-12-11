@@ -40,8 +40,8 @@ internal class Day11Test {
         "    If false: throw to monkey 1",
     )
 
-    val resultTestOne = 10605
-    val resultOne = 58056
+    val resultTestOne = 10605L
+    val resultOne = 58056L
 
     val resultTestTwo = 2713310158L
     val resultTwo = 15048718170L

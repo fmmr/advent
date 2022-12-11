@@ -5,34 +5,34 @@ package no.rodland.advent_2022
 
 @Suppress("ConvertCallChainIntoSequence")
 object Day11 {
-    fun partOne(list: List<String>): Int {
-        val (monkeys, modNumber) = list.toMonkeys()
-        repeat(20) { monkeys.round(3, modNumber) }
-        return monkeys.values.map { it.count }.sortedDescending().take(2).reduce(Int::times)
+    fun partOne(input: List<String>): Long {
+        return input.toMonkeys().rounds(20, 3).monkeyBusiness()
     }
 
-    fun partTwo(list: List<String>): Long {
-        val (monkeys, modNumber) = list.toMonkeys()
-        repeat(10000) { monkeys.round(1, modNumber) }
-        return monkeys.values.map { it.count }.sortedDescending().take(2).map { it.toLong() }.reduce(Long::times)
+    fun partTwo(input: List<String>): Long {
+        return input.toMonkeys().rounds(10000, 1).monkeyBusiness()
     }
 
-    private fun Map<Int, Monkey>.round(divisor: Int, modNumber: Int) {
-        forEach { (_, monkey) ->
+    private fun List<Monkey>.rounds(rounds: Int, divisor: Int): List<Monkey> {
+        val modNumber = map { monkey -> monkey.modNumber }.reduce(Int::times)
+        repeat(rounds) { round(divisor, modNumber) }
+        return this
+    }
+
+    private fun List<Monkey>.round(divisor: Int, modNumber: Int) {
+        forEach { monkey ->
             monkey.removeAll { item ->
                 val newValue = monkey.inspectAndCount(item, divisor, modNumber)
                 val newMonkey = monkey.next(newValue)
-                get(newMonkey)!!.add(newValue)
+                get(newMonkey).add(newValue)
             }
         }
     }
+    private fun List<Monkey>.monkeyBusiness() = map { it.count }.sortedDescending().take(2).map { it.toLong() }.reduce(Long::times)
 
     private fun List<String>.toMonkeys() = joinToString("\n").split("\n\n")
         .map { it.toMonkey() }
-        .associateBy { it.id }
-        .let {
-            it to it.values.map { monkey -> monkey.modNumber }.reduce(Int::times)
-        }
+
 
     private fun String.toMonkey(): Monkey {
         val id = substringAfter(" ").substringBefore(":").toInt()
@@ -56,8 +56,13 @@ object Day11 {
         return Monkey(id, ArrayDeque(items), test, operation, action)
     }
 
-
-    class Monkey(val id: Int, private val items: ArrayDeque<Long>, val modNumber: Int, val inspect: (Long, Int, Int) -> Long, val next: (Long) -> Int) : MutableList<Long> by items {
+    class Monkey(
+        val id: Int,
+        private val items: ArrayDeque<Long>,
+        val modNumber: Int,
+        val inspect: (Long, Int, Int) -> Long,
+        val next: (Long) -> Int
+    ) : MutableList<Long> by items {
 
         var count = 0
 
@@ -66,7 +71,6 @@ object Day11 {
             return inspect(old, divisor, modNumber)
         }
     }
-
 }
 
 
