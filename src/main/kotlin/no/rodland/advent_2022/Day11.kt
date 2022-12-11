@@ -17,11 +17,10 @@ object Day11 {
         return monkeys.values.map { it.count }.sortedDescending().take(2).map { it.toLong() }.reduce(Long::times)
     }
 
-    private fun Map<Int, Monkey>.round(divisor: Int = 1, modNumber: Int = -1) {
+    private fun Map<Int, Monkey>.round(divisor: Int, modNumber: Int) {
         forEach { (_, monkey) ->
             monkey.removeAll { item ->
-                val inspected = monkey.inspectAndCount(item) / divisor
-                val newValue = inspected % modNumber
+                val newValue = monkey.inspectAndCount(item, divisor, modNumber)
                 val newMonkey = monkey.next(newValue)
                 get(newMonkey)!!.add(newValue)
             }
@@ -44,26 +43,27 @@ object Day11 {
         val test = substringAfter("Test: divisible by ").substringBefore("\n").toInt()
         val trueMonkey = substringAfter("If true: throw to monkey ").substringBefore("\n").toInt()
         val falseMonkey = substringAfter("If false: throw to monkey ").substringBefore("\n").toInt()
-        val operation = { newValue: Long ->
-            val v = if (opValue == "old") newValue else opValue.toLong()
-            when (op) {
-                "*" -> newValue * v
-                "+" -> newValue + v
-                else -> error("only + and * allowed")
+        val operation = { old: Long, divisor: Int, modNumber: Int ->
+            val v = if (opValue == "old") old else opValue.toLong()
+            val newValue = when (op) {
+                "*" -> old * v
+                "+" -> old + v
+                else -> error("only + and * implemented")
             }
+            newValue / divisor % modNumber
         }
         val action = { newValue: Long -> if (newValue.mod(test) == 0) trueMonkey else falseMonkey }
         return Monkey(id, ArrayDeque(items), test, operation, action)
     }
 
 
-    class Monkey(val id: Int, private val items: ArrayDeque<Long>, val modNumber: Int, val inspect: (Long) -> Long, val next: (Long) -> Int) : MutableList<Long> by items {
+    class Monkey(val id: Int, private val items: ArrayDeque<Long>, val modNumber: Int, val inspect: (Long, Int, Int) -> Long, val next: (Long) -> Int) : MutableList<Long> by items {
 
         var count = 0
 
-        fun inspectAndCount(old: Long): Long {
+        fun inspectAndCount(old: Long, divisor: Int, modNumber: Int): Long {
             count++
-            return inspect(old)
+            return inspect(old, divisor, modNumber)
         }
     }
 
