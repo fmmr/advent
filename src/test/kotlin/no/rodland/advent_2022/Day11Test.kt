@@ -43,8 +43,8 @@ internal class Day11Test {
     val resultTestOne = 10605
     val resultOne = 58056
 
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestTwo = 2713310158L
+    val resultTwo = 15048718170L
 
     @Nested
     inner class Init {
