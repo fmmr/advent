@@ -5,30 +5,20 @@ import no.rodland.advent.Pos
 
 // template generated: 28/11/2022
 // Fredrik Rødland 2022
-
 object Day12 {
-    fun partOne(list: List<String>): Int {
+    fun partOne(list: List<String>, printGrid: Boolean = false): Int {
         val grid = IntGrid.fromChar(list)
-        val shortestPath = shortestPath(grid)
-        return shortestPath.size - 1
-    }
-
-    fun printRoute(list: List<String>): Int {
-        val grid = IntGrid.fromChar(list)
-        val shortestPath = shortestPath(grid)
-        grid.printRoute(
-            { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
-            { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
-        )
-        return 2
-    }
-
-    private fun shortestPath(grid: IntGrid): List<Pos> {
         val all = grid.all()
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
         val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
-        return shortestPath
+        if (printGrid) {
+            grid.printRoute(
+                { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
+                { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
+            )
+        }
+        return shortestPath.size - 1
     }
 
     fun partTwo(list: List<String>): Int {
@@ -39,7 +29,6 @@ object Day12 {
         val shortestPath = bfs(grid, start, end) { potentialMove, current -> grid[potentialMove] > (grid[current] - 2) }
         return shortestPath.size - 1
     }
-
 
     private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, walkRestriction: (Pos, Pos) -> Boolean): List<Pos> {
         val queue = mutableListOf(start)

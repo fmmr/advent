@@ -43,7 +43,7 @@ internal class Day12Test {
         @Test
         fun `12,1,live,print_map`() {
             report {
-                Day12.printRoute(data12) to 2
+                Day12.partOne(data12, true) to resultOne
             }
         }
     }
