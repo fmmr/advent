@@ -41,9 +41,7 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
     }
 
     override fun toString(): String {
-        return list.map {
-            it.joinToString("")
-        }.joinToString("\n")
+        return list.joinToString("\n") { it.joinToString("") }
     }
 
     // colour: given a pos - which colour on background (0.0 - 1.0)
