@@ -12,12 +12,7 @@ object Day12 {
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
         val shortestPath = bfs(grid, start, setOf(end)) { from, to -> grid[to] <= (grid[from] + 1) }
-        if (printGrid) {
-            grid.print(
-                { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
-                { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
-            )
-        }
+        printGrid(printGrid, grid, shortestPath)
         return shortestPath.size - 1
     }
 
@@ -54,6 +49,15 @@ object Day12 {
             'S'.code -> 'a'.code
             'E'.code -> 'z'.code
             else -> i
+        }
+    }
+
+    private fun printGrid(printGrid: Boolean, grid: IntGrid, shortestPath: List<Pos>) {
+        if (printGrid) {
+            grid.print(
+                { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
+                { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
+            )
         }
     }
 }
