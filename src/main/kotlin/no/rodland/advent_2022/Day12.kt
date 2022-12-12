@@ -11,7 +11,7 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
-        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
+        val shortestPath = bfs(grid, start, setOf(end)) { from, to -> grid[to] <= (grid[from] + 1) }
         if (printGrid) {
             grid.print(
                 { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
@@ -26,11 +26,11 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'E'.code }.first
         val end = all.filter { it.second == 'a'.code || it.second == 'S'.code }.map { it.first }.toSet()
-        val shortestPath = bfs(grid, start, end) { potentialMove, current -> grid[potentialMove] > (grid[current] - 2) }
+        val shortestPath = bfs(grid, start, end) { from, to -> grid[to] >= (grid[from] - 1) }
         return shortestPath.size - 1
     }
 
-    private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, walkRestriction: (Pos, Pos) -> Boolean): List<Pos> {
+    private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, canWalk: (Pos, Pos) -> Boolean): List<Pos> {
         val queue = mutableListOf(start)
         val parents = mutableMapOf<Pos, Pos?>().apply { put(start, null) }
         while (queue.isNotEmpty()) {
@@ -39,7 +39,7 @@ object Day12 {
                 return generateSequence(current) { parents[it] }.toList()
             }
             grid.neighbours(current)
-                .filter { walkRestriction(it, current) }
+                .filter { canWalk(current, it) }
                 .filterNot { it in parents.keys }
                 .forEach { neighbor ->
                     queue.add(neighbor)
