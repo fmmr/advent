@@ -21,39 +21,29 @@ object Day12 {
         val all = grid.all()
         val start = all.filter { it.second == 'a'.code || it.second == 'S'.code }.map { it.first }
         val end = all.first { it.second == 'E'.code }.first
-        val sorted = start.map { bfs(grid, it, end).size - 1 }.filter { it != -1 }.sorted()
-        return sorted.min()
+        val sorted = start.map { bfs(grid, it, end).size }.filterNot { it == 0 }.sorted()
+        return sorted.min() - 1
     }
 
-    private fun bfs(grid: IntGrid, start: Pos, end: Pos): List<Pos> {
+    private fun bfs(grid: IntGrid, start: Pos, end: Pos): List<Pos?> {
         val queue = ArrayDeque(listOf(start))
-        val visited = mutableSetOf(start)
-        val parents = mutableMapOf<Pos, Pos>()
+        val parents = mutableMapOf<Pos, Pos?>().apply { put(start, null) }
         while (queue.isNotEmpty()) {
             val current = queue.removeFirst()
             if (current == end) {
-                return parents.pathTo(end)
+                return generateSequence(end) { parents[it] }.toList()
             }
             grid.neighbours(current)
                 .filter { grid[it] < (grid[current] + 2) }
-                .filterNot { it in visited }
+                .filterNot {
+                    it in parents.keys
+                }
                 .forEach { neighbor ->
                     queue.add(neighbor)
-                    visited.add(neighbor)
                     parents[neighbor] = current
                 }
         }
         return emptyList()
-    }
-
-    private fun MutableMap<Pos, Pos>.pathTo(end: Pos): List<Pos> {
-        val path = mutableListOf<Pos>()
-        var node: Pos? = end
-        while (node != null) {
-            path.add(node)
-            node = this[node]
-        }
-        return path.reversed()
     }
 
     private operator fun IntGrid.get(pos: Pos): Int {
