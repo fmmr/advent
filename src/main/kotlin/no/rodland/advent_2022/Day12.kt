@@ -12,7 +12,9 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
-        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
+        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current ->
+            grid[potentialMove] < (grid[current] + 2)
+        }
         return shortestPath.size - 1
     }
 
@@ -21,8 +23,9 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'E'.code }.first
         val end = all.filter { it.second == 'a'.code || it.second == 'S'.code }.map { it.first }.toSet()
-        val walkRestriction = { potentialMove: Pos, current: Pos -> grid[potentialMove] > (grid[current] - 2) }
-        val shortestPath = bfs(grid, start, end, walkRestriction)
+        val shortestPath = bfs(grid, start, end) { potentialMove, current ->
+            grid[potentialMove] > (grid[current] - 2)
+        }
         return shortestPath.size - 1
     }
 
