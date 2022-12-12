@@ -35,9 +35,7 @@ object Day12 {
             }
             grid.neighbours(current)
                 .filter { grid[it] < (grid[current] + 2) }
-                .filterNot {
-                    it in parents.keys
-                }
+                .filterNot { it in parents.keys }
                 .forEach { neighbor ->
                     queue.add(neighbor)
                     parents[neighbor] = current
