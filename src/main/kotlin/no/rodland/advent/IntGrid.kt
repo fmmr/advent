@@ -25,6 +25,12 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
         }
     }
 
+    fun all(): List<Pair<Pos, Int>> {
+        return flatMapIndexed { y, line ->
+            line.mapIndexed { x, value -> Pos(x, y) to value }
+        }
+    }
+
     fun neighbours(p: Pos) = p.neighbourCellsUDLR().filter { it.isInGrid(this) }
     fun neighbourCellsAllEight(p: Pos) = p.neighbourCellsAllEight().filter { it.isInGrid(this) }
 
@@ -44,8 +50,14 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
                 IntArray(ints.size) { value -> ints[value] }
             }
         }
+        private fun toGridFromChar(strings: List<String>) = List(strings.size) { row ->
+            strings[row].toCharArray().map { it.code }.let { ints ->
+                IntArray(ints.size) { value -> ints[value] }
+            }
+        }
 
         fun fromInput(input: List<String>) = IntGrid(toGrid(input))
+        fun fromChar(input: List<String>) = IntGrid(toGridFromChar(input))
     }
 
 }
