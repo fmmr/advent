@@ -32,13 +32,7 @@ object Day12 {
         while (queue.isNotEmpty()) {
             val current = queue.removeFirst()
             if (current == end) {
-                val path = mutableListOf<Pos>()
-                var node: Pos? = end
-                while (node != null) {
-                    path.add(node)
-                    node = parents[node]
-                }
-                return path.reversed()
+                return parents.pathTo(end)
             }
             grid.neighbours(current)
                 .filter { grid[it] < (grid[current] + 2) }
@@ -50,6 +44,16 @@ object Day12 {
                 }
         }
         return emptyList()
+    }
+
+    private fun MutableMap<Pos, Pos>.pathTo(end: Pos): List<Pos> {
+        val path = mutableListOf<Pos>()
+        var node: Pos? = end
+        while (node != null) {
+            path.add(node)
+            node = this[node]
+        }
+        return path.reversed()
     }
 
     private operator fun IntGrid.get(pos: Pos): Int {
