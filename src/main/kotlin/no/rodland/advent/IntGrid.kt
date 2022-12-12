@@ -48,15 +48,22 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
 
     // colour: given a pos - which colour on background (0.0 - 1.0)
     // char: given a pos - which char to print
-    fun printRoute(colour: (Pos) -> Double = { 0.0 }, char: (Pos) -> Char, foreground: String = "\u001B[30m\u001B[1m") {
+    fun print(colour: (Pos) -> Double = { -1.0 }, char: (Pos) -> Char = { p -> Char(get(p)) }, foreground: String = "\u001B[30m\u001B[1m") {
         val ansiReset = "\u001b[0m"
+        val defaultBackground = "\u001b[47m"
         val ansiBgColors = listOf(
             "\u001b[44m", "\u001b[104m", "\u001b[46m", "\u001b[106m",
             "\u001b[42m", "\u001b[102m", "\u001b[43m", "\u001b[103m",
             "\u001b[45m", "\u001b[105m", "\u001b[41m", "\u001b[101m",
         )
 
-        fun getAnsiBgColor(p: Pos): String = ansiBgColors[min((colour(p) * ansiBgColors.size).toInt(), ansiBgColors.size - 1)]
+        fun getAnsiBgColor(p: Pos): String = colour(p).let {
+            if (it < 0.0) {
+                defaultBackground
+            } else {
+                ansiBgColors[min((colour(p) * ansiBgColors.size).toInt(), ansiBgColors.size - 1)]
+            }
+        }
 
         print(foreground)
         mapIndexed { y, arr ->

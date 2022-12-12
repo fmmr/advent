@@ -13,7 +13,7 @@ object Day12 {
         val end = all.first { it.second == 'E'.code }.first
         val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
         if (printGrid) {
-            grid.printRoute(
+            grid.print(
                 { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
                 { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
             )
