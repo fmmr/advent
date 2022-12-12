@@ -39,6 +39,13 @@ internal class Day12Test {
                 Day12.partTwo(data12) to resultTwo
             }
         }
+
+        @Test
+        fun `12,1,live,print_map`() {
+            report {
+                Day12.printRoute(data12) to 2
+            }
+        }
     }
 
     @Nested

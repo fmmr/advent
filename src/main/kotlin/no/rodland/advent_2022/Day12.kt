@@ -9,13 +9,26 @@ import no.rodland.advent.Pos
 object Day12 {
     fun partOne(list: List<String>): Int {
         val grid = IntGrid.fromChar(list)
+        val shortestPath = shortestPath(grid)
+        return shortestPath.size - 1
+    }
+
+    fun printRoute(list: List<String>): Int {
+        val grid = IntGrid.fromChar(list)
+        val shortestPath = shortestPath(grid)
+        grid.printRoute(
+            { p -> (grid[p] - 'a'.code).toDouble() / ('z'.code - 'a'.code) },
+            { p: Pos -> if (p in shortestPath) Char(grid[p]) else ' ' }
+        )
+        return 2
+    }
+
+    private fun shortestPath(grid: IntGrid): List<Pos> {
         val all = grid.all()
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
-        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current ->
-            grid[potentialMove] < (grid[current] + 2)
-        }
-        return shortestPath.size - 1
+        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
+        return shortestPath
     }
 
     fun partTwo(list: List<String>): Int {
@@ -23,13 +36,12 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'E'.code }.first
         val end = all.filter { it.second == 'a'.code || it.second == 'S'.code }.map { it.first }.toSet()
-        val shortestPath = bfs(grid, start, end) { potentialMove, current ->
-            grid[potentialMove] > (grid[current] - 2)
-        }
+        val shortestPath = bfs(grid, start, end) { potentialMove, current -> grid[potentialMove] > (grid[current] - 2) }
         return shortestPath.size - 1
     }
 
-    private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, walkRestriction: (Pos, Pos) -> Boolean): List<Pos?> {
+
+    private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, walkRestriction: (Pos, Pos) -> Boolean): List<Pos> {
         val queue = mutableListOf(start)
         val parents = mutableMapOf<Pos, Pos?>().apply { put(start, null) }
         while (queue.isNotEmpty()) {
