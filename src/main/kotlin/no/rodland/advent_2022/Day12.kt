@@ -12,7 +12,7 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'S'.code }.first
         val end = all.first { it.second == 'E'.code }.first
-        val shortestPath = bfs(grid, start, setOf(end)) { p1, p2 -> grid[p1] < (grid[p2] + 2) }
+        val shortestPath = bfs(grid, start, setOf(end)) { potentialMove, current -> grid[potentialMove] < (grid[current] + 2) }
         return shortestPath.size - 1
     }
 
@@ -21,12 +21,13 @@ object Day12 {
         val all = grid.all()
         val start = all.first { it.second == 'E'.code }.first
         val end = all.filter { it.second == 'a'.code || it.second == 'S'.code }.map { it.first }.toSet()
-        val shortestPath = bfs(grid, start, end) { p1, p2 -> grid[p1] > (grid[p2] - 2) }
+        val walkRestriction = { potentialMove: Pos, current: Pos -> grid[potentialMove] > (grid[current] - 2) }
+        val shortestPath = bfs(grid, start, end, walkRestriction)
         return shortestPath.size - 1
     }
 
     private fun bfs(grid: IntGrid, start: Pos, end: Set<Pos>, walkRestriction: (Pos, Pos) -> Boolean): List<Pos?> {
-        val queue = ArrayDeque(listOf(start))
+        val queue = mutableListOf(start)
         val parents = mutableMapOf<Pos, Pos?>().apply { put(start, null) }
         while (queue.isNotEmpty()) {
             val current = queue.removeFirst()
