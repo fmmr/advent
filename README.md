@@ -3,7 +3,6 @@
 
 fmmr solutions for Advent of code.
 
-20220104:
 ![stars](gifs/stars.png?raw=true "ascii art")
 
 ## 2022
@@ -70,4 +69,4 @@ fmmr solutions for Advent of code.
 
 ![ascii art](gifs/2015.gif?raw=true "ascii art")
 
-Fredrik Rødland 2021
+Fredrik Rødland 2022
