@@ -6,6 +6,7 @@ fun String.readFile(): List<String> {
     val resource = Pos::class.java.getResource("/$this")!!
     return resource.readText().split("\n")
 }
+
 fun String.readFileAsString(): String {
     val resource = Pos::class.java.getResource("/$this")!!
     return resource.readText()
@@ -14,6 +15,7 @@ fun String.readFileAsString(): String {
 fun String.readFileAsInt(): List<Int> {
     return readFile().map { it.toInt() }
 }
+
 fun List<String>.chunckedInts(): List<List<Int>> {
     return map { it.toIntOrNull() }
         .joinToString("\n")
@@ -45,7 +47,7 @@ operator fun Caves.set(pos: Pos, value: Char) {
 }
 
 operator fun Caves.contains(pos: Pos): Boolean =
-        pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
+    pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
 
 operator fun Caves.get(pos: Pos): Char {
     return this[pos.y][pos.x]
@@ -85,6 +87,19 @@ fun <K> MutableMap<K, Int>.increment(key: K) {
 
 fun factorial(n: Int) = (1..n).map { it.toLong() }.reduce { acc, l -> acc * l }
 
-fun getCharForTyping(on: String =  "⚪️", off: String ="⚫️", predicate: () -> Boolean): String {
+fun getCharForTyping(on: String = "⚪️", off: String = "⚫️", predicate: () -> Boolean): String {
     return if (predicate()) on else off
+}
+
+
+@Suppress("unused")
+inline fun <T> Iterable<T>.takeUntil(predicate: (T) -> Boolean): List<T> = this.asSequence().takeUntil(predicate)
+inline fun <T> Sequence<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
+    val list = ArrayList<T>()
+    for (item in this) {
+        list.add(item)
+        if (predicate(item))
+            break
+    }
+    return list
 }
