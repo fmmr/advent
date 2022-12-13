@@ -8,25 +8,17 @@ import org.json.simple.JSONValue
 
 object Day13 {
 
-    var count = 0  // keeping track of the number of compares
-
     fun partOne(list: List<String>): Int {
-        count = 0
         val indices = list
             .asSequence()
             .filterNot { it.isEmpty() }
             .chunked(2)
             .map { it.first() to it.last() }
-            .mapIndexed { i, pair -> i to pair.rightOrder() }
-            .filter { it.second }
-            .map { it.first + 1 }
-            .toList()
-        println("did $count compares")
+            .mapIndexed { i, pair -> if (pair.rightOrder()) i + 1 else 0 }
         return indices.sum()
     }
 
     fun partTwo(list: List<String>): Int {
-        count = 0
         val p1 = parse("[[2]]")
         val p2 = parse("[[6]]")
         val all = list
@@ -38,7 +30,6 @@ object Day13 {
                 add(p2)
             }
             .sorted()
-        println("did $count compares")
         return (all.indexOf(p1) + 1) * (all.indexOf(p2) + 1)
     }
 
@@ -60,7 +51,6 @@ object Day13 {
 
     private data class IntPacket(val value: Int) : Packet() {
         override fun compareTo(other: Packet): Int {
-            count++
             return when (other) {
                 is IntPacket -> value.compareTo(other.value)
                 is ListPacket -> ListPacket(listOf(this)).compareTo(other)
@@ -70,7 +60,6 @@ object Day13 {
 
     private data class ListPacket(val value: List<Packet>) : Packet(), List<Packet> by value {
         override fun compareTo(other: Packet): Int {
-            count++
             return when (other) {
                 is IntPacket -> this.compareTo(ListPacket(listOf(other)))
                 is ListPacket -> {
