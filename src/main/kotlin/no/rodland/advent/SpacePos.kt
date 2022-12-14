@@ -163,7 +163,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     private fun nw(): Pos = Pos(x - 1, y - 1)
     fun ne(): Pos = Pos(x + 1, y - 1)
     fun sw(): Pos = Pos(x - 1, y + 1)
-    private fun se(): Pos = Pos(x + 1, y + 1)
+    fun se(): Pos = Pos(x + 1, y + 1)
 
     private fun Any?.size(): Int {
         return when (this) {

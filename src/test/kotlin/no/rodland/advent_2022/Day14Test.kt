@@ -15,11 +15,11 @@ internal class Day14Test {
         "503,4 -> 502,4 -> 502,9 -> 494,9"
     )
 
-    val resultTestOne = 2
-    val resultOne = 2
+    val resultTestOne = 24
+    val resultOne = 715
 
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestTwo = 93
+    val resultTwo = 25248
 
     @Nested
     inner class Init {
@@ -43,7 +43,7 @@ internal class Day14Test {
         @Test
         fun `14,1,test`() {
             report {
-                Day14.partOne(test14) to resultTestOne
+                Day14.partOne(test14, true) to resultTestOne
             }
         }
 
@@ -56,11 +56,28 @@ internal class Day14Test {
     }
 
     @Nested
+    inner class `Only test both parts` {
+        @Test
+        fun `14,1,test,1`() {
+            report {
+                Day14.partOne(test14, true) to resultTestOne
+            }
+        }
+
+        @Test
+        fun `14,1,test,2`() {
+            report {
+                Day14.partTwo(test14, true) to resultTestTwo
+            }
+        }
+    }
+
+    @Nested
     inner class `Part 2` {
         @Test
         fun `14,2,test`() {
             report {
-                Day14.partTwo(test14) to resultTestTwo
+                Day14.partTwo(test14, true) to resultTestTwo
             }
         }
 
