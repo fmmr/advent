@@ -11,11 +11,12 @@ import readFile
 internal class Day14Test {
     val data14 = "2022/input_14.txt".readFile()
     val test14 = listOf(
-        "1"
+        "498,4 -> 498,6 -> 496,6",
+        "503,4 -> 502,4 -> 502,9 -> 494,9"
     )
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    val resultTestOne = 2
+    val resultOne = 2
 
     val resultTestTwo = 2L
     val resultTwo = 2L

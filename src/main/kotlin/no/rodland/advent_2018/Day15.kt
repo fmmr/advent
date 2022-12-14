@@ -1,33 +1,31 @@
 package no.rodland.advent_2018
 
-import no.rodland.advent.Pos
+
+import no.rodland.advent.*
 import no.rodland.advent_2018.Day15.Team.ELF
 import no.rodland.advent_2018.Day15.Team.GOBLIN
-import java.util.ArrayDeque
-import java.util.Deque
+import java.util.*
 
-typealias Caves = Array<CharArray>
-typealias Path = List<Pos>
 
-// after strugling a really long time, I finally gave up (see last version of this file), and read
-// through https://todd.ginsberg.com/post/advent-of-code/2018/day15/ exelent blogpost on Day 15 and adopted (i.e. copied)
-// hsi solution to mine
+// after struggling a really long time, I finally gave up (see last version of this file), and read
+// through https://todd.ginsberg.com/post/advent-of-code/2018/day15/ excellent blogpost on Day 15 and adopted (i.e. copied)
+// his solution to mine
 object Day15 {
     fun partOne(list: List<String>): Int {
-        val caves: Caves = init(list)
-        val creatures: List<Creature> = Creature.findCreatures(caves)
+        val cave: Cave = init(list)
+        val creatures: List<Creature> = Creature.findCreatures(cave)
 
-        val rounds = fight(creatures, caves)
+        val rounds = fight(creatures, cave)
         return creatures.filterNot { it.dead() }.sumOf { it.hitPoints } * rounds
     }
 
     fun partTwo(list: List<String>): Int {
         return generateSequence(4, Int::inc).map { _ ->
             // Reset
-            val caves: Caves = init(list)
-            val creatures: List<Creature> = Creature.findCreatures(caves, 19)
+            val cave: Cave = init(list)
+            val creatures: List<Creature> = Creature.findCreatures(cave, 19)
             val elves = creatures.count { it.team == ELF }
-            val rounds = fight(creatures, caves)
+            val rounds = fight(creatures, cave)
             val elvesSurvivors = creatures.filterNot { it.dead() }.count { it.team == ELF }
             val dead = elves - elvesSurvivors
 
@@ -41,16 +39,16 @@ object Day15 {
         }.filterNotNull().first()
     }
 
-    private fun fight(creatures: List<Creature>, caves: Caves): Int {
+    private fun fight(creatures: List<Creature>, cave: Cave): Int {
         var rounds = 0
-        while (round(creatures, caves)) {
+        while (round(creatures, cave)) {
             rounds++
         }
         return rounds
     }
 
 
-    private fun round(creatures: List<Creature>, caves: Caves): Boolean {
+    private fun round(creatures: List<Creature>, cave: Cave): Boolean {
         // Fighters need to be in order at the start of the round.
         // This is a sequence because we can lazily remove dead fighers before their turn,
         // otherwise we have to manually check.
@@ -64,9 +62,9 @@ object Day15 {
             var target: Creature? = creature.inRange(creatures).firstOrNull()
             if (target == null) {
                 // Movement
-                val path = creature.findPathToBestEnemyAdjacentSpot(creatures, caves)
+                val path = creature.findPathToBestEnemyAdjacentSpot(creatures, cave)
                 if (path.isNotEmpty()) {
-                    creature.move(path.first(), caves)
+                    creature.move(path.first(), cave)
                 }
                 // Find target
                 target = creature.inRange(creatures).firstOrNull()
@@ -74,7 +72,7 @@ object Day15 {
 
             // Fight if we have a target
             target?.let {
-                creature.attack(it, caves)
+                creature.attack(it, cave)
             }
         }
         return true // Round ended at its natural end
@@ -82,7 +80,7 @@ object Day15 {
 
     private fun keepFighting(creatures: List<Creature>): Boolean = creatures.filterNot { it.dead() }.distinctBy { it.team }.count() > 1
 
-    fun init(list: List<String>): Caves = list.map { it.toCharArray() }.toTypedArray()
+    fun init(list: List<String>): Cave = list.map { it.toCharArray() }.toTypedArray()
 
     data class Creature(val team: Team, val name: String, var pos: Pos, val power: Int = 3, var hitPoints: Int = 200) : Comparable<Creature> {
         override fun compareTo(other: Creature): Int = pos.compareTo(other.pos)
@@ -96,26 +94,26 @@ object Day15 {
         // Enemies are in range if they are not me, neither of us is dead,
         // we are not on the same team, and only 1 square away
         fun inRange(others: List<Creature>): List<Creature> =
-                others.filter {
-                    it != this &&
-                            !this.dead() &&
-                            !it.dead() &&
-                            it.team != this.team &&
-                            this.pos.distanceTo(it.pos) == 1
-                }
-                        .sortedWith(compareBy({ it.hitPoints }, { it.pos }))
+            others.filter {
+                it != this &&
+                    !this.dead() &&
+                    !it.dead() &&
+                    it.team != this.team &&
+                    this.pos.distanceTo(it.pos) == 1
+            }
+                .sortedWith(compareBy({ it.hitPoints }, { it.pos }))
 
-        fun findPathToBestEnemyAdjacentSpot(creatures: List<Creature>, caves: Caves): Path =
-                pathToAnyEnemy(enemyAdjacentOpenSpots(creatures, caves), caves)
+        fun findPathToBestEnemyAdjacentSpot(creatures: List<Creature>, cave: Cave): Path =
+            pathToAnyEnemy(enemyAdjacentOpenSpots(creatures, cave), cave)
 
-        private fun pathToAnyEnemy(enemies: Set<Pos>, caves: Caves): Path {
+        private fun pathToAnyEnemy(enemies: Set<Pos>, cave: Cave): Path {
             val seen: MutableSet<Pos> = mutableSetOf(pos)
             val paths: Deque<Path> = ArrayDeque()
 
             // Seed the queue with each of our neighbors, in reading order (that's important)
             pos.neighbourCellsReadingOrder()
-                    .filter { caves[it] == '.' }
-                    .forEach { paths.add(listOf(it)) }
+                .filter { cave[it] == '.' }
+                .forEach { paths.add(listOf(it)) }
 
             // While we still have paths to examine, and haven't found the answer yet...
             while (paths.isNotEmpty()) {
@@ -133,51 +131,51 @@ object Day15 {
                 if (pathEnd !in seen) {
                     seen.add(pathEnd)
                     pathEnd.neighbourCellsReadingOrder()
-                            .filter { caves[it] == '.' }
-                            .filterNot { it in seen }
-                            .forEach { paths.add(path + it) }
+                        .filter { cave[it] == '.' }
+                        .filterNot { it in seen }
+                        .forEach { paths.add(path + it) }
                 }
             }
             return emptyList()
         }
 
 
-        private fun enemyAdjacentOpenSpots(creatures: List<Creature>, caves: Caves): Set<Pos> =
-                creatures
-                        .filterNot { it.dead() }
-                        .filterNot { it.team == team }
-                        .flatMap { it.pos.neighbourCellsReadingOrder().filter { neighbor -> caves[neighbor.y][neighbor.x] == '.' } }
-                        .toSet()
+        private fun enemyAdjacentOpenSpots(creatures: List<Creature>, cave: Cave): Set<Pos> =
+            creatures
+                .filterNot { it.dead() }
+                .filterNot { it.team == team }
+                .flatMap { it.pos.neighbourCellsReadingOrder().filter { neighbor -> cave[neighbor.y][neighbor.x] == '.' } }
+                .toSet()
 
-        fun attack(target: Creature, caves: Caves) {
+        fun attack(target: Creature, cave: Cave) {
             hit(target)
             if (target.dead()) {
-                caves[target.pos] = '.'
+                cave[target.pos] = '.'
             }
         }
 
-        fun move(newPos: Pos, caves: Caves) {
-            caves[pos] = '.'
-            caves[newPos] = team.char
+        fun move(newPos: Pos, cave: Cave) {
+            cave[pos] = '.'
+            cave[newPos] = team.char
             pos = newPos
         }
 
         companion object {
-            fun findCreatures(caves: Caves, elvesAttackPower: Int = 3): List<Creature> =
-                    caves
-                            .mapIndexed { y, row ->
-                                row.mapIndexed { x, spot ->
-                                    spot.toTeam()?.let { team ->
-                                        if (team == ELF) {
-                                            Creature(team, "${team}_$x,$y", Pos(x, y), power = elvesAttackPower)
-                                        } else {
-                                            Creature(team, "${team}_$x,$y", Pos(x, y))
-                                        }
-                                    }
+            fun findCreatures(cave: Cave, elvesAttackPower: Int = 3): List<Creature> =
+                cave
+                    .mapIndexed { y, row ->
+                        row.mapIndexed { x, spot ->
+                            spot.toTeam()?.let { team ->
+                                if (team == ELF) {
+                                    Creature(team, "${team}_$x,$y", Pos(x, y), power = elvesAttackPower)
+                                } else {
+                                    Creature(team, "${team}_$x,$y", Pos(x, y))
                                 }
                             }
-                            .flatten()
-                            .filterNotNull()
+                        }
+                    }
+                    .flatten()
+                    .filterNotNull()
         }
     }
 
@@ -186,17 +184,6 @@ object Day15 {
         ELF('E'), GOBLIN('G');
     }
 
-}
-
-operator fun Array<CharArray>.set(pos: Pos, value: Char) {
-    this[pos.y][pos.x] = value
-}
-
-operator fun Array<CharArray>.contains(pos: Pos): Boolean =
-        pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
-
-operator fun Array<CharArray>.get(pos: Pos): Char {
-    return this[pos.y][pos.x]
 }
 
 

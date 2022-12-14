@@ -1,5 +1,8 @@
 package no.rodland.advent_2018
 
+import no.rodland.advent.Cave
+import no.rodland.advent.get
+import no.rodland.advent.contains
 import no.rodland.advent.Pos
 
 object Day18 {
@@ -8,7 +11,7 @@ object Day18 {
     const val LUMBERYARD = '#'
 
     fun partOne(list: List<String>): Int {
-        var cave: Caves = init(list)
+        var cave: Cave = init(list)
         repeat(10) {
             cave = iteration(cave)
 //            cave.printme()
@@ -26,7 +29,7 @@ object Day18 {
 
     // thanks to chriswk
     fun partTwo(list: List<String>): Int {
-        var cave: Caves = init(list)
+        var cave: Cave = init(list)
         var i = 0
         val map = mutableMapOf<String, Int>()
         map[cave.getSignature()] = 0
@@ -50,13 +53,13 @@ object Day18 {
         }
     }
 
-    private fun iteration(cave: Caves): Caves {
+    private fun iteration(cave: Cave): Cave {
         return cave.mapIndexed { y, row ->
             row.mapIndexed { x, c -> getNewValue(c, Pos(x, y), cave) }.toCharArray()
         }.toTypedArray()
     }
 
-    private fun getNewValue(c: Char, pos: Pos, cave: Caves): Char {
+    private fun getNewValue(c: Char, pos: Pos, cave: Cave): Char {
         val num = pos.neighbourCellsAllEight().filter { it in cave }.map { cave[it] }.groupingBy { it }.eachCount()
         val trees = num[TREE] ?: 0
         val lumberyard = num[LUMBERYARD] ?: 0
@@ -71,14 +74,14 @@ object Day18 {
         }
     }
 
-    fun init(list: List<String>): Caves = list.map { it.toCharArray() }.toTypedArray()
+    fun init(list: List<String>): Cave = list.map { it.toCharArray() }.toTypedArray()
 
     private fun Char.isOpen(): Boolean = this == OPEN
     private fun Char.isTree(): Boolean = this == TREE
 
     @Suppress("unused")
     fun partTwoTrialAndError(list: List<String>): Int {
-        var cave: Caves = init(list)
+        var cave: Cave = init(list)
         // 508 - 536
         val recurringList = (1..536).map {
             cave = iteration(cave)

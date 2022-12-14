@@ -90,5 +90,4 @@ class IntGrid(val list: List<IntArray>) : List<IntArray> by list {
         fun fromInput(input: List<String>) = IntGrid(toGrid(input))
         fun fromChar(input: List<String>) = IntGrid(toGridFromChar(input))
     }
-
 }

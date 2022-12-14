@@ -38,6 +38,8 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
 
 
 data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
+    constructor(str: String, x: Int=str.split(",").first().toInt(), y: Int=str.split(",").last().toInt() ) : this(x, y)
+
     override fun compareTo(other: Pos): Int {
         val yComp = y.compareTo(other.y)
         return if (yComp == 0) {

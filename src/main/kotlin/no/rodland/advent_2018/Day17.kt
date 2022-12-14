@@ -1,13 +1,17 @@
 package no.rodland.advent_2018
 
 import no.rodland.advent.Pos
+import no.rodland.advent.Cave
+import no.rodland.advent.get
+import no.rodland.advent.set
+import no.rodland.advent.contains
 
 
 object Day17 {
     fun partOne(list: List<String>, printFinalMap: Boolean = false): Int {
         val coordinates: List<Pair<IntRange, IntRange>> = parse(list)
         val (xminmax, yminmax) = getMinMax(coordinates)
-        val cave: Caves = runSim(coordinates, xminmax, yminmax, printFinalMap)
+        val cave: Cave = runSim(coordinates, xminmax, yminmax, printFinalMap)
         return (yminmax.first..yminmax.second).map { y ->
             ((xminmax.first - 1)..(xminmax.second + 1)).map { x ->
                 cave[Pos(x, y)].isWater()
@@ -18,7 +22,7 @@ object Day17 {
     fun partTwo(list: List<String>): Int {
         val coordinates: List<Pair<IntRange, IntRange>> = parse(list)
         val (xminmax, yminmax) = getMinMax(coordinates)
-        val cave: Caves = runSim(coordinates, xminmax, yminmax)
+        val cave: Cave = runSim(coordinates, xminmax, yminmax)
         return (yminmax.first..yminmax.second).map { y ->
             ((xminmax.first - 1)..(xminmax.second + 1)).map { x ->
                 cave[Pos(x, y)].still()
@@ -26,9 +30,9 @@ object Day17 {
         }.sum()
     }
 
-    private fun runSim(coordinates: List<Pair<IntRange, IntRange>>, xminmax: Pair<Int, Int>, yminmax: Pair<Int, Int>, printFinalMap: Boolean = false): Caves {
+    private fun runSim(coordinates: List<Pair<IntRange, IntRange>>, xminmax: Pair<Int, Int>, yminmax: Pair<Int, Int>, printFinalMap: Boolean = false): Cave {
         val spring = Pos(500, 0)
-        val cave: Caves = map(coordinates, xminmax, yminmax)
+        val cave: Cave = map(coordinates, xminmax, yminmax)
 
         advanceWater(spring, cave)
 
@@ -49,10 +53,10 @@ object Day17 {
     private fun Char.still(): Boolean = this in "~"
     private fun Char.isWater(): Boolean = this in "+~|"
     private fun Char.isSand(): Boolean = this == '.'
-    private fun Pos.hasWalls(cave: Caves): Boolean =
-            this.hasWall(Pos::right, cave) && this.hasWall(Pos::left, cave)
+    private fun Pos.hasWalls(cave: Cave): Boolean =
+        this.hasWall(Pos::right, cave) && this.hasWall(Pos::left, cave)
 
-    private fun Pos.hasWall(nextPoint: (Pos) -> Pos, cave: Caves): Boolean {
+    private fun Pos.hasWall(nextPoint: (Pos) -> Pos, cave: Cave): Boolean {
         var point = this
         while (point in cave) {
             when (cave[point]) {
@@ -64,12 +68,12 @@ object Day17 {
         return false
     }
 
-    private fun Pos.fillLeftAndRight(cave: Caves) {
+    private fun Pos.fillLeftAndRight(cave: Cave) {
         this.fillUntilWall(Pos::right, cave)
         this.fillUntilWall(Pos::left, cave)
     }
 
-    private fun Pos.fillUntilWall(nextPoint: (Pos) -> Pos, cave: Caves) {
+    private fun Pos.fillUntilWall(nextPoint: (Pos) -> Pos, cave: Cave) {
         var point = this
         while (cave[point] != '#') {
             cave[point] = '~'
@@ -77,17 +81,17 @@ object Day17 {
         }
     }
 
-    private fun map(clay: List<Pair<IntRange, IntRange>>, xminmax: Pair<Int, Int>, yminmax: Pair<Int, Int>): Caves {
+    private fun map(clay: List<Pair<IntRange, IntRange>>, xminmax: Pair<Int, Int>, yminmax: Pair<Int, Int>): Cave {
         return (0..yminmax.second + 1).map { y ->
             (0..(xminmax.second + 1)).map { x ->
                 if (clay.isClay(x, y)) '#' else '.'
             }.toCharArray()
         }.toTypedArray()
-                .apply { this[0][500] = '+' }
+            .apply { this[0][500] = '+' }
     }
 
 
-    private fun advanceWater(pos: Pos, cave: Caves) {
+    private fun advanceWater(pos: Pos, cave: Cave) {
         if (pos.below() !in cave) {
             return
         }
