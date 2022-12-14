@@ -19,22 +19,23 @@ private const val WALL = '#'
 object Day14 {
 
 
-    private data class CaveWithFloor(val cave: Cave, val floor: MutableSet<Pos>) {
+    private data class CaveWithFloor(val cave: Cave, val extra: MutableSet<Pos>) {
         val height = cave.size
         val width = cave[0].size
         fun countSand(): Int {
-            val countCave = cave.sumOf { row -> row.count { c -> c == SAND } }
-            return countCave + floor.filterNot { onFloor(it) }.size
+            val flat = cave.flatMapIndexed { y, row -> row.mapIndexed { x, c -> Pos(x, y) to c } }
+            val inCave = flat.filter { p -> p.second == SAND }.map { it.first }.toSet()
+            return inCave.size + extra.filterNot { it in inCave }.size
         }
+
         fun print() {
             cave.forEachIndexed { idy, ca ->
                 ca.forEachIndexed { idx, c ->
-                    if (Pos(idx, idy) in floor) {
+                    if (Pos(idx, idy) in extra) {
                         print(SAND)
                     } else {
                         print(c)
                     }
-
                 }
                 println()
             }
@@ -44,9 +45,17 @@ object Day14 {
 
         fun isEmpty(pos: Pos): Boolean {
             return if (pos.x < 0 || pos.x > width - 1) {
-                pos !in floor
+                pos !in extra
             } else {
-                (cave[pos] == EMPTY && pos !in floor)
+                (cave[pos] == EMPTY && pos !in extra)
+            }
+        }
+
+        fun isSand(pos: Pos): Boolean {
+            return if (pos.x < 0 || pos.x > width - 1) {
+                pos in extra
+            } else {
+                (cave[pos] == SAND || pos in extra)
             }
         }
 
@@ -54,11 +63,12 @@ object Day14 {
 
         operator fun set(pos: Pos, value: Char) {
             if (pos.x < 0 || pos.x > width - 1 || onFloor(pos)) {
-                floor.add(pos)
+                extra.add(pos)
             } else {
                 cave[pos] = value
             }
         }
+
     }
 
     private fun Cave.isEmpty(pos: Pos) = this[pos] == EMPTY
@@ -74,13 +84,26 @@ object Day14 {
 
     fun partTwo(input: List<String>, printCave: Boolean = false): Int {
         val (cave, start) = cave(input, Pos(500, 0))
-        val cavewithFloor = CaveWithFloor(cave, mutableSetOf())
+        val caveWithFloor = CaveWithFloor(cave, mutableSetOf())
         println("start: $start")
-        if (printCave) cavewithFloor.print()
-        val set: MutableSet<Pos> = mutableSetOf()
-        val units = doItPart2(cavewithFloor, start) { c, pos -> endStatePart2(c, pos, set) }
-        if (printCave) cavewithFloor.print()
-        return units + set.size
+        if (printCave) caveWithFloor.print()
+        val units = doItPart2(caveWithFloor, start) { c, pos -> endStatePart2(c, pos) }
+        if (printCave) caveWithFloor.print()
+        return units
+    }
+
+    private fun doItPart1(cave: Array<CharArray>, start: Pos, endState: (Cave, Pos) -> Pos): Int {
+        var reachedAbyss = false
+        while (!reachedAbyss) {
+            val pos = endState(cave, start)
+
+            if (pos.y == cave.size - 2) {
+                reachedAbyss = true
+            } else {
+                cave[pos] = SAND
+            }
+        }
+        return cave.sumOf { row -> row.count { c -> c == SAND } }
     }
 
     private fun doItPart2(cave: CaveWithFloor, start: Pos, endState: (CaveWithFloor, Pos) -> Pos): Int {
@@ -96,23 +119,23 @@ object Day14 {
         return cave.countSand()
     }
 
-    private fun endStatePart2(cave: CaveWithFloor, pos: Pos, set: MutableSet<Pos> = mutableSetOf()): Pos {
+    private fun endStatePart2(cave: CaveWithFloor, pos: Pos): Pos {
         val below = pos.below()
         val sw = pos.sw()
         val se = pos.se()
 
         return when {
             cave.onFloor(pos) -> {
-                if (!set.add(pos)) {
-                    endStatePart2(cave, pos, set)
+                if (cave.isSand(pos)) {
+                    endStatePart2(cave, pos)
                 } else {
                     pos
                 }
             }
 
-            cave.isEmpty(below) -> endStatePart2(cave, below, set)
-            cave.isEmpty(sw) -> endStatePart2(cave, sw, set)
-            cave.isEmpty(se) -> endStatePart2(cave, se, set)
+            cave.isEmpty(below) -> endStatePart2(cave, below)
+            cave.isEmpty(sw) -> endStatePart2(cave, sw)
+            cave.isEmpty(se) -> endStatePart2(cave, se)
             else -> pos
         }
     }
@@ -125,24 +148,9 @@ object Day14 {
             pos.y == cave.size - 2 -> pos
             cave.isEmpty(below) -> endStatePart1(cave, below)
             cave.isEmpty(sw) -> endStatePart1(cave, sw)
-            cave.isEmpty(se) -> {
-                endStatePart1(cave, se)
-            }
+            cave.isEmpty(se) -> endStatePart1(cave, se)
             else -> pos
         }
-    }
-
-    private fun doItPart1(cave: Array<CharArray>, start: Pos, endState: (Cave, Pos) -> Pos): Int {
-        var reachedAbyss = false
-        while (!reachedAbyss) {
-            val pos = endState(cave, start)
-            if (pos.y == cave.size - 2) {
-                reachedAbyss = true
-            } else {
-                cave[pos] = SAND
-            }
-        }
-        return cave.sumOf { row -> row.count { c -> c == SAND } }
     }
 
 
