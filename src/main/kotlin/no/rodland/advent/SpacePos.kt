@@ -38,7 +38,7 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
 
 
 data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
-    constructor(str: String, x: Int=str.split(",").first().toInt(), y: Int=str.split(",").last().toInt() ) : this(x, y)
+    constructor(str: String, x: Int = str.split(",").first().trim().toInt(), y: Int = str.split(",").last().trim().toInt()) : this(x, y)
 
     override fun compareTo(other: Pos): Int {
         val yComp = y.compareTo(other.y)
@@ -196,13 +196,37 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
         }
     }
 
+    fun fill(pos: Pos): List<Pos> {
+        return when {
+            this.x == pos.x -> {
+                if (y <= pos.y) {
+                    (y..pos.y).map { Pos(x, it) }
+                } else {
+                    (y downTo pos.y).map { Pos(x, it) }
+                }
+            }
+            this.y == pos.y -> {
+                if (x <= pos.x) {
+                    (x..pos.x).map { Pos(it, y) }
+                } else {
+                    (x downTo pos.x).map { Pos(it, y) }
+                }
+            }
+            else -> {
+                error("only line fill is supported")
+            }
+        }
+
+
+    }
+
     companion object {
         fun getMinMax(coordinates: Collection<Pos>): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-            val xmin = coordinates.minOf { it.x }
-            val xmax = coordinates.maxOf { it.x }
-            val ymin = coordinates.minOf { it.y }
-            val ymax = coordinates.maxOf { it.y }
-            return (xmin to xmax) to (ymin to ymax)
+            val xMin = coordinates.minOf { it.x }
+            val xMax = coordinates.maxOf { it.x }
+            val yMin = coordinates.minOf { it.y }
+            val yMax = coordinates.maxOf { it.y }
+            return (xMin to xMax) to (yMin to yMax)
         }
     }
 
