@@ -16,10 +16,10 @@ operator fun Cave.get(pos: Pos): Char {
 }
 
 @Suppress("UNUSED_PARAMETER")
-fun Cave.print(minX: Int, minY: Int, maxX: Int, maxY: Int) {
-    mapIndexed { y, _ ->
-        ((minX - 1)..(maxX + 1)).map { x ->
-            print(get(Pos(x, y)))
+fun Cave.print(minX: Int = 0, minY: Int = 0, maxX: Int = first().size, maxY: Int = size) {
+    forEach { ca ->
+        ca.forEach {
+            print(it)
         }
         println()
     }
