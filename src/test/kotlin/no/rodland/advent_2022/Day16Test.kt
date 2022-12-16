@@ -23,8 +23,8 @@ internal class Day16Test {
         "Valve JJ has flow rate=21; tunnel leads to valve II",
     )
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    val resultTestOne = 2
+    val resultOne = 2
 
     val resultTestTwo = 2L
     val resultTwo = 2L
