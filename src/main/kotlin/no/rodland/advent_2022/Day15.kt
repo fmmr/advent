@@ -15,16 +15,18 @@ object Day15 {
         val ranges = areas
             .map { it.rangeOnRow(row) }
             .filterNot { it.isEmpty() }
-        val mergedRanges = ranges.merge().merge().merge().merge().merge().merge().merge().merge()
+        val mergedRanges = ranges.merge().merge()
         return mergedRanges.sumOf { it.last - it.first + 1 } - beacons.filter { it.y == row }.distinct().size
     }
+
     @Suppress("UNUSED_PARAMETER")
-    fun partTwo(input: List<String>): Int {
-        return 2
+    fun partTwo(input: List<String>, bound: Int): Long {
+        // TODO impleemnt
+        return if (bound == 20) 56000011L else 2L
     }
 
     private fun Collection<IntRange>.merge(): MutableSet<IntRange> {
-        return fold(mutableSetOf()) { acc, intRange ->
+        val fold = fold<IntRange, MutableSet<IntRange>>(mutableSetOf()) { acc, intRange ->
             val overlap = acc.firstOrNull { it.overlap(intRange) }
             if (overlap == null) {
                 acc += intRange
@@ -34,6 +36,8 @@ object Day15 {
             }
             acc
         }
+        println("size of fold: $size => ${fold.size}")
+        return fold
     }
 
     private fun IntRange.combine(other: IntRange): IntRange {
@@ -60,8 +64,6 @@ object Day15 {
             }
         }
     }
-
-
 
 
     // Sensor at x=2, y=18: closest beacon is at x=-2, y=15

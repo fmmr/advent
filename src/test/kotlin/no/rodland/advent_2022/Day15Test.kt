@@ -30,8 +30,8 @@ internal class Day15Test {
     val resultTestOne = 26
     val resultOne = 4748135
 
-    val resultTestTwo = 2 //56000011
-    val resultTwo = 2
+    val resultTestTwo = 56000011L //56000011
+    val resultTwo = 2L
 
     @Nested
     inner class Init {
@@ -45,7 +45,7 @@ internal class Day15Test {
         @Test
         fun `15,2,live,init`() {
             report {
-                Day15.partTwo(data15) to resultTwo
+                Day15.partTwo(data15, 4000000) to resultTwo
             }
         }
     }
@@ -72,14 +72,14 @@ internal class Day15Test {
         @Test
         fun `15,2,test`() {
             report {
-                Day15.partTwo(test15) to resultTestTwo
+                Day15.partTwo(test15, 20) to resultTestTwo
             }
         }
 
         @Test
         fun `15,2,live,1`() {
             report {
-                Day15.partTwo(data15) to resultTwo
+                Day15.partTwo(data15, 4000000) to resultTwo
             }
         }
     }
