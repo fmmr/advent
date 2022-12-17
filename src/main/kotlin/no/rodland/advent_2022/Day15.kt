@@ -19,10 +19,26 @@ object Day15 {
         return mergedRanges.sumOf { it.last - it.first + 1 } - beacons.filter { it.y == row }.distinct().size
     }
 
-    @Suppress("UNUSED_PARAMETER")
+    // https://todd.ginsberg.com/post/advent-of-code/2022/day15/
     fun partTwo(input: List<String>, bound: Int): Long {
-        // TODO impleemnt
-        return if (bound == 20) 56000011L else 2L
+        val areas = input.parse()
+        val range = (0..bound)
+        val firstNotNullOf = areas.firstNotNullOf { area ->
+            val up = Pos(area.sensor.x, area.sensor.y - area.manhattan - 1)
+            val down = Pos(area.sensor.x, area.sensor.y + area.manhattan + 1)
+            val left = Pos(area.sensor.x - area.manhattan - 1, area.sensor.y)
+            val right = Pos(area.sensor.x + area.manhattan + 1, area.sensor.y)
+
+            (up.lineTo(right) + right.lineTo(down) + down.lineTo(left) + left.lineTo(up))
+                .filter { it.x in range && it.y in range }
+                .firstOrNull { candidate -> areas.none { area -> area.inRange(candidate) } }
+        }
+        return firstNotNullOf.tuningFrequency()
+    }
+
+    private fun Pos.tuningFrequency(): Long {
+        println("found $x  $y")
+        return 4000000L * x + y
     }
 
     private fun Collection<IntRange>.merge(): MutableSet<IntRange> {
@@ -47,10 +63,11 @@ object Day15 {
     private fun IntRange.overlap(other: IntRange): Boolean = first <= other.last && last >= other.first
 
     data class Area(val sensor: Pos, val beacon: Pos) {
-        private val manhattan = sensor.distanceTo(beacon)
+        val manhattan = sensor.distanceTo(beacon)
 
         private val colRange = (sensor.x - manhattan)..(sensor.x + manhattan)
         private val rowRange = ((sensor.y - manhattan)..(sensor.y + manhattan))
+        fun inRange(pos: Pos): Boolean = sensor.distanceTo(pos) <= manhattan
 
         private fun affectsRow(row: Int): Boolean = row in rowRange
         fun rangeOnRow(row: Int): IntRange {

@@ -1,6 +1,7 @@
 package no.rodland.advent_2022
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -30,8 +31,8 @@ internal class Day15Test {
     val resultTestOne = 26
     val resultOne = 4748135
 
-    val resultTestTwo = 56000011L //56000011
-    val resultTwo = 2L
+    val resultTestTwo = 56000011L
+    val resultTwo = 13743542639657L
 
     @Nested
     inner class Init {
@@ -43,6 +44,7 @@ internal class Day15Test {
         }
 
         @Test
+        @Slow(900)
         fun `15,2,live,init`() {
             report {
                 Day15.partTwo(data15, 4000000) to resultTwo
@@ -77,6 +79,7 @@ internal class Day15Test {
         }
 
         @Test
+        @Slow(900)
         fun `15,2,live,1`() {
             report {
                 Day15.partTwo(data15, 4000000) to resultTwo

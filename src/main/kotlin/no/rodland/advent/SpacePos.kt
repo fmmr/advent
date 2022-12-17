@@ -184,6 +184,12 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
 
     operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
+    fun lineTo(other: Pos): List<Pos> {
+        val xDelta = (other.x - x).sign
+        val yDelta = (other.y - y).sign
+        val steps = maxOf((x - other.x).absoluteValue, (y - other.y).absoluteValue)
+        return (1..steps).scan(this) { last, _ -> Pos(last.x + xDelta, last.y + yDelta) }
+    }
 
 
     fun rotateRight(times: Int): Pos {
