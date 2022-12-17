@@ -5,15 +5,13 @@ import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
+import readFileAsString
 
 @Suppress("ClassName")
 @DisableSlow
 internal class Day17Test {
-    val data17 = "2022/input_17.txt".readFile()
-    val test17 = listOf(
-        ""
-    )
-
+    val data17 = "2022/input_17.txt".readFileAsString()
+    val test17 = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
     val resultTestOne = 2L
     val resultOne = 2L
 
