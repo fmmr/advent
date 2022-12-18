@@ -28,6 +28,16 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
             .filterNot { it == this }
     }
 
+    fun adjacent(): List<Pos3D> {
+        return listOf(1, -1).map {
+            Pos3D(x + it, y, z)
+        } + listOf(1, -1).map {
+            Pos3D(x, y + it, z)
+        } + listOf(1, -1).map {
+            Pos3D(x, y, z + it)
+        }
+    }
+
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z)
     override fun any(predicate: (Int) -> Boolean): Boolean = listOf(x, y, z).any(predicate)
 
