@@ -11,7 +11,13 @@ import readFile
 internal class Day20Test {
     val data20 = "2022/input_20.txt".readFile()
     val test20 = listOf(
-        "1"
+        "1",
+        "2",
+        "-3",
+        "3",
+        "-2",
+        "0",
+        "4",
     )
 
     val resultTestOne = 2L

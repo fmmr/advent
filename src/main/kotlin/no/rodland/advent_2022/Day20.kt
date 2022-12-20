@@ -6,6 +6,7 @@ package no.rodland.advent_2022
 object Day20 {
     @Suppress("UNUSED_PARAMETER")
     fun partOne(list: List<String>): Long {
+        list.map { it.toInt() }
         return 2
     }
 
