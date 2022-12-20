@@ -2,6 +2,7 @@ package no.rodland.advent_2022
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.report
+import no.rodland.advent_2022.Day20.DECRYPTION_KEY
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -10,6 +11,15 @@ import readFile
 @DisableSlow
 internal class Day20Test {
     val data20 = "2022/input_20.txt".readFile()
+    val test20_2 = listOf(
+        "811589153",
+        "1623178306",
+        "-2434767459",
+        "2434767459",
+        "-1623178306",
+        "0",
+        "3246356612",
+    )
     val test20 = listOf(
         "1",
         "2",
@@ -20,11 +30,10 @@ internal class Day20Test {
         "4",
     )
 
-    val resultTestOne = 2L
-    val resultOne = 2L
-
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestOne = 3L
+    val resultOne = 10707L
+    val resultTestTwo = 1623178306L * DECRYPTION_KEY
+    val resultTwo = 2488332343098L
 
     @Nested
     inner class Init {
@@ -65,7 +74,7 @@ internal class Day20Test {
         @Test
         fun `20,2,test`() {
             report {
-                Day20.partTwo(test20) to resultTestTwo
+                Day20.partTwo(test20_2) to resultTestTwo
             }
         }
 
