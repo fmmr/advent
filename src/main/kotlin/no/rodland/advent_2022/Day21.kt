@@ -22,7 +22,7 @@ object Day21 {
         }
         // https://www.mathpapa.com/equation-solver/
         // solves the output from this printlln:
-        // println("$num=$eq")
+        println("$num=$eq")
         return 2L
     }
 
@@ -30,7 +30,14 @@ object Day21 {
         return when {
             monkey.id == "humn" -> "x"
             monkey is NumMonkey -> monkey.value.toString()
-            monkey is OperationMonkey -> "(" + toEq(map, map[monkey.left]!!) + monkey.operation.op + toEq(map, map[monkey.right]!!) + ")"
+            monkey is OperationMonkey -> {
+                val (left, right) = if (isHumanInTree(map, monkey.left)) {
+                    toEq(map, map[monkey.left]!!) to toNumMonkey(map, map[monkey.right]!!).value.toString()
+                } else {
+                    toNumMonkey(map, map[monkey.left]!!).value.toString() to toEq(map, map[monkey.right]!!)
+                }
+                "(" + left + monkey.operation.op + right + ")"
+            }
             else -> error("nope")
         }
     }
