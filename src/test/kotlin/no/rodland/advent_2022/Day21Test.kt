@@ -11,11 +11,25 @@ import readFile
 internal class Day21Test {
     val data21 = "2022/input_21.txt".readFile()
     val test21 = listOf(
-        "1"
+        "root: pppw + sjmn",
+        "dbpl: 5",
+        "cczh: sllz + lgvd",
+        "zczc: 2",
+        "ptdq: humn - dvpt",
+        "dvpt: 3",
+        "lfqf: 4",
+        "humn: 5",
+        "ljgn: 2",
+        "sjmn: drzm * dbpl",
+        "sllz: 4",
+        "pppw: cczh / lfqf",
+        "lgvd: ljgn * ptdq",
+        "drzm: hmdt - zczc",
+        "hmdt: 32",
     )
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    val resultTestOne = 152L
+    val resultOne = 169525884255464L
 
     val resultTestTwo = 2L
     val resultTwo = 2L
