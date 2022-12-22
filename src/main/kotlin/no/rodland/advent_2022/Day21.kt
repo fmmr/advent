@@ -14,8 +14,8 @@ object Day21 {
     fun partTwo(list: List<String>): Long {
         val monkeys = list.map { it.toMonkey() }.associateBy { it.id }
         val root = monkeys["root"] as OperationMonkey
-        val humanLeft = isHumanInTree(monkeys, root.left)
-        val (num, eq) = if (humanLeft) {
+
+        val (num, eq) = if (isHumanInTree(monkeys, root.left)) {
             toNumMonkey(monkeys, toNumMonkey(monkeys, monkeys[root.right]!!)).value to toEq(monkeys, monkeys[root.left]!!)
         } else {
             toNumMonkey(monkeys, toNumMonkey(monkeys, monkeys[root.left]!!)).value to toEq(monkeys, monkeys[root.right]!!)

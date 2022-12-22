@@ -11,14 +11,27 @@ import readFile
 internal class Day22Test {
     val data22 = "2022/input_22.txt".readFile()
     val test22 = listOf(
-        "1"
+        "        ...#",
+        "        .#..",
+        "        #...",
+        "        ....",
+        "...#.......#",
+        "........#...",
+        "..#....#....",
+        "..........#.",
+        "        ...#....",
+        "        .....#..",
+        "        .#......",
+        "        ......#.",
+        "",
+        "10R5L5R10L4R5L5",
     )
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    val resultTestOne = 6032
+    val resultOne = 95358
 
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestTwo = 2
+    val resultTwo = 2
 
     @Nested
     inner class Init {
