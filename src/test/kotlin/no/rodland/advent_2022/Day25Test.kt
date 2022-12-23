@@ -9,30 +9,30 @@ import readFile
 @Suppress("ClassName")
 @DisableSlow
 internal class Day25Test {
-    val data25 = "2022/input_25.txt".readFile()
-    val test25 = listOf(
-        "1"
-    )
+    private val data25 = "2022/input_25.txt".readFile()
+    private val test25 = listOf("1", "2")
 
-    val resultTestOne = 2L
-    val resultOne = 2L
+    private val day25 = Day25(data25)
+    private val day25Test = Day25(test25)
 
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    private val resultTestOne = 2L
+    private val resultTestTwo = 2L
+    private val resultOne = 2L
+    private val resultTwo = 2L
 
     @Nested
     inner class Init {
         @Test
         fun `25,1,live,init`() {
             report {
-                Day25.partOne(data25) to resultOne
+                day25.partOne() to resultOne
             }
         }
 
         @Test
         fun `25,2,live,init`() {
             report {
-                Day25.partTwo(data25) to resultTwo
+                day25.partTwo() to resultTwo
             }
         }
     }
@@ -42,14 +42,14 @@ internal class Day25Test {
         @Test
         fun `25,1,test`() {
             report {
-                Day25.partOne(test25) to resultTestOne
+                day25Test.partOne() to resultTestOne
             }
         }
 
         @Test
         fun `25,1,live,1`() {
             report {
-                Day25.partOne(data25) to resultOne
+                day25.partOne() to resultOne
             }
         }
     }
@@ -59,14 +59,14 @@ internal class Day25Test {
         @Test
         fun `25,2,test`() {
             report {
-                Day25.partTwo(test25) to resultTestTwo
+                day25Test.partTwo() to resultTestTwo
             }
         }
 
         @Test
         fun `25,2,live,1`() {
             report {
-                Day25.partTwo(data25) to resultTwo
+                day25.partTwo() to resultTwo
             }
         }
     }

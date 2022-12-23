@@ -1,16 +1,22 @@
 package no.rodland.advent_2022
 
-// template generated: 28/11/2022
+// template generated: 23/12/2022
 // Fredrik Rødland 2022
 
-object Day24 {
-    @Suppress("UNUSED_PARAMETER")
-    fun partOne(list: List<String>): Long {
+@Suppress("unused")
+class Day24(val input: List<String>) {
+
+    val parsed = input.parse()
+
+    fun partOne(): Long {
         return 2
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun partTwo(list: List<String>): Long {
+    fun partTwo(): Long {
         return 2
+    }
+
+    fun List<String>.parse(): List<String> {
+        return this
     }
 }
