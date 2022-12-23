@@ -30,12 +30,22 @@ class Day23(val input: List<String>) {
     fun partOne(): Int {
         var elves = parsed
         (1 ..10).forEach { round ->
-            println(Dir.dir(round))
             elves = elves.round(round)
         }
         val (x, y) = elves.getMinMax()
         return (x.second - x.first + 1) * (y.second - y.first + 1) - elves.size
     }
+
+    fun partTwo(): Int {
+        var elves = parsed
+        return (1..5000).first { round ->
+            val tmpElves = elves.round(round)
+            val found = elves.containsAll(tmpElves)
+            elves = tmpElves
+            found
+        }
+    }
+
 
     private fun Collection<Pos>.getMinMax(): Pair<Pair<Int, Int>, Pair<Int, Int>> {
         val xMin = minOf { it.x }
@@ -74,9 +84,7 @@ class Day23(val input: List<String>) {
         }
     }
 
-    fun partTwo(): Long {
-        return 2
-    }
+
 
 
     fun List<String>.parse(): Elves = flatMapIndexed { y, line ->
