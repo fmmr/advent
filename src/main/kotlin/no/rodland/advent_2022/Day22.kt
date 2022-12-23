@@ -58,16 +58,17 @@ object Day22 {
     // B C
     // A
 
-    fun a(x: Int, y: Int) = x in X1 && y in Y4
-    fun b(x: Int, y: Int) = x in X1 && y in Y3
-    fun c(x: Int, y: Int) = x in X2 && y in Y3
-    fun d(x: Int, y: Int) = x in X2 && y in Y2
-    fun e(x: Int, y: Int) = x in X2 && y in Y1
-    fun f(x: Int, y: Int) = x in X3 && y in Y1
+    private fun a(x: Int, y: Int) = x in X1 && y in Y4
+    private fun b(x: Int, y: Int) = x in X1 && y in Y3
+    private fun bRight(x: Int, y: Int) = b(x, y) && y == 100
+    private fun c(x: Int, y: Int) = x in X2 && y in Y3
+    private fun d(x: Int, y: Int) = x in X2 && y in Y2
+    private fun e(x: Int, y: Int) = x in X2 && y in Y1
+    private fun f(x: Int, y: Int) = x in X3 && y in Y1
 
     private fun Grid.getNext(x: Int, y: Int, dir: Dir): Triple<Int, Int, Dir> {
-        val (newX, newY, newDir) = when {
-            dir == U && b(x, y) && y == 100 -> {
+        val (newX, newY, newDir) = when {  // phuuuu
+            dir == U && bRight(x, y) -> {
                 Triple(50, x + 50, R) // UP from B
             }
             dir == U && e(x, y) && y == 0 -> {
