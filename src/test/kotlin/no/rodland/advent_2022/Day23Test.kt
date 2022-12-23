@@ -10,14 +10,32 @@ import readFile
 @DisableSlow
 internal class Day23Test {
     private val data23 = "2022/input_23.txt".readFile()
-    private val test23 = listOf("1", "2")
+    private val test23 = listOf(
+        "....#..",
+        "..###.#",
+        "#...#.#",
+        ".#...##",
+        "#.###..",
+        "##.#.##",
+        ".#..#..",
+    )
+    private val test23Small = listOf(
+        ".....",
+        "..##.",
+        "..#..",
+        ".....",
+        "..##.",
+        ".....",
+    )
 
     private val day23 = Day23(data23)
     private val day23Test = Day23(test23)
+    private val day23TestSmall = Day23(test23Small)
 
-    private val resultTestOne = 2L
+    private val resultTestOne = 110
+    private val resultTestOneSmall = 25
+    private val resultOne = 4146
     private val resultTestTwo = 2L
-    private val resultOne = 2L
     private val resultTwo = 2L
 
     @Nested
@@ -45,7 +63,12 @@ internal class Day23Test {
                 day23Test.partOne() to resultTestOne
             }
         }
-
+        @Test
+        fun `23,1,test,small`() {
+            report {
+                day23TestSmall.partOne() to resultTestOneSmall
+            }
+        }
         @Test
         fun `23,1,live,1`() {
             report {
@@ -62,6 +85,7 @@ internal class Day23Test {
                 day23Test.partTwo() to resultTestTwo
             }
         }
+
 
         @Test
         fun `23,2,live,1`() {
