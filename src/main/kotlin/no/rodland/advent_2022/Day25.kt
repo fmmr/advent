@@ -23,6 +23,7 @@ class Day25(val input: List<String>) {
         return encode(sum)
     }
 
+    // nice encoding: https://kotlinlang.slack.com/archives/C87V9MQFK/p1671948816270299?thread_ts=1671944442.161599&cid=C87V9MQFK
     private val DIGITS = "=-012"
     private fun encode(number: Long): String {
         if (number == 0L) return "0"
