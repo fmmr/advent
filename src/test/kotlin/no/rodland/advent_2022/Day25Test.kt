@@ -17,34 +17,18 @@ internal class Day25Test {
 
     private val resultTestOne = 2L
     private val resultTestTwo = 2L
-    private val resultOne = 2L
+    private val resultOne = "20=212=1-12=200=00-1"
     private val resultTwo = 2L
 
-    @Nested
-    inner class Init {
-        @Test
-        fun `25,1,live,init`() {
-            report {
-                day25.partOne() to resultOne
-            }
-        }
-
-        @Test
-        fun `25,2,live,init`() {
-            report {
-                day25.partTwo() to resultTwo
-            }
-        }
-    }
 
     @Nested
     inner class `Part 1` {
-        @Test
-        fun `25,1,test`() {
-            report {
-                day25Test.partOne() to resultTestOne
-            }
-        }
+//        @Test
+//        fun `25,1,test`() {
+//            report {
+//                day25Test.partOne() to resultTestOne
+//            }
+//        }
 
         @Test
         fun `25,1,live,1`() {
