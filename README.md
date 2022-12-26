@@ -7,12 +7,6 @@ fmmr solutions for Advent of code.
 
 ## 2022
 
-TODO:
-- Day 16
-- Day 17
-- Day 19
-- Day 20
-
 [AOC](https://adventofcode.com/2022),
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2022),
 [Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2022)
