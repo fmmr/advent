@@ -10,22 +10,22 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
-        <kotlin.version>1.7.21</kotlin.version>
-        <kotlin.jvmTarget>17</kotlin.jvmTarget>
+        <kotlin.version>1.9.21</kotlin.version>
+        <kotlin.jvmTarget>21</kotlin.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
 
-        <assertj.version>3.23.1</assertj.version>
+        <assertj.version>3.24.2</assertj.version>
         <version.json-simple>1.1.1</version.json-simple>
-        <guava.version>32.0.0-jre</guava.version>
-        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
-        <junit.version>5.9.1</junit.version>
+        <guava.version>32.1.3-jre</guava.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <junit.version>5.10.1</junit.version>
         <klaxon.version>5.6</klaxon.version>
-        <kotlinx-coroutines.version>1.6.4</kotlinx-coroutines.version>
-        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-        <surefire.version>3.0.0-M7</surefire.version>
+        <kotlinx-coroutines.version>1.7.3</kotlinx-coroutines.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <surefire.version>3.2.2</surefire.version>
     </properties>
     <dependencyManagement>
         <!-- debugging why source isn't visible for kotlin stdlib -->
@@ -58,6 +58,12 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>${version.json-simple}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
