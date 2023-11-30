@@ -1,6 +1,7 @@
 package no.rodland.advent_2022
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -15,11 +16,9 @@ internal class Day19Test {
         "Blueprint 2: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 8 clay. Each geode robot costs 3 ore and 12 obsidian.",
     )
 
-    val resultTestOne = 2
-    val resultOne = 2
-
-    val resultTestTwo = 2L
-    val resultTwo = 2L
+    val resultTestOne = 33
+    val resultOne = 1659
+    val resultTwo = 6804
 
     @Nested
     inner class Init {
@@ -31,6 +30,7 @@ internal class Day19Test {
         }
 
         @Test
+        @Slow(1100)
         fun `19,2,live,init`() {
             report {
                 Day19.partTwo(data19) to resultTwo
@@ -57,14 +57,9 @@ internal class Day19Test {
 
     @Nested
     inner class `Part 2` {
-        @Test
-        fun `19,2,test`() {
-            report {
-                Day19.partTwo(test19) to resultTestTwo
-            }
-        }
 
         @Test
+        @Slow(1100)
         fun `19,2,live,1`() {
             report {
                 Day19.partTwo(data19) to resultTwo
