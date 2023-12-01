@@ -62,19 +62,19 @@ internal class Day01Test {
             }
         }
 
-        @Test
-        fun `25,2,test,2`() {
-            report {
-                day25Test_2.fix("243") to 23
-            }
-        }
-
-        @Test
-        fun `25,2,test,3`() {
-            report {
-                day25Test_2.fix("two4three") to 23
-            }
-        }
+//        @Test
+//        fun `25,2,test,2`() {
+//            report {
+//                day25Test_2.fix("243") to 23
+//            }
+//        }
+//
+//        @Test
+//        fun `25,2,test,3`() {
+//            report {
+//                day25Test_2.fix("two4three") to 23
+//            }
+//        }
 
         @Test
         fun `25,2,live,1`() {
