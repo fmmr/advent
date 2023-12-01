@@ -9,7 +9,7 @@ import readFile
 @Suppress("ClassName")
 @DisableSlow
 internal class Day01Test {
-    private val data25 = "2022/input_25.txt".readFile()
+    private val data25 = "2023/input_01.txt".readFile()
     private val test25 = listOf("1", "2")
 
     private val day25 = Day01(data25)
