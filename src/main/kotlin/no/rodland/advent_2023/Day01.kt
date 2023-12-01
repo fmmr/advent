@@ -8,28 +8,15 @@ import kotlin.Int.Companion.MAX_VALUE
 @Suppress("MemberVisibilityCanBePrivate")
 class Day01(val input: List<String>) {
 
-
     fun partOne(): Long {
-        return input.parse().sum().toLong()
+        return input.sumOf { line -> findNumbers(line) { digit -> listOf(digit) } }.toLong()
     }
 
     fun partTwo(): Long {
-        return input.parse2().sum().toLong()
+        return input.sumOf { line -> findNumbers(line) { digit -> listOf(digit, DIGIT_MAPPING[digit]!!) } }.toLong()
     }
 
-    fun List<String>.parse(): List<Int> {
-        return map { line ->
-            fix(line) { digit -> listOf(digit) }
-        }
-    }
-
-    fun List<String>.parse2(): List<Int> {
-        return map { line ->
-            fix(line) { digit -> listOf(digit, DIGIT_MAPPING[digit]!!) }
-        }
-    }
-
-    fun fix(line: String, listFunc: (String) -> List<String>): Int {
+    fun findNumbers(line: String, listFunc: (String) -> List<String>): Int {
         val map = DIGIT_MAPPING
             .keys
             .map { d -> DigitPos(d, listFunc(d).minOf { line.indexOfMaxDefault(it) }, listFunc(d).maxOf { line.lastIndexOf(it) }) }
@@ -43,7 +30,7 @@ class Day01(val input: List<String>) {
     fun String.indexOfMaxDefault(sub: String) = if (contains(sub)) indexOf(sub) else MAX_VALUE
 
     companion object {
-        val DIGIT_MAPPING = mapOf(
+        private val DIGIT_MAPPING = mapOf(
             "1" to "one",
             "2" to "two",
             "3" to "three",
