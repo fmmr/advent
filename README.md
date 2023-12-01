@@ -5,6 +5,14 @@ fmmr solutions for Advent of code.
 
 ![stars](gifs/stars.png?raw=true "ascii art")
 
+## 2023
+
+[AOC](https://adventofcode.com/2023),
+[Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2023),
+[Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2023)
+
+![ascii art](gifs/2022.gif?raw=true "ascii art")
+
 ## 2022
 
 [AOC](https://adventofcode.com/2022),
@@ -69,4 +77,4 @@ fmmr solutions for Advent of code.
 
 ![ascii art](gifs/2015.gif?raw=true "ascii art")
 
-Fredrik Rødland 2022
+Fredrik Rødland 2023
