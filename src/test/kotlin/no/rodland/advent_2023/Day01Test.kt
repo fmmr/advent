@@ -30,10 +30,10 @@ internal class Day01Test {
     private val day25Test = Day01(test25)
     private val day25Test_2 = Day01(test25_2)
 
-    private val resultTestOne = 142L
-    private val resultTestTwo = 281L
-    private val resultOne = 54877L
-    private val resultTwo = 54100L
+    private val resultTestOne = 142
+    private val resultTestTwo = 281
+    private val resultOne = 54877
+    private val resultTwo = 54100
 
 
     @Nested

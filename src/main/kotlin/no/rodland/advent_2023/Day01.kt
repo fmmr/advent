@@ -5,13 +5,15 @@ package no.rodland.advent_2023
 
 class Day01(val input: List<String>) {
 
-    fun partOne(): Long {
-        return input.sumOf { line -> calibrationValue(line, DIGIT_MAPPING.values) }.toLong()
+    fun partOne(): Int {
+        return sum(DIGIT_MAPPING.values)
     }
 
-    fun partTwo(): Long {
-        return input.sumOf { line -> calibrationValue(line, DIGIT_MAPPING.keys + DIGIT_MAPPING.values) }.toLong()
+    fun partTwo(): Int {
+        return sum(DIGIT_MAPPING.keys + DIGIT_MAPPING.values)
     }
+
+    private fun sum(numbers: Collection<String>) = input.sumOf { line -> calibrationValue(line, numbers) }
 
     private fun calibrationValue(line: String, numbers: Collection<String>): Int {
         val (_, firstNumber) = line.findAnyOf(numbers)!!
