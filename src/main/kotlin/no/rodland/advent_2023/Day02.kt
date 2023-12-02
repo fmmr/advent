@@ -1,12 +1,12 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent_2023.Day02.Colour.*
+import product
 import kotlin.math.max
 
 // template generated: 01/12/2023
 // Fredrik Rødland 2023
 
-@Suppress("unused")
 class Day02(val input: List<String>) {
 
     private val parsed = input.parse()
@@ -14,7 +14,7 @@ class Day02(val input: List<String>) {
 
     fun partOne(): Int = parsed.filter { it.possible(candidate) }.sumOf { it.id }
 
-    fun partTwo(): Int = parsed.map { it.max }.sumOf { it.red * it.green * it.blue }
+    fun partTwo(): Int = parsed.map { it.max }.sumOf { it.power() }
 
     fun List<String>.parse(): List<Game> {
         return map { line ->
@@ -24,9 +24,9 @@ class Day02(val input: List<String>) {
                 val colours = pick
                     .split(", ")
                     .associate {
-                        Colour.from(it.substringAfter(" ")) to it.substringBefore(" ").toInt()
+                        Colour.valueOf(it.substringAfter(" ")) to it.substringBefore(" ").toInt()
                     }
-                Pick(colours.getOrDefault(RED, 0), colours.getOrDefault(GREEN, 0), colours.getOrDefault(BLUE, 0))
+                Pick(colours.getOrDefault(red, 0), colours.getOrDefault(green, 0), colours.getOrDefault(blue, 0))
             }
             Game(id, picks)
         }
@@ -41,22 +41,11 @@ class Day02(val input: List<String>) {
         fun possible(candidate: Pick): Boolean = candidate.red >= max.red && candidate.green >= max.green && candidate.blue >= max.blue
     }
 
-    data class Pick(val red: Int, val green: Int, val blue: Int)
-
-
-    enum class Colour {
-        RED, GREEN, BLUE;
-
-        companion object {
-            fun from(s: String): Colour {
-                return when (s) {
-                    "blue" -> BLUE
-                    "red" -> RED
-                    "green" -> GREEN
-                    else -> error("unknown col: s")
-                }
-            }
-        }
+    data class Pick(val red: Int, val green: Int, val blue: Int) {
+        fun power() = listOf(red, green, blue).product().toInt()
     }
+
+    @Suppress("EnumEntryName")
+    enum class Colour { red, green, blue }
 }
 
