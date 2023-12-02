@@ -2,13 +2,10 @@ package no.rodland.advent_2019
 
 import com.ginsberg.advent2019.IntCodeComputerMk2
 import combinations
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
+@OptIn(DelicateCoroutinesApi::class)
 @ExperimentalCoroutinesApi
 @Suppress("UNUSED_PARAMETER")
 object Day25 {
@@ -86,7 +83,7 @@ object Day25 {
                 }
                 if (!computer.output.isClosedForReceive) {
                     withContext(Dispatchers.Default) {
-                        "${readLine()!!}\n"
+                        "${readln()}\n"
                     }.forEach { c -> computer.input.send(c.code.toLong()) }
                 }
             }

@@ -22,7 +22,7 @@ object Day07 {
     }
 
     @ExperimentalCoroutinesApi
-    @Suppress("DeferredResultUnused")
+    @Suppress("DEPRECATION")
     private suspend fun runAmplifiersPart2(program: List<String>, phases: List<Long>): Long {
 
         val broadcast = BroadcastChannel<Long>(20)
@@ -60,7 +60,6 @@ object Day07 {
     }
 
     @ExperimentalCoroutinesApi
-    @Suppress("DeferredResultUnused")
     private suspend fun runAmplifiersPart1(program: List<String>, phases: List<Long>): Long {
         var tmp = runAmp(program, phases[0], 0)
         tmp = runAmp(program, phases[1], tmp)
