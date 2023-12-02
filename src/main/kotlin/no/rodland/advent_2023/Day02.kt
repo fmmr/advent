@@ -17,20 +17,19 @@ class Day02(val input: List<String>) {
     fun partTwo(): Int = parsed.map { it.max }.sumOf { it.red * it.green * it.blue }
 
     fun List<String>.parse(): List<Game> {
-        val map = map { line ->
-            val (f, s) = line.split(": ")
-            val id = f.substringAfter(" ").toInt()
-            val picks = s.split("; ").map { g ->
-                val cubes = g.split(", ")
-                val colours = cubes.associate {
-                    val (number, colour) = it.split(" ")
-                    Colour.from(colour) to number.toInt()
-                }
+        return map { line ->
+            val (head, tail) = line.split(": ")
+            val id = head.substringAfter(" ").toInt()
+            val picks = tail.split("; ").map { pick ->
+                val colours = pick
+                    .split(", ")
+                    .associate {
+                        Colour.from(it.substringAfter(" ")) to it.substringBefore(" ").toInt()
+                    }
                 Pick(colours.getOrDefault(RED, 0), colours.getOrDefault(GREEN, 0), colours.getOrDefault(BLUE, 0))
             }
             Game(id, picks)
         }
-        return map
     }
 
 
