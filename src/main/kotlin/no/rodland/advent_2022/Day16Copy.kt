@@ -4,7 +4,7 @@ import java.util.*
 private const val STARTING_ROOM = "AA"
 
 // https://github.com/NoMoor/aoc2022/blob/main/src/aoc2022/Day16.kt
-private class Day16(val lines: List<String>) {
+private class Day16(lines: List<String>) {
 
     var roomMap: Map<String, Room>
     val sparseEdges: Map<String, List<Edge>>
@@ -71,6 +71,7 @@ private class Day16(val lines: List<String>) {
         val isPt2: Boolean = false
     )
 
+    @Suppress("unused")
     fun part1(): Long {
         cache.clear()
         val state = State(0, roomMap.get(STARTING_ROOM)!!, setOf())
@@ -132,8 +133,6 @@ private class Day16(val lines: List<String>) {
 }
 
 fun main() {
-    val day = "16".toInt()
-
     val todayTest = Day16( listOf(
         "Valve ZN has flow rate=0; tunnels lead to valves SD, ZV",
         "Valve HO has flow rate=17; tunnel leads to valve LT",
