@@ -1,7 +1,7 @@
 package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
@@ -21,7 +21,7 @@ internal class Day09Test {
         "8767896789",
         "9899965678",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         9,
         Day09::partOne,
         Day09::partTwo,

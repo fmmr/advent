@@ -2,7 +2,7 @@ package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -10,7 +10,6 @@ import readFile
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@Suppress("ClassName")
 @DisableSlow
 internal class Day20Test {
     private val liveData = "2021/input_20.txt".readFile()
@@ -23,7 +22,7 @@ internal class Day20Test {
         "..#..",
         "..###",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         20, Day20::partOne, Day20::partTwo, liveData, testData,
         testPart1 = 35,
         livePart1 = 5425,  // 5570 too high

@@ -1,0 +1,29 @@
+package no.rodland.advent_2023
+
+import no.rodland.advent.Day
+
+// template generated: 02/12/2023
+// Fredrik Rødland 2023
+
+class Day03(val input: List<String>) : Day<Long, Long, String> {
+
+
+    @Suppress("unused")
+    val parsed = input.parse()
+
+    override fun partOne(): Long {
+        return 2
+    }
+
+    override fun partTwo(): Long {
+        return 2
+    }
+
+    override fun List<String>.parse(): List<String> {
+        return map { line ->
+            line
+        }
+    }
+
+    override val day = "03".toInt()
+}

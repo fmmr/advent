@@ -3,14 +3,13 @@ package no.rodland.advent_2021
 import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.IntGrid
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@Suppress("ClassName")
 @DisableSlow
 internal class Day11Test {
     private val liveData = "2021/input_11.txt".readFile()
@@ -33,7 +32,7 @@ internal class Day11Test {
         "19991",
         "11111",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         11, { Day11.partOne(it) }, Day11::partTwo, liveData, testData,
         testPart1 = 1656,
         livePart1 = 1562,

@@ -1,21 +1,22 @@
 package no.rodland.advent_2023
 
+import no.rodland.advent.Day
 import product
 import kotlin.math.max
 
 // template generated: 01/12/2023
 // Fredrik Rødland 2023
 
-class Day02(val input: List<String>) {
+class Day02(val input: List<String>) : Day<Int, Int, Day02.Game> {
 
     private val parsed = input.parse()
     private val candidate = Pick(12, 13, 14)
 
-    fun partOne(): Int = parsed.filter { it.possible(candidate) }.sumOf { it.id }
+    override fun partOne(): Int = parsed.filter { it.possible(candidate) }.sumOf { it.id }
 
-    fun partTwo(): Int = parsed.map { it.max }.sumOf { it.power() }
+    override fun partTwo(): Int = parsed.map { it.max }.sumOf { it.power() }
 
-    fun List<String>.parse(): List<Game> {
+    override fun List<String>.parse(): List<Game> {
         return map { line ->
             val (head, tail) = line.split(": ")
             val id = head.substringAfter(" ").toInt()
@@ -47,5 +48,7 @@ class Day02(val input: List<String>) {
     data class Pick(val red: Int, val green: Int, val blue: Int) {
         fun power() = listOf(red, green, blue).product().toInt()
     }
+
+    override val day: Int = "02".toInt()
 }
 

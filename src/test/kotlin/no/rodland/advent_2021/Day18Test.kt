@@ -3,7 +3,7 @@ package no.rodland.advent_2021
 import no.rodland.advent.AOCTest
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import no.rodland.advent_2021.Day18.FishNumber
 import no.rodland.advent_2021.Day18.FishPair
@@ -13,7 +13,6 @@ import readFile
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@Suppress("ClassName")
 @DisableSlow
 internal class Day18Test {
     private val liveData = "2021/input_18.txt".readFile()
@@ -55,7 +54,7 @@ internal class Day18Test {
         "[3,3]",
         "[4,4]",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         18, Day18::partOne, Day18::partTwo, liveData, testData,
         testPart1 = 4140,
         livePart1 = 4072,

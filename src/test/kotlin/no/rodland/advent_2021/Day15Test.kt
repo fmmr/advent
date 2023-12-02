@@ -2,7 +2,7 @@ package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -11,7 +11,6 @@ import kotlin.time.ExperimentalTime
 
 @ExperimentalStdlibApi
 @ExperimentalTime
-@Suppress("ClassName")
 @DisableSlow
 internal class Day15Test {
     private val liveData = "2021/input_15.txt".readFile()
@@ -27,7 +26,7 @@ internal class Day15Test {
         "1293138521",
         "2311944581",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         15, Day15::partOne, Day15::partTwo, liveData, testData,
         testPart1 = 40,
         livePart1 = 390,
@@ -35,7 +34,7 @@ internal class Day15Test {
         livePart2 = 2814,
         numTestPart2 = 1
     )
-    val testChrisWk = defaultTestSuite(
+    val testChrisWk = defaultTestSuiteParseOnCall(
         15, Day15ChrisWK::part1, Day15ChrisWK::part2, liveData, testData,
         testPart1 = 40,
         livePart1 = 390,

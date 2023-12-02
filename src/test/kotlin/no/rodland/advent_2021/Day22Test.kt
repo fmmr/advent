@@ -1,17 +1,12 @@
 package no.rodland.advent_2021
 
-import no.rodland.advent.AOCTest
-import no.rodland.advent.DisableSlow
-import no.rodland.advent.Slow
-import no.rodland.advent.defaultTestSuite
-import no.rodland.advent.report
+import no.rodland.advent.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import readFile
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@Suppress("ClassName", "RemoveRedundantBackticks")
 @DisableSlow
 internal class Day22Test {
     private val liveData = "2021/input_22.txt".readFile()
@@ -107,7 +102,7 @@ internal class Day22Test {
         "on x=-53470..21291,y=-120233..-33476,z=-44150..38147",
         "off x=-93533..-4276,y=-16170..68771,z=-104985..-24507",
     )
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         22, Day22::partOne, Day22::partTwo, liveData, testData,
         testPart1 = 39L,
         livePart1 = 503864L,
@@ -160,12 +155,12 @@ internal class Day22Test {
     }
 
     @Test
-    fun `ranges_size`() {
+    fun ranges_size() {
         report(AOCTest("19.transformations", { Day22.Ranges(10..12, 10..12, 10..12, true).size }, 2, 27))
     }
 
     @Test
-    fun `ranges_overlaps`() {
+    fun ranges_overlaps() {
         report(AOCTest("19.transformations", {
             val ranges = Day22.Ranges(10..12, 10..12, 10..12, true)
             val other = Day22.Ranges(10..14, 10..12, 10..12, true)
@@ -174,7 +169,7 @@ internal class Day22Test {
     }
 
     @Test
-    fun `ranges_includes_false`() {
+    fun ranges_includes_false() {
         report(AOCTest("19.transformations", {
             val ranges = Day22.Ranges(10..12, 10..12, 10..12, true)
             val other = Day22.Ranges(10..14, 10..12, 10..12, true)
@@ -183,7 +178,7 @@ internal class Day22Test {
     }
 
     @Test
-    fun `ranges_includes_true`() {
+    fun ranges_includes_true() {
         report(AOCTest("19.transformations", {
             val ranges = Day22.Ranges(10..12, 10..12, 10..12, true)
             val other = Day22.Ranges(10..11, 10..12, 10..12, true)
@@ -192,13 +187,13 @@ internal class Day22Test {
     }
 
     @Test
-    fun `ranges_size_2`() {
+    fun ranges_size_2() {
         report(AOCTest("19.transformations", { Day22.Ranges(-1..1, -1..1, -1..1, true).size }, 2, 27))
     }
 
     @Suppress("EmptyRange")
     @Test
-    fun `ranges_empty`() {
+    fun ranges_empty() {
         report(AOCTest("19.transformations", { (-2..-3).isEmpty() }, 2, true))
     }
 }

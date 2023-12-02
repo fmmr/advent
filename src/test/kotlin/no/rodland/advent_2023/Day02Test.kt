@@ -1,6 +1,7 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.defaultTestSuiteParseOnInit
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,28 +19,23 @@ internal class Day02Test {
         "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
     )
 
-    private val day02 = Day02(data02)
-    private val day02Test = Day02(test02)
-
     private val resultTestOne = 8
     private val resultTestTwo = 2286
     private val resultOne = 2545
     private val resultTwo = 78111
 
+    val test = defaultTestSuiteParseOnInit(Day02(data02), Day02(test02), resultTestOne, resultOne, resultTestTwo, resultTwo)
+
     @Nested
     inner class Init {
         @Test
         fun `02,1,live,init`() {
-            report {
-                day02.partOne() to resultOne
-            }
+            report(test.initPart1)
         }
 
         @Test
         fun `02,2,live,init`() {
-            report {
-                day02.partTwo() to resultTwo
-            }
+            report(test.initPart2)
         }
     }
 
@@ -47,16 +43,12 @@ internal class Day02Test {
     inner class `Part 1` {
         @Test
         fun `02,1,test`() {
-            report {
-                day02Test.partOne() to resultTestOne
-            }
+            report(test.testPart1)
         }
 
         @Test
         fun `02,1,live,1`() {
-            report {
-                day02.partOne() to resultOne
-            }
+            report(test.livePart1)
         }
     }
 
@@ -64,16 +56,12 @@ internal class Day02Test {
     inner class `Part 2` {
         @Test
         fun `02,2,test`() {
-            report {
-                day02Test.partTwo() to resultTestTwo
-            }
+            report(test.testPart2)
         }
 
         @Test
         fun `02,2,live,1`() {
-            report {
-                day02.partTwo() to resultTwo
-            }
+            report(test.livePart2)
         }
     }
 }

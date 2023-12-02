@@ -2,19 +2,18 @@ package no.rodland.advent_2021
 
 import no.rodland.advent.DisableSlow
 import no.rodland.advent.Slow
-import no.rodland.advent.defaultTestSuite
+import no.rodland.advent.defaultTestSuiteParseOnCall
 import no.rodland.advent.report
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-@Suppress("ClassName")
 @DisableSlow
 internal class Day21Test {
     private val liveData = 8 to 5
     private val testData = 4 to 8
-    val test = defaultTestSuite(
+    val test = defaultTestSuiteParseOnCall(
         21, Day21::partOne, Day21::partTwo, liveData, testData,
         testPart1 = 739785,
         livePart1 = 597600,
