@@ -18,12 +18,12 @@ class Day02(val input: List<String>) {
 
     fun List<String>.parse(): List<Game> {
         val map = map { line ->
-            val (f, s) = line.split(":")
+            val (f, s) = line.split(": ")
             val id = f.substringAfter(" ").toInt()
-            val picks = s.split(";").map { g ->
+            val picks = s.split("; ").map { g ->
                 val cubes = g.split(", ")
                 val colours = cubes.associate {
-                    val (number, colour) = it.trim().split(" ")
+                    val (number, colour) = it.split(" ")
                     Colour.from(colour) to number.toInt()
                 }
                 Pick(colours.getOrDefault(RED, 0), colours.getOrDefault(GREEN, 0), colours.getOrDefault(BLUE, 0))
