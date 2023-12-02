@@ -1,6 +1,5 @@
 package no.rodland.advent_2023
 
-import no.rodland.advent_2023.Day02.Colour.*
 import product
 import kotlin.math.max
 
@@ -24,9 +23,13 @@ class Day02(val input: List<String>) {
                 val colours = pick
                     .split(", ")
                     .associate {
-                        Colour.valueOf(it.substringAfter(" ")) to it.substringBefore(" ").toInt()
+                        it.substringAfter(" ") to it.substringBefore(" ").toInt()
                     }
-                Pick(colours.getOrDefault(red, 0), colours.getOrDefault(green, 0), colours.getOrDefault(blue, 0))
+                Pick(
+                    colours.getOrDefault("red", 0),
+                    colours.getOrDefault("green", 0),
+                    colours.getOrDefault("blue", 0)
+                )
             }
             Game(id, picks)
         }
@@ -44,8 +47,5 @@ class Day02(val input: List<String>) {
     data class Pick(val red: Int, val green: Int, val blue: Int) {
         fun power() = listOf(red, green, blue).product().toInt()
     }
-
-    @Suppress("EnumEntryName")
-    enum class Colour { red, green, blue }
 }
 
