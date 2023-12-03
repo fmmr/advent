@@ -11,14 +11,25 @@ import readFile
 @DisableSlow
 internal class Day03Test {
     private val data03 = "2023/input_03.txt".readFile()
-    private val test03 = listOf("1", "2")
+    private val test03 = listOf(
+        "467..114..",
+        "...*......",
+        "..35..633.",
+        "......#...",
+        "617*......",
+        ".....+.58.",
+        "..592.....",
+        "......755.",
+        "...$.*....",
+        ".664.598..",
+        )
 
-    private val resultTestOne = 2L
-    private val resultTestTwo = 2L
-    private val resultOne = 2L
-    private val resultTwo = 2L
+    private val resultTestOne = 4361
+    private val resultTestTwo = 467835
+    private val resultOne = 533775
+    private val resultTwo = 78236071
 
-    val test = defaultTestSuiteParseOnInit(Day03(data03), Day03(test03), resultTestOne, resultOne, resultTestTwo, resultTwo)
+    val test = defaultTestSuiteParseOnInit(Day03(data03), Day03(test03), resultTestOne, resultOne, resultTestTwo, resultTwo, numTestPart1 = 5, numTestPart2 = 5)
 
     @Nested
     inner class Init {

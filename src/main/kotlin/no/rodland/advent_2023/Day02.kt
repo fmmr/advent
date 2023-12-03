@@ -7,7 +7,7 @@ import kotlin.math.max
 // template generated: 01/12/2023
 // Fredrik Rødland 2023
 
-class Day02(val input: List<String>) : Day<Int, Int, Day02.Game> {
+class Day02(val input: List<String>) : Day<Int, Int, List<Day02.Game>> {
 
     private val parsed = input.parse()
     private val candidate = Pick(12, 13, 14)
