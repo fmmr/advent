@@ -17,8 +17,8 @@ class Day03(val input: List<String>) : Day<Int, Int, Grid> {
     private val parsed = input.parse()
 
     override fun partOne(): Int {
-        return numbers.sumOf { start ->
-            val (number, neighbours) = neighbours(start)
+        val numberWithNeighbours = numberWithNeighbours()
+        return numberWithNeighbours.sumOf { (number, neighbours) ->
             if (neighbours.any { neighbour -> neighbour in symbols }) {
                 number
             } else {
@@ -28,12 +28,9 @@ class Day03(val input: List<String>) : Day<Int, Int, Grid> {
     }
 
     override fun partTwo(): Int {
-        val allNeighbours = numbers.map { start ->
-            val (number, neighbours) = neighbours(start)
-            number to neighbours
-        }
+        val numberWithNeighbours = numberWithNeighbours()
         return gears.sumOf { gearPos ->
-            val numbers = allNeighbours.filter { it.second.contains(gearPos) }.map { it.first }
+            val numbers = numberWithNeighbours.filter { it.second.contains(gearPos) }.map { it.first }
             if (numbers.size == 2) {
                 numbers[0] * numbers[1]
             } else {
@@ -42,23 +39,23 @@ class Day03(val input: List<String>) : Day<Int, Int, Grid> {
         }
     }
 
-    private fun neighbours(start: Pos): Pair<Int, List<Pos>> {
-        val row = parsed[start.y]
-        val sub = row.copyOfRange(start.x, row.size)
-        val numAsString = sub.takeWhile { d -> d.isDigit() }.joinToString("")
-        val length = numAsString.length
-        val number = numAsString.toInt()
-
-        val posList = getAllPosForLength(start, length)
-        val neighbours = posList
-            .flatMap { it.neighbourCellsAllEight() }
-            .filter { it !in posList }
-            .filter { pos -> pos.x >= 0 && pos.y >= 0 && pos.x < parsed[0].size && pos.y < parsed.size }
-            .distinct()
-        return Pair(number, neighbours)
+    private fun numberWithNeighbours(): List<Pair<Int, List<Pos>>> {
+        return numbers.map { start ->
+            val row = parsed[start.y]
+            val number = row.copyOfRange(start.x, row.size).takeWhile { d -> d.isDigit() }.joinToString("")
+            val neighbours = number.positions(start)
+                .flatMap { pos -> pos.neighbourCellsAllEight() }
+                .filter { pos -> pos !in number.positions(start) }
+                .filter { pos -> parsed.inGrid(pos) }
+                .distinct()
+            Pair(number.toInt(), neighbours)
+        }
     }
 
-    private fun getAllPosForLength(start: Pos, length: Int): List<Pos> {
+    private fun Grid.inGrid(pos: Pos) = pos.x >= 0 && pos.y >= 0 && pos.x < this[0].size && pos.y < size
+
+    private fun String.positions(start: Pos): List<Pos> {
+        val length = length
         return (0 until length).map { i ->
             start.copy(x = start.x + i)
         }
@@ -88,9 +85,6 @@ class Day03(val input: List<String>) : Day<Int, Int, Grid> {
             }.toCharArray()
         }.toTypedArray()
     }
-
-    //private operator fun Grid.get(pos: Pos): Char = this[pos.y][pos.x]
-
 
     override val day = "03".toInt()
 }
