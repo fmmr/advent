@@ -15,18 +15,30 @@ class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
     }
 
     override fun partTwo(): Long {
-        return partTwoWithArray()
+        return partTwoWithMutableList()
     }
 
+    @Suppress("unused")
     private fun partTwoWithArray(): Long {
-        val ar = parsed.toTypedArray()
-        ar.forEach { game ->
+        val mutableList = parsed.toTypedArray()
+        mutableList.forEach { game ->
             val endIndex = game.id + game.numberWinning
-            (game.id..< endIndex).forEach { i ->
-                ar[i] = ar[i].copy(numCards = ar[i].numCards + game.numCards)
+            (game.id..<endIndex).forEach { i ->
+                mutableList[i] = mutableList[i].copy(numCards = mutableList[i].numCards + game.numCards)
             }
         }
-        return ar.sumOf { it.numCards }
+        return mutableList.sumOf { it.numCards }
+    }
+
+    private fun partTwoWithMutableList(): Long {
+        val mutableList = parsed.toMutableList()
+        mutableList.forEach { game ->
+            val endIndex = game.id + game.numberWinning
+            (game.id..<endIndex).forEach { i ->
+                mutableList[i] = mutableList[i].copy(numCards = mutableList[i].numCards + game.numCards)
+            }
+        }
+        return mutableList.sumOf { it.numCards }
     }
 
     @Suppress("unused")
@@ -51,8 +63,8 @@ class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
         return map { line ->
             // Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
             val id = line.substringAfter("Card").substringBefore(":").trim().toInt()
-            val winning = line.substringAfter(":").substringBefore("|").split(" +".toRegex()).filterNot { it.isBlank() }.map { it.trim().toInt() }.toSet()
-            val drawn = line.substringAfter("|").split(" +".toRegex()).filterNot { it.isBlank() }.map { it.trim().toInt() }
+            val winning = line.substringAfter(":").substringBefore("|").split(" ").filterNot { it.isBlank() }.map { it.trim().toInt() }.toSet()
+            val drawn = line.substringAfter("|").split(" ").filterNot { it.isBlank() }.map { it.trim().toInt() }
             Game(id, winning, drawn)
         }
     }

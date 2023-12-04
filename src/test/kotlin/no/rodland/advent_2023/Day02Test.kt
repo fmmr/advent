@@ -24,18 +24,27 @@ internal class Day02Test {
     private val resultOne = 2545
     private val resultTwo = 78111
 
-    val test = defaultTestSuiteParseOnInit(Day02(data02), Day02(test02), resultTestOne, resultOne, resultTestTwo, resultTwo)
+    val test = defaultTestSuiteParseOnInit(
+        Day02(data02),
+        Day02(test02),
+        resultTestOne,
+        resultOne,
+        resultTestTwo,
+        resultTwo,
+        { Day02(data02) },
+        { Day02(test02) },
+    )
 
     @Nested
     inner class Init {
         @Test
-        fun `02,1,live,init`() {
-            report(test.initPart1)
+        fun `02,-,test,init`() {
+            report(test.initTest)
         }
 
         @Test
-        fun `02,2,live,init`() {
-            report(test.initPart2)
+        fun `02,-,live,init`() {
+            report(test.initLive)
         }
     }
 

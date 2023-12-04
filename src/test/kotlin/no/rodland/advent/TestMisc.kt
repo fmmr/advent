@@ -99,20 +99,21 @@ data class AOCTest<I, T>(
         day: Int,
         part: Part,
         live: Boolean,
-    ) : this(day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST", function, data, expected, numTests)
+        init: Boolean = false,
+    ) : this(day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST" + if (init) ".INIT" else "", function, data, expected, numTests)
 }
 
 fun Int.padDate(): String = if (this < 10) "0$this" else this.toString()
 
-enum class Part { ONE, TWO }
+enum class Part { ONE, TWO, INIT }
 
 class AOCTestSuite<I, T, S>(
     val livePart1: AOCTest<T, I>,
     val livePart2: AOCTest<S, I>,
     val testPart1: AOCTest<T, I>,
     val testPart2: AOCTest<S, I>,
-    val initPart1: AOCTest<T, I> = livePart1.copy(numTests = 1),
-    val initPart2: AOCTest<S, I> = livePart2.copy(numTests = 1),
+    val initLive: AOCTest<*, *> ,
+    val initTest: AOCTest<*, *> ,
 )
 
 fun <T, S, U> defaultTestSuiteParseOnCall(
@@ -132,6 +133,8 @@ fun <T, S, U> defaultTestSuiteParseOnCall(
     AOCTest(part2, liveData, livePart2, numTestPart2, day = day, part = Part.TWO, live = true),
     AOCTest(part1, testData, testPart1, 1, day, part = Part.ONE, live = false),
     AOCTest(part2, testData, testPart2, 1, day, part = Part.TWO, live = false),
+    AOCTest(part1, liveData, livePart1, 1, day = day, part = Part.ONE, live = true),
+    AOCTest(part2, liveData, livePart2, 1, day = day, part = Part.TWO, live = true),
 )
 
 
@@ -142,13 +145,19 @@ fun <T, S> defaultTestSuiteParseOnInit(
     livePart1: T,
     testPart2: S,
     livePart2: S,
+    initLive: () -> Unit = {},
+    initTest: () -> Unit = {},
     numTestPart1: Int = 1000,
     numTestPart2: Int = 1000,
+    numInitLive: Int = 100,
+    numInitTest: Int = 100,
 ) = AOCTestSuite(
     AOCTest({ liveDay.partOne() }, Unit, livePart1, numTestPart1, liveDay.day, Part.ONE, true),
     AOCTest({ liveDay.partTwo() }, Unit, livePart2, numTestPart2, liveDay.day, Part.TWO, true),
     AOCTest({ testDay.partOne() }, Unit, testPart1, 2, liveDay.day, Part.ONE, false),
     AOCTest({ testDay.partTwo() }, Unit, testPart2, 2, liveDay.day, Part.TWO, false),
+    AOCTest({ initLive() }, Unit, Unit, numInitLive, liveDay.day, Part.INIT, live = true),
+    AOCTest({ initTest() }, Unit, Unit, numInitTest, liveDay.day, Part.INIT, live = false),
 )
 
 
