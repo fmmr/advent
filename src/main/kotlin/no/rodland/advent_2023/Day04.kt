@@ -15,6 +15,22 @@ class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
     }
 
     override fun partTwo(): Long {
+        return partTwoWithArray()
+    }
+
+    private fun partTwoWithArray(): Long {
+        val ar = parsed.toTypedArray()
+        ar.forEach { game ->
+            val endIndex = game.id + game.numberWinning
+            (game.id..< endIndex).forEach { i ->
+                ar[i] = ar[i].copy(numCards = ar[i].numCards + game.numCards)
+            }
+        }
+        return ar.sumOf { it.numCards }
+    }
+
+    @Suppress("unused")
+    private fun partTwoWithFold(): Long {
         val end = parsed.fold(parsed) { acc: List<Game>, game: Game ->
             val done = acc.subList(0, game.id)
             val mustFix = acc.subList(game.id, acc.size)
