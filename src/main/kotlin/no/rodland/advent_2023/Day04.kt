@@ -15,18 +15,20 @@ class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
     }
 
     override fun partTwo(): Long {
-        return 2
+        val end = parsed.fold(parsed) { acc: List<Game>, game: Game ->
+            val done = acc.subList(0, game.id)
+            val mustFix = acc.subList(game.id, acc.size)
+            val updatedGame = done.last()
+            val update = mustFix.subList(0, game.numberWinning).map { it.copy(numCards = it.numCards + updatedGame.numCards) }
+            val doNotUpdate = mustFix.subList(game.numberWinning, mustFix.size)
+            done + update + doNotUpdate
+        }
+        return end.sumOf { it.numCards }
     }
 
-    data class Game(val id: Int, val winning: Set<Int>, val drawn: List<Int>) {
-        fun points(): Long {
-            val numberWinning = drawn.intersect(winning).size
-            return if (numberWinning == 0) {
-                0
-            } else {
-                2.toDouble().pow((numberWinning - 1).toDouble()).toLong()
-            }
-        }
+    data class Game(val id: Int, val winning: Set<Int>, val drawn: List<Int>, val numCards: Long = 1L) {
+        val numberWinning = drawn.intersect(winning).size
+        fun points(): Long = 2.toDouble().pow((numberWinning - 1).toDouble()).toLong()  // (0.5d).toLong() is 0
     }
 
     override fun List<String>.parse(): List<Game> {

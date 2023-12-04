@@ -21,11 +21,11 @@ internal class Day04Test {
     )
 
     private val resultTestOne = 13L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 30L
     private val resultOne = 25571L
-    private val resultTwo = 2L
+    private val resultTwo = 8805731L
 
-    val test = defaultTestSuiteParseOnInit(Day04(data04), Day04(test04), resultTestOne, resultOne, resultTestTwo, resultTwo)
+    val test = defaultTestSuiteParseOnInit(Day04(data04), Day04(test04), resultTestOne, resultOne, resultTestTwo, resultTwo, numTestPart2 = 6)
 
     @Nested
     inner class Init {
