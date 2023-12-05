@@ -1,6 +1,7 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.DisableSlow
+import no.rodland.advent.Slow
 import no.rodland.advent.defaultTestSuiteParseOnInit
 import no.rodland.advent.report
 import org.junit.jupiter.api.Nested
@@ -48,9 +49,9 @@ internal class Day05Test {
     )
 
     private val resultTestOne = 35L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 46L
     private val resultOne = 836040384L
-    private val resultTwo = 2L
+    private val resultTwo = 10834440L
 
     val test = defaultTestSuiteParseOnInit(
         Day05(data05),
@@ -61,6 +62,7 @@ internal class Day05Test {
         resultTwo,
         { Day05(data05) },
         { Day05(test05) },
+        numTestPart2 = 1,
     )
 
     @Nested
@@ -97,6 +99,7 @@ internal class Day05Test {
         }
 
         @Test
+        @Slow(180000)
         fun `05,2,live,1`() {
             report(test.livePart2)
         }

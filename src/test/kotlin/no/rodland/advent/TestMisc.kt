@@ -5,10 +5,8 @@ import org.junit.jupiter.api.extension.ConditionEvaluationResult
 import org.junit.jupiter.api.extension.ExecutionCondition
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
-import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import kotlin.time.measureTimedValue
 
 fun <T> report(function: () -> Pair<T, T>) {
     getHeader().run {
@@ -29,25 +27,21 @@ fun <T, U> report(test: AOCTest<T, U>) {
         println(this)
         println("=".repeat(this.length).joinToString(""))
     }
-
-    val init = test.function(test.data)
-    if (init == test.expected) {
-        val nanos = measureNanoTime {
-            repeat(test.numTests) {
-                val start = System.nanoTime()
-                val value = test.function(test.data) to test.expected
-                (System.nanoTime() - start) to (value.first to value.second)
+    var endValue: U? = null
+    val nanos = measureTimedValue {
+        repeat(test.numTests) {
+            val value = test.function(test.data) to test.expected
+            if (value.first != value.second) {
+                println("Result: ${value.first}, Expected: ${test.expected}")
+                Assertions.assertEquals(test.expected, value.first)
             }
+            endValue = value.first
         }
-        val avg = nanos.toDuration(DurationUnit.NANOSECONDS) / test.numTests
-        println("Result: $init (OK)")
-        println("Ran ${test.numTests}, time_pr_test: $avg")
-
-    } else {
-        println("Result: ${init}, Expected: ${test.expected}")
     }
+    val avg = nanos.duration / test.numTests
+    println("Result: $endValue (OK)")
+    println("Ran ${test.numTests}, time_pr_test: $avg")
     println()
-    Assertions.assertEquals(test.expected, init)
 }
 
 
@@ -111,8 +105,8 @@ class AOCTestSuite<I, T, S>(
     val livePart2: AOCTest<S, I>,
     val testPart1: AOCTest<T, I>,
     val testPart2: AOCTest<S, I>,
-    val initLive: AOCTest<*, *> ,
-    val initTest: AOCTest<*, *> ,
+    val initLive: AOCTest<*, *>,
+    val initTest: AOCTest<*, *>,
 )
 
 fun <T, S, U> defaultTestSuiteParseOnCall(
@@ -153,8 +147,8 @@ fun <T, S> defaultTestSuiteParseOnInit(
 ) = AOCTestSuite(
     AOCTest({ liveDay.partOne() }, Unit, livePart1, numTestPart1, liveDay.day, Part.ONE, true),
     AOCTest({ liveDay.partTwo() }, Unit, livePart2, numTestPart2, liveDay.day, Part.TWO, true),
-    AOCTest({ testDay.partOne() }, Unit, testPart1, 2, liveDay.day, Part.ONE, false),
-    AOCTest({ testDay.partTwo() }, Unit, testPart2, 2, liveDay.day, Part.TWO, false),
+    AOCTest({ testDay.partOne() }, Unit, testPart1, 1, liveDay.day, Part.ONE, false),
+    AOCTest({ testDay.partTwo() }, Unit, testPart2, 1, liveDay.day, Part.TWO, false),
     AOCTest({ initLive() }, Unit, Unit, numInitLive, liveDay.day, Part.INIT, live = true),
     AOCTest({ initTest() }, Unit, Unit, numInitTest, liveDay.day, Part.INIT, live = false),
 )
