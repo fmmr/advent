@@ -23,7 +23,7 @@ class Day05(val input: List<String>) : Day<Long, Long, List<Day05.Converter>> {
 
     override fun partTwo(): Long {
         val seeds = input.take(1).first().substringAfter(": ").split(" ").map { it.toLong() }.chunked(2).map { it.first()..<(it.last() + it.first()) }
-        val result = AtomicLong(1000000000000000000L)
+        val result = AtomicLong(836040384L)
         var i = 1
         val numSeeds = seeds.size
         val start = System.currentTimeMillis()
