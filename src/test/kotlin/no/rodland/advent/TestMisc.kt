@@ -99,8 +99,7 @@ data class AOCTest<I, T>(
         day: Int,
         part: Part,
         live: Boolean,
-        init: Boolean = false,
-    ) : this(day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST" + if (init) ".INIT" else "", function, data, expected, numTests)
+    ) : this(day.padDate() + "." + part.toString() + if (live) ".LIVE" else ".TEST", function, data, expected, numTests)
 }
 
 fun Int.padDate(): String = if (this < 10) "0$this" else this.toString()

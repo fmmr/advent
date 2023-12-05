@@ -1,16 +1,15 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.Day
-import kotlin.math.pow
 
 // template generated: 04/12/2023
 // Fredrik Rødland 2023
 
-class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
+class Day04(val input: List<String>) : Day<Int, Long, List<Day04.Game>> {
 
     private val parsed = input.parse()
 
-    override fun partOne(): Long {
+    override fun partOne(): Int {
         return parsed.sumOf { it.points() }
     }
 
@@ -56,7 +55,7 @@ class Day04(val input: List<String>) : Day<Long, Long, List<Day04.Game>> {
 
     data class Game(val id: Int, val winning: Set<Int>, val drawn: List<Int>, val numCards: Long = 1L) {
         val numberWinning = drawn.intersect(winning).size
-        fun points(): Long = 2.toDouble().pow((numberWinning - 1).toDouble()).toLong()  // (0.5d).toLong() is 0
+        fun points(): Int = (1 shl (numberWinning - 1)) // 2.0.pow(numberWinning - 1)
     }
 
     override fun List<String>.parse(): List<Game> {

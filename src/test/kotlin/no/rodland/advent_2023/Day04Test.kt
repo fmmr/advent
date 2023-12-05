@@ -20,9 +20,9 @@ internal class Day04Test {
         "Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11",
     )
 
-    private val resultTestOne = 13L
+    private val resultTestOne = 13
     private val resultTestTwo = 30L
-    private val resultOne = 25571L
+    private val resultOne = 25571
     private val resultTwo = 8805731L
 
     val test = defaultTestSuiteParseOnInit(
