@@ -1,8 +1,6 @@
 package no.rodland.advent_2023
 
-import no.rodland.advent.DisableSlow
-import no.rodland.advent.defaultTestSuiteParseOnInit
-import no.rodland.advent.report
+import no.rodland.advent.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -35,7 +33,7 @@ internal class Day06Test {
         resultTwo,
         { Day06(data06) },
         { Day06(test06) },
-        numTestPart2 = 1
+        numTestPart2 = 1000
     )
 
     @Nested
@@ -75,5 +73,24 @@ internal class Day06Test {
         fun `06,2,live,1`() {
             report(test.livePart2)
         }
+    }
+
+    @Nested
+    inner class `Part 2 implementations` {
+        @Test
+        fun `06,2,midPoint`() {
+            report(AOCTest({  Day06(data06).impl_2_half_range_and_stop(48938466L, 261119210191063L) }, Unit, 36749103L, 10, 1, Part.TWO, true, "test half range and stop"))
+        }
+
+        @Test
+        fun `06,2,all`() {
+            report(AOCTest({  Day06(data06).impl_1_try_whole_range(48938466L, 261119210191063L) }, Unit, 36749103L, 10, 1, Part.TWO, true, "test all range"))
+        }
+
+        @Test
+        fun `06,2,root`() {
+            report(AOCTest({ Day06(data06).impl_3_solve_quadratic(48938466L, 261119210191063L) }, Unit, 36749103L, 10000, 1, Part.TWO, true, "solve for root"))
+        }
+
     }
 }
