@@ -35,10 +35,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
     private fun score(findGroups: (List<Char>) -> List<Int>, cardValue: (Char) -> Int): Long {
         val selectors = listOf(Hand::getBestValue) + (0..4).map { idx -> { it: Hand -> it.cards[idx] } }
         return parsed
-            .map { (cards, bid) ->
-                val groups = findGroups(cards)
-                Hand(cards.map { cardValue(it) }, groups, bid)
-            }
+            .map { (cards, bid) -> Hand(cards.map { cardValue(it) }, findGroups(cards), bid) }
             .sortedWith(compareBy(*selectors.toTypedArray<(Hand) -> Int>()))
             .mapIndexed { index: Int, hand: Hand -> (index + 1) * hand.bid.toLong() }
             .sum()
