@@ -57,13 +57,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
 
     companion object {
         val POWERS = (0..4).associateWith { idx -> (14.0.pow((5 - idx))).toInt() }
-        val LABELS = mapOf(
-            'A' to 14,
-            'K' to 13,
-            'Q' to 12,
-            'J' to 11,
-            'T' to 10,
-        ) + (2..9).map { it.digitToChar() to it }
+        val LABELS = mapOf('A' to 14, 'K' to 13, 'Q' to 12, 'J' to 11, 'T' to 10) + (2..9).map { it.digitToChar() to it }
     }
 
     override val day = "07".toInt()
