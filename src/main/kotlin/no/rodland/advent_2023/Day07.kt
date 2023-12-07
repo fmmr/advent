@@ -1,6 +1,7 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.Day
+import kotlin.math.pow
 
 // template generated: 07/12/2023
 // Fredrik Rødland 2023
@@ -33,17 +34,18 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
     }
 
     private fun score(findGroups: (List<Char>) -> List<Int>, cardValue: (Char) -> Int): Long {
-        val selectors = listOf(Hand::typeValue) + (0..4).map { idx -> { it: Hand -> it.cards[idx] } }
+        val selectors = listOf(Hand::typeValue, Hand::cardValue)
         return parsed
+            .asSequence()
             .map { (cards, bid) -> Hand(cards.map { cardValue(it) }, findGroups(cards), bid) }
             .sortedWith(compareBy(*selectors.toTypedArray<(Hand) -> Int>()))
             .mapIndexed { index: Int, hand: Hand -> (index + 1) * hand.bid.toLong() }
             .sum()
     }
 
-
     data class Hand(val cards: List<Int>, val groups: List<Int>, val bid: Int) {
         val typeValue = groups[0] * 10 + (groups.getOrNull(1) ?: 0) // 50, 41, 32, 31, 22, 21, 11
+        val cardValue = (0..4).sumOf { cards[it] * POWERS[it]!! }  // [0]*14^5 + [1]*14^4 ...
     }
 
     override fun List<String>.parse(): List<Pair<List<Char>, Int>> {
@@ -54,6 +56,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
     }
 
     companion object {
+        val POWERS = (0..4).associateWith { idx -> (14.0.pow((5 - idx))).toInt() }
         val LABELS = mapOf(
             'A' to 14,
             'K' to 13,
