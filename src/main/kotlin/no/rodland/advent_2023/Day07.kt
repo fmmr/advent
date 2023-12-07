@@ -33,7 +33,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
     }
 
     private fun score(findGroups: (List<Char>) -> List<Int>, cardValue: (Char) -> Int): Long {
-        val selectors = listOf(Hand::getBestValue) + (0..4).map { idx -> { it: Hand -> it.cards[idx] } }
+        val selectors = listOf(Hand::typeValue) + (0..4).map { idx -> { it: Hand -> it.cards[idx] } }
         return parsed
             .map { (cards, bid) -> Hand(cards.map { cardValue(it) }, findGroups(cards), bid) }
             .sortedWith(compareBy(*selectors.toTypedArray<(Hand) -> Int>()))
@@ -43,29 +43,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<List<Char>, Int
 
 
     data class Hand(val cards: List<Int>, val groups: List<Int>, val bid: Int) {
-        fun getBestValue(): Int = when {
-            groups.size == 1 -> 6
-            groups[0] == 4 -> 5
-            groups[0] == 3 && groups[1] == 2 -> 4
-            groups[0] == 3 && groups[1] == 1 -> 3
-            groups[0] == 2 && groups[1] == 2 -> 2
-            groups[0] == 2 && groups[1] == 1 -> 1
-            else -> 0
-        }
-
-//        private fun getBestString(groupValue: Int): String = when (groupValue) {
-//            6 -> "five"
-//            5 -> "four"
-//            4 -> "house"
-//            3 -> "three"
-//            2 -> "twopair"
-//            1 -> "pair"
-//            else -> "high"
-//        }
-//
-//        override fun toString(): String {
-//            return cards.joinToString("") + " (" + getBestString(getBestValue()) + ") " + groups
-//        }
+        val typeValue = groups[0] * 10 + (groups.getOrNull(1) ?: 0) // 50, 41, 32, 31, 22, 21, 11
     }
 
     override fun List<String>.parse(): List<Pair<List<Char>, Int>> {
