@@ -7,10 +7,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
 
-@Suppress("ClassName")
+@Suppress("ClassName", "PrivatePropertyName")
 @DisableSlow
 internal class Day07Test {
     private val data07 = "2023/input_07.txt".readFile()
+
+    // https://www.reddit.com/r/adventofcode/comments/18cr4xr/2023_day_7_better_example_input_not_a_spoiler/
+    private val data07_2 = "2023/input_07_2.txt".readFile()
     private val test07 = listOf(
         "32T3K 765",
         "T55J5 684",
@@ -70,6 +73,8 @@ internal class Day07Test {
 
     @Nested
     inner class `Part 2` {
+
+
         @Test
         fun `07,2,test`() {
             report(test.testPart2)
@@ -78,6 +83,21 @@ internal class Day07Test {
         @Test
         fun `07,2,live,1`() {
             report(test.livePart2)
+        }
+    }
+
+    @Nested
+    inner class `Edge Cases` {
+        @Test
+        fun `07,1,live,edge`() {
+            val day = Day07(data07_2)
+            report(test.livePart1.copy(function = { day.partOne() }, expected = 4466L))
+        }
+
+        @Test
+        fun `07,2,live,edge`() {
+            val day = Day07(data07_2)
+            report(test.livePart2.copy(function = { day.partTwo() }, expected = 4657L))
         }
     }
 }
