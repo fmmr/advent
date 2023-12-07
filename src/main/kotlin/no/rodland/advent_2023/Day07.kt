@@ -1,7 +1,6 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.Day
-import no.rodland.advent_2023.Day07.Hand.Companion.LABELS
 
 // template generated: 07/12/2023
 // Fredrik Rødland 2023
@@ -11,60 +10,61 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Day07.Hand>> {
     private val parsed = input.parse()
 
     override fun partOne(): Long {
-        // 248704822 too low
-        return parsed.sortedWith(
-                compareBy(
-                    Hand::getBestValue,
-                    { LABELS[it.cards[0]] },
-                    { LABELS[it.cards[1]] },
-                    { LABELS[it.cards[2]] },
-                    { LABELS[it.cards[3]] },
-                    { LABELS[it.cards[4]] })
-            ).mapIndexed { index: Int, hand: Hand ->
-                (index + 1) * hand.bid.toLong()
-            }.sum()
+        val selectors = listOf(Hand::getBestValue1) + (0..4).map { idx -> { it: Hand -> it.cardValues1[idx] } }
+        return score(selectors)
     }
 
     override fun partTwo(): Long {
-        return 2
+        val selectors = listOf(Hand::getBestValue2) + (0..4).map { idx -> { it: Hand -> it.cardValues2[idx] } }
+        return score(selectors)
+    }
+
+    private fun score(selectors: List<(Hand) -> Int>): Long {
+        return parsed
+            .sortedWith(compareBy(*selectors.toTypedArray()))
+            .mapIndexed { index: Int, hand: Hand -> (index + 1) * hand.bid.toLong() }
+            .sum()
     }
 
     data class Hand(val cards: List<Char>, val bid: Int) {
-        private val five = cards.all { it == cards.first() }
-        private val four = hasNumOfAKind(4, cards)
-        private val house = hasNumOfAKind(3, cards) && hasNumOfAKind(2, cards)
-        private val three = hasNumOfAKind(3, cards)
-        private val twoPairs = cards.any { card ->
-            cards.count { it == card } == 2 && hasNumOfAKind(2, cards.filterNot { it == card })
+        val groups = cards.groupBy { it }.map { it.value.size }.sortedByDescending { it }
+        val groupsWithoutJoker = cards.filterNot { it == 'J' }.groupBy { it }.map { it.value.size }.sortedByDescending { it }
+        val numJokers = cards.count { it == 'J' }
+        val groupsPart2 = if (numJokers == 5) {
+            listOf(5)
+        } else {
+            listOf(groupsWithoutJoker[0] + numJokers) + groupsWithoutJoker.drop(1)
         }
-        private val pair = hasNumOfAKind(2, cards)
-        private fun hasNumOfAKind(num: Int, chars: List<Char> = cards) = chars.any { card -> chars.count { it == card } == num }
+        val cardValues1 = cards.map { LABELS[it]!! }
+        val cardValues2 = cards.map { if (it == 'J') 1 else LABELS[it]!! }
 
+        fun getBestValue2(): Int = getBestValue(groupsPart2)
 
-        override fun toString(): String {
-            return cards.joinToString("") + " (" + getBestString() + ")"
-        }
+        fun getBestValue1(): Int = getBestValue(groups)
 
-        fun getBestValue(): Int = when {
-            five -> 6
-            four -> 5
-            house -> 4
-            three -> 3
-            twoPairs -> 2
-            pair -> 1
+        private fun getBestValue(checkGroups: List<Int>): Int = when {
+            checkGroups.size == 1 -> 6
+            checkGroups[0] == 4 -> 5
+            checkGroups[0] == 3 && checkGroups[1] == 2 -> 4
+            checkGroups[0] == 3 && checkGroups[1] == 1 -> 3
+            checkGroups[0] == 2 && checkGroups[1] == 2 -> 2
+            checkGroups[0] == 2 && checkGroups[1] == 1 -> 1
             else -> 0
         }
 
-        private fun getBestString(): String = when {
-            five -> "five"
-            four -> "four"
-            house -> "house"
-            three -> "three"
-            twoPairs -> "twopair"
-            pair -> "pair"
+        private fun getBestString(groupValue: Int): String = when (groupValue) {
+            6 -> "five"
+            5 -> "four"
+            4 -> "house"
+            3 -> "three"
+            2 -> "twopair"
+            1 -> "pair"
             else -> "high"
         }
 
+        override fun toString(): String {
+            return cards.joinToString("") + " (1: " + getBestString(getBestValue(groups)) + ", 2: " + getBestString(getBestValue(groupsPart2)) + ") " + groups
+        }
 
         companion object {
             val LABELS = mapOf(

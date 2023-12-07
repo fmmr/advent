@@ -20,9 +20,9 @@ internal class Day07Test {
     )
 
     private val resultTestOne = 6440L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 5905L
     private val resultOne = 252295678L
-    private val resultTwo = 2L
+    private val resultTwo = 250577259L
 
     val test = defaultTestSuiteParseOnInit(
         Day07(data07),
@@ -33,7 +33,8 @@ internal class Day07Test {
         resultTwo,
         { Day07(data07) },
         { Day07(test07) },
-        numTestPart1 = 150
+        numTestPart1 = 100,
+        numTestPart2 = 100,
     )
 
     @Nested
@@ -51,6 +52,11 @@ internal class Day07Test {
 
     @Nested
     inner class `Part 1` {
+        @Test
+        fun `07,1,live,onlyOne`() {
+            report(test.livePart1.copy(numTests = 1))
+        }
+
         @Test
         fun `07,1,test`() {
             report(test.testPart1)
