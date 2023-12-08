@@ -3,20 +3,19 @@ package no.rodland.advent_2023
 import no.rodland.advent.Day
 import no.rodland.advent.cycle
 import java.math.BigInteger
-import java.util.*
 
 // template generated: 08/12/2023
 // Fredrik Rødland 2023
 
-class Day08(val input: List<String>) : Day<Long, Long, Pair<Day08.Instructions, Map<String, Day08.Place>>> {
+class Day08(val input: List<String>) : Day<BigInteger, BigInteger, Pair<Day08.Instructions, Map<String, Day08.Place>>> {
 
     private val parsed = input.parse()
-    override fun partOne(): Long {
+    override fun partOne(): BigInteger {
         val (instructions, places) = parsed
         return find(listOf("AAA"), places, instructions)
     }
 
-    override fun partTwo(): Long {
+    override fun partTwo(): BigInteger {
         val (instructions, places) = parsed
         val start = places.filterKeys { it.endsWith("A") }.keys.toList()
         return find(start, places, instructions)
@@ -26,52 +25,33 @@ class Day08(val input: List<String>) : Day<Long, Long, Pair<Day08.Instructions, 
         start: List<String>,
         places: Map<String, Place>,
         instructions: Instructions
-    ): Long {
+    ): BigInteger {
         val periods = start
-            .map {
-                dfs(it, places = places, instructions = instructions)
-            }
+            .map { traverse(it, places = places, instructions = instructions) }
             .map { BigInteger.valueOf(it) }
-        return periods.reduce { acc, i ->
-            lcm(acc, i)
-        }.toLong()
+        return periods.reduce { acc, i -> lcm(acc, i) }
     }
 
     private fun lcm(n1: BigInteger, n2: BigInteger): BigInteger {
         // https://no.wikipedia.org/wiki/Minste_felles_multiplum
         // lcm = (n1 * n2) / gcd
-        val gcd = n1.gcd(n2)
-        return ((n1 * n2) / gcd)
+        return (n1 * n2) / n1.gcd(n2)
     }
 
     data class State(val id: String, val pos: Int)
 
-    private fun dfs(
-        startId: String,
-        places: Map<String, Place>,
-        instructions: Instructions
-    ): Long {
+    private fun traverse(startId: String, places: Map<String, Place>, instructions: Instructions): Long {
         var seenCount = 0L
-        val stack = Stack<State>()
-        val pos = instructions.pos()
-        stack.push(State(startId, pos))
-        while (stack.isNotEmpty()) {
-            val (id, _) = stack.pop()
+        var id = startId
+        for (dir in instructions) {
+            seenCount++
+            val nextPlaces = places[id]!!
+            id = if (dir == Dir.L) nextPlaces.left else nextPlaces.right
             if (id.endsWith("Z")) {
                 return seenCount
             }
-            val nextPlaces = places[id] ?: error("hm - why don't we have place $id")
-            // If this state has been visited before, skip
-            // if (!visited.add(State(id, instructions.pos()))) {                println("SEEN");                continue            }
-            // println("A PLACE: $nextPlaces $ids")
-
-            val nextDir = instructions.next()
-            val nextIds = if (nextDir == Dir.L) nextPlaces.left else nextPlaces.right
-            val nextPos = instructions.pos()
-            stack.push(State(nextIds, nextPos))
-            seenCount++
         }
-        return seenCount
+        error("Endstate not found")
     }
 
     enum class Dir { L, R }

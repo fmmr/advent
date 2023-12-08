@@ -4,6 +4,7 @@ import no.rodland.advent.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
+import java.math.BigInteger
 
 @Suppress("ClassName", "PrivatePropertyName")
 @DisableSlow
@@ -40,10 +41,10 @@ internal class Day08Test {
         "ZZZ = (ZZZ, ZZZ)",
     )
 
-    private val resultTestOne = 2L
-    private val resultTestTwo = 2L
-    private val resultOne = 18827L
-    private val resultTwo = 20220305520997L
+    private val resultTestOne = BigInteger.valueOf(2L)
+    private val resultTestTwo = BigInteger.valueOf(2L)
+    private val resultOne = BigInteger.valueOf(18827)
+    private val resultTwo = BigInteger.valueOf(20220305520997L)
 
     val test = defaultTestSuiteParseOnInit(
         Day08(data08),
@@ -81,7 +82,7 @@ internal class Day08Test {
         @Test
         fun `08,1,test,2`() {
             val day = Day08(test08_2)
-            report(test.testPart1.copy(function = { day.partOne() }, expected = 6L))
+            report(test.testPart1.copy(function = { day.partOne() }, expected = BigInteger.valueOf(6L)))
         }
 
         @Test
@@ -95,7 +96,7 @@ internal class Day08Test {
         @Test
         fun `08,2,test`() {
             val day08 = Day08(test08_3)
-            report(AOCTest({ day08.partTwo() }, Unit, 6L, 1, day08.day, Part.TWO, false))
+            report(AOCTest({ day08.partTwo() }, Unit, BigInteger.valueOf(6), 1, day08.day, Part.TWO, false))
         }
 
         @Test
