@@ -43,7 +43,7 @@ internal class Day08Test {
     private val resultTestOne = 2L
     private val resultTestTwo = 2L
     private val resultOne = 18827L
-    private val resultTwo = 2L
+    private val resultTwo = 20220305520997L
 
     val test = defaultTestSuiteParseOnInit(
         Day08(data08),
@@ -54,8 +54,8 @@ internal class Day08Test {
         resultTwo,
         { Day08(data08) },
         { Day08(test08) },
-        numTestPart1 = 20,
-        numTestPart2 = 20,
+        numTestPart1 = 200,
+        numTestPart2 = 100,
     )
 
     @Nested
@@ -95,7 +95,7 @@ internal class Day08Test {
         @Test
         fun `08,2,test`() {
             val day08 = Day08(test08_3)
-            report(AOCTest({ day08.partTwo() }, Unit, 2L, 1, day08.day, Part.TWO, false))
+            report(AOCTest({ day08.partTwo() }, Unit, 6L, 1, day08.day, Part.TWO, false))
         }
 
         @Test
