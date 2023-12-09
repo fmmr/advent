@@ -14,16 +14,14 @@ class Day09(val input: List<String>) : Day<Int, Int, List<List<Int>>> {
     }
 
     override fun partTwo(): Int {
-        return parsed.sumOf { it.previous() }
+        return parsed.map { it.reversed() }.sumOf { it.next() }
     }
 
     private fun List<Int>.next(): Int = if (all { it == 0 }) 0
-    else last() + diffs().next()
+    else last() + zipWithNext { a, b -> b - a }.next()
 
-    private fun List<Int>.previous(): Int = if (all { it == 0 }) 0
-    else first() - diffs().previous()
-
-    private fun List<Int>.diffs(): List<Int> = zipWithNext { a, b -> b - a }
+//    private fun List<Int>.previous(): Int = if (all { it == 0 }) 0
+//    else first() - diffs().previous()
 
     override fun List<String>.parse(): List<List<Int>> {
         return map { line ->
