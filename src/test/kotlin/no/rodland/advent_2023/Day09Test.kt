@@ -15,9 +15,9 @@ internal class Day09Test {
         "10 13 16 21 30 45",
     )
 
-    private val resultTestOne = 2L
+    private val resultTestOne = 114
     private val resultTestTwo = 2L
-    private val resultOne = 2L
+    private val resultOne = 1972648895
     private val resultTwo = 2L
 
     val test = defaultTestSuiteParseOnInit(
