@@ -38,7 +38,7 @@ class Day09(val input: List<String>) : Day<Int, Int, List<List<Int>>> {
         return listOf(next.first() - (last?.first() ?: 0)) + next
     }
 
-    private fun List<Int>.diffs(): List<Int> = windowed(2) { it.last() - it.first() }
+    private fun List<Int>.diffs(): List<Int> = zipWithNext { a, b -> b - a }
 
     override fun List<String>.parse(): List<List<Int>> {
         return map { line ->
