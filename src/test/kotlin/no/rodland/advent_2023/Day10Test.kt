@@ -46,9 +46,9 @@ internal class Day10Test {
     )
 
     private val resultTestOne = 4
-    private val resultTestTwo = 2
+    private val resultTestTwo = 1
     private val resultOne = 6599
-    private val resultTwo = 2
+    private val resultTwo = 477
 
     val test = defaultTestSuiteParseOnInit(
         Day10(data10),
@@ -59,7 +59,8 @@ internal class Day10Test {
         resultTwo,
         { Day10(data10) },
         { Day10(test10) },
-        numTestPart1 = 20
+        numTestPart1 = 20,
+        numTestPart2 = 6,
     )
     val testPart1_2 = test.testPart1.copy(function = { Day10(test10_2).partOne() })
     val testPart1_3 = testPart1_2.copy(function = { Day10(test10_3).partOne() }, expected = 8)
