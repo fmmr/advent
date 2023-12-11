@@ -59,8 +59,8 @@ internal class Day10Test {
         resultTwo,
         { Day10(data10) },
         { Day10(test10) },
-        numTestPart1 = 20,
-        numTestPart2 = 6,
+        numTestPart1 = 1,
+        numTestPart2 = 1,
     )
     val testPart1_2 = test.testPart1.copy(function = { Day10(test10_2).partOne() })
     val testPart1_3 = testPart1_2.copy(function = { Day10(test10_3).partOne() }, expected = 8)

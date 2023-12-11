@@ -14,6 +14,7 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
 
     override fun partOne(): Int {
         val (start, tiles) = parsed
+        tiles.print()
         return findPath(start, tiles).size / 2
     }
 
@@ -22,17 +23,15 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
         // https://en.wikipedia.org/wiki/Point_in_polygon
         // Ray casting algorithm
         val (start, tiles) = parsed
-        val findPath = findPath(start, tiles)
         // set everything else than path to dot
-        val cleanTiles = cleanTiles(tiles, findPath)
-
+        val cleanTiles = cleanTiles(tiles, start, findPath(start, tiles))
         val posInside = cleanTiles.flatMapIndexed { y, line ->
             line.mapIndexedNotNull { x, tile ->
-                val rest = line.subList(x + 1, line.size)
                 if (tile == DOT) {
-                    // skip DASH L J  (and maybe S)  - we define the point
-                    // as being under these when ray casting horisontally
-                    if ((rest.count { it !in setOf(DASH, L, J, DOT) } % 2) == 1) {
+                    // skip DASH L J   we define the point
+                    // as being under these when ray casting horizontally
+                    // then cast a ray to the right and count number of non-dots
+                    if ((line.subList(x + 1, line.size).count { it !in setOf(DASH, L, J, DOT) } % 2) == 1) {
                         Pos(x, y)
                     } else {
                         null
@@ -42,19 +41,38 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
                 }
             }
         }
+        cleanTiles.print(posInside.toSet())
         return posInside.size
     }
 
-    private fun cleanTiles(tiles: Array<Array<Tile>>, findPath: Set<Pos>): List<List<Tile>> {
+    private fun cleanTiles(tiles: Array<Array<Tile>>, start: Pos, path: Set<Pos>): List<List<Tile>> {
         return tiles.mapIndexed() { y, line ->
             line.mapIndexed { x, tile ->
-                if (Pos(x, y) !in findPath) {
+                if (Pos(x, y) == start) {
+                    // actually no need to replace this, because input S is replaced anyway for both test
+                    // and live data in tests, but nice anyway
+                    findStartTile(start, tiles)
+                } else if (Pos(x, y) !in path) {
                     DOT
                 } else {
                     tile
                 }
             }
         }
+    }
+
+    private fun findStartTile(start: Pos, tiles: Array<Array<Tile>>): Tile {
+        val (u, d, l, r) = start.neighbourCellsUDLR().map { tiles[it] }
+        val startChar = when {
+            u in setOf(PIPE, SVN, F) && d in setOf(L, PIPE, J) -> PIPE
+            l in setOf(DASH, L, F) && r in setOf(DASH, J, SVN) -> DASH
+            u in setOf(PIPE, SVN, F) && r in setOf(DASH, J, SVN) -> L
+            u in setOf(PIPE, SVN, F) && l in setOf(DASH, L, F) -> J
+            l in setOf(DASH, L, F) && d in setOf(L, PIPE, J) -> SVN
+            d in setOf(L, PIPE, J) && r in setOf(DASH, J, SVN) -> F
+            else -> error("hm - not S found for u, d, l, r: $u, $d, $l, $r")
+        }
+        return startChar
     }
 
     private fun findPath(start: Pos, tiles: Array<Array<Tile>>): Set<Pos> {
@@ -65,7 +83,7 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
             val p = deque.removeFirst()
             val current = tiles[p]
             val (n, s, w, e) = p.neighbourCellsUDLR()
-            if (current in setOf(S, L, J, PIPE) && tiles[n] in setOf(PIPE, SVN, F) &&  seen.add(n)) {
+            if (current in setOf(S, L, J, PIPE) && tiles[n] in setOf(PIPE, SVN, F) && seen.add(n)) {
                 deque.addLast(n)
             }
             if (current in setOf(S, SVN, F, PIPE) && tiles[s] in setOf(PIPE, L, J) && seen.add(s)) {
@@ -91,6 +109,25 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
         pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
 
 
+    fun Tiles.print(inside: Set<Pos> = emptySet()) {
+        map { it.toList() }.print(inside)
+    }
+
+    fun Iterable<Iterable<Tile>>.print(inside: Set<Pos> = emptySet()) {
+        val red = "\u001b[31m"
+        val reset = "\u001b[0m"
+        forEachIndexed { y, l ->
+            l.forEachIndexed { x, t ->
+                if (Pos(x, y) in inside) {
+                    print("$red█$reset")
+                } else {
+                    print(t.print)
+                }
+            }
+            println("")
+        }
+    }
+
     override fun List<String>.parse(): Pair<Pos, Array<Array<Tile>>> {
         val maxX = maxOf { it.length }
         var start = Pos(0, 0)
@@ -110,11 +147,8 @@ class Day10(val input: List<String>) : Day<Int, Int, Pair<Pos, Tiles>> {
     override val day = "10".toInt()
 }
 
-enum class Tile {
-    PIPE, DASH, L, J, SVN, F, DOT, S;
-
-
-
+enum class Tile(val print: Char) {
+    PIPE('│'), DASH('─'), L('└'), J('┘'), SVN('┐'), F('┌'), DOT('.'), S('S');
 
 
     companion object {
