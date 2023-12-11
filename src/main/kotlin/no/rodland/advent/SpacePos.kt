@@ -193,6 +193,8 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
 
     operator fun minus(other: Pos): Pos = Pos(x - other.x, y - other.y)
 
+    fun manhattanDistance(p: Pos): Int = abs(x - p.x) + abs(y - p.y)
+
     operator fun plus(other: Pos): Pos = Pos(x + other.x, y + other.y)
     fun lineTo(other: Pos): List<Pos> {
         val xDelta = (other.x - x).sign
