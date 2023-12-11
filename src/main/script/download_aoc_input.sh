@@ -1,7 +1,7 @@
 #!/bin/bash
-YEAR=`date '+%Y'`
-DAY=`date '+%d'`
-DAY_NO_ZEROS="$(echo $DAY | sed 's/^0*//')"
+YEAR=$(date '+%Y')
+DAY=$(date '+%d')
+DAY_NO_ZEROS="${DAY//0/}"
 
 AOC_SESSION_COOKIE="FIND_IN_BROWSER"
 
