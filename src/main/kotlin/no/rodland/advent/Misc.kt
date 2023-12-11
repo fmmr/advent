@@ -2,13 +2,22 @@ import no.rodland.advent.Pos
 
 
 fun String.readFile(): List<String> {
-    val resource = Pos::class.java.getResource("/$this")!!
-    return resource.readText().split("\n")
+    return readFileAsString().split("\n")
 }
 
 fun String.readFileAsString(): String {
-    val resource = Pos::class.java.getResource("/$this")!!
-    return resource.readText()
+    return try {
+        val resource = Pos::class.java.getResource("/$this")!!
+        val str = resource.readText()
+        if (str.last() == '\n') {
+            str.dropLast(1)
+        } else {
+            str
+        }
+    } catch (e: Exception) {
+        println("Unable to read file: $this, ${e.message}")
+        ""
+    }
 }
 
 fun String.readFileAsInt(): List<Int> {
@@ -40,7 +49,6 @@ fun Regex.getLong(str: String, i: Int = 1): Long = find(str)!!.groupValues[i].to
 fun Int.isEven() = this % 2 == 0
 
 fun Any.println() = println(this)
-
 
 
 fun <T> Sequence<T>.takeWhileInclusive(pred: (T) -> Boolean): Sequence<T> {
