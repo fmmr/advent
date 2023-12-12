@@ -1,60 +1,48 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.Day
-import kotlin.math.pow
 
 // template generated: 12/12/2023
 // Fredrik Rødland 2023
 
-class Day12(val input: List<String>) : Day<Int, Long, List<Pair<List<String>, List<Int>>>> {
+class Day12(val input: List<String>) : Day<Int, Long, List<Pair<String, List<Int>>>> {
 
     private val parsed = input.parse()
 
     override fun partOne(): Int {
-        val hei = parsed.map { (candidates, numbers) ->
-            candidates
+        return parsed.sumOf { (candidates, numbers) ->
+            expand(candidates)
                 .map { candidate -> candidate.split("\\.+".toRegex()).filterNot { it.isEmpty() } }
                 .filter { it.size == numbers.size }
                 .map { strings -> strings.map { it.length } }
                 .count { it == numbers }
         }
-        return hei.sum()
     }
 
     override fun partTwo(): Long {
         return 2
     }
 
-    data class Springs(val candidates: String, val lengths: List<Int>)
 
     fun expand(input: String): List<String> {
+        fun String.replaceBoolean(): List<Char> = map { char ->
+            if (char == '0') '.'
+            else '#'
+        }
+
         val count = input.count { it == '?' }
-        if (count == 0) {
-            return listOf(input)
+        val numChars = 1 shl count  // 2^count
+        return (0..<numChars).map { boolean ->
+            boolean.toString(2).padStart(count, '0').replaceBoolean()
+        }.map { mask ->
+            mask.fold(input) { acc: String, c: Char -> acc.replaceFirst("?", c.toString()) }
         }
-        val numChars = 2.0.pow(count).toInt()
-        val replacement = (0..(numChars - 1)).map { n ->
-            val bin = n.toString(2).padStart(count, '0')
-            bin.map { char ->
-                if (char == '0') '.'
-                else '#'
-            }.joinToString("")
-        }.map {
-            var replaced = input
-            for (char in it) {
-                replaced = replaced.replaceFirst("?", char.toString())
-            }
-            replaced
-        }
-        return replacement
     }
 
-    override fun List<String>.parse(): List<Pair<List<String>, List<Int>>> {
-
+    override fun List<String>.parse(): List<Pair<String, List<Int>>> {
         return map { line ->
             val (first, second) = line.split(" ")
-            val ints = second.split(",").map { it.toInt() }
-            expand(first) to ints
+            first to second.split(",").map { it.toInt() }
         }
     }
 

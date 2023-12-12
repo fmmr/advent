@@ -29,10 +29,8 @@ internal class Day12Test {
         resultTwo,
         { Day12(data12) },
         { Day12(test12) },
-        numInitLive = 0,
         numTestPart1 = 1,
-        numTestPart2 = 2,
-
+        numTestPart2 = 1,
     )
 
     @Nested
@@ -110,6 +108,7 @@ internal class Day12Test {
         }
 
         @Test
+        @Slow(10000)
         fun `12,1,live,1`() {
             report(test.livePart1)
         }
