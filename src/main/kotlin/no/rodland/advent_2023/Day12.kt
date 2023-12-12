@@ -11,18 +11,12 @@ class Day12(val input: List<String>) : Day<Int, Long, List<Pair<List<String>, Li
     private val parsed = input.parse()
 
     override fun partOne(): Int {
-        val hei = parsed.map { (candidates, ints) ->
-            val map = candidates.map {
-                it.split("\\.+".toRegex()).filterNot { it.isEmpty() }
-            }
-            val sameSize = map.filter { it.size == ints.size }
-            val lengths = sameSize.map { strings ->
-                strings.map { it.length }
-            }
-            val matches = lengths.count {
-                it == ints
-            }
-            matches
+        val hei = parsed.map { (candidates, numbers) ->
+            candidates
+                .map { candidate -> candidate.split("\\.+".toRegex()).filterNot { it.isEmpty() } }
+                .filter { it.size == numbers.size }
+                .map { strings -> strings.map { it.length } }
+                .count { it == numbers }
         }
         return hei.sum()
     }
