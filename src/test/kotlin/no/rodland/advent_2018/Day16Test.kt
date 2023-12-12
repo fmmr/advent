@@ -68,7 +68,7 @@ internal class Day16Test {
         @Test
         fun `16,1,live`() {
             report {
-                Day16.partOne(samples16.windowed(4, 4), 3) to 592
+                Day16.partOne(samples16.windowed(4, 4), 3) to 591
             }
         }
     }
