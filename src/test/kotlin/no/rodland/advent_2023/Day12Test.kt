@@ -15,9 +15,9 @@ internal class Day12Test {
     private val data12 = "2023/input_12.txt".readFile()
     private val test12 = "2023/input_12_test.txt".readFile()
 
-    private val resultTestOne = 2L
+    private val resultTestOne = 21
     private val resultTestTwo = 2L
-    private val resultOne = 2L
+    private val resultOne = 7163
     private val resultTwo = 2L
 
     val test = defaultTestSuiteParseOnInit(
@@ -29,14 +29,62 @@ internal class Day12Test {
         resultTwo,
         { Day12(data12) },
         { Day12(test12) },
+        numInitLive = 0,
+        numTestPart1 = 1,
+        numTestPart2 = 2,
+
     )
 
     @Nested
-    inner class Init {
+    inner class Parsing {
+        val day = Day12(emptyList())
+        val test1 = AOCTest({ day.expand("") }, Unit, listOf(""), 1, "12".toInt(), Part.ONE, false, "parsing")
+
         @Test
-        fun `12,-,example,1`() {
-            report(AOCTest({ "123".toInt() }, Unit, 123, 5, "12".toInt(), Part.TWO, false, "example"))
+        fun `12,-,example,expand_empty`() {
+            report(test1)
         }
+
+        @Test
+        fun `12,-,example,expand_question`() {
+            test("?", listOf(".", "#"))
+        }
+
+        @Test
+        fun `12,-,example,expand_2_question`() {
+            test("??", listOf("..", ".#", "#.", "##"))
+        }
+
+        @Test
+        fun `12,-,example,expand_2_question_with_hash`() {
+            test("?#?", listOf(".#.", ".##", "##.", "###"))
+            test("#??", listOf("#..", "#.#", "##.", "###"))
+            test("??#", listOf("..#", ".##", "#.#", "###"))
+        }
+
+        @Test
+        fun `12,-,example,expand_3_question`() {
+            test("???", listOf("...", "..#", ".#.", ".##", "#..", "#.#", "##.", "###"))
+        }
+
+        @Test
+        fun `12,-,example,expand_dot`() {
+            test(".", listOf("."))
+        }
+
+        @Test
+        fun `12,-,example,expand_hash`() {
+            test("#", listOf("#"))
+        }
+
+        private fun test(input: String, expected: List<String>) {
+            report(test1.copy(function = { day.expand(input) }, expected = expected))
+        }
+
+    }
+
+    @Nested
+    inner class Init {
 
         @Test
         fun `12,-,example,2`() {
