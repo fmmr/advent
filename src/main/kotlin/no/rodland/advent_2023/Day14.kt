@@ -33,12 +33,12 @@ class Day14(val input: List<String>) : Day<Int, Int, List<String>> {
         return cycle.load()
     }
 
-    private fun List<String>.rev() = map { it.reversed() }
+    private fun List<String>.reverseEachLine() = map { it.reversed() }
     private fun List<String>.load() = sumOf { it.load() }
-    private fun List<String>.cycle() = tilt().rotateLeft().rev()
-        .tilt().reversed().rotateLeft().rev()
-        .tilt().reversed().rotateLeft().rev()
-        .tilt().reversed().rotateLeft().asReversed().rev()
+    private fun List<String>.cycle() = tilt().rotateLeft().reverseEachLine()
+        .tilt().reversed().rotateLeft().reverseEachLine()
+        .tilt().reversed().rotateLeft().reverseEachLine()
+        .tilt().reversed().rotateLeft().asReversed().reverseEachLine()
 
     private fun List<String>.tilt() = map { line -> collapsed(line) }
 
