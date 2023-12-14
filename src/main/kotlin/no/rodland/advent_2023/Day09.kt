@@ -21,7 +21,7 @@ class Day09(val input: List<String>) : Day<Int, Int, List<List<Int>>> {
     else last() + zipWithNext { a, b -> b - a }.next()
 
 //    private fun List<Int>.previous(): Int = if (all { it == 0 }) 0
-//    else first() - diffs().previous()
+//    else first() - zipWithNext { a, b -> b - a }.previous()
 
     override fun List<String>.parse(): List<List<Int>> {
         return map { line ->
