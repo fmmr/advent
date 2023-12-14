@@ -35,8 +35,8 @@ internal class Day12Test {
 
     @Nested
     inner class Parsing {
-        val day = Day12(emptyList())
-        val test1 = AOCTest({ day.expand("") }, Unit, listOf(""), 1, "12".toInt(), Part.ONE, false, "parsing")
+        private val day = Day12(emptyList())
+        private val test1 = AOCTest({ day.expand("") }, Unit, listOf(""), 1, "12".toInt(), Part.ONE, false, "parsing")
 
         @Test
         fun `12,-,example,expand_empty`() {
