@@ -5,24 +5,51 @@ import no.rodland.advent.Day
 // template generated: 14/12/2023
 // Fredrik Rødland 2023
 
-class Day14(val input: List<String>) : Day<Int, Long, List<String>> {
+class Day14(val input: List<String>) : Day<Int, Int, List<String>> {
 
     private val grid = input.parse()
 
     override fun partOne(): Int {
-       return grid.map { line ->
-            val collapsed = collapsed(line)
-            val weight = collapsed.foldIndexed(0) { index: Int, acc: Int, c: Char ->
-                if (c == 'O') {
-                    acc + (line.length - index)
-                } else {
-                    acc
-                }
-            }
-            weight
-        }.sum()
-
+        return grid.rotateLeft().tilt().load()
     }
+
+    override fun partTwo(): Int {
+        var cycle = grid.rotateLeft()
+        val seenStateIn = mutableMapOf(cycle to 0)
+        val number = 1_000_000_000
+        // loop through until we see a map we've already seen and cycle (a few times) forward until we
+        // would have reached 1_000_000_000
+        for (i in 1..number) {
+            cycle = cycle.cycle()
+            val lastSeen = seenStateIn.getOrPut(cycle) { i }
+            if (lastSeen != i) {
+                val mod = i - lastSeen
+                val diff = number - i
+                val times = diff % mod
+                repeat(times) { cycle = cycle.cycle() }
+                break
+            }
+        }
+        return cycle.load()
+    }
+
+    private fun List<String>.rev() = map { it.reversed() }
+    private fun List<String>.load() = sumOf { it.load() }
+    private fun List<String>.cycle() = tilt().rotateLeft().rev()
+        .tilt().reversed().rotateLeft().rev()
+        .tilt().reversed().rotateLeft().rev()
+        .tilt().reversed().rotateLeft().asReversed().rev()
+
+    private fun List<String>.tilt() = map { line -> collapsed(line) }
+
+    private fun String.load() =
+        foldIndexed(0) { index: Int, acc: Int, c: Char ->
+            if (c == 'O') {
+                acc + (length - index)
+            } else {
+                acc
+            }
+        }
 
     fun collapsed(line: String): String {
         var previousLine = line
@@ -34,7 +61,7 @@ class Day14(val input: List<String>) : Day<Int, Long, List<String>> {
         return newLine
     }
 
-    fun hopOne(line: String): String {
+    private fun hopOne(line: String): String {
         val array = line.toCharArray()
         line.forEachIndexed { idx, c ->
             if (line[idx] == '.' && (idx + 1) < line.length && line[idx + 1] != '#') {
@@ -46,18 +73,20 @@ class Day14(val input: List<String>) : Day<Int, Long, List<String>> {
         return array.joinToString("")
     }
 
-    override fun partTwo(): Long {
-        return 2
+    override fun List<String>.parse(): List<String> = this
+
+    private fun List<String>.rotateLeft(): List<String> {
+        return indices.reversed().map { j -> indices.map { i -> get(i)[j] }.joinToString("") }
     }
 
-    override fun List<String>.parse(): List<String> {
-        val width = first().length
-        val height = size
-        return (0..<width).map { j ->
-            (0..<height).map { i ->
-                get(i)[j]
-            }.joinToString("")
+    @Suppress("unused")
+    private fun List<String>.print(str: String? = null): List<String> {
+        if (str != null) {
+            println(str)
         }
+        forEach { println(it) }
+        println()
+        return this
     }
 
     override val day = "14".toInt()

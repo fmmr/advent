@@ -16,9 +16,9 @@ internal class Day14Test {
     private val test14 = "2023/input_14_test.txt".readFile()
 
     private val resultTestOne = 136
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 64
     private val resultOne = 108144
-    private val resultTwo = 2L
+    private val resultTwo = 108404
 
     val test = defaultTestSuiteParseOnInit(
         Day14(data14),
@@ -29,6 +29,8 @@ internal class Day14Test {
         resultTwo,
         { Day14(data14) },
         { Day14(test14) },
+        numTestPart1 = 300,
+        numTestPart2 = 1,
     )
 
     @Nested
@@ -76,6 +78,18 @@ internal class Day14Test {
 
     }
 
+    @Nested
+    inner class `Only tests` {
+        @Test
+        fun `14,1,test`() {
+            report(test.testPart1)
+        }
+        @Test
+        fun `14,2,test`() {
+            report(test.testPart2)
+        }
+
+    }
 
     @Nested
     inner class `Part 1` {
@@ -85,6 +99,7 @@ internal class Day14Test {
         }
 
         @Test
+        @Slow(320)
         fun `14,1,live,1`() {
             report(test.livePart1)
         }
@@ -98,6 +113,7 @@ internal class Day14Test {
         }
 
         @Test
+        @Slow(490)
         fun `14,2,live,1`() {
             report(test.livePart2)
         }
