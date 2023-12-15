@@ -24,20 +24,20 @@ class Day15(val input: List<String>) : Day<Int, Int, List<Day15.Step>> {
                 }
             }
         }
-        return ar.flatMapIndexed { idx, list ->
-            list.mapIndexed { listIdx, lens -> focusingPower(idx, listIdx, lens) }
+        return ar.flatMapIndexed { box, list ->
+            list.mapIndexed { slot, lens -> focusingPower(box, slot + 1, lens) }
         }.sum()
     }
 
-    private fun focusingPower(boxIndex: Int, lensIndex: Int, lens: Lens) = (boxIndex + 1) * (lensIndex + 1) * lens.focal
+    private fun focusingPower(box: Int, slot: Int, lens: Lens) = (box + 1) * slot * lens.focal
 
     private fun MutableList<Lens>.remove(label: String) {
-        removeAll { it.label == label }
+        removeIf { it.label == label }
     }
 
     private fun MutableList<Lens>.replace(label: String, step: Step) {
         Lens(label, step.num!!).also { lens ->
-            indexOfFirst { it.label == label }.also { if (it >= 0) this[it] = lens else add(lens) }
+            indexOfFirst { it.label == label }.also { idx -> if (idx >= 0) this[idx] = lens else add(lens) }
         }
     }
 
