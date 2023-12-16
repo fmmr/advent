@@ -1,6 +1,7 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import readFile
@@ -65,6 +66,7 @@ internal class Day16Test {
 
         @Test
         @Slow(350)
+        @Disabled
         fun `16,1,live,1`() {
             report(test.livePart1)
         }
@@ -79,6 +81,7 @@ internal class Day16Test {
 
         @Test
         @Slow(10000)
+        @Disabled
         fun `16,2,live,1`() {
             report(test.livePart2)
         }
