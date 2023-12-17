@@ -63,7 +63,7 @@ class Day14(val input: List<String>) : Day<Int, Int, List<String>> {
 
     private fun hopOne(line: String): String {
         val array = line.toCharArray()
-        line.forEachIndexed { idx, c ->
+        line.forEachIndexed { idx, _ ->
             if (line[idx] == '.' && (idx + 1) < line.length && line[idx + 1] != '#') {
                 val tmp = line[idx]
                 array[idx] = line[idx + 1]
