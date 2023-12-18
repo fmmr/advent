@@ -23,4 +23,17 @@ enum class Direction(val c: Char, val num: Long) {
         SOUTH -> WEST
         WEST -> NORTH
     }
+
+    operator fun times(num: Int): List<Direction> = (0..<num).map { _ -> this }
+    operator fun times(num: Long): List<Direction> = (0..<num).map { _ -> this }
+
+    companion object{
+        fun fromUDLR(c: Char): Direction = when (c) {
+            'U' -> NORTH
+            'D' -> SOUTH
+            'L' -> WEST
+            'R' -> EAST
+            else -> throw IllegalArgumentException("Unknown direction: $c")
+        }
+    }
 }
