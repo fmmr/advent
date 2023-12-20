@@ -30,18 +30,16 @@ class Day19(val input: List<String>) : Day<Int, Long, Pair<Map<String, Day19.Wor
     fun run(wf: String, ranges: Ranges): Long {
         if (wf == "R") return 0L
         if (wf == "A") return ranges.product()
-        if (ranges.empty) return 0L
 
         val workflow = workflows[wf]!!
-        var total = 0L
+
         var currentRanges = ranges
-        workflow.filters.forEach { rule ->
+        return workflow.filters.sumOf { rule ->
             val (matchedRule, notMatched) = rule.split(currentRanges)
-            total += run(rule.destination, matchedRule)
             currentRanges = notMatched
+            // if (notMatched.empty) return@sumOf run(rule.destination, matchedRule)
+            run(rule.destination, matchedRule)
         }
-        total += run(workflow.defaultDestination, currentRanges)
-        return total
     }
 
 
@@ -68,12 +66,14 @@ class Day19(val input: List<String>) : Day<Int, Long, Pair<Map<String, Day19.Wor
                         string.substringAfter(">").substringBefore(":").toInt(),
                         string.substringAfter(":")
                     )
+
                     string.contains("<") -> CheckRule(
                         string.substringBefore("<").first(),
                         false,
                         string.substringAfter("<").substringBefore(":").toInt(),
                         string.substringAfter(":")
                     )
+
                     string == "A" -> acceptRule
                     string == "R" -> rejectRule
                     else -> NoCheckRule(string)
