@@ -21,6 +21,24 @@ fun String.readFileAsString(): String {
     }
 }
 
+// https://kotlinlang.slack.com/archives/C87V9MQFK/p1703069274599999?thread_ts=1703048402.894019&cid=C87V9MQFK
+//fun chineseRemainder(values: List<Pair<Long, Long>>): Long {
+//    if (values.isEmpty()) {
+//        return 0L
+//    }
+//    var result = values[0].first
+//    var lcm = values[0].second
+//    for (i in 1 until values.size) {
+//        val (base, modulo) = values[i]
+//        val target = base % modulo
+//        while (result % modulo != target) {
+//            result += lcm
+//        }
+//        lcm = lcm(lcm, modulo)
+//    }
+//    return result
+//}
+
 fun lcm(n1: BigInteger, n2: BigInteger): BigInteger {
     // https://no.wikipedia.org/wiki/Minste_felles_multiplum
     // lcm = (n1 * n2) / gcd
