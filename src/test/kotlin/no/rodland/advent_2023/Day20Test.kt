@@ -16,11 +16,11 @@ internal class Day20Test {
     private val test20 = "2023/input_20_test.txt".readFile()
     private val test20_2 = "2023/input_20_test_2.txt".readFile()
 
-    private val resultTestOne = 2L
+    private val resultTestOne = 32000000L
     private val resultTestTwo = 2L
-    private val resultTestTwo_2 = 2L
-    private val resultOne = 2L
-    private val resultTwo = 2L
+    private val resultTestTwo_2 = 11687500L
+    private val resultOne = 819397964L
+    private val resultTwo = 252667369442479L
 
     val test = defaultTestSuiteParseOnInit(
         Day20(data20),
@@ -31,6 +31,8 @@ internal class Day20Test {
         resultTwo,
         { Day20(data20) },
         { Day20(test20) },
+        numTestPart1 = 20,
+        numTestPart2 = 4
     )
 
     @Nested
@@ -62,6 +64,7 @@ internal class Day20Test {
         fun `20,1,test`() {
             report(test.testPart1)
         }
+
         @Test
         fun `20,1,test,2`() {
             report(test.testPart1.copy(function = { Day20(test20_2).partOne() }, expected = resultTestTwo_2))
@@ -75,10 +78,10 @@ internal class Day20Test {
 
     @Nested
     inner class `Part 2` {
-        @Test
-        fun `20,2,test`() {
-            report(test.testPart2)
-        }
+//        @Test
+//        fun `20,2,test`() {
+//            report(test.testPart2)
+//        }
 
         @Test
         fun `20,2,live,1`() {

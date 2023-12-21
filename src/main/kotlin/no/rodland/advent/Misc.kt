@@ -1,4 +1,5 @@
 import no.rodland.advent.Pos
+import java.math.BigInteger
 
 
 fun String.readFile(): List<String> {
@@ -18,6 +19,12 @@ fun String.readFileAsString(): String {
         println("Unable to read file: $this, ${e.message}")
         ""
     }
+}
+
+fun lcm(n1: BigInteger, n2: BigInteger): BigInteger {
+    // https://no.wikipedia.org/wiki/Minste_felles_multiplum
+    // lcm = (n1 * n2) / gcd
+    return (n1 * n2) / n1.gcd(n2)
 }
 
 fun String.readFileAsInt(): List<Int> {
