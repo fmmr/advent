@@ -5,6 +5,8 @@ import kotlin.math.*
 internal const val ACTIVE = '#'
 private fun Char.active() = this == ACTIVE
 
+typealias Point = Pos
+
 sealed class SpacePos {
     abstract fun neighbours(): List<SpacePos>
     abstract fun manhattan(): Int
