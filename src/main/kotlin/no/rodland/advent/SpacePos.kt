@@ -16,6 +16,7 @@ sealed class SpacePos {
 
 data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
     constructor(triple: Triple<Int, Int, Int>) : this(triple.first, triple.second, triple.third)
+    constructor(str:String, separator:Char=',') : this(str.split(separator).map { it.trim().toInt() }.let { Triple(it[0], it[1], it[2]) })
 
     override fun neighbours(): List<SpacePos> {
         return listOf(0, 1, -1)

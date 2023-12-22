@@ -1,11 +1,12 @@
 package no.rodland.advent_2023
 
 import no.rodland.advent.Day
+import no.rodland.advent.Pos3D
 
 // template generated: 22/12/2023
 // Fredrik Rødland 2023
 
-class Day22(val input: List<String>) : Day<Long, Long, List<String>> {
+class Day22(val input: List<String>) : Day<Long, Long, List<Day22.Brick>> {
 
     private val parsed = input.parse()
 
@@ -17,9 +18,12 @@ class Day22(val input: List<String>) : Day<Long, Long, List<String>> {
         return 2
     }
 
-    override fun List<String>.parse(): List<String> {
+    data class Brick(val from: Pos3D, val to: Pos3D)
+
+    override fun List<String>.parse(): List<Brick> {
         return map { line ->
-            line
+            val (from, to) = line.split('~')
+            Brick(Pos3D(from), Pos3D(to))
         }
     }
 
