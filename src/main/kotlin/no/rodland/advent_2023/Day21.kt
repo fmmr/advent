@@ -90,7 +90,7 @@ class Day21(val input: List<String>) : Day<Int, Long, Map<Pos, Char>> {
 
 
     override fun partTwo(): Long {
-        println(solvePart2())
+//        println(solvePart2())
         return 2
     }
 
