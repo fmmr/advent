@@ -126,3 +126,8 @@ inline fun <T> Sequence<T>.takeUntil(predicate: (T) -> Boolean): List<T> {
     }
     return list
 }
+
+fun <E> List<E>.cartesianPairs(): List<Pair<E, E>> =
+    this.flatMapIndexed { index, left ->
+        this.indices.drop(index).map { right -> left to this[right] }
+    }
