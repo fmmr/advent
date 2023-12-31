@@ -23,7 +23,33 @@ class Day24(val input: List<String>) : Day<Int, Long, List<Day24.HailStone>> {
         .count { (x, y, _) -> x in range && y in range }
 
     override fun partTwo(): Long {
-        return 2
+        // copy of https://todd.ginsberg.com/post/advent-of-code/2023/day24/
+        val range = -300L..300L
+        while (true) {
+            val hail = parsed.shuffled().take(4)
+            range.forEach { deltaX ->
+                range.forEach { deltaY ->
+                    val hail0 = hail[0].withVelocityDelta(deltaX, deltaY)
+                    val intercepts = hail.drop(1).mapNotNull {
+                        it.withVelocityDelta(deltaX, deltaY).crosses(hail0)
+                    }
+                    if (intercepts.size == 3 &&
+                        intercepts.all { it.x == intercepts.first().x } &&
+                        intercepts.all { it.y == intercepts.first().y }
+                    ) {
+                        range.forEach { deltaZ ->
+                            val z1 = hail[1].predictZ(intercepts[0].time, deltaZ)
+                            val z2 = hail[2].predictZ(intercepts[1].time, deltaZ)
+                            val z3 = hail[3].predictZ(intercepts[2].time, deltaZ)
+                            if (z1 == z2 && z2 == z3) {
+                                return (intercepts.first().x + intercepts.first().y + z1).toLong()
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
     data class HailStone(val pos: Pos3DLong, val vel: Pos3DLong) {
@@ -40,6 +66,15 @@ class Day24(val input: List<String>) : Day<Int, Long, List<Day24.HailStone>> {
             val y = slope * (x - pos.x) + pos.y
             return Intersection(x, y, t1)
         }
+
+        fun withVelocityDelta(vx: Long, vy: Long): HailStone =
+            copy(
+                vel = Pos3DLong(vel.x + vx, vel.y + vy, vel.z)
+            )
+
+
+        fun predictZ(time: Double, deltaVZ: Long): Double =
+            (pos.z + time * (vel.z + deltaVZ))
     }
 
     data class Intersection(val x: Double, val y: Double, val time: Double)
