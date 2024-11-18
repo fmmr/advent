@@ -4,3 +4,4 @@ out
 advent.iml
 lib/*-sources.jar
 target
+auth.txt

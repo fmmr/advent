@@ -1,10 +1,13 @@
 #!/bin/bash
+
+MYDIR="$(dirname "$(realpath "$0")")"
+. $MYDIR/auth.txt
+
 YEAR=$(date '+%Y')
 DAY=$(date '+%d')
 # shellcheck disable=SC2001
 DAY_NO_ZEROS="$(echo "$DAY" | sed 's/^0*//')"
 
-AOC_SESSION_COOKIE="FIND_IN_BROWSER"
 AOC_DIR="/Users/fmr/projects/advent"
 PUZZLE_URL="https://adventofcode.com/${YEAR}/day/${DAY_NO_ZEROS}/input"
 
