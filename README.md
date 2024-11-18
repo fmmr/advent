@@ -5,7 +5,7 @@ fmmr solutions for Advent of code.
 
 ![stars](gifs/stars.png?raw=true "ascii art")
 
-## 2023
+## 2024
 
 [AOC](https://adventofcode.com/2024),
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2024),
