@@ -11,6 +11,7 @@ fmmr solutions for Advent of code.
 [Implementations](https://github.com/fmmr/advent/tree/master/src/main/kotlin/no/rodland/advent_2024),
 [Tests](https://github.com/fmmr/advent/tree/master/src/test/kotlin/no/rodland/advent_2024)
 
+![ascii art](gifs/2024.png?raw=true "ascii art")
 
 ## 2023
 
