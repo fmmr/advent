@@ -6,13 +6,14 @@ import no.rodland.advent.Day
 // Fredrik Rødland 2024
 class Day02(val input: List<String>) : Day<Long, Long, List<List<Int>>> {
     private val parsed = input.parse()
+    private val expanded = parsed.expand()
 
     override fun partOne(): Long {
         return parsed.count { it.isSafe() }.toLong()
     }
 
     override fun partTwo(): Long {
-        return parsed.expand().count { candidates -> candidates.any { list -> list.isSafe() } }.toLong()
+        return expanded.count { candidates -> candidates.any { list -> list.isSafe() } }.toLong()
     }
 
     override fun List<String>.parse(): List<List<Int>> {
