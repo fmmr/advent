@@ -17,13 +17,14 @@ class Day01(val input: List<String>) : Day<Int, Int, List<Pair<Int, Int>>> {
     }
 
     override fun partTwo(): Int {
-        return firstList.sumOf { first -> first * lastList.count { it == first } }
+        val frequencies = lastList.groupingBy { it }.eachCount()
+        return firstList.sumOf { first -> first * frequencies.getOrDefault(first, 0) }
     }
 
     override fun List<String>.parse(): List<Pair<Int, Int>> {
         return map { line ->
             val split = line.split(" +".toRegex())
-            split.first().toInt() to  split.last().toInt()
+            split.first().toInt() to split.last().toInt()
         }
     }
 
