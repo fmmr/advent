@@ -23,3 +23,6 @@ git commit -a -m "${YEAR} - Day ${DAY} - input/init"
 cd - || exit
 
 tail -10 "$PUZZLE_FILE"
+echo
+echo "TEST-FILE: $PUZZLE_FILE_TEST"
+echo "FILE:      $PUZZLE_FILE"
