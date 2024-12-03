@@ -17,7 +17,7 @@ fun <T> report(function: () -> Pair<T, T>) {
     }
     val millis = measureTimeMillis {
         val value = function()
-        println("Result: ${value.first}, Excpected: ${value.second}")
+        println("Result: ${value.first}, Expected: ${value.second}")
         Assertions.assertEquals(value.second, value.first)
     }
     println("took: ${millis}ms")

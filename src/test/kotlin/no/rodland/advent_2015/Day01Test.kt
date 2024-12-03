@@ -10,13 +10,6 @@ import org.junit.jupiter.api.Test
 internal class Day01Test {
     val data01 = "2015/input_01.txt".readFileAsOneString()
 
-
-    @Test
-    fun FMR_PRINT_VARIABLES(){
-        println("FMR CHECK ENV")
-        System.getenv().forEach{ (k, v) -> println("$k: $v") }
-    }
-
     @Nested
     inner class `Part 1` {
         @Test
