@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import kotlin.system.measureTimeMillis
 import kotlin.time.measureTimedValue
 
-val GHA = System.getenv("run.from") == "GHA"
+val GHA = System.getenv("RUN_FROM") == "GHA"
 
 fun <T> report(function: () -> Pair<T, T>) {
     getHeader().run {
