@@ -1,5 +1,8 @@
 name: Java CI
 
+env:
+  RUN_FROM: GHA
+
 on: [push]
 
 jobs:
