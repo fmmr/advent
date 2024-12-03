@@ -30,8 +30,9 @@ fun <T, U> report(test: AOCTest<T, U>) {
         println("=".repeat(this.length).joinToString(""))
     }
     var endValue: U? = null
+    val numTestsToRun = if (GHA) 1 else test.numTests
     val nanos = measureTimedValue {
-        repeat(test.numTests) {
+        repeat(numTestsToRun) {
             val value = test.function(test.data) to test.expected
             if (value.first != value.second) {
                 println("Result: ${value.first}, Expected: ${test.expected}")
@@ -40,9 +41,13 @@ fun <T, U> report(test: AOCTest<T, U>) {
             endValue = value.first
         }
     }
-    val avg = nanos.duration / test.numTests
-    println("Result: $endValue (OK)")
-    println("Ran ${test.numTests}, time_pr_test: $avg")
+    if (numTestsToRun == 1) {
+        println("Result: $endValue (OK), time: ${nanos.duration}")
+    } else {
+        val avg = nanos.duration / numTestsToRun
+        println("Result: $endValue (OK)")
+        println("Ran $numTestsToRun, time_pr_test: $avg")
+    }
     println()
 }
 
@@ -125,8 +130,8 @@ fun <T, S, U> defaultTestSuiteParseOnCall(
     numTestPart1: Int = 10,
     numTestPart2: Int = 10,
 ) = AOCTestSuite(
-    AOCTest(part1, liveData, livePart1,  if (GHA) 1 else numTestPart1, day = day, part = Part.ONE, live = true),
-    AOCTest(part2, liveData, livePart2,  if (GHA) 1 else numTestPart2, day = day, part = Part.TWO, live = true),
+    AOCTest(part1, liveData, livePart1, numTestPart1, day = day, part = Part.ONE, live = true),
+    AOCTest(part2, liveData, livePart2, numTestPart2, day = day, part = Part.TWO, live = true),
     AOCTest(part1, testData, testPart1, 1, day, part = Part.ONE, live = false),
     AOCTest(part2, testData, testPart2, 1, day, part = Part.TWO, live = false),
     AOCTest(part1, liveData, livePart1, 1, day = day, part = Part.ONE, live = true),
@@ -148,12 +153,12 @@ fun <T, S> defaultTestSuiteParseOnInit(
     numInitLive: Int = 100,
     numInitTest: Int = 100,
 ) = AOCTestSuite(
-    AOCTest({ liveDay.partOne() }, Unit, livePart1,  if (GHA) 1 else numTestPart1, liveDay.day, Part.ONE, true),
-    AOCTest({ liveDay.partTwo() }, Unit, livePart2,  if (GHA) 1 else numTestPart2, liveDay.day, Part.TWO, true),
+    AOCTest({ liveDay.partOne() }, Unit, livePart1, numTestPart1, liveDay.day, Part.ONE, true),
+    AOCTest({ liveDay.partTwo() }, Unit, livePart2, numTestPart2, liveDay.day, Part.TWO, true),
     AOCTest({ testDay.partOne() }, Unit, testPart1, 1, liveDay.day, Part.ONE, false),
     AOCTest({ testDay.partTwo() }, Unit, testPart2, 1, liveDay.day, Part.TWO, false),
-    AOCTest({ initLive() }, Unit, Unit, numInitLive,  if (GHA) 1 else liveDay.day, Part.INIT, live = true),
-    AOCTest({ initTest() }, Unit, Unit, numInitTest,  if (GHA) 1 else liveDay.day, Part.INIT, live = false),
+    AOCTest({ initLive() }, Unit, Unit, numInitLive, liveDay.day, Part.INIT, live = true),
+    AOCTest({ initTest() }, Unit, Unit, numInitTest, liveDay.day, Part.INIT, live = false),
 )
 
 
