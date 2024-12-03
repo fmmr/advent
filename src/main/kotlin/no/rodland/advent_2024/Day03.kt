@@ -6,16 +6,18 @@ import no.rodland.advent.Day
 // Fredrik Rødland 2024
 
 class Day03(val input: List<String>) : Day<Int, Int, String> {
-    private val multRegEx = """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
+    private val mulRegex = """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
+    private val doRegex = """do\(\)""".toRegex()
+    private val dontRegex = """don't\(\)""".toRegex()
+    private val matches = """$mulRegex|$doRegex|$dontRegex""".toRegex()
 
     private val parsed = input.parse()
 
     override fun partOne(): Int {
-        return multRegEx.findAll(parsed).toList().sumOf { mr -> mr.groupValues[1].toInt() * mr.groupValues[2].toInt() }
+        return mulRegex.findAll(parsed).toList().sumOf { mr -> mr.groupValues[1].toInt() * mr.groupValues[2].toInt() }
     }
 
     override fun partTwo(): Int {
-        val matches = """${multRegEx}|do\(\)|don't\(\)""".toRegex()
         var inDoMode = true
         return sequence {
             matches
@@ -24,7 +26,7 @@ class Day03(val input: List<String>) : Day<Int, Int, String> {
                     when {
                         mr.value == "do()" -> inDoMode = true
                         mr.value == "don't()" -> inDoMode = false
-                        inDoMode && multRegEx.matches(mr.value) -> yield(mr.groupValues[1].toInt() * mr.groupValues[2].toInt())
+                        inDoMode && mulRegex.matches(mr.value) -> yield(mr.groupValues[1].toInt() * mr.groupValues[2].toInt())
                     }
                 }
         }.sum()
