@@ -33,7 +33,7 @@ class Day03(val input: List<String>) : Day<Long, Long, List<String>> {
                             when {
                                 mr.value == "do()" -> inDoMode = true
                                 mr.value == "don't()" -> inDoMode = false
-                                multRegEx.matches(mr.value) && inDoMode -> yield(mr.groupValues[1].toInt() * mr.groupValues[2].toInt())
+                                inDoMode && multRegEx.matches(mr.value) -> yield(mr.groupValues[1].toInt() * mr.groupValues[2].toInt())
                             }
                         }
                 }
