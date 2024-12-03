@@ -15,7 +15,7 @@ class Day03(val input: List<String>) : Day<Int, Int, String> {
     }
 
     override fun partTwo(): Int {
-        val matches = """mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)""".toRegex()
+        val matches = """${multRegEx}|do\(\)|don't\(\)""".toRegex()
         var inDoMode = true
         return sequence {
             matches
