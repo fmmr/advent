@@ -173,10 +173,10 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
     fun below(howMuch: Int = 1): Pos = Pos(x, y + howMuch)
     fun left(howMuch: Int = 1): Pos = Pos(x - howMuch, y)
     fun right(howMuch: Int = 1): Pos = Pos(x + howMuch, y)
-    private fun nw(): Pos = Pos(x - 1, y - 1)
-    fun ne(): Pos = Pos(x + 1, y - 1)
-    fun sw(): Pos = Pos(x - 1, y + 1)
-    fun se(): Pos = Pos(x + 1, y + 1)
+    fun nw(howMuch: Int = 1): Pos = Pos(x - howMuch, y - howMuch)
+    fun ne(howMuch: Int = 1): Pos = Pos(x + howMuch, y - howMuch)
+    fun sw(howMuch: Int = 1): Pos = Pos(x - howMuch, y + howMuch)
+    fun se(howMuch: Int = 1): Pos = Pos(x + howMuch, y + howMuch)
 
     private fun Any?.size(): Int {
         return when (this) {
