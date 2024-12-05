@@ -5,11 +5,19 @@ import no.rodland.advent.Day
 // template generated: 05/12/2024
 // Fredrik Rødland 2024
 
-class Day05(val input: List<String>) : Day<Int, Int, Pair<Set<Pair<Int, Int>>, List<List<Int>>>> {
+class Day05(val input: List<String>) : Day<Int, Int, Pair<Map<Int, Set<Int>>, List<List<Int>>>> {
 
     private val parsed = input.parse()
     private val rules = parsed.first
     private val pages = parsed.second
+
+    private val comparator = Comparator<Int> { i1, i2 ->
+        when {
+            i1 in rules && rules[i1]!!.contains(i2) -> -1
+            i2 in rules && rules[i2]!!.contains(i1) -> 1
+            else -> 0
+        }
+    }
 
     override fun partOne(): Int {
         return pages
@@ -20,54 +28,26 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<Set<Pair<Int, Int>>, L
     override fun partTwo(): Int {
         return pages
             .filterNot { it.valid() }
-            .map { it.reorder() }
+            .map { it.sort() }
             .sumOf { it[it.size / 2] }
     }
 
-    private fun List<Int>.valid() = pairs().all { it in rules }
+    private fun List<Int>.valid(): Boolean = sort() == this
+    private fun List<Int>.sort(): List<Int> = sortedWith(comparator)
 
-    private fun List<Int>.reorder(): List<Int> {
-        val breaking = pairs()
-            .filterNot { it in rules }
-            .reversed() // see comment below **
-            .groupBy({ it.first }, { it.second }) // The returned map preserves the entry iteration order of the keys produced from the original collection.
 
-        return breaking.keys.fold(this) { acc, b -> acc.move(b, breaking[b]!!) }
-
-        // ** if not reversing the keys above - multiple passes must be done to ensure we have a right-ordered list.
-        // by starting at the end we don't have to.
-        //        return if (fold.valid()) {
-        //             println("yeah.       $this    $fold    $breaking")
-        //        } else {
-        //            // still not right - just run it again
-        //             println("reordering. $this    $fold    $breaking")
-        //            fold.reorder()
-        //        }
-    }
-
-    private fun List<Int>.move(element: Int, after: List<Int>): List<Int> {
-        val moveAfter = indexOfLast { it in after }
-        return toMutableList().apply {
-            remove(element)
-            add(moveAfter, element)
-        }
-    }
-
-    private fun List<Int>.pairs(): List<Pair<Int, Int>> {
-        return flatMapIndexed { index: Int, i: Int ->
-            subList(index + 1, size).map { i to it }
-        }
-    }
-
-    override fun List<String>.parse(): Pair<Set<Pair<Int, Int>>, List<List<Int>>> {
+    override fun List<String>.parse(): Pair<Map<Int, Set<Int>>, List<List<Int>>> {
         val (rulesStr, pagesStr) = this.joinToString("\n").split("\n\n").map { it.split("\n") }
 
         val pages = pagesStr.map { line ->
             line.split(",").map { it.toInt() }
         }
-        val rules = rulesStr.map { line ->
-            line.split("|").map { it.toInt() }.let { it[0] to it[1] }
-        }.toSet()
+        val rules = rulesStr
+            .map { line ->
+                line.split("|").map { it.toInt() }.let { it[0] to it[1] }
+            }
+            .groupBy({ it.first }, { it.second })
+            .mapValues { it.value.toSet() }
         return rules to pages
     }
 
