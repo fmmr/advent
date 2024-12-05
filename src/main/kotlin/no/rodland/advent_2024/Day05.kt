@@ -29,11 +29,12 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
     private fun List<Int>.reorder(): List<Int> {
         val breaking = pairs()
             .filterNot { it in rules }
-            .groupBy({ it.first }, { it.second })
+            .reversed() // see comment below **
+            .groupBy({ it.first }, { it.second }) // The returned map preserves the entry iteration order of the keys produced from the original collection.
 
-        return breaking.keys.reversed().fold(this) { acc, b -> acc.move(b, breaking[b]!!) }
+        return breaking.keys.fold(this) { acc, b -> acc.move(b, breaking[b]!!) }
 
-        // if not reversing the keys above - multiple passes must be done to ensure we have a right-ordered list.
+        // ** if not reversing the keys above - multiple passes must be done to ensure we have a right-ordered list.
         // by starting at the end we don't have to.
         //        return if (fold.valid()) {
         //             println("yeah.       $this    $fold    $breaking")
