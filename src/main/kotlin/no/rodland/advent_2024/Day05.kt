@@ -31,17 +31,17 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
             .filterNot { it in rules }
             .groupBy({ it.first }, { it.second })
 
-        val fold = breaking.keys.fold(this) { acc, b ->
-            acc.move(b, breaking[b]!!)
-        }
-        return if (fold.valid()){
-            // println("yeah.       $this    $fold    $breaking")
-            fold
-        }else{
-            // still not right - just run it again
-            // println("reordering. $this    $fold    $breaking")
-            fold.reorder()
-        }
+        return breaking.keys.reversed().fold(this) { acc, b -> acc.move(b, breaking[b]!!) }
+
+        // if not reversing the keys above - multiple passes must be done to ensure we have a right-ordered list.
+        // by starting at the end we don't have to.
+        //        return if (fold.valid()) {
+        //             println("yeah.       $this    $fold    $breaking")
+        //        } else {
+        //            // still not right - just run it again
+        //             println("reordering. $this    $fold    $breaking")
+        //            fold.reorder()
+        //        }
     }
 
     private fun List<Int>.move(element: Int, after: List<Int>): List<Int> {
