@@ -14,14 +14,14 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
     override fun partOne(): Int {
         return pages
             .filter { it.valid() }
-            .sumOf { it.middle() }
+            .sumOf { it[it.size / 2] }
     }
 
     override fun partTwo(): Int {
         return pages
             .filterNot { it.valid() }
             .map { it.reorder() }
-            .sumOf { it.middle() }
+            .sumOf { it[it.size / 2] }
     }
 
     private fun List<Int>.valid() = pairs().all { it in rules }
@@ -45,19 +45,18 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
     }
 
     private fun List<Int>.move(element: Int, after: List<Int>): List<Int> {
-        val indexElement = indexOf(element)
         val moveAfter = indexOfLast { it in after }
-        return subList(0, indexElement) + subList(indexElement + 1, moveAfter + 1) + element + subList(moveAfter + 1, size)
+        return toMutableList().apply {
+            remove(element)
+            add(moveAfter, element)
+        }
     }
-
-    private fun List<Int>.middle(): Int = get(size / 2)
 
     private fun List<Int>.pairs(): List<Pair<Int, Int>> {
         return flatMapIndexed { index: Int, i: Int ->
             subList(index + 1, size).map { i to it }
         }
     }
-
 
     override fun List<String>.parse(): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
         val (rulesStr, pagesStr) = this.joinToString("\n").split("\n\n").map { it.split("\n") }
