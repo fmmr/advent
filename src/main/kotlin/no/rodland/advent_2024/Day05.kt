@@ -26,10 +26,13 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<Map<Int, Set<Int>>, Li
     }
 
     override fun partTwo(): Int {
-        return pages
-            .filterNot { it.valid() }
-            .map { it.sort() }
-            .sumOf { it[it.size / 2] }
+        // only sorting once
+        return pages.map { it.sort() }.zip(pages).filter { it.first != it.second }.map { it.first }.sumOf { it[it.size / 2] }
+        // more readable
+        //        return pages
+        //            .filterNot { it.valid() }
+        //            .map { it.sort() }
+        //            .sumOf { it[it.size / 2] }
     }
 
     private fun List<Int>.valid(): Boolean = sort() == this
