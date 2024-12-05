@@ -5,7 +5,7 @@ import no.rodland.advent.Day
 // template generated: 05/12/2024
 // Fredrik Rødland 2024
 
-class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, List<List<Int>>>> {
+class Day05(val input: List<String>) : Day<Int, Int, Pair<Set<Pair<Int, Int>>, List<List<Int>>>> {
 
     private val parsed = input.parse()
     private val rules = parsed.first
@@ -59,7 +59,7 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
         }
     }
 
-    override fun List<String>.parse(): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
+    override fun List<String>.parse(): Pair<Set<Pair<Int, Int>>, List<List<Int>>> {
         val (rulesStr, pagesStr) = this.joinToString("\n").split("\n\n").map { it.split("\n") }
 
         val pages = pagesStr.map { line ->
@@ -67,7 +67,7 @@ class Day05(val input: List<String>) : Day<Int, Int, Pair<List<Pair<Int, Int>>, 
         }
         val rules = rulesStr.map { line ->
             line.split("|").map { it.toInt() }.let { it[0] to it[1] }
-        }
+        }.toSet()
         return rules to pages
     }
 
