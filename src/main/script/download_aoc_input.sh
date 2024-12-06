@@ -26,4 +26,4 @@ tail -10 "$PUZZLE_FILE"
 echo
 echo "TEST-FILE: $PUZZLE_FILE_TEST"
 echo "FILE:      $PUZZLE_FILE"
-echo "NUM-LINES: " `wc -l $PUZZLE_FILE`
+echo "NUM-LINES: " $(wc -l $PUZZLE_FILE | awk {'print $1'})
