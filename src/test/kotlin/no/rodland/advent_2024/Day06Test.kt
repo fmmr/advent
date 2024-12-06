@@ -29,6 +29,7 @@ internal class Day06Test {
         resultTwo,
         { Day06(data06) },
         { Day06(test06) },
+        numTestPart1 = 10,
         numTestPart2 = 1
     )
 
@@ -63,7 +64,6 @@ internal class Day06Test {
         }
 
         @Test
-        @Slow(520)
         fun `06,1,live,1`() {
             report(test.livePart1)
         }
@@ -77,7 +77,6 @@ internal class Day06Test {
         }
 
         @Test
-        @Slow(1200)
         fun `06,2,live,1`() {
             report(test.livePart2)
         }

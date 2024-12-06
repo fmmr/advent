@@ -19,9 +19,13 @@ class Day06(val input: List<String>) : Day<Int, Int, Pair<Pos, Array<CharArray>>
 
     override fun partTwo(): Int {
         val obstructions = doTheWalk()!!.map { it.first }.toSet() - start
-        return obstructions.map { check ->
-            doTheWalk { g: Grid, p: Pos -> if (p == check) '#' else g[p] }
-        }.count { it == null }
+        return obstructions
+            .parallelStream()
+            .map { check ->
+                doTheWalk { g: Grid, p: Pos -> if (p == check) '#' else g[p] }
+            }
+            .filter { it == null }
+            .count().toInt()
     }
 
     private fun doTheWalk(getter: (g: Grid, p: Pos) -> Char = { g, p -> g[p] }): MutableSet<Pair<Pos, Direction>>? {
