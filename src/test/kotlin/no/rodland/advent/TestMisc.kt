@@ -9,6 +9,7 @@ import kotlin.system.measureTimeMillis
 import kotlin.time.measureTimedValue
 
 val GHA = System.getenv("RUN_FROM") == "GHA"
+const val OK_TO_WAIT_PR_TEST = 600
 
 fun <T> report(function: () -> Pair<T, T>) {
     getHeader().run {
@@ -61,8 +62,6 @@ private fun getHeader(): String {
         "DAY: ${name[0]}, PART: ${name[1]}, DATA: ${name[2]}"
     }
 }
-
-const val OK_TO_WAIT_PR_TEST = 600
 
 class DisableSlowCond : ExecutionCondition {
     override fun evaluateExecutionCondition(context: ExtensionContext): ConditionEvaluationResult {
