@@ -24,6 +24,7 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<Long, List<Long
         .sumOf { it.first }
 
     private fun canBeTrue(sum: Long, acc: Long, values: List<Long>, operators: List<(Long, Long) -> Long>): Boolean {
+        if (acc > sum) return false
         if (values.isEmpty()) return sum == acc
         return operators.any { canBeTrue(sum, it.invoke(acc, values.first()), values.drop(1), operators) }
     }
