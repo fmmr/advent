@@ -8,26 +8,27 @@ import no.rodland.advent.Day
 class Day07(val input: List<String>) : Day<Long, Long, List<Pair<Long, List<Long>>>> {
 
     private val parsed = input.parse()
+    private val operatorsPart1: List<(Long, Long) -> Long> = listOf(Long::plus, Long::times)
+    private val operatorsPart2 = operatorsPart1 + { l1, l2 -> "$l1$l2".toLong() }
 
     override fun partOne(): Long {
-        return parsed
-            .filter { canBeTrue(it.first, 0, it.second, listOf(Long::plus, Long::times)) }
-            .sumOf { it.first }
+        return solve(operatorsPart1)
     }
 
     override fun partTwo(): Long {
-        return parsed
-            .filter { canBeTrue(it.first, 0, it.second, listOf(Long::plus, Long::times, { l1, l2 -> "$l1$l2".toLong() })) }
-            .sumOf { it.first }
+        return solve(operatorsPart2)
     }
+
+    private fun solve(operators: List<(Long, Long) -> Long>) = parsed
+        .filter { canBeTrue(it.first, 0, it.second, operators) }
+        .sumOf { it.first }
 
     private fun canBeTrue(sum: Long, acc: Long, values: List<Long>, operators: List<(Long, Long) -> Long>): Boolean {
         if (values.isEmpty()) return sum == acc
-        val next = values.first()
-        return operators.any { canBeTrue(sum, it.invoke(acc, next), values.drop(1), operators) }
+        return operators.any { canBeTrue(sum, it.invoke(acc, values.first()), values.drop(1), operators) }
     }
 
-   override fun List<String>.parse(): List<Pair<Long, List<Long>>> {
+    override fun List<String>.parse(): List<Pair<Long, List<Long>>> {
         return map { line ->
             line.substringBefore(":").toLong() to line.substringAfter(": ").split(" ").map { it.toLong() }
         }
