@@ -14,11 +14,11 @@ class Day06(val input: List<String>) : Day<Int, Int, Pair<Pos, Array<CharArray>>
     private val grid = parsed.second
 
     override fun partOne(): Int {
-        return doTheWalk()!!.map { it.first }.toSet().size
+        return doTheWalk()!!.size
     }
 
     override fun partTwo(): Int {
-        val obstructions = doTheWalk()!!.map { it.first }.toSet() - start
+        val obstructions = doTheWalk()!!.toSet() - start
         return obstructions
             .parallelStream()
             .map { check ->
@@ -28,7 +28,7 @@ class Day06(val input: List<String>) : Day<Int, Int, Pair<Pos, Array<CharArray>>
             .count().toInt()
     }
 
-    private fun doTheWalk(getter: (g: Grid, p: Pos) -> Char = { g, p -> g[p] }): MutableSet<Pair<Pos, Direction>>? {
+    private fun doTheWalk(getter: (g: Grid, p: Pos) -> Char = { g, p -> g[p] }): Set<Pos>? {
         var current = start
         var dir = Direction.NORTH
         val visited = mutableSetOf(current to dir)
@@ -48,21 +48,20 @@ class Day06(val input: List<String>) : Day<Int, Int, Pair<Pos, Array<CharArray>>
                 current = next
             }
         }
-        return visited
+        return visited.map { it.first }.toSet()
     }
 
     private operator fun Grid.get(pos: Pos): Char = this[pos.y][pos.x]
 
     override fun List<String>.parse(): Pair<Pos, Array<CharArray>> {
-        var start: Pos? = null
+        var start: Pos = Pos(-1, -1)
         val grid = indices.map { y ->
-            indices.map { x ->
-                val c = this[y][x]
-                if (c == '^') start = Pos(x, y)
-                c
-            }.toCharArray()
+            indices
+                .map { x ->
+                    this[y][x].also { if (it == '^') start = Pos(x, y) }
+                }.toCharArray()
         }.toTypedArray()
-        return start!! to grid
+        return start to grid
     }
 
     override val day = "06".toInt()
