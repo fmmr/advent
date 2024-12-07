@@ -10,15 +10,24 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<Long, List<Long
     private val parsed = input.parse()
 
     override fun partOne(): Long {
-        return 2
+        return parsed
+            .filter { canBeTrue(it.first, 0, it.second, listOf(Long::plus, Long::times)) }
+            .sumOf { it.first }
     }
 
     override fun partTwo(): Long {
-        return 2
+        return parsed
+            .filter { canBeTrue(it.first, 0, it.second, listOf(Long::plus, Long::times, { l1, l2 -> "$l1$l2".toLong() })) }
+            .sumOf { it.first }
     }
 
-    // 3267: 81 40 27
-    override fun List<String>.parse(): List<Pair<Long, List<Long>>> {
+    private fun canBeTrue(sum: Long, acc: Long, values: List<Long>, operators: List<(Long, Long) -> Long>): Boolean {
+        if (values.isEmpty()) return sum == acc
+        val next = values.first()
+        return operators.any { canBeTrue(sum, it.invoke(acc, next), values.drop(1), operators) }
+    }
+
+   override fun List<String>.parse(): List<Pair<Long, List<Long>>> {
         return map { line ->
             line.substringBefore(":").toLong() to line.substringAfter(": ").split(" ").map { it.toLong() }
         }
@@ -26,3 +35,4 @@ class Day07(val input: List<String>) : Day<Long, Long, List<Pair<Long, List<Long
 
     override val day = "07".toInt()
 }
+
