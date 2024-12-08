@@ -16,9 +16,9 @@ internal class Day08Test {
     private val test08 = "2024/input_08_test.txt".readFile()
 
     private val resultTestOne = 14
-    private val resultTestTwo = 2L
-    private val resultOne = 289 // 288 your answer is too low
-    private val resultTwo = 2L
+    private val resultTestTwo = 34
+    private val resultOne = 289
+    private val resultTwo = 1030
 
     val test = defaultTestSuiteParseOnInit(
         Day08(data08),

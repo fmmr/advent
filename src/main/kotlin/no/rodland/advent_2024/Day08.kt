@@ -5,26 +5,50 @@ import no.rodland.advent.Pos
 
 // template generated: 08/12/2024
 // Fredrik Rødland 2024
-
-class Day08(val input: List<String>) : Day<Int, Long, Pair<Array<CharArray>, Map<Char, List<Pos>>>> {
+class Day08(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Map<Char, List<Pos>>>> {
 
     private val parsed = input.parse()
     val grid = parsed.first
     val map = parsed.second
 
     override fun partOne(): Int {
-        val hei = map
-            .flatMap { (_, v) ->
-                v.pairs().flatMap { it.antinodes() }
-            }
+        return map
+            .flatMap { (_, v) -> v.pairs().flatMap { it.antinodes() } }
             .filter { p -> p in grid }
             .toSet()
-        return hei.size
+            .size
     }
 
-    private fun Pair<Pos, Pos>.antinodes(): List<Pos> {
+    override fun partTwo(): Int {
+        val antinodes = map
+            .flatMap { (c, v) ->
+                v.pairs().flatMap { it.antinodes(grid[0].size) }
+            }
+            .filter { p -> p in grid }
+        val nodes = map.filterValues { it.size > 1 }.values.flatten()
+        return (nodes + antinodes).toSet().size
+    }
+
+    private fun Pair<Pos, Pos>.antinodes(size: Int = 0): List<Pos> {
         val diff = second - first
-        return listOf(second + diff, first - diff)
+        return if (size == 0) {
+            listOf(second + diff, first - diff)
+        } else {
+            var p = second + diff
+            var p2 = first - diff
+            val sequence = sequence {
+                while (p in grid) {
+                    yield(p)
+                    p += diff
+                }
+            } + sequence {
+                while (p2 in grid) {
+                    yield(p2)
+                    p2 -= diff
+                }
+            }
+            sequence.toList()
+        }
     }
 
     operator fun Grid.contains(pos: Pos): Boolean =
@@ -41,9 +65,6 @@ class Day08(val input: List<String>) : Day<Int, Long, Pair<Array<CharArray>, Map
         return drop(1).let { rest -> rest.map { first to it } + rest.pairs() }
     }
 
-    override fun partTwo(): Long {
-        return 2
-    }
 
     override fun List<String>.parse(): Pair<Array<CharArray>, Map<Char, List<Pos>>> {
         val map = mutableMapOf<Char, MutableList<Pos>>()
