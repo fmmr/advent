@@ -12,59 +12,51 @@ class Day08(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Map<
     val map = parsed.second
 
     override fun partOne(): Int {
+        return solve { it.antinodes1() }
+    }
+
+    override fun partTwo(): Int {
+        return solve { it.antinodes2() }
+    }
+
+    private fun solve(antinodes: (Pair<Pos, Pos>) -> Set<Pos>): Int {
         return map
-            .flatMap { (_, v) -> v.pairs().flatMap { it.antinodes() } }
+            .flatMap { (_, v) -> v.pairs().flatMap(antinodes) }
             .filter { p -> p in grid }
             .toSet()
             .size
     }
 
-    override fun partTwo(): Int {
-        val antinodes = map
-            .flatMap { (c, v) ->
-                v.pairs().flatMap { it.antinodes(grid[0].size) }
-            }
-            .filter { p -> p in grid }
-        val nodes = map.filterValues { it.size > 1 }.values.flatten()
-        return (nodes + antinodes).toSet().size
-    }
+    private fun Pair<Pos, Pos>.antinodes1(): Set<Pos> = (second - first).let { diff -> setOf(second + diff, first - diff) }
 
-    private fun Pair<Pos, Pos>.antinodes(size: Int = 0): List<Pos> {
+    private fun Pair<Pos, Pos>.antinodes2(): Set<Pos> {
         val diff = second - first
-        return if (size == 0) {
-            listOf(second + diff, first - diff)
-        } else {
+        val forward = sequence {
             var p = second + diff
-            var p2 = first - diff
-            val sequence = sequence {
-                while (p in grid) {
-                    yield(p)
-                    p += diff
-                }
-            } + sequence {
-                while (p2 in grid) {
-                    yield(p2)
-                    p2 -= diff
-                }
+            while (p in grid) {
+                yield(p)
+                p = p.plus(diff)
             }
-            sequence.toList()
         }
+        val backwards = sequence {
+            var p2 = first - diff
+            while (p2 in grid) {
+                yield(p2)
+                p2 = p2.minus(diff)
+            }
+        }
+        return (forward + backwards + first + second).toSet()
     }
 
-    operator fun Grid.contains(pos: Pos): Boolean =
-        pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
+    operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
 
-    operator fun Grid.get(pos: Pos): Char {
-        return this[pos.y][pos.x]
-    }
-
+    operator fun Grid.get(pos: Pos): Char = this[pos.y][pos.x]
 
     private fun List<Pos>.pairs(): List<Pair<Pos, Pos>> {
         if (size < 2) return emptyList()
         val first = first()
         return drop(1).let { rest -> rest.map { first to it } + rest.pairs() }
     }
-
 
     override fun List<String>.parse(): Pair<Array<CharArray>, Map<Char, List<Pos>>> {
         val map = mutableMapOf<Char, MutableList<Pos>>()

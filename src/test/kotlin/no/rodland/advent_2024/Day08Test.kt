@@ -29,6 +29,7 @@ internal class Day08Test {
         resultTwo,
         { Day08(data08) },
         { Day08(test08) },
+        numTestPart2 = 200
     )
 
     @Nested
