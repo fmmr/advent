@@ -31,8 +31,8 @@ class Day08(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Map<
 
     private fun Pair<Pos, Pos>.antinodes2(): Set<Pos> {
         return (second - first).let { diff ->
-            val forward = generateSequence(first + diff) { it + diff }.takeWhile { it in grid }
-            val backwards = generateSequence(second - diff) { it - diff }.takeWhile { it in grid }
+            val forward = generateSequence(second) { it + diff }.takeWhile { it in grid }
+            val backwards = generateSequence(first) { it - diff }.takeWhile { it in grid }
             (forward + backwards).toSet()
         }
     }
