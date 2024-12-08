@@ -30,22 +30,11 @@ class Day08(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Map<
     private fun Pair<Pos, Pos>.antinodes1(): Set<Pos> = (second - first).let { diff -> setOf(second + diff, first - diff) }
 
     private fun Pair<Pos, Pos>.antinodes2(): Set<Pos> {
-        val diff = second - first
-        val forward = sequence {
-            var p = second + diff
-            while (p in grid) {
-                yield(p)
-                p = p.plus(diff)
-            }
+        return (second - first).let { diff ->
+            val forward = generateSequence(first + diff) { it + diff }.takeWhile { it in grid }
+            val backwards = generateSequence(second - diff) { it - diff }.takeWhile { it in grid }
+            (forward + backwards).toSet()
         }
-        val backwards = sequence {
-            var p2 = first - diff
-            while (p2 in grid) {
-                yield(p2)
-                p2 = p2.minus(diff)
-            }
-        }
-        return (forward + backwards + first + second).toSet()
     }
 
     operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
