@@ -5,50 +5,52 @@ import no.rodland.advent.Pos
 
 // template generated: 10/12/2024
 // Fredrik Rødland 2024
-class Day10(val input: List<String>) : Day<Int, Long, Pair<Pair<Set<Pos>, Set<Pos>>, Array<CharArray>>> {
+class Day10(val input: List<String>) : Day<Int, Int, Map<Pos, Int>> {
 
-    private val parsed = input.parse()
-    private val heads = parsed.first.first
-    private val tails = parsed.first.second
-    private val grid = parsed.second
+    private val grid = input.parse()
+    private val heads = grid.filterValues { it == 0 }.keys
 
     override fun partOne(): Int {
         return heads.sumOf { it.score(mutableSetOf()) }
     }
 
-    override fun partTwo(): Long {
-        return 2
+    override fun partTwo(): Int {
+        return heads.sumOf { it.rating(emptyList(), mutableSetOf()) }
     }
+
+    private fun Pos.rating(path: List<Pos>, visited: MutableSet<List<Pos>>): Int {
+        val newPath = path + this
+        visited.add(newPath)
+        val c = grid[this]!!
+        return if (c == 9) 1
+        else neighbourCellsUDLR().filterNot { (newPath + it) in visited }
+            .filter { it in grid }
+            .filter { grid[it]!! == c + 1 }
+            .sumOf { it.rating(newPath, visited) }
+    }
+
 
     private fun Pos.score(visited: MutableSet<Pos>): Int {
         visited.add(this)
-        val c = grid[this].digitToInt()
-        return if (c == 9) return 1
-        else neighbourCellsUDLR()
-            .filterNot { it in visited }
+        val c = grid[this]!!
+        return if (c == 9) 1
+        else neighbourCellsUDLR().filterNot { it in visited }
             .filter { it in grid }
-            .filter { grid[it].digitToInt() == c + 1 }
+            .filter { grid[it] == c + 1 }
             .sumOf { it.score(visited) }
     }
 
-    operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
-
-    operator fun Grid.get(pos: Pos): Char = this[pos.y][pos.x]
-
-    override fun List<String>.parse(): Pair<Pair<Set<Pos>, Set<Pos>>, Array<CharArray>> {
-        val heads = mutableSetOf<Pos>()
-        val tails = mutableSetOf<Pos>()
-        val grid = indices.map { y ->
-            indices.map { x ->
-                val c = this[y][x]
-                if (c == '0') heads.add(Pos(x, y))
-                if (c == '9') tails.add(Pos(x, y))
-                c
-            }.toCharArray()
-        }.toTypedArray()
-        return (heads to tails) to grid
+    override fun List<String>.parse(): Map<Pos, Int> {
+        return flatMapIndexed { y, str ->
+            str.mapIndexed { x, c ->
+                Pos(x, y) to c.digitToInt()
+            }
+        }.toMap()
     }
 
     override val day = "10".toInt()
+
 }
+
+
 
