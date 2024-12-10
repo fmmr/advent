@@ -18,25 +18,25 @@ class Day10(val input: List<String>) : Day<Int, Int, Map<Pos, Int>> {
         return heads.sumOf { it.rating(emptyList(), mutableSetOf()) }
     }
 
+    // part 1
     private fun Pos.score(visited: MutableSet<Pos>): Int {
-        return grid[this]?.let { c ->
-            visited.add(this)
-            if (c == 9) 1
-            else neighbourCellsUDLR().filterNot { it in visited }
-                .filter { grid[it] == c + 1 }
-                .sumOf { it.score(visited) }
-        } ?: 0
+        val c = grid[this]!!
+        visited.add(this)
+        return if (c == 9) 1
+        else neighbourCellsUDLR().filterNot { it in visited }
+            .filter { grid[it] == c + 1 }
+            .sumOf { it.score(visited) }
     }
 
+    // part 2
     private fun Pos.rating(path: List<Pos>, visited: MutableSet<List<Pos>>): Int {
-        return grid[this]?.let { c ->
-            val newPath = path + this
-            visited.add(newPath)
-            if (c == 9) 1
-            else neighbourCellsUDLR().filterNot { (newPath + it) in visited }
-                .filter { grid[it] == c + 1 }
-                .sumOf { it.rating(newPath, visited) }
-        } ?: 0
+        val c = grid[this]!!
+        val newPath = path + this
+        visited.add(newPath)
+        return if (c == 9) 1
+        else neighbourCellsUDLR().filterNot { (newPath + it) in visited }
+            .filter { grid[it] == c + 1 }
+            .sumOf { it.rating(newPath, visited) }
     }
 
     override fun List<String>.parse(): Map<Pos, Int> {
