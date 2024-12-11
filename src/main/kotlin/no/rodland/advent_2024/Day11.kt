@@ -6,16 +6,19 @@ import no.rodland.advent.Day
 // Fredrik Rødland 2024
 
 class Day11(val input: List<String>) : Day<Long, Long, List<Long>> {
-
     private val parsed = input.parse()
+
     override fun partOne(): Long {
-        val memoization = mutableMapOf<Pair<Long, Int>, Long>()
-        return parsed.map { it.numberStones(25, memoization) }.sumOf { it }
+        return solve(25)
     }
 
     override fun partTwo(): Long {
+        return solve(75)
+    }
+
+    private fun solve(iterations: Int): Long {
         val memoization = mutableMapOf<Pair<Long, Int>, Long>()
-        return parsed.map { it.numberStones(75, memoization) }.sumOf { it }
+        return parsed.map { it.numberStones(iterations, memoization) }.sumOf { it }
     }
 
     private fun Long.numberStones(i: Int, memoization: MutableMap<Pair<Long, Int>, Long>): Long {
