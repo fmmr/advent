@@ -20,9 +20,7 @@ class Day11(val input: List<String>) : Day<Long, Long, List<Long>> {
 
     private fun Long.numberStones(i: Int, memoization: MutableMap<Pair<Long, Int>, Long>): Long {
         if (i == 0) return 1
-        if (memoization.containsKey(this to i)) {
-            return memoization[this to i]!!
-        }
+        memoization[this to i]?.let { return it }
         return this.runRules().sumOf { it.numberStones(i - 1, memoization) }.also { memoization[this to i] = it }
     }
 
@@ -58,7 +56,3 @@ class Day11(val input: List<String>) : Day<Long, Long, List<Long>> {
 
     override val day = "11".toInt()
 }
-
-
-
-
