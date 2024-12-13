@@ -2,6 +2,7 @@ package no.rodland.advent_2024
 
 import no.rodland.advent.Day
 import no.rodland.advent.Pos
+import kotlin.math.abs
 
 // template generated: 12/12/2024
 // Fredrik Rødland 2024
@@ -52,8 +53,46 @@ class Day12(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Arra
 
 
     override fun partTwo(): Int {
+        val regions = findAllRegions()
+//        regions.forEach { println(it.toString() + ": " + it.neighbours()) }
+//
+//        val initMaybe = regions[0].neighbours().map { setOf(it) }
+//        val test0 = regions[0].neighbours().fold(initMaybe) { acc: List<Set<Pos>>, pos: Pos ->
+//            val (fences, rest) = acc.partition { fence -> fence.sameFence(pos) }
+//            if (fences.isEmpty()) {
+//                rest
+//            } else {
+//                (rest + fences.map { it + pos }).filterNot { it == setOf(pos) }
+//            }
+//        }.map { it.sorted() }.toSet()
         return 2
     }
+
+    private fun Set<Pos>.sameFence(pos: Pos): Boolean {
+        return if (size == 0) {
+            error("should not happen")
+        } else {
+            val first = first()
+            if (first == pos) {
+                true
+            } else if (size == 1) {
+                first.isAdjacent(pos)
+            } else if (all { it.x == first.x }) {
+                any { it.isAdjacentY(pos) }
+            } else if (all { it.y == first.y }) {
+                any { it.isAdjacentX(pos) }
+            } else {
+                error("should not happen either")
+            }
+        }
+
+
+        TODO("Not yet implemented")
+    }
+
+    fun Pos.isAdjacent(other: Pos) = abs(x - other.x) + abs(y - other.y) == 1
+    fun Pos.isAdjacentX(other: Pos) = abs(x - other.x) == 1 && y == other.y
+    fun Pos.isAdjacentY(other: Pos) = abs(y - other.y) == 1 && x == other.x
 
     operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
 
@@ -80,5 +119,6 @@ class Day12(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Arra
 
 
 }
+
 
 
