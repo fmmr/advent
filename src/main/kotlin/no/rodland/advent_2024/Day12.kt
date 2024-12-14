@@ -1,15 +1,13 @@
 package no.rodland.advent_2024
 
-import no.rodland.advent.Day
-import no.rodland.advent.Direction
-import no.rodland.advent.Pos
+import no.rodland.advent.*
 
 // template generated: 12/12/2024
 // Fredrik Rødland 2024
 
-class Day12(val input: List<String>) : Day<Int, Int, Array<CharArray>> {
+class Day12(val input: List<String>) : Day<Int, Int, Cave> {
 
-    private val grid = input.parse()
+    private val cave = input.parse()
 
 
     override fun partOne(): Int {
@@ -30,14 +28,14 @@ class Day12(val input: List<String>) : Day<Int, Int, Array<CharArray>> {
 
     // got help from: https://todd.ginsberg.com/post/advent-of-code/2024/day12/
     private fun Pos.corners(): Int {
-        val c = grid[this]
+        val c = cave.getOrNull(this)
         return listOf(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.NORTH)
             .zipWithNext()
             .map { (first, second) ->
                 listOf(
-                    grid[next(first)],
-                    grid[next(second)],
-                    grid[next(first).next(second)]
+                    cave.getOrNull(next(first)),
+                    cave.getOrNull(next(second)),
+                    cave.getOrNull(next(first).next(second))
                 )
             }.count { (side1, side2, corner) ->
                 (c != side1 && c != side2) || (side1 == c && side2 == c && corner != c)
@@ -46,22 +44,22 @@ class Day12(val input: List<String>) : Day<Int, Int, Array<CharArray>> {
 
     @Suppress("ConvertCallChainIntoSequence")
     private fun findAllRegions(): List<Region> {
-        fun getRegion(grid: Grid, pos: Pos, visited: MutableSet<Pos>): Set<Pos> {
+        fun getRegion(grid: Cave, pos: Pos, visited: MutableSet<Pos>): Set<Pos> {
             return (setOf(pos) + pos.neighbourCellsUDLR()
                 .filter { it !in visited }
-                .filter { it in this@Day12.grid }
-                .filter { this@Day12.grid[it] == this@Day12.grid[pos] }
+                .filter { it in cave }
+                .filter { cave[it] == cave[pos] }
                 .onEach { visited.add(it) }
                 .flatMap { getRegion(grid, it, visited) }
                 .toList()).toSet()
         }
 
         val visited = mutableSetOf<Pos>()
-        return grid.flatMapIndexed { y, row ->
+        return cave.flatMapIndexed { y, row ->
             row.mapIndexed { x, c ->
                 val pos = Pos(x, y)
                 if (pos !in visited) {
-                    Region(c, getRegion(grid, pos, visited))
+                    Region(c, getRegion(cave, pos, visited))
                 } else {
                     null
                 }
@@ -70,11 +68,7 @@ class Day12(val input: List<String>) : Day<Int, Int, Array<CharArray>> {
     }
 
 
-    operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
-
-    operator fun Grid.get(pos: Pos): Char? = if (pos in this) grid[pos.y][pos.x] else null
-
-    override fun List<String>.parse(): Grid = indices.map { y -> indices.map { x -> this[y][x] }.toCharArray() }.toTypedArray<CharArray>()
+    override fun List<String>.parse(): Cave = indices.map { y -> indices.map { x -> this[y][x] }.toCharArray() }.toTypedArray<CharArray>()
 
     override val day = "12".toInt()
 

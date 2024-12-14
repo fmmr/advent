@@ -2,6 +2,8 @@ package no.rodland.advent_2024
 
 import no.rodland.advent.Day
 import no.rodland.advent.Pos
+import no.rodland.advent.fromMap
+import no.rodland.advent.print
 import product
 
 // template generated: 14/12/2024
@@ -22,13 +24,27 @@ class Day14(val input: List<String>, val width: Int, val height: Int) : Day<Long
 
     override fun partTwo(): Int {
         // no overlaps?
-        val hei = (0..width * height).map { i ->
+        val iterations = (0..width * height).map { i ->
             val overlaps = robots.map { it.move(i, width, height) }
                 .groupBy { it }
                 .count { (_, v) -> v.size > 1 }
             i to overlaps
-        }.first { it.second == 0 }
-        return hei.first
+        }.first { it.second == 0 }.first
+        if (width > 100) { // only print for live
+            printChristmasTree(iterations)
+        }
+        return iterations
+    }
+
+    private fun printChristmasTree(iterations: Int) {
+        val tree = robots
+            .asSequence()
+            .map { it.move(iterations, width, height) }
+            .map { Pos(it.x - 19, it.y - 17) }
+            .filter { it.x < 34 && it.y < 36 }
+            .map { it to '*' }
+            .toList().toMap()
+        fromMap(tree).print()
     }
 
     data class Robot(val pos: Pos, val vel: Pos) {
