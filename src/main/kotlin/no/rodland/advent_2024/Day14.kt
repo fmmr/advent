@@ -7,22 +7,28 @@ import product
 // template generated: 14/12/2024
 // Fredrik Rødland 2024
 
-class Day14(val input: List<String>, val width: Int, val height: Int) : Day<Long, Long, List<Day14.Robot>> {
+class Day14(val input: List<String>, val width: Int, val height: Int) : Day<Long, Int, List<Day14.Robot>> {
 
     private val robots = input.parse()
 
     override fun partOne(): Long {
         return robots.map { it.move(100, width, height) }
             .groupBy { it.quadrant(width, height) }
-            .toSortedMap()
             .filterKeys { i: Int -> i != 0 } // middle
             .values
             .map { it.size }
             .product()
     }
 
-    override fun partTwo(): Long {
-        return 2
+    override fun partTwo(): Int {
+        // no overlaps?
+        val hei = (0..width * height).map { i ->
+            val overlaps = robots.map { it.move(i, width, height) }
+                .groupBy { it }
+                .count { (_, v) -> v.size > 1 }
+            i to overlaps
+        }.first { it.second == 0 }
+        return hei.first
     }
 
     data class Robot(val pos: Pos, val vel: Pos) {
