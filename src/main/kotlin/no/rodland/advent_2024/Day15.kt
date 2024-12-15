@@ -15,11 +15,10 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
     private val height = grid.size
 
     override fun partOne(): Long {
-        val (endGrid, robot) = directions.fold(grid to start) { g, d ->
-            g.first.move(d, g.second)
-        }
-        // endGrid.print()
-        return endGrid.flatMapIndexed { y, row ->
+        val gridCopy = grid.copy()
+        var p = start
+        directions.forEach { d -> p = gridCopy.move(d, p) }
+        return gridCopy.flatMapIndexed { y, row ->
             row.mapIndexed { x, c ->
                 if (c == 'O') {
                     100 * y + x
@@ -31,18 +30,14 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
         }.sum().toLong()
     }
 
-    private fun getRest(d: Direction, robot: Pos): List<Pos> {
-        return when (d) {
-            Direction.NORTH -> ((robot.y) downTo 0).map { Pos(robot.x, it) }
-            Direction.SOUTH -> ((robot.y)..<height).map { Pos(robot.x, it) }
-            Direction.WEST -> ((robot.x) downTo 0).map { Pos(it, robot.y) }
-            Direction.EAST -> ((robot.x)..<width).map { Pos(it, robot.y) }
-        }
+    private fun getRest(d: Direction, robot: Pos): List<Pos> = when (d) {
+        Direction.NORTH -> (robot.y downTo 0).map { Pos(robot.x, it) }
+        Direction.SOUTH -> (robot.y..<height).map { Pos(robot.x, it) }
+        Direction.WEST -> (robot.x downTo 0).map { Pos(it, robot.y) }
+        Direction.EAST -> (robot.x..<width).map { Pos(it, robot.y) }
     }
 
-    private fun List<Pos>.fix(cave: Cave, d: Direction, robot: Pos): Map<Pos, Char> {
-        // cannot move walls
-
+    private fun List<Pos>.changes(cave: Cave, d: Direction, robot: Pos): Map<Pos, Char> {
         val chars = map { cave[it] }
         val firstSpace = chars.indexOf('.')
         val firstWall = chars.indexOf('#')
@@ -53,20 +48,18 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
             return emptyMap()
         }
         var i = 0
-        return (listOf('.') + (1..firstSpace).map { chars[it - 1] }).map { robot.next(d, i++) to it }.toMap()
+        return (listOf('.') + (1..firstSpace).map { chars[it - 1] }).associateBy { robot.next(d, i++) }
     }
 
-    private fun Cave.move(d: Direction, robot: Pos): Pair<Cave, Pos> {
+    private fun Cave.move(d: Direction, robot: Pos): Pos {
         val line: List<Pos> = getRest(d, robot)
-        val fixedLine = line.fix(this, d, robot)
-        var newRobot = Pos(0, 0)
-        val newGrid = indices.map { y ->
-            indices.map { x ->
-                (fixedLine[Pos(x, y)] ?: get(Pos(x, y))).also { if (it == '@') newRobot = Pos(x, y) }
-
-            }.toCharArray()
-        }.toTypedArray<CharArray>()
-        return newGrid to newRobot
+        return line
+            .changes(this, d, robot)
+            .mapNotNull { (p, c) ->
+                this[p] = c
+                if (c == '@') p else null
+            }
+            .firstOrNull() ?: robot
     }
 
     override fun partTwo(): Long {
