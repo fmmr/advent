@@ -35,5 +35,13 @@ enum class Direction(val c: Char, val num: Long) {
             'R' -> EAST
             else -> throw IllegalArgumentException("Unknown direction: $c")
         }
+
+        fun fromChar(c: Char): Direction = when (c) {
+            '^' -> NORTH
+            'v' -> SOUTH
+            '<' -> WEST
+            '>' -> EAST
+            else -> throw IllegalArgumentException("Unknown direction: $c")
+        }
     }
 }
