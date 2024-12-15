@@ -18,16 +18,11 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
         val gridCopy = grid.copy()
         var p = start
         directions.forEach { d -> p = gridCopy.move(d, p) }
-        return gridCopy.flatMapIndexed { y, row ->
-            row.mapIndexed { x, c ->
-                if (c == 'O') {
-                    100 * y + x
-                } else {
-                    0
-                }
-
+        return gridCopy
+            .flatMapIndexed { y, row ->
+                row.mapIndexed { x, c -> if (c == 'O') 100 * y + x else 0 }
             }
-        }.sum().toLong()
+            .sum().toLong()
     }
 
     private fun getRest(d: Direction, robot: Pos): List<Pos> = when (d) {
