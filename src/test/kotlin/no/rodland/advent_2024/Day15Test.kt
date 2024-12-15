@@ -29,7 +29,7 @@ internal class Day15Test {
         resultTwo,
         { Day15(data15) },
         { Day15(test15) },
-        numTestPart1 = 3,
+        numTestPart1 = 5,
         numTestPart2 = 1
     )
 
