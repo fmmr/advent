@@ -5,31 +5,45 @@ import no.rodland.advent.*
 // template generated: 15/12/2024
 // Fredrik Rødland 2024
 
-class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, List<Direction>>> {
+class Day15(val input: List<String>) : Day<Int, Int, Pair<Pair<Array<CharArray>, Array<CharArray>>, Pair<Pos, List<Direction>>>> {
 
     private val parsed = input.parse()
-    private val start = parsed.first.first
-    private val grid = parsed.first.second
-    private val directions = parsed.second
-    private val width = grid[0].size
-    private val height = grid.size
+    private val grid = parsed.first.first
+    private val grid2 = parsed.first.second
+    private val start = parsed.second.first
+    private val directions = parsed.second.second
+    private val boxCorner = setOf('O', '[')
 
-    override fun partOne(): Long {
-        val gridCopy = grid.copy()
-        var p = start
-        directions.forEach { d -> p = gridCopy.move(d, p) }
+    override fun partOne(): Int {
+        return solve(start, grid.copy())
+    }
+
+    override fun partTwo(): Int {
+        return solve(Pos(start.x * 2, start.y), grid2.copy())
+    }
+
+    private fun solve(p: Pos, gridCopy: Array<CharArray>): Int {
+        directions.fold(p) { pos, direction ->
+            gridCopy.move(direction, pos)
+        }
         return gridCopy
             .flatMapIndexed { y, row ->
-                row.mapIndexed { x, c -> if (c == 'O') 100 * y + x else 0 }
+                row.mapIndexed { x, c -> if (c in boxCorner) 100 * y + x else 0 }
             }
-            .sum().toLong()
+            .sum()
     }
 
-    override fun partTwo(): Long {
-        return 2
+    private fun Cave.move(d: Direction, robot: Pos): Pos {
+        val changes = getAreaToMove(this, d, robot).changes(this, d)
+        return changes
+            .mapNotNull { (p, c) ->
+                this[p] = c
+                if (c == '@') p else null
+            }
+            .firstOrNull() ?: robot
     }
 
-    private fun getRest(cave: Cave, d: Direction, robot: Pos): Set<Pos> {
+    private fun getAreaToMove(cave: Cave, d: Direction, robot: Pos): Set<Pos> {
         val set = mutableSetOf<Pos>()
         val queue = ArrayDeque<Pos>()
         queue.add(robot)
@@ -49,25 +63,25 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
                     set.add(p)
                 }
 
-//                ']' -> {
-//                    set.add(p)
-//                    val side = Pos(p.x - 1, p.y)
-//                    set.add(side)
-//                    val pnext = p.next(d)
-//                    val sidenext = side.next(d)
-//                    if (pnext !in queue) set.add(pnext)
-//                    if (sidenext !in queue) set.add(sidenext)
-//                }
-//
-//                '[' -> {
-//                    set.add(p)
-//                    val side = Pos(p.x + 1, p.y)
-//                    set.add(side)
-//                    val pNext = p.next(d)
-//                    val sideNext = side.next(d)
-//                    if (pNext !in queue) set.add(pNext)
-//                    if (sideNext !in queue) set.add(sideNext)
-//                }
+                ']' -> {
+                    val side = Pos(p.x - 1, p.y)
+                    val pNext = p.next(d)
+                    val sideNext = side.next(d)
+                    if (pNext !in set) queue.add(pNext)
+                    if (sideNext !in set) queue.add(sideNext)
+                    set.add(p)
+                    set.add(side)
+                }
+
+                '[' -> {
+                    val side = Pos(p.x + 1, p.y)
+                    val pNext = p.next(d)
+                    val sideNext = side.next(d)
+                    if (pNext !in set) queue.add(pNext)
+                    if (sideNext !in set) queue.add(sideNext)
+                    set.add(p)
+                    set.add(side)
+                }
 
                 else -> error("Unexpected character: ${cave[p]}")
             }
@@ -76,42 +90,30 @@ class Day15(val input: List<String>) : Day<Long, Long, Pair<Pair<Pos, Cave>, Lis
         return if (possible) set else emptySet()
     }
 
-    private fun Set<Pos>.changes(cave: Cave, d: Direction, robot: Pos): Map<Pos, Char> {
-
-        val clearAll = map { p -> p to '.' }.toMap()
-        val newValues = map { p -> p.next(d) to cave[p] }.toMap()
-        // XXX probably something I can do here
-        return clearAll.mapValues { (k, v) -> newValues[k] ?: v }
-
-
-//        val chars = map { cave[it] }
-//        var i = 0
-//        val old = if (isEmpty()) {
-//            emptyMap()
-//        } else {
-//            (listOf('.') + (1..<size).map { chars[it - 1] }).associateBy { robot.next(d, i++) }
-//        }
-//        return old
+    private fun Set<Pos>.changes(cave: Cave, d: Direction): Map<Pos, Char> {
+        val clearAll = associate { p -> p to '.' }
+        val newValues = associate { p -> p.next(d) to cave[p] }
+        return (clearAll + newValues).toMap().filterKeys { it in this }
     }
 
-    private fun Cave.move(d: Direction, robot: Pos): Pos {
-        val line: Set<Pos> = getRest(this, d, robot)
-        val changes = line.changes(this, d, robot)
-        return changes
-            .mapNotNull { (p, c) ->
-                this[p] = c
-                if (c == '@') p else null
-            }
-            .firstOrNull() ?: robot
-    }
-
-    override fun List<String>.parse(): Pair<Pair<Pos, Cave>, List<Direction>> {
+    override fun List<String>.parse(): Pair<Pair<Array<CharArray>, Array<CharArray>>, Pair<Pos, List<Direction>>> {
         val (map, move) = joinToString("\n").split("\n\n")
         var start = Pos(0, 0)
         val lines = map.lines()
         val cave = lines.indices.map { y -> lines.indices.map { x -> lines[y][x].also { if (it == '@') start = Pos(x, y) } }.toCharArray() }.toTypedArray<CharArray>()
+        val cavePart2 = cave.mapIndexed { _, row ->
+            row.flatMapIndexed { _, c ->
+                when (c) {
+                    'O' -> listOf('[', ']')
+                    '@' -> listOf('@', '.')
+                    '#' -> listOf('#', '#')
+                    '.' -> listOf('.', '.')
+                    else -> error("Invalid character")
+                }
+            }.toCharArray()
+        }.toTypedArray<CharArray>()
         val directions = move.split("\n").flatMap { s -> s.map { Direction.fromChar(it) } }
-        return (start to cave) to directions
+        return (cave to cavePart2) to (start to directions)
     }
 
     override val day = "15".toInt()

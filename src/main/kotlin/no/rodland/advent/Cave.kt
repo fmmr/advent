@@ -17,11 +17,7 @@ operator fun Cave.get(pos: Pos): Char {
 
 fun Cave.getOrNull(pos: Pos): Char? = if (pos in this) this[pos] else null
 
-fun Cave.copy() = this.indices.map { y ->
-    this.indices.map { x ->
-        this[y][x]
-    }.toCharArray()
-}.toTypedArray<CharArray>()
+fun Cave.copy() = this.map { row -> row.map { it }.toCharArray() }.toTypedArray<CharArray>()
 
 fun fromMap(map: Map<Pos, Char>): Cave {
     val maxX = map.keys.maxOf { it.x }
