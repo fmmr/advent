@@ -29,6 +29,8 @@ fun fromMap(map: Map<Pos, Char>): Cave {
     }
 }
 
+fun List<String>.toCave(): Cave = map { line -> line.toCharArray() }.toTypedArray()
+
 @Suppress("UNUSED_PARAMETER")
 fun Cave.print(minX: Int = 0, minY: Int = 0, maxX: Int = first().size, maxY: Int = size) {
     forEach { ca ->
