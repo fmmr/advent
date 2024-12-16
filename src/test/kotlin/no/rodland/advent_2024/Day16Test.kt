@@ -16,9 +16,9 @@ internal class Day16Test {
     private val test16 = "2024/input_16_test.txt".readFile()
 
     private val resultTestOne = 7036
-    private val resultTestTwo = 2
+    private val resultTestTwo = 45
     private val resultOne = 99460
-    private val resultTwo = 2
+    private val resultTwo = 500
 
     val test = defaultTestSuiteParseOnInit(
         Day16(data16),
@@ -64,6 +64,7 @@ internal class Day16Test {
         }
 
         @Test
+        @Slow(450)
         fun `16,1,live,1`() {
             report(test.livePart1)
         }
@@ -77,6 +78,7 @@ internal class Day16Test {
         }
 
         @Test
+        @Slow(400)
         fun `16,2,live,1`() {
             report(test.livePart2)
         }
