@@ -30,7 +30,7 @@ internal class Day18Test {
         { Day18(data18, 1024, 70) },
         { Day18(test18, 12, 6) },
         numTestPart1 = 20,
-        numTestPart2 = 1
+        numTestPart2 = 20
     )
 
     @Nested
@@ -77,7 +77,6 @@ internal class Day18Test {
         }
 
         @Test
-        @Slow(1500)
         fun `18,2,live,1`() {
             report(test.livePart2)
         }

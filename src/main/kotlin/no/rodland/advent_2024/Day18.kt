@@ -17,10 +17,21 @@ class Day18(val input: List<String>, private val bytesToTake: Int, maxIndex: Int
     }
 
     override fun partTwo(): Pos {
-        val idx = (bytesToTake..parsed.size).first { n ->
-            bfs(n).isEmpty()
+        val findFirstPassingIndex: Int = binarySearch(bytesToTake, parsed.size - 1) { n: Int -> bfs(n).isEmpty() }
+        return parsed[findFirstPassingIndex - 1]
+    }
+
+    private fun binarySearch(left: Int, right: Int, test: (index: Int) -> Boolean): Int {
+        if (left > right) return -1
+        val mid = left + (right - left) / 2
+        return if (test(mid)) {
+            // Check if this is the first passing index or search the left half
+            val earlierIndex = binarySearch(left, mid - 1, test)
+            if (earlierIndex != -1) earlierIndex else mid
+        } else {
+            // Search the right half
+            binarySearch(mid + 1, right, test)
         }
-        return parsed[idx - 1]
     }
 
     private fun bfs(n: Int, set: Set<Pos> = parsed.take(n).toSet()) = bfs(start, end, { p ->
