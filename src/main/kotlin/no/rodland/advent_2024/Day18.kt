@@ -22,14 +22,15 @@ class Day18(val input: List<String>, private val bytesToTake: Int, maxIndex: Int
         return parsed[findFirstPassingIndex - 1]
     }
 
+    @Suppress("unused")
     private fun binarySearchFromKotlin(): Pos {
         // using kotlin's built in binary search
-        val hopp = (1..parsed.size)
+        val idx = (1..parsed.size)
             .map { parsed.take(it) }
             .binarySearch(bytesToTake) {
                 if (bfs(it.size, it.toSet()).isNotEmpty()) -1 else 1
             }
-        return parsed[(hopp + 1) * -1]
+        return parsed[(idx + 1) * -1]
     }
 
     private fun binarySearch(left: Int, right: Int, test: (index: Int) -> Boolean): Int {
@@ -45,6 +46,7 @@ class Day18(val input: List<String>, private val bytesToTake: Int, maxIndex: Int
         }
     }
 
+    @Suppress("ConvertCallChainIntoSequence")
     private fun bfs(n: Int, set: Set<Pos> = parsed.take(n).toSet()) = bfs(start, end, { p ->
         p.neighbourCellsUDLR()
             .filter { it !in set }
