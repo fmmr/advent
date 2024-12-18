@@ -17,8 +17,19 @@ class Day18(val input: List<String>, private val bytesToTake: Int, maxIndex: Int
     }
 
     override fun partTwo(): Pos {
+        // return binarySearchFromKotlin()
         val findFirstPassingIndex: Int = binarySearch(bytesToTake, parsed.size - 1) { n: Int -> bfs(n).isEmpty() }
         return parsed[findFirstPassingIndex - 1]
+    }
+
+    private fun binarySearchFromKotlin(): Pos {
+        // using kotlin's built in binary search
+        val hopp = (1..parsed.size)
+            .map { parsed.take(it) }
+            .binarySearch(bytesToTake) {
+                if (bfs(it.size, it.toSet()).isNotEmpty()) -1 else 1
+            }
+        return parsed[(hopp + 1) * -1]
     }
 
     private fun binarySearch(left: Int, right: Int, test: (index: Int) -> Boolean): Int {
