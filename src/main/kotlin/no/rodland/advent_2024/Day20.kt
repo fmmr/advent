@@ -5,19 +5,21 @@ import no.rodland.advent.*
 // template generated: 20/12/2024
 // Fredrik Rødland 2024
 
-class Day20(val input: List<String>, private val limit: Int = 0, private val limitTestPart2: Int = limit) : Day<Int, Int, Pair<Array<CharArray>, Pair<Pos, Pos>>> {
+class Day20(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Pair<Pos, Pos>>> {
 
     private val parsed = input.parse()
     private val racetrack: Cave = parsed.first
     private val start = parsed.second.first
     private val end = parsed.second.second
+    private val isTest = racetrack.size == 15
+    private val limit = if (isTest) 10 else 100
 
     override fun partOne(): Int {
         return solve(2, limit)
     }
 
     override fun partTwo(): Int {
-        return solve(20, limitTestPart2)
+        return solve(20, limit)
     }
 
     private fun solve(maxDistance: Int, lim: Int): Int {
@@ -25,26 +27,19 @@ class Day20(val input: List<String>, private val limit: Int = 0, private val lim
         val size = shortestPath.size
         val fromStart = shortestPath.mapIndexed { idx, pos -> pos to idx }.toMap()
         val toEnd = shortestPath.mapIndexed { idx, pos -> pos to size - idx }.toMap()
-        return shortestPath.asSequence().flatMapIndexed() { idx, from ->
-            shortestPath
-                .subList(idx + 1, shortestPath.size)
-                .mapNotNull { to ->
-                    val manhattanDistance = from.manhattanDistance(to)
-                    if (manhattanDistance in 2..maxDistance) {
-                        manhattanDistance to to
-                    } else {
-                        null
-                    }
-                }
-                .map { to ->
-                    size - (fromStart[from]!! + to.first + toEnd[to.second]!!)
-                }.filter { it > 0 }
-        }
+        return shortestPath
+            .asSequence()
+            .flatMapIndexed { idx, from ->
+                shortestPath
+                    .subList(idx + 1, size)
+                    .mapNotNull { to -> from.manhattanDistance(to).let { if (it in 2..maxDistance) it to to else null } }
+                    .map { to -> size - (fromStart[from]!! + to.first + toEnd[to.second]!!) }
+                    .filter { it > 0 }
+            }
             .groupBy { it }
-            .map { it.value.size to it.key }
-            .filter { it.second >= lim }
-            .sortedBy { it.second }
-            .sumOf { it.first }
+            .filterKeys { it >= lim }
+            .map { it.value.size }
+            .sum()
     }
 
 
