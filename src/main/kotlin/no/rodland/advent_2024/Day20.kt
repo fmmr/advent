@@ -40,7 +40,7 @@ class Day20(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Pair
                     last()
                         .neighbourCellsUDLR()
                         .filter { racetrack[it] != '#' }
-                        .first { it != getOrNull(lastIndex - 1) }
+                        .first { it != getOrNull(lastIndex - 1) }  // don't go back/to last
                 )
             }
         }
