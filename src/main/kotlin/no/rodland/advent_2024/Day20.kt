@@ -23,49 +23,27 @@ class Day20(val input: List<String>) : Day<Int, Int, Pair<Array<CharArray>, Pair
     }
 
     private fun solve(maxDistance: Int, lim: Int): Int {
-        val shortestPath = bfs(start, end)
-        val size = shortestPath.size
-        val fromStart = shortestPath.mapIndexed { idx, pos -> pos to idx }.toMap()
-        val toEnd = shortestPath.mapIndexed { idx, pos -> pos to size - idx }.toMap()
-        return shortestPath
-            .asSequence()
-            .flatMapIndexed { idx, from ->
-                shortestPath
-                    .subList(idx + 1, size)
-                    .mapNotNull { to -> from.manhattanDistance(to).let { if (it in 2..maxDistance) it to to else null } }
-                    .map { to -> size - (fromStart[from]!! + to.first + toEnd[to.second]!!) }
-                    .filter { it > 0 }
+        val shortestPath = getPath().toTypedArray()
+        return shortestPath.indices
+            .sumOf { from ->
+                ((from + lim)..<shortestPath.size).count { end ->
+                    val manhattan = shortestPath[from].manhattanDistance(shortestPath[end])
+                    manhattan <= maxDistance && manhattan <= end - from - lim
+                }
             }
-            .groupBy { it }
-            .filterKeys { it >= lim }
-            .map { it.value.size }
-            .sum()
     }
 
-
-    private tailrec fun bfs(
-        start: Pos,
-        end: Pos,
-        queue: ArrayDeque<List<Pos>> = ArrayDeque(listOf(listOf(start))),
-        visited: MutableSet<Pos> = mutableSetOf(start)
-    ): List<Pos> {
-        if (queue.isEmpty()) return emptyList()
-        // Dequeue the current path
-        val path = queue.removeFirst()
-        val current = path.last()
-
-        // Check if we reached the end position
-        if (current == end) return path
-        current.neighbourCellsUDLR()
-            .filter { it !in visited }
-            .filter { it in racetrack }
-            .filter { racetrack[it] != '#' }
-            .forEach { neighbor ->
-                visited.add(neighbor)
-                queue.add(path + neighbor) // Enqueue the new path
+    private fun getPath(): List<Pos> {
+        return mutableListOf(start).apply {
+            while (last() != end) {
+                add(
+                    last()
+                        .neighbourCellsUDLR()
+                        .filter { racetrack[it] != '#' }
+                        .first { it != getOrNull(lastIndex - 1) }
+                )
             }
-        // Recursive call with the updated queue and visited set
-        return bfs(start, end, queue, visited)
+        }
     }
 
     override fun List<String>.parse(): Pair<Array<CharArray>, Pair<Pos, Pos>> {
