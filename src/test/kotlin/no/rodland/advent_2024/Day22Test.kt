@@ -79,7 +79,7 @@ internal class Day22Test {
         }
 
         @Test
-        @Slow(14000)
+//        @Slow(2000)
         fun `22,2,live,1`() {
             report(test.livePart2)
         }

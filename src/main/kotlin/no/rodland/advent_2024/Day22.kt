@@ -8,47 +8,38 @@ import no.rodland.advent.Day
 
 class Day22(val input: List<String>) : Day<Long, Long, List<Long>> {
 
-    override fun partOne(): Long {
-        return orgSequence().sumOf(Sequence<Long>::last)
+    val parse = input.parse()
 
+    private fun Long.sequence() = generateSequence(this) { it.calc() }.take(2001)
+    private val orgSequence = parse.map { input -> input.sequence() }
+
+    override fun partOne(): Long {
+        return orgSequence.sumOf(Sequence<Long>::last)
     }
 
     override fun partTwo(): Long {
-
-        // XXX F TODO re-write
-
-        val map = orgSequence()
-            .map { it.map { n -> n % 10 } }
-            .map { seq ->
-                seq
-                    .zipWithNext { a, b -> b to b - a }
-                    .windowed(4) { list -> list.map { it.second } to list.last().first }
-
-            }
-        val prices = map.map {
-                it.groupingBy { (key, value) -> key }
-                    .fold({ _, value -> value.second }, { _, a, _ -> a })
-            }
-
-        return prices.flatMap { it.keys }.toSet().maxOf { key ->
-            prices.sumOf { it[key] ?: 0 }
+        val allSeq = orgSequence.map { seq ->
+            seq.map { it % 10 }
+                .zipWithNext()
+                .map { (a, b) -> b - a to b }
+                .windowed(4)
+                .map { list -> list.map { it.first } to list.last().second }
+                .distinctBy { it.first }
+                .toMap()
         }
-
-
+        val prices = allSeq
+            .fold(mutableMapOf<List<Long>, Long>()) { acc, map ->
+                acc.apply {
+                    map.forEach { (key, value) -> acc.merge(key, value, Long::plus) }
+                }
+            }
+        return prices.values.max()
     }
-
-//    private fun part2Seq(seq: Sequence<Long>) = seq.map { it % 10 }
-//        .zipWithNext { a, b -> b to b - a }
-//        .windowed(4) { (a, b, c, d) -> listOf(a.second, b.second, c.second, d.second) to d.first }
-//        .groupingBy { (key, value) -> key }
-//        .fold({ _, value -> value.second }, { _, a, _ -> a })
-
-    private fun orgSequence() = input.parse().map { input -> generateSequence(input) { it.calc() }.take(2001) }
 
     private fun Long.mix(secret: Long) = this xor secret
     private fun Long.prune() = this % 16777216L
     private fun Long.step(calc: (Long) -> Long) = calc(this).mix(this).prune()
-    private fun Long.calc() = step { it * 64 }.step { it / 32 }.step { it * 2048 }
+    private fun Long.calc() = step { it shl 6 }.step { it shr 5 }.step { it shl 11 }
 
     override fun List<String>.parse(): List<Long> = map { it.toLong() }
 
