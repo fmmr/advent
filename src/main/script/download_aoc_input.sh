@@ -22,7 +22,13 @@ git add "src/test/resources/${YEAR}/input_${DAY}_test.txt"
 git commit -a -m "${YEAR} - Day ${DAY} - input/init"
 cd - || exit
 
-tail -10 "$PUZZLE_FILE"
+
+echo "HEAD:"
+echo "====="
+head -4 "$PUZZLE_FILE"
+echo "TAIL:"
+echo "====="
+tail -4 "$PUZZLE_FILE"
 echo
 echo "TEST-FILE: $PUZZLE_FILE_TEST"
 echo "FILE:      $PUZZLE_FILE"
