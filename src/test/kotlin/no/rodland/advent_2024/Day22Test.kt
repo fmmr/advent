@@ -14,23 +14,26 @@ import readFile
 internal class Day22Test {
     private val data22 = "2024/input_22.txt".readFile()
     private val test22 = "2024/input_22_test.txt".readFile()
+    private val test22Part2 = "2024/input_22_test_part2.txt".readFile()
 
     private val resultTestOne = 37327623L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 23L
     private val resultOne = 14082561342L
-    private val resultTwo = 2L
+    private val resultTwo = 1568L
 
-    val test = defaultTestSuiteParseOnInit(
-        Day22(data22),
-        Day22(test22),
-        resultTestOne,
-        resultOne,
-        resultTestTwo,
-        resultTwo,
-        { Day22(data22) },
-        { Day22(test22) },
-        numTestPart1 = 3
-    )
+    val test = run {
+        val liveDay = Day22(data22)
+        val testDay = Day22(test22)
+        val testDayPart2 = Day22(test22Part2)
+        AOCTestSuite<Any?, Unit, Unit>(
+            AOCTest({ liveDay.partOne() }, Unit, resultOne, numTests = 3, day = liveDay.day, part = Part.ONE, live = true),
+            AOCTest({ liveDay.partTwo() }, Unit, resultTwo, 1, liveDay.day, Part.TWO, true),
+            AOCTest({ testDay.partOne() }, Unit, resultTestOne, 1, liveDay.day, Part.ONE, false),
+            AOCTest({ testDayPart2.partTwo() }, Unit, resultTestTwo, 1, liveDay.day, Part.TWO, false),
+            AOCTest<Unit, Unit>({ Day22(data22) }, Unit, Unit, 100, liveDay.day, Part.INIT, live = true),
+            AOCTest<Unit, Unit>({ Day22(test22) }, Unit, Unit, 100, liveDay.day, Part.INIT, live = false),
+        )
+    }
 
     @Nested
     inner class Init {
@@ -76,6 +79,7 @@ internal class Day22Test {
         }
 
         @Test
+        @Slow(14000)
         fun `22,2,live,1`() {
             report(test.livePart2)
         }
