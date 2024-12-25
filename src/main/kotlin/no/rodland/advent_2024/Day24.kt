@@ -13,9 +13,9 @@ class Day24(val input: List<String>) : Day<Long, Long, Pair<Map<String, Day24.Wi
         val (values, logic) = parsed
         val system = values.toMutableMap()
 
-        val map = logic.map { (k, v) -> buildNode(system, logic, k, v) }
-        println("hm - ran through buildNode: $i")
-        return map
+        return logic
+            .asSequence()
+            .map { (k, v) -> buildNode(system, logic, k, v) }
             .filter { it.name.startsWith("z") }
             .sortedByDescending { it.name }
             .map { it.input.value }
@@ -23,10 +23,8 @@ class Day24(val input: List<String>) : Day<Long, Long, Pair<Map<String, Day24.Wi
             .toLong(2)
     }
 
-    var i = 0
     private fun buildNode(system: MutableMap<String, Wire>, input: Map<String, String>, k: String, v: String): Wire {
         system[k]?.let { wire -> return wire }
-        i++
         val (aKey, op, bKey) = v.split(" ")
         val a = system[aKey] ?: buildNode(system, input, aKey, input[aKey]!!)
         val b = system[bKey] ?: buildNode(system, input, bKey, input[bKey]!!)
