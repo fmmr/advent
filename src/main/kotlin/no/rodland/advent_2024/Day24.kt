@@ -13,8 +13,7 @@ class Day24(val input: List<String>) : Day<Long, Long, Pair<Map<String, Day24.Wi
         val (values, logic) = parsed
         val system = values.toMutableMap()
 
-        val map = logic
-            .map { (k, v) -> buildNode(system, logic, k, v) }
+        val map = logic.map { (k, v) -> buildNode(system, logic, k, v) }
         println("hm - ran through buildNode: $i")
         return map
             .filter { it.name.startsWith("z") }
@@ -30,13 +29,14 @@ class Day24(val input: List<String>) : Day<Long, Long, Pair<Map<String, Day24.Wi
         i++
         val (aKey, op, bKey) = v.split(" ")
         val a = system[aKey] ?: buildNode(system, input, aKey, input[aKey]!!)
-        val b = system[bKey] ?: buildNode(system, input, aKey, input[bKey]!!)
+        val b = system[bKey] ?: buildNode(system, input, bKey, input[bKey]!!)
         val wire = when (op) {
             "AND" -> Wire(k, AND(a, b))
             "OR" -> Wire(k, OR(a, b))
             "XOR" -> Wire(k, XOR(a, b))
             else -> error("Unknown op $op")
         }
+        system[k] = wire
         return wire
     }
 
