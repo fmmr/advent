@@ -18,9 +18,18 @@ class Day25(val input: List<String>) : Day<Long, Long, List<String>> {
     }
 
     override fun List<String>.parse(): List<String> {
+
+        val (locks, keys) = joinToString("\n").split("\n\n").partition { it.startsWith("#####") }
         return map { line ->
             line
         }
+    }
+    sealed interface Thing
+    data class Lock(val init: String): Thing {
+
+    }
+    data class Key(val init: String): Thing {
+
     }
 
     override val day = "25".toInt()
