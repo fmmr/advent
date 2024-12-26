@@ -16,9 +16,9 @@ internal class Day24Test {
     private val test24 = "2024/input_24_test.txt".readFile()
 
     private val resultTestOne = 2024L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = "cgq,fnr,kqk,nbc,svm,z15,z23,z39"
     private val resultOne = 57344080719736L  // 8510417647883 too low
-    private val resultTwo = 2L
+    private val resultTwo = "cgq,fnr,kqk,nbc,svm,z15,z23,z39"
 
     val test = defaultTestSuiteParseOnInit(
         Day24(data24),
