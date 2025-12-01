@@ -5,28 +5,28 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>rodland.no</groupId>
     <artifactId>advent</artifactId>
-    <version>2022</version>
+    <version>2025</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
 
-        <kotlin.version>2.1.0</kotlin.version>
+        <kotlin.version>2.2.21</kotlin.version>
         <kotlin.jvmTarget>22</kotlin.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
 
-        <assertj.version>3.26.3</assertj.version>
-        <guava.version>33.3.1-jre</guava.version>
-        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <assertj.version>3.27.6</assertj.version>
+        <guava.version>33.5.0-jre</guava.version>
+        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <jgrapht.version>1.5.2</jgrapht.version>
-        <junit.version>5.11.3</junit.version>
+        <json-simple.version>1.1.1</json-simple.version>
+        <junit.version>6.0.1</junit.version> <!-- 6.0.1 -->
         <klaxon.version>5.6</klaxon.version>
-        <kotlinx-coroutines.version>1.9.0</kotlinx-coroutines.version>
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <surefire.version>3.5.2</surefire.version>
-        <version.json-simple>1.1.1</version.json-simple>
+        <kotlinx-coroutines.version>1.10.2</kotlinx-coroutines.version>
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+        <surefire.version>3.5.4</surefire.version>
     </properties>
     <dependencyManagement>
         <!-- debugging why source isn't visible for kotlin stdlib -->
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
-            <version>${version.json-simple}</version>
+            <version>${json-simple.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
