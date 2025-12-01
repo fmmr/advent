@@ -1,6 +1,7 @@
 package no.rodland.advent_2025
 
 import no.rodland.advent.Day
+import kotlin.math.absoluteValue
 
 // template generated: 01/12/2025
 // Fredrik Rødland 2025
@@ -11,17 +12,28 @@ class Day01(val input: List<String>) : Day<Long, Long, List<Pair<LF, Int>>> {
     private val start = 50
 
     override fun partOne(): Long {
-        return parsed.runningFold(start) { acc, (dir, num) -> turn(acc, dir, num) }.count { it == 0 }.toLong()
+        return parsed.runningFold(start to 0) { acc, (dir, num) -> turn(acc.first, dir, num) }.count { it.first == 0 }.toLong()
     }
 
     override fun partTwo(): Long {
-        return 2
+        return parsed.runningFold<Pair<LF, Int>, Pair<Int, Int>>(start to 0) { acc, (dir, num) -> turn(acc.first, dir, num) }.sumOf { it.second }.toLong()
     }
 
-    fun turn(previous: Int, dir: LF, num: Int): Int {
-        return when (dir) {
-            LF.L -> (previous - num) % 100
-            LF.R -> (previous + num) % 100
+    fun turn(currentPos: Int, dir: LF, num: Int): Pair<Int, Int> {
+        val newNumRaw = when (dir) {
+            LF.L -> (currentPos - num)
+            LF.R -> (currentPos + num)
+        }
+        val newNum = newNumRaw.mod(100)
+        val passesZero = passesZero(currentPos, newNumRaw)
+        return newNum to passesZero
+    }
+
+    private fun passesZero(previous: Int, newRawPos: Int): Int {
+        return when {
+            newRawPos == 0 -> 1
+            newRawPos > 0 -> newRawPos / 100
+            else -> newRawPos.absoluteValue / 100 + if (previous == 0) 0 else 1
         }
     }
 
