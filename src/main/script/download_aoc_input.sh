@@ -11,6 +11,8 @@ DAY_NO_ZEROS="$(echo "$DAY" | sed 's/^0*//')"
 AOC_DIR="/Users/fmr/projects/advent"
 PUZZLE_URL="https://adventofcode.com/${YEAR}/day/${DAY_NO_ZEROS}/input"
 
+mkdir -p "${AOC_DIR}/src/test/resources/${YEAR}"
+
 PUZZLE_FILE="${AOC_DIR}/src/test/resources/${YEAR}/input_${DAY}.txt"
 PUZZLE_FILE_TEST="${AOC_DIR}/src/test/resources/${YEAR}/input_${DAY}_test.txt"
 
