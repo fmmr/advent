@@ -21,6 +21,7 @@ touch "${PUZZLE_FILE_TEST}"
 
 cd "${AOC_DIR}" || exit
 git add "src/test/resources/${YEAR}/input_${DAY}_test.txt"
+git add "src/test/resources/${YEAR}/input_${DAY}.txt"
 git commit -a -m "${YEAR} - Day ${DAY} - input/init"
 cd - || exit
 
