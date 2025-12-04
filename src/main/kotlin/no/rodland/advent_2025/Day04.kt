@@ -12,34 +12,38 @@ class Day04(val input: List<String>) : Day<Long, Long, Grid> {
     private val parsed = input.parse()
 
     override fun partOne(): Long {
-        return parsed.indices.flatMap { y ->
-            parsed[y].indices.map { x ->
-                val pos = Pos(x, y)
-                if (parsed[pos] == '@') {
-                    pos.neighbourCellsAllEight().filter { it in parsed }.count { parsed[it] == '@' } < 4
-                } else false
-            }
-        }.count { it }.toLong()
-
+        return parsed.movables().count().toLong()
     }
 
     override fun partTwo(): Long {
-        return 2
+        val newGrid = parsed.copy()
+        var remove = newGrid.movables()
+        while (remove.isNotEmpty()) {
+            newGrid.clear(remove)
+            remove = newGrid.movables()
+        }
+        return (parsed.countPaper() - newGrid.countPaper()).toLong()
     }
 
-    override fun List<String>.parse(): Grid {
-        val maxX = maxOf { it.length }
-        return indices.map { y ->
-            (0 until maxX).map { x ->
-                val c = this[y][x]
-                c
-            }.toCharArray()
-        }.toTypedArray()
+    private fun Grid.movables(): List<Pos> = indices.flatMap { y ->
+        this[y].indices.mapNotNull { x ->
+            val pos = Pos(x, y)
+            if (this[pos] == '@' && pos.neighbourCellsAllEight().filter { it in this }.count { this[it] == '@' } < 4) {
+                pos
+            } else {
+                null
+            }
+        }
     }
 
-    override val day = "04".toInt()
+    override fun List<String>.parse(): Grid = map { it.toCharArray() }.toTypedArray()
 
     operator fun Grid.get(pos: Pos): Char = this[pos.y][pos.x]
     operator fun Grid.contains(pos: Pos): Boolean = pos.x >= 0 && pos.x < this[0].size && pos.y >= 0 && pos.y < this.size
+    private fun Grid.countPaper(): Int = sumOf { row -> row.count { c -> c == '@' } }
+    private fun Grid.copy() = this.map { row -> row.map { it }.toCharArray() }.toTypedArray<CharArray>()
+    private fun Grid.clear(list: List<Pos>) = list.forEach { pos -> this[pos.y][pos.x] = '.' }
 
+    override val day = "04".toInt()
 }
+
