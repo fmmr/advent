@@ -77,6 +77,7 @@ internal class Day02Test {
         }
 
         @Test
+        @Slow(600)
         fun `02,2,live,1`() {
             report(test.livePart2)
         }
