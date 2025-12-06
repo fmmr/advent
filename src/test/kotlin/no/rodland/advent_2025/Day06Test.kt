@@ -16,9 +16,9 @@ internal class Day06Test {
     private val test06 = "2025/input_06_test.txt".readFile()
 
     private val resultTestOne = 4277556L
-    private val resultTestTwo = 2L
+    private val resultTestTwo = 3263827L
     private val resultOne = 5381996914800L
-    private val resultTwo = 2L
+    private val resultTwo = 9627174150897L
 
     val test = defaultTestSuiteParseOnInit(
         Day06(data06),
@@ -29,6 +29,7 @@ internal class Day06Test {
         resultTwo,
         { Day06(data06) },
         { Day06(test06) },
+        numTestPart2 = 5
     )
 
     @Nested

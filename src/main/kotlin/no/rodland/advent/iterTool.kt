@@ -352,3 +352,13 @@ fun <T : Any> cartProd(vararg items: Iterable<T>): Sequence<List<T>> = sequence 
         }
     }
 }
+
+fun <T> List<List<T>>.transpose(): List<List<T>> {
+    val width = first().size
+    val height = size
+    return (0..<width).map { j ->
+        (0..<height).map { i ->
+            get(i)[j]
+        }.toList()
+    }
+}

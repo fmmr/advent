@@ -1,6 +1,7 @@
 package no.rodland.advent_2025
 
 import no.rodland.advent.Day
+import no.rodland.advent.transpose
 
 // template generated: 06/12/2025
 // Fredrik Rødland 2025
@@ -15,7 +16,23 @@ class Day06(val input: List<String>) : Day<Long, Long, Pair<List<Day06.Op>, List
     }
 
     override fun partTwo(): Long {
-        return 2
+        val (ops, nums) = parsed
+        val padPositions = nums.map { list -> list.maxOf { it.toString().length } }
+        val cephalopodNums = input.dropLast(1)
+            .map { line ->
+                var idx = 0
+                padPositions.map { pos ->
+                    line.substring(idx, idx + pos).also { idx += (pos + 1) }
+                }
+            }
+            .transpose()
+            .map { list ->
+                val size = list.first().length
+                (0..<size).map { num ->
+                    list.map { it[num] }.joinToString("").trim().toInt()
+                }
+            }
+        return ops.mapIndexed { index, op -> op.calc(cephalopodNums[index]) }.sum()
     }
 
     override fun List<String>.parse(): Pair<List<Op>, List<List<Int>>> {
@@ -44,12 +61,6 @@ class Day06(val input: List<String>) : Day<Long, Long, Pair<List<Day06.Op>, List
     }
 
 }
-fun List<List<Int>>.transpose(): List<List<Int>> {
-    val width = first().size
-    val height = size
-    return (0..<width).map { j ->
-        (0..<height).map { i ->
-            get(i)[j]
-        }.toList()
-    }
-}
+
+
+
