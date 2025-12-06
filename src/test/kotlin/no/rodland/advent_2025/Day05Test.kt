@@ -15,10 +15,10 @@ internal class Day05Test {
     private val data05 = "2025/input_05.txt".readFile()
     private val test05 = "2025/input_05_test.txt".readFile()
 
-    private val resultTestOne = 2L
-    private val resultTestTwo = 2L
-    private val resultOne = 2L
-    private val resultTwo = 2L
+    private val resultTestOne = 3L
+    private val resultTestTwo = 14L
+    private val resultOne = 598L
+    private val resultTwo = 360341832208407L
 
     val test = defaultTestSuiteParseOnInit(
         Day05(data05),
