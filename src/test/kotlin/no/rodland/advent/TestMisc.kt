@@ -13,22 +13,21 @@ const val OK_TO_WAIT_PR_TEST = 600
 
 fun <T> report(function: () -> Pair<T, T>) {
     getHeader().run {
-        println(this)
-        println("=".repeat(this.length).joinToString(""))
+        printHeader(this)
     }
     val millis = measureTimeMillis {
         val value = function()
-        println("Result: ${value.first}, Expected: ${value.second}")
+        // Always-on simple Christmas emojis
+        println("✅ Result: ${value.first}  🎯 Expected: ${value.second}")
         Assertions.assertEquals(value.second, value.first)
     }
-    println("took: ${millis}ms")
+    println("⏱️ took: ${millis}ms")
     println()
 }
 
 fun <T, U> report(test: AOCTest<T, U>) {
     test.name.run {
-        println(this)
-        println("=".repeat(this.length).joinToString(""))
+        printHeader(this)
     }
     var endValue: U? = null
     val numTestsToRun = if (GHA) 1 else test.numTests
@@ -36,18 +35,18 @@ fun <T, U> report(test: AOCTest<T, U>) {
         repeat(numTestsToRun) {
             val value = test.function(test.data) to test.expected
             if (value.first != value.second) {
-                println("Result: ${value.first}, Expected: ${test.expected}")
+                println("❌ Result: ${value.first}  🎯 Expected: ${test.expected}")
                 Assertions.assertEquals(test.expected, value.first)
             }
             endValue = value.first
         }
     }
     if (numTestsToRun == 1) {
-        println("Result: $endValue (OK), time: ${nanos.duration}")
+        println("🎁 Result: $endValue (OK)  ⏱️ ${nanos.duration}")
     } else {
         val avg = nanos.duration / numTestsToRun
-        println("Result: $endValue (OK)")
-        println("Ran $numTestsToRun, time_pr_test: $avg")
+        println("🎁 Result: $endValue (OK)")
+        println("🧪 Ran $numTestsToRun, ⏱️ pr_test: $avg")
     }
     println()
 }
@@ -62,6 +61,8 @@ private fun getHeader(): String {
         "DAY: ${name[0]}, PART: ${name[1]}, DATA: ${name[2]}"
     }
 }
+
+private fun printHeader(title: String) = println("🎄 $title 🎄")
 
 class DisableSlowCond : ExecutionCondition {
     override fun evaluateExecutionCondition(context: ExtensionContext): ConditionEvaluationResult {
