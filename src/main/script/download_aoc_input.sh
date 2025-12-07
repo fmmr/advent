@@ -4,7 +4,7 @@ MYDIR="$(dirname "$(realpath "$0")")"
 . $MYDIR/auth.txt
 
 YEAR=$(date '+%Y')
-DAY="05"
+DAY="$(date '+%d')"
 # shellcheck disable=SC2001
 DAY_NO_ZEROS="$(echo "$DAY" | sed 's/^0*//')"
 
