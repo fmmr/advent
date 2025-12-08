@@ -16,7 +16,7 @@ sealed class SpacePos {
 
 data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
     constructor(triple: Triple<Int, Int, Int>) : this(triple.first, triple.second, triple.third)
-    constructor(str:String, separator:Char=',') : this(str.split(separator).map { it.trim().toInt() }.let { Triple(it[0], it[1], it[2]) })
+    constructor(str: String, separator: Char = ',') : this(str.split(separator).map { it.trim().toInt() }.let { Triple(it[0], it[1], it[2]) })
 
     override fun neighbours(): List<SpacePos> {
         return listOf(0, 1, -1)
@@ -39,6 +39,13 @@ data class Pos3D(val x: Int, val y: Int, val z: Int) : SpacePos() {
         } + listOf(1, -1).map {
             Pos3D(x, y, z + it)
         }
+    }
+
+    fun squaredDistance(other: Pos3D): Long {
+        val dx = (other.x - x).toLong()
+        val dy = (other.y - y).toLong()
+        val dz = (other.z - z).toLong()
+        return dx * dx + dy * dy + dz * dz
     }
 
     override fun manhattan(): Int = abs(x) + abs(y) + abs(z)
@@ -226,6 +233,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
                     (y downTo pos.y).map { Pos(x, it) }
                 }
             }
+
             this.y == pos.y -> {
                 if (x <= pos.x) {
                     (x..pos.x).map { Pos(it, y) }
@@ -233,6 +241,7 @@ data class Pos(val x: Int, val y: Int) : SpacePos(), Comparable<Pos> {
                     (x downTo pos.x).map { Pos(it, y) }
                 }
             }
+
             else -> {
                 error("only line fill is supported")
             }
