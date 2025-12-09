@@ -18,7 +18,6 @@ class Day24(val input: List<String>) : Day<Int, Long, List<Day24.HailStone>> {
 
     private fun checkPart1(range: ClosedFloatingPointRange<Double>) = parsed
         .cartesianPairs()
-        .filter { it.first != it.second }
         .mapNotNull { it.first.crosses(it.second) }
         .count { (x, y, _) -> x in range && y in range }
 

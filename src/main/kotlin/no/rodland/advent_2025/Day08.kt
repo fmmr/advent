@@ -75,7 +75,6 @@ class Day08(val input: List<String>) : Day<Long, Long, Pair<List<Pos3D>, List<Pa
         }
         val pairs = map
             .cartesianPairs()
-            .filterNot { it.first == it.second }
             .sortedBy { (p, q) ->
                 p.squaredDistance(q)
             }

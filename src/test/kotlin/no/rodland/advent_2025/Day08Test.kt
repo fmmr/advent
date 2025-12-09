@@ -30,7 +30,8 @@ internal class Day08Test {
         { Day08(data08) },
         { Day08(test08) },
         numTestPart1 = 10,
-        numTestPart2 = 1
+        numTestPart2 = 1,
+        numInitLive = 1
     )
 
     @Nested
