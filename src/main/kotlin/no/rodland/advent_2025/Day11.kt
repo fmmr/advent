@@ -5,21 +5,31 @@ import no.rodland.advent.Day
 // template generated: 11/12/2025
 // Fredrik Rødland 2025
 
-class Day11(val input: List<String>) : Day<Long, Long, List<String>> {
+class Day11(val input: List<String>) : Day<Long, Long, Map<String, Set<String>>> {
 
-    private val parsed = input.parse()
+    private val graph = input.parse()
 
     override fun partOne(): Long {
-        return 2
+        return countPaths("you", emptySet())
     }
 
     override fun partTwo(): Long {
         return 2
     }
 
-    override fun List<String>.parse(): List<String> {
-        return map { line ->
-            line
+    private fun countPaths(current: String, visited: Set<String>): Long {
+        if (current == "out") return 1L
+        val connections = graph[current]!!
+        return connections
+            .filter { it !in visited }
+            .sumOf { countPaths(it, visited + current) }
+    }
+
+    override fun List<String>.parse(): Map<String, Set<String>> {
+        return associate { line ->
+            val device = line.substringBefore(": ")
+            val connections = line.substringAfter(": ").split(" ").toSet()
+            device to connections
         }
     }
 
