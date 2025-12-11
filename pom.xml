@@ -27,6 +27,7 @@
         <kotlinx-coroutines.version>1.10.2</kotlinx-coroutines.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <surefire.version>3.5.4</surefire.version>
+        <z3-turnkey.version>4.14.1</z3-turnkey.version>
     </properties>
     <dependencyManagement>
         <!-- debugging why source isn't visible for kotlin stdlib -->
@@ -122,6 +123,11 @@
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>tools.aqua</groupId>
+            <artifactId>z3-turnkey</artifactId>
+            <version>${z3-turnkey.version}</version>
         </dependency>
     </dependencies>
     <build>

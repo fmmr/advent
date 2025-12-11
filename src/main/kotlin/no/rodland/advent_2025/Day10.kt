@@ -11,12 +11,7 @@ class Day10(val input: List<String>) : Day<Long, Long, List<Machine>> {
     private val machines = input.parse()
 
     override fun partOne(): Long {
-        return machines.sumOf { machine ->
-            machine.combos
-                .filter { combo ->
-                    combo.fold(0) { acc, x -> acc xor x } == machine.goal
-                }.minOf { it.size }
-        }.toLong()
+        return machines.sumOf { machine -> machine.validCombos.minOf { it.size } }.toLong()
     }
 
 
@@ -34,21 +29,21 @@ class Day10(val input: List<String>) : Day<Long, Long, List<Machine>> {
                     else -> 0
                 }
             }.joinToString("").toInt(2)
-            // [..#.]
-            val length = line.substringBefore("]").substringAfter("[").length
             //(0,1,2) (0) (0,2) (1,3) (0,3)
             val buttons = line.substringAfter("] ").substringBefore(" {").split(" ").map { group ->
                 group.replace("[() ]".toRegex(), "").split(",").map { it.toInt() }.map { 1 shl it }.fold(0) { acc, i -> acc or i }
             }
             // {41,34,21,24}
             val joltages = line.substringAfter(" {").substringBefore("}").split(",").map { it.toInt() }
-            Machine(goal, length, buttons, joltages)
+            Machine(goal,  buttons, joltages)
         }
     }
 
     override val day = "10".toInt()
 }
 
-data class Machine(val goal: Int, val length: Int, val buttons: List<Int>, val joltages: List<Int>) {
+data class Machine(val goal: Int,  val buttons: List<Int>, val joltages: List<Int>) {
     val combos = buttons.combinations()
+    val validCombos = combos.filter { valid(it) }
+    fun valid(combo: List<Int>) = combo.fold(0) { acc, x -> acc xor x } == goal
 }

@@ -11,47 +11,45 @@ import readFile
 
 @Suppress("ClassName")
 @DisableSlow
-internal class Day10Test {
-    private val data10 = "2025/input_10.txt".readFile()
-    private val test10 = "2025/input_10_test.txt".readFile()
+internal class Day12Test {
+    private val data12 = "2025/input_12.txt".readFile()
+    private val test12 = "2025/input_12_test.txt".readFile()
 
-    private val resultTestOne = 7L
+    private val resultTestOne = 2L
     private val resultTestTwo = 2L
-    private val resultOne = 522L
+    private val resultOne = 2L
     private val resultTwo = 2L
 
     val test = defaultTestSuiteParseOnInit(
-        Day10(data10),
-        Day10(test10),
+        Day12(data12),
+        Day12(test12),
         resultTestOne,
         resultOne,
         resultTestTwo,
         resultTwo,
-        { Day10(data10) },
-        { Day10(test10) },
-        numTestPart2 = 5,
-        numInitLive = 1
+        { Day12(data12) },
+        { Day12(test12) },
     )
 
     @Nested
     inner class Init {
         @Test
-        fun `10,-,example,1`() {
-            report(AOCTest({ "123".toInt() }, Unit, 123, 5, "10".toInt(), Part.TWO, false, "example"))
+        fun `12,-,example,1`() {
+            report(AOCTest({ "123".toInt() }, Unit, 123, 5, "12".toInt(), Part.TWO, false, "example"))
         }
 
         @Test
-        fun `10,-,example,2`() {
+        fun `12,-,example,2`() {
             report(test.initTest.copy())
         }
 
         @Test
-        fun `10,-,test,init`() {
+        fun `12,-,test,init`() {
             report(test.initTest)
         }
 
         @Test
-        fun `10,-,live,init`() {
+        fun `12,-,live,init`() {
             report(test.initLive)
         }
     }
@@ -59,12 +57,12 @@ internal class Day10Test {
     @Nested
     inner class `Part 1` {
         @Test
-        fun `10,1,test`() {
+        fun `12,1,test`() {
             report(test.testPart1)
         }
 
         @Test
-        fun `10,1,live,1`() {
+        fun `12,1,live,1`() {
             report(test.livePart1)
         }
     }
@@ -72,12 +70,12 @@ internal class Day10Test {
     @Nested
     inner class `Part 2` {
         @Test
-        fun `10,2,test`() {
+        fun `12,2,test`() {
             report(test.testPart2)
         }
 
         @Test
-        fun `10,2,live,1`() {
+        fun `12,2,live,1`() {
             report(test.livePart2)
         }
     }
