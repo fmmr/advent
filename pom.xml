@@ -17,7 +17,7 @@
         <kotlin.jvmTarget>22</kotlin.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
 
-        <assertj.version>3.27.6</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <guava.version>33.5.0-jre</guava.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <jgrapht.version>1.5.2</jgrapht.version>
